@@ -26,7 +26,9 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
   Vườn treo Babylon, Tượng Zeus, Đền Artemis, Lăng Halicarnassus, Tượng Rhodes, Hải đăng Alexandria).
   Mảnh trên chỉ lắp được khi mảnh dưới đã có.
   Loại gạch: brick/plate các cỡ, tile (trơn, không núm), dốc 2x2/1x2/2x4, dốc cheese, gạch tròn 1x1/2x2,
-  nón vuông/tròn, mái vòm 2x2/4x4, vòm cửa 1x4/1x6.
+  nón vuông/tròn, mái vòm 2x2/4x4, vòm cửa 1x4/1x6, dốc nghiêng + góc chéo (mặt kim tự tháp).
+  Mảnh tạo hình: mái củ hành, chóp nhọn, quả cầu, chậu, cột, cây thông, cây cọ, bụi cây, hoa, ngọn lửa,
+  tượng người, sư tử, ngựa, cửa sổ vòm, góc bo tròn, mái cong, buồm. Nước trong suốt, chất liệu bóng.
 - `mobile-v2.html`: bản điện thoại trước đó (khung hướng dẫn từng bước ở trên, thanh booster).
 - `index.html`: bản desktop đầu tiên (rê chuột + click để lắp).
 
