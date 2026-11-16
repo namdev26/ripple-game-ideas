@@ -171,6 +171,55 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .scard.lock img{filter:grayscale(1) opacity(.5)}
 .slock{position:absolute;inset:0;border-radius:4cqw;background:#ffffffa0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10cqw;text-align:center}
 .slock small{font-size:4cqw;font-weight:800;color:#4b5275;padding:0 6cqw}
+/* ---------- bản thiết kế / tiệm gạch / kho ---------- */
+.ov{background:linear-gradient(#6a72d6 0%,#7d8fe4 28%,#9cc0f2 60%,#c3e2fb 100%);justify-content:flex-start;padding-top:9cqw;z-index:11}
+#shop{z-index:12;padding-top:19cqw}
+.ov .close{top:6cqw;right:5cqw}
+.ov .coins{position:absolute;top:7cqw;left:9cqw}
+.ov .sHead{max-width:62cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card{background:#fff;border-radius:5cqw;box-shadow:inset 0 -1.4cqw 0 #cfd6ec,0 1.5cqw 3cqw #0003;width:86cqw;padding:2cqw 3cqw 3cqw;display:flex;flex-direction:column;align-items:center;flex:none}
+#bpImg{width:40cqw;height:40cqw}
+.nav{display:flex;align-items:center;gap:4cqw;font-size:5cqw;font-weight:800}
+.nav .btn{width:10cqw;height:10cqw;font-size:4.6cqw}
+.pills{display:flex;flex-wrap:wrap;gap:1.5cqw;justify-content:center;margin-top:2cqw}
+.pill{display:flex;align-items:center;font-size:3.8cqw;font-weight:800;color:#4b5275;background:#eef2fa;border-radius:3cqw;padding:0 2cqw 0 0}
+.pill img{width:9cqw;height:9cqw}
+.list{flex:1;min-height:0;overflow-y:auto;width:86cqw;margin-top:3cqw;display:flex;flex-direction:column;gap:2cqw;touch-action:pan-y;scrollbar-width:none;padding-bottom:2cqw}
+.li{display:flex;align-items:center;gap:3cqw;background:#fff;border-radius:3.5cqw;padding:1cqw 3cqw 1cqw 1cqw;font-size:4.4cqw;font-weight:800;color:#2b3150;flex:none;box-shadow:inset 0 -.8cqw 0 #dfe4f2}
+.li img{width:12cqw;height:12cqw}
+.li .nm{flex:1;min-width:0}
+.li .ok{color:#2fae43}.li .miss{color:#e0303f}
+.foot{display:flex;gap:4cqw;padding:3cqw 0 6cqw;flex:none}
+.foot .btn{width:41cqw;height:15cqw;font-size:5.4cqw}
+.btn.dis{filter:grayscale(.85);opacity:.6}
+.tabs{display:flex;gap:3cqw;margin:0 0 2cqw;flex:none}
+.tabs .btn{height:10cqw;padding:0 4cqw;font-size:4.4cqw}
+.tabs .btn:not(.on){filter:saturate(.25) brightness(1.15);opacity:.8}
+.pane{display:none;flex:1;min-height:0;flex-direction:column;align-items:center;width:100%}
+.pane.on{display:flex}
+.qty{display:flex;align-items:center;gap:1.5cqw}
+.qty .btn{width:8cqw;height:8cqw;font-size:5cqw;padding:0;border-radius:2.5cqw}
+.qty b{min-width:7cqw;text-align:center}
+.buyRow{display:flex;flex-direction:column;gap:3.5cqw;padding:4cqw 0 2cqw;flex:none}
+.buyRow .btn{width:80cqw;height:13cqw;font-size:5.2cqw}
+.cheap::after{content:"Rẻ hơn";position:absolute;top:-3cqw;right:3cqw;background:#e0303f;color:#fff;font-size:3.4cqw;line-height:1;padding:1cqw 2cqw;border-radius:2cqw;border:.4cqw solid #fff}
+#shopNeed{font-size:4.2cqw;font-weight:800;color:#2b3150;background:#ffffffd0;border-radius:3cqw;padding:1cqw 4cqw;margin:1cqw 0 5cqw;flex:none;max-width:86cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5cqw;width:86cqw;overflow-y:auto;flex:1;min-height:0;align-content:start;touch-action:pan-y;scrollbar-width:none;padding:1cqw 1cqw 3cqw}
+.grid h4{grid-column:1/-1;margin:2cqw 0 0;font-size:4.8cqw;line-height:1.1}
+.catItem,.invItem{position:relative;background:#fff;border-radius:3cqw;aspect-ratio:1;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:inset 0 -.8cqw 0 #dfe4f2}
+.catItem img,.invItem img{width:88%;height:88%}
+.catItem.sel,.invItem.sel{outline:1cqw solid #ffd43b}
+.invItem b{position:absolute;right:1.5cqw;bottom:.4cqw;font-size:4cqw;color:#2b3150}
+.pick{width:86cqw;background:#fff;border-radius:5cqw;padding:3cqw;margin:2cqw 0 4cqw;display:flex;flex-direction:column;gap:2.5cqw;box-shadow:0 1.5cqw 3cqw #0003;flex:none}
+.pick .row2{display:flex;align-items:center;justify-content:space-between;gap:2cqw;font-size:4.4cqw;font-weight:800;color:#2b3150}
+.pick img{width:13cqw;height:13cqw}
+.pick .btn{height:11cqw;padding:0 4cqw;font-size:4.6cqw}
+#catColors{display:flex;flex-wrap:wrap;gap:2cqw}
+.chip{width:8cqw;height:8cqw;border-radius:50%;border:.8cqw solid #fff;box-shadow:0 0 0 .4cqw #cfd6ec;cursor:pointer}
+.chip.sel{box-shadow:0 0 0 .9cqw #2b3150}
+#homeTools{position:absolute;top:20cqw;left:5cqw;display:flex;flex-direction:column;gap:4cqw}
+#homeTools .btn{width:12cqw;height:12cqw;font-size:6.4cqw;padding:0 0 .8cqw}
+.lvc .tag{position:absolute;top:-2.8cqw;right:-2.8cqw;font-size:4.6cqw;line-height:1}
 </style>
 </head>
 <body>
@@ -244,9 +293,50 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div id="sList"></div>
   </div>
 
+  <div id="bpView" class="screen ov">
+    <div class="sHead outline" id="bpName">Bản thiết kế</div>
+    <button class="btn blue close" id="bpClose" aria-label="Đóng">✕</button>
+    <div class="card">
+      <img id="bpImg" alt="">
+      <div class="nav"><button class="btn blue" id="bpPrev" aria-label="Bước trước">◀</button><span id="bpStepT">Bước 1/1</span><button class="btn blue" id="bpNext" aria-label="Bước sau">▶</button></div>
+      <div class="pills" id="bpStep"></div>
+    </div>
+    <div class="list" id="bpList"></div>
+    <div class="foot"><button class="btn orange" id="bpShop"><span class="outline o">🛒 MUA GẠCH</span></button><button class="btn green" id="bpBuild"><span class="outline g">▶ LẮP</span></button></div>
+  </div>
+
+  <div id="shop" class="screen ov">
+    <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">0</span></div>
+    <div class="sHead outline">TIỆM GẠCH</div>
+    <button class="btn blue close" id="shopClose" aria-label="Đóng">✕</button>
+    <div class="tabs"><button class="btn blue" id="tabBp"><span class="outline">Theo bản vẽ</span></button><button class="btn blue" id="tabShelf"><span class="outline">Kệ hàng</span></button></div>
+    <div class="pane" id="paneBp">
+      <div class="list" id="missList"></div>
+      <div class="buyRow"><button class="btn green" id="missBuy"></button><button class="btn orange" id="comboBuy"></button></div>
+    </div>
+    <div class="pane" id="paneShelf">
+      <div class="grid" id="catGrid"></div>
+      <div class="pick" id="catPick">
+        <div class="row2"><img id="catImg" alt=""><span id="catHave"></span><span class="qty"><button class="btn blue" id="catMinus">−</button><b id="catN">1</b><button class="btn blue" id="catPlus">+</button></span></div>
+        <div id="catColors"></div>
+        <button class="btn green" id="catBuy"></button>
+      </div>
+    </div>
+    <div id="shopNeed"></div>
+  </div>
+
+  <div id="invView" class="screen ov">
+    <div class="sHead outline">KHO MẢNH</div>
+    <button class="btn blue close" id="invClose" aria-label="Đóng">✕</button>
+    <div class="grid" id="invGrid"></div>
+    <div class="pick" id="invPick"><div class="row2"><span id="invInfo"></span><button class="btn orange" id="sellBtn"></button></div></div>
+    <div class="foot"><button class="btn orange" id="invShop" style="width:60cqw"><span class="outline o">🛒 TIỆM GẠCH</span></button></div>
+  </div>
+
   <div id="home" class="screen show">
     <button class="btn orange" id="serBtn"><span>📚</span><span class="outline o" id="serName">Khởi động</span></button>
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">100</span></div>
+    <div id="homeTools"><button class="btn blue" id="shelfBtn" aria-label="Kệ trưng bày">🏛</button><button class="btn blue" id="invBtn" aria-label="Kho mảnh">📦</button></div>
     <div class="logo">
       <div class="r"><b style="--c:#e2342a">X</b><b style="--c:#f5b700">Ế</b><b style="--c:#2fa04f">P</b></div>
       <div class="r"><b style="--c:#2f7fd6">G</b><b style="--c:#ef7d1a">Ạ</b><b style="--c:#9b59d0">C</b><b style="--c:#e2342a">H</b></div>
@@ -959,7 +1049,7 @@ function loadLevel(i){
   if (levelRoot) scene.remove(levelRoot);
   levelRoot=new THREE.Group(); scene.add(levelRoot);
   mistakes=0; hintsLeft=3; done=false; anims=[]; hintT=null; endDrag(true);
-  ['result','setModal','infoModal','home','series'].forEach(id=>$(id).classList.remove('show'));
+  ['result','setModal','infoModal','home','series','bpView','shop','invView'].forEach(id=>$(id).classList.remove('show'));
   controls.autoRotate=false;
 
   targets=levelTargets(L).map(t=>({...t,placed:false}));
@@ -1238,7 +1328,7 @@ function showHome(s){
   if (typeof s!=='number'){ s=0; while(s<SERIES.length-1&&seriesOpen(s+1)) s++; } // mặc định: bộ mới nhất đã mở
   curSeries=s; homeSel=pickInSeries(s);
   renderHome(); updateCoins();
-  ['result','setModal','infoModal','series'].forEach(id=>$(id).classList.remove('show'));
+  ['result','setModal','infoModal','series','bpView','shop','invView'].forEach(id=>$(id).classList.remove('show'));
   $('home').classList.add('show');
 }
 const toMenu=()=>showHome(seriesOf(levelIdx));
@@ -1246,12 +1336,18 @@ function renderHome(){
   const r=SERIES[curSeries];
   $('serName').textContent=r.name;
   $('hImg').src=thumbLevel(homeSel); $('hName').textContent=LEVELS[homeSel].name;
-  $('playSub').textContent=`Màn ${homeSel-r.from+1} · ${levelTargets(LEVELS[homeSel]).length} mảnh`;
+  const st=cardState(homeSel), nMiss=missingOf(homeSel,S.inv).reduce((a,m)=>a+m.n,0);
+  const [pt,ps]={buy:['MUA',`Bản thiết kế · ${bpPrice(homeSel)}🪙`],need:['BẢN VẼ',`Còn thiếu ${nMiss} mảnh`],
+    ready:['LẮP',`Đủ ${levelTargets(LEVELS[homeSel]).length} mảnh`],built:['ĐÃ LẮP','Xem / Lắp lại']}[st];
+  $('playBtn').querySelector('.t').textContent=pt; $('playSub').textContent=ps;
+  $('playBtn').className='btn '+(st==='buy'?'orange':'green');
+  $('playBtn').querySelector('.t').className='t outline '+(st==='buy'?'o':'g');
   $('hLevels').innerHTML='';
   for(let i=r.from;i<r.from+r.n;i++){
     const s=best(i), open=levelOpen(i), b=document.createElement('button');
     b.className='btn '+(s?'green':'blue')+' lvc'+(i===homeSel?' cur':'')+(open?'':' lock');
-    b.innerHTML=open ? `<span class="outline${s?' g':''}">${i-r.from+1}</span><span class="st">${[0,1,2].map(k=>`<span class="${k<s?'':'off'}">★</span>`).join('')}</span>`
+    const tag={buy:'🛒',need:'📘',ready:'✅',built:''}[cardState(i)];
+    b.innerHTML=open ? `<span class="outline${s?' g':''}">${i-r.from+1}</span>${tag?`<span class="tag">${tag}</span>`:''}<span class="st">${[0,1,2].map(k=>`<span class="${k<s?'':'off'}">★</span>`).join('')}</span>`
       : `<span>🔒</span>`;
     b.onclick=()=>{ if(!open){ toast('Hoàn thành màn trước để mở khóa'); sfx.back(); return; } homeSel=i; renderHome(); sfx.pick(); };
     $('hLevels').appendChild(b);
@@ -1275,6 +1371,151 @@ function showSeries(){
   show('series',true);
 }
 
+// ====================== BẢN THIẾT KẾ / TIỆM GẠCH / KHO ======================
+const invKey=m=>m.key+'|'+m.color;
+const have=k=>S.inv[k]||0;
+const splitKey=k=>{ const [key,color]=k.split('|'); return {key,color}; };
+const itemsCost=items=>items.reduce((s,m)=>s+partPrice(m.key)*m.n,0);
+const hexCss=c=>'#'+COLORS[c].hex.toString(16).padStart(6,'0');
+// ảnh mô hình lắp tới hết bước n (trang sách hướng dẫn)
+function thumbStep(i,n){
+  const k='st'+i+':'+n; if (thumbCache[k]) return thumbCache[k];
+  const info=modelInfo(LEVELS[i]), g=new THREE.Group();
+  info.ts.forEach(t=>{ if(t.step>n) return; const o=makeBrick(t.key,t.color); placeObj(o,t.key,t.x,t.y,t.z,t.rot); g.add(o); });
+  return thumbCache[k]=renderThumb(g,info.center,info.radius,new THREE.Vector3(0.55,0.65,1));
+}
+function pay(items,cost){
+  if (!buy(S,items,cost)){ toast(`Không đủ xu (cần ${cost}🪙)`); sfx.wrong(); return false; }
+  save(); updateCoins(true); sfx.coin(); return true;
+}
+function refreshViews(){
+  if ($('bpView').classList.contains('show')) renderBp();
+  if ($('home').classList.contains('show')) renderHome();
+}
+function startBuild(i,rb=false){
+  if (!rb&&cardState(i)!=='ready'){ toast('Chưa đủ mảnh để lắp'); sfx.back(); return; }
+  loadLevel(i);
+}
+
+let bpI=0, bpPage=0;
+function openBlueprint(i){ bpI=i; bpPage=0; $('bpName').textContent=LEVELS[i].name; renderBp(); show('bpView',true); }
+function renderBp(){
+  const i=bpI, N=LEVELS[i].steps.length;
+  $('bpImg').src=thumbStep(i,bpPage); $('bpStepT').textContent=`Bước ${bpPage+1}/${N}`;
+  const m=new Map(); LEVELS[i].steps[bpPage].forEach(([key,color])=>{ const k=key+'|'+color; m.set(k,(m.get(k)||0)+1); });
+  $('bpStep').innerHTML=[...m].map(([k,n])=>{ const p=splitKey(k); return `<span class="pill"><img src="${thumb(p.key,p.color)}" alt="">×${n}</span>`; }).join('');
+  const miss=missingOf(i,S.inv), lack=new Map(miss.map(x=>[invKey(x),x.n]));
+  $('bpList').innerHTML=bomOf(i).map(b=>{ const l=lack.get(invKey(b))||0;
+    return `<div class="li"><img src="${thumb(b.key,b.color)}" alt=""><span class="nm">×${b.n}</span>${l?`<span class="miss">thiếu ${l}</span>`:'<span class="ok">✓ đủ</span>'}</div>`; }).join('');
+  $('bpBuild').classList.toggle('dis',miss.length>0);
+}
+$('bpPrev').onclick=()=>{ if(bpPage>0){ bpPage--; renderBp(); sfx.pick(); } };
+$('bpNext').onclick=()=>{ if(bpPage<LEVELS[bpI].steps.length-1){ bpPage++; renderBp(); sfx.pick(); } };
+$('bpClose').onclick=()=>{ show('bpView',false); renderHome(); sfx.back(); };
+$('bpShop').onclick=()=>{ sfx.pick(); openShop(bpI,'bp'); };
+$('bpBuild').onclick=()=>{
+  const n=missingOf(bpI,S.inv).reduce((s,m)=>s+m.n,0);
+  if (n){ toast(`Còn thiếu ${n} mảnh, ra tiệm mua nhé`); sfx.back(); return; }
+  sfx.pick(); startBuild(bpI);
+};
+
+let shopI=null, shopTab='bp', missQty={}, catSel=null;
+function openShop(i,tab){
+  shopI=i; shopTab=tab||(i==null?'shelf':'bp'); catSel=null; resetMissQty();
+  renderShop(); updateCoins(); show('shop',true);
+}
+function resetMissQty(){ missQty={}; if(shopI!=null) missingOf(shopI,S.inv).forEach(m=>missQty[invKey(m)]=m.n); }
+const missItems=()=>Object.entries(missQty).filter(([,n])=>n>0).map(([k,n])=>({...splitKey(k),n}));
+function renderShop(){
+  $('tabBp').style.display=shopI==null?'none':'';
+  $('tabBp').classList.toggle('on',shopTab==='bp'); $('tabShelf').classList.toggle('on',shopTab==='shelf');
+  $('paneBp').classList.toggle('on',shopTab==='bp'); $('paneShelf').classList.toggle('on',shopTab==='shelf');
+  renderNeed();
+  if (shopTab==='bp') renderMiss(); else renderCat();
+}
+function renderNeed(){
+  const el=$('shopNeed'); el.style.display=shopI==null?'none':'';
+  if (shopI==null) return;
+  const n=missingOf(shopI,S.inv).reduce((s,m)=>s+m.n,0);
+  el.textContent=n?`Còn thiếu cho ${LEVELS[shopI].name}: ${n} mảnh`:`✓ Đủ mảnh cho ${LEVELS[shopI].name}!`;
+}
+function renderMiss(){
+  const ks=Object.keys(missQty);
+  $('missList').innerHTML=ks.length?ks.map(k=>{ const p=splitKey(k);
+    return `<div class="li" data-k="${k}"><img src="${thumb(p.key,p.color)}" alt=""><span class="nm">${partPrice(p.key)}🪙 / mảnh</span><span class="qty"><button class="btn blue" data-d="-1">−</button><b>${missQty[k]}</b><button class="btn blue" data-d="1">+</button></span></div>`; }).join('')
+    : '<div class="li"><span class="nm">✓ Đã đủ mảnh! Quay lại bản thiết kế để lắp.</span></div>';
+  const mc=itemsCost(missItems()), cc=comboPrice(shopI), missCheap=mc>0&&mc<cc;
+  $('missBuy').innerHTML=`<span class="outline g">Mua phần thiếu – ${mc}🪙</span>`;
+  $('comboBuy').innerHTML=`<span class="outline o">Túi combo −20% – ${cc}🪙</span>`;
+  $('missBuy').classList.toggle('dis',!mc);
+  $('missBuy').classList.toggle('cheap',missCheap); $('comboBuy').classList.toggle('cheap',!missCheap&&ks.length>0);
+}
+$('missList').onclick=e=>{
+  const b=e.target.closest('[data-d]'); if(!b) return;
+  const k=b.closest('.li').dataset.k; missQty[k]=clamp(missQty[k]+(+b.dataset.d),0,99); sfx.pick(); renderMiss();
+};
+function afterBuy(msg){
+  resetMissQty(); renderShop(); refreshViews();
+  toast(shopI!=null&&!missingOf(shopI,S.inv).length?'✓ Đủ mảnh rồi! Quay lại bản thiết kế để lắp':msg);
+}
+$('missBuy').onclick=()=>{ const it=missItems(); if(it.length&&pay(it,itemsCost(it))) afterBuy('🧱 Đã mua mảnh vào kho'); };
+$('comboBuy').onclick=()=>{ if(pay(bomOf(shopI),comboPrice(shopI))) afterBuy('🎁 Đã mua túi combo'); };
+$('tabBp').onclick=()=>{ shopTab='bp'; renderShop(); sfx.pick(); };
+$('tabShelf').onclick=()=>{ shopTab='shelf'; renderShop(); sfx.pick(); };
+$('shopClose').onclick=()=>{ show('shop',false); refreshViews(); if($('invView').classList.contains('show')) renderInv(); sfx.back(); };
+
+// kệ hàng: chỉ bày mảnh+màu có trong ít nhất 1 màn
+const CAT_GROUPS=[['Cơ bản',s=>s==='box'],['Dốc & mái',s=>s==='slope'||s==='wcorner'],['Tròn & vòm',s=>['round','rcone','dome','arch','cone'].includes(s)],['Trang trí',()=>true]];
+let catalog=null;
+function getCatalog(){
+  if (catalog) return catalog;
+  catalog=new Map();
+  LEVELS.forEach((l,i)=>bomOf(i).forEach(m=>{ if(!catalog.has(m.key)) catalog.set(m.key,[]); const c=catalog.get(m.key); if(!c.includes(m.color)) c.push(m.color); }));
+  return catalog;
+}
+function renderCat(){
+  const cat=getCatalog(), used=new Set(); let h='';
+  CAT_GROUPS.forEach(([name,f])=>{
+    const ks=[...cat.keys()].filter(k=>!used.has(k)&&f(PARTS[k].shape)); ks.forEach(k=>used.add(k));
+    if (ks.length) h+=`<h4 class="outline">${name}</h4>`+ks.map(k=>`<div class="catItem${catSel&&catSel.key===k?' sel':''}" data-k="${k}"><img src="${thumb(k,cat.get(k)[0])}" alt=""></div>`).join('');
+  });
+  $('catGrid').innerHTML=h; renderPick();
+}
+function renderPick(){
+  $('catPick').style.display=catSel?'':'none'; if(!catSel) return;
+  $('catColors').innerHTML=getCatalog().get(catSel.key).map(c=>`<span class="chip${c===catSel.color?' sel':''}" data-c="${c}" style="background:${hexCss(c)}"></span>`).join('');
+  $('catImg').src=thumb(catSel.key,catSel.color); $('catN').textContent=catSel.n;
+  $('catHave').textContent=`Kho: ${have(invKey(catSel))}`;
+  $('catBuy').innerHTML=`<span class="outline g">Mua ${catSel.n} – ${partPrice(catSel.key)*catSel.n}🪙</span>`;
+}
+$('catGrid').onclick=e=>{
+  const it=e.target.closest('.catItem'); if(!it) return;
+  catSel={key:it.dataset.k,color:getCatalog().get(it.dataset.k)[0],n:1};
+  document.querySelectorAll('#catGrid .catItem').forEach(x=>x.classList.toggle('sel',x===it)); renderPick(); sfx.pick();
+};
+$('catColors').onclick=e=>{ const c=e.target.closest('.chip'); if(!c) return; catSel.color=c.dataset.c; renderPick(); sfx.pick(); };
+$('catMinus').onclick=()=>{ catSel.n=Math.max(1,catSel.n-1); renderPick(); };
+$('catPlus').onclick=()=>{ catSel.n=Math.min(99,catSel.n+1); renderPick(); };
+$('catBuy').onclick=()=>{ if(pay([{...catSel}],partPrice(catSel.key)*catSel.n)){ resetMissQty(); renderNeed(); renderPick(); refreshViews(); toast(`🧱 +${catSel.n} mảnh vào kho`); } };
+
+let invSel=null;
+function openInv(){ invSel=null; renderInv(); show('invView',true); }
+function renderInv(){
+  const ks=Object.keys(S.inv).filter(k=>S.inv[k]>0);
+  $('invGrid').innerHTML=ks.length?ks.map(k=>{ const p=splitKey(k);
+    return `<div class="invItem${k===invSel?' sel':''}" data-k="${k}"><img src="${thumb(p.key,p.color)}" alt=""><b>×${S.inv[k]}</b></div>`; }).join('')
+    : '<h4 class="outline">Kho trống. Ra tiệm gạch mua mảnh nhé!</h4>';
+  if (!(S.inv[invSel]>0)) invSel=null;
+  $('invPick').style.display=invSel?'':'none'; if(!invSel) return;
+  $('invInfo').textContent=`Đang có ${S.inv[invSel]} mảnh`;
+  $('sellBtn').innerHTML=`<span class="outline o">Bán 1 · +${Math.floor(partPrice(splitKey(invSel).key)*0.5)}🪙</span>`;
+}
+$('invGrid').onclick=e=>{ const it=e.target.closest('.invItem'); if(!it) return; invSel=it.dataset.k; renderInv(); sfx.pick(); };
+$('sellBtn').onclick=()=>{ const p=splitKey(invSel); if(sell(S,p.key,p.color)){ save(); updateCoins(true); sfx.coin(); renderInv(); refreshViews(); } };
+$('invClose').onclick=()=>{ show('invView',false); refreshViews(); sfx.back(); };
+$('invShop').onclick=()=>{ sfx.pick(); openShop(null,'shelf'); };
+$('invBtn').onclick=()=>{ sfx.pick(); openInv(); };
+
 // ====================== NÚT ======================
 const show=(id,on)=>$(id).classList.toggle('show',on);
 $('hintBtn').onclick=useHint;
@@ -1297,7 +1538,13 @@ $('rNext').onclick=()=>{
   if (seriesOf(n)!==seriesOf(levelIdx)) toast(`🎉 Mở khóa bộ mới: ${SERIES[seriesOf(n)].name}`,2500);
   loadLevel(n);
 };
-$('playBtn').onclick=()=>{ loadLevel(homeSel); sfx.pick(); };
+$('playBtn').onclick=()=>{
+  const i=homeSel, st=cardState(i); sfx.pick();
+  if (st==='buy'){ if(pay([],bpPrice(i))){ S.bp[LEVELS[i].name]=true; save(); renderHome(); toast('📘 Đã mua bản thiết kế!'); } }
+  else if (st==='need') openBlueprint(i);
+  else if (st==='ready') startBuild(i);
+  else startBuild(i,true);
+};
 $('coinPill').onclick=()=>toast('Thắng màn để nhận thêm xu');
 
 // zoom

@@ -23,10 +23,17 @@ document.title=r;const d=document.createElement('pre');d.id='__res';d.textConten
   fs.writeFileSync(f, html);
   const ud = fs.mkdtempSync(path.join(os.tmpdir(), 'xg-'));
   let out = '';
+  if (process.env.SHOT) { // SHOT=1: chụp ảnh tests/.tmp/<case>.png thay vì kiểm kết quả
+    const png = f.replace(/\.html$/, '.png');
+    try { execFileSync(CHROME, ['--headless=new', '--enable-unsafe-swiftshader', '--use-angle=swiftshader', `--user-data-dir=${ud}`, '--hide-scrollbars',
+      '--window-size=432,768', `--virtual-time-budget=${c.budget || 15000}`, `--screenshot=${png}`, 'file:///' + f.split(path.sep).join('/') + (c.query || '')],
+      { stdio: 'ignore', timeout: 90000 }); } catch (e) {}
+    console.log('📷 ' + png); continue;
+  }
   try {
     out = execFileSync(CHROME, ['--headless=new', '--enable-unsafe-swiftshader', '--use-angle=swiftshader', `--user-data-dir=${ud}`,
       '--window-size=432,768', `--virtual-time-budget=${c.budget || 15000}`, '--dump-dom', 'file:///' + f.split(path.sep).join('/') + (c.query || '')],
-      { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 90000 });
+      { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 90000, maxBuffer: 1 << 28 });
   } catch (e) { out = e.stdout || ''; }
   const m = out.match(/<pre id="__res">([\s\S]*?)<\/pre>/);
   const res = m ? m[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>') : 'ERR: không có kết quả (trang treo/lỗi tải)';
