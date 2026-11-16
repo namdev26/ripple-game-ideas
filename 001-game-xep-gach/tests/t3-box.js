@@ -85,5 +85,15 @@ module.exports = [
       $('shopBtn').click(); document.querySelectorAll('#mGrid .mItem')[3].click(); $('mBuy').click();
       ok(S.coins === 50 && !owned(3) && !$('unbox').classList.contains('show'), 'thiếu xu không mua được Lâu đài 70');
   } },
+  { name: 'home-bo-cuc', pre: save0({ coins: 100, best: { 'Cây nấm': 3 }, own: { 'Ngôi nhà': true, 'Dưa hấu': true }, sp: { 'Dưa hấu': true }, tut: 6 }), post: async () => {
+      const R = e => $(e).getBoundingClientRect(), A = R('app'), hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+      ok(['shopBtn', 'shelfBtn'].every(id => $(id).closest('#hNav')) && Math.abs(R('hNav').bottom - A.bottom) < 2, 'thanh dưới: cửa hàng + kệ, sát đáy');
+      ok($('oddsBtn').closest('#hLeft') && $('hLevels').closest('#hRight') && $('hSetBtn'), 'cột trái: nút chức năng, cột phải: chờ lắp, có nút cài đặt');
+      const pend = [...$('hLevels').children];
+      ok(pend.length === 2 && pend[1].classList.contains('sp') && pend.every(e => e.textContent.includes('LẮP')), 'ô chờ lắp có nhãn LẮP, bản đặc biệt vàng');
+      ok(R('playBtn').bottom < R('hNav').top && !hit(R('playBtn'), R('hLeft')) && !hit(R('playBtn'), R('hRight')) && !hit(R('hBox'), R('hLeft')) && !hit(R('hBox'), R('hRight')), 'giữa không đè lên cột hai bên / thanh dưới');
+      ok([...document.querySelectorAll('#home *')].every(e => { const r = e.getBoundingClientRect(); return !r.width || (r.left >= A.left - 1 && r.right <= A.right + 1); }), 'không tràn ngang');
+      $('hSetBtn').click(); ok($('setModal').classList.contains('show'), 'nút cài đặt mở bảng cài đặt');
+  } },
 ];
 module.exports.lib = require('./t4-build.js').lib;

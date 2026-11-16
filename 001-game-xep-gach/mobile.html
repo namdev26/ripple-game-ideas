@@ -131,22 +131,25 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .sw.on{background:#3cbf4c}.sw.on::after{left:9cqw}
 
 /* ---------- home ---------- */
-#home{background:linear-gradient(#6a72d6 0%,#7d8fe4 28%,#9cc0f2 60%,#c3e2fb 100%);justify-content:flex-start;padding-top:16cqw}
-#home .coins{position:absolute;top:7cqw;right:5cqw}
+/* nền gỗ: vân ván dọc + quầng sáng giữa */
+#home{justify-content:flex-start;padding-top:16cqw;
+  background:repeating-linear-gradient(90deg,#0000 0 24.6cqw,#5a2d0e40 24.6cqw 25cqw),
+  radial-gradient(ellipse at 50% 42%,#e9a865 0,#c97a3c 45%,#8f4f22 100%)}
+#home .coins{position:absolute;top:7cqw;right:18.5cqw}
 .logo .r{display:flex;justify-content:center;margin:2cqw 0}
 .logo b{position:relative;display:inline-flex;width:15cqw;height:15cqw;background:var(--c);color:#fff;border-radius:2.6cqw;font-size:10cqw;line-height:1;
   align-items:center;justify-content:center;margin:0 .8cqw;box-shadow:inset 0 -1.7cqw 0 #0003,inset 0 .8cqw 0 #ffffff40,0 1.2cqw 2cqw #0003;padding-top:1cqw}
 .logo b::before{content:"";position:absolute;top:-2.3cqw;left:50%;transform:translateX(-50%);width:6.5cqw;height:2.7cqw;background:var(--c);border-radius:1cqw 1cqw 0 0;box-shadow:inset 0 -.8cqw 0 #0002}
 @keyframes bob{50%{transform:translateY(-2cqw)}}
 #hName{font-size:8cqw;line-height:1;margin-top:-1cqw}
-#playBtn{margin-top:4cqw;width:66cqw;height:21cqw}
+#playBtn{margin-top:7cqw;width:66cqw;height:21cqw}
 #playBtn .t{font-size:10.5cqw;line-height:.95}
 #playBtn small{font-size:4.2cqw;font-weight:700;opacity:.95}
-#hLevels{display:flex;gap:4.5cqw;margin-top:5cqw;max-width:100cqw;box-sizing:border-box;padding:2cqw 7cqw 7cqw;overflow-x:auto;scrollbar-width:none;touch-action:pan-x}
+#hLevels{display:flex;flex-direction:column;align-items:center;gap:3cqw;max-height:64cqw;padding:1.5cqw 1cqw;overflow-y:auto;scrollbar-width:none;touch-action:pan-y}
 #hLevels::-webkit-scrollbar{display:none}
 .lvc{width:15cqw;height:15cqw;font-size:7cqw;flex:none}
 .lvc.cur{outline:1cqw solid #ffd43b;outline-offset:.6cqw}
-#serBtn{position:absolute;top:6.4cqw;left:5cqw;height:10cqw;max-width:52cqw;padding:0 3.5cqw;font-size:4.4cqw;flex-direction:row;gap:1.5cqw}
+#serBtn{position:absolute;top:6.4cqw;left:5cqw;height:10cqw;max-width:38cqw;padding:0 3.5cqw;font-size:4.4cqw;flex-direction:row;gap:1.5cqw}
 #serBtn .outline{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* ---------- bộ sưu tập ---------- */
 #series{background:linear-gradient(#6a72d6 0%,#7d8fe4 28%,#9cc0f2 60%,#c3e2fb 100%);justify-content:flex-start;padding-top:9cqw;z-index:11}
@@ -181,8 +184,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .pick .row2{display:flex;align-items:center;justify-content:space-between;gap:2cqw;font-size:4.4cqw;font-weight:800;color:#2b3150}
 .pick img{width:13cqw;height:13cqw}
 .pick .btn{height:11cqw;padding:0 4cqw;font-size:4.6cqw}
-#homeTools{position:absolute;top:20cqw;left:5cqw;display:flex;flex-direction:column;gap:4cqw}
-#homeTools .btn{width:12cqw;height:12cqw;font-size:6.4cqw;padding:0 0 .8cqw}
 /* ---------- phát lại + kệ trưng bày ---------- */
 #skipBtn{display:none;position:absolute;right:5cqw;bottom:10cqw;height:12cqw;padding:0 5cqw;font-size:5cqw;z-index:6;flex-direction:row}
 #app.replaying #skipBtn{display:flex}
@@ -211,18 +212,36 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .mbox.empty{filter:grayscale(.8) opacity(.6)}
 .mbox.shake{animation:boxshake .5s}
 @keyframes boxshake{20%{transform:rotate(-8deg)}40%{transform:rotate(7deg) translateY(-1cqw)}60%{transform:rotate(-5deg)}80%{transform:rotate(3deg)}}
-#hBoxWrap{position:relative;margin-top:3cqw}
+#hBoxWrap{position:relative;margin-top:7cqw}
 #hBox{width:40cqw;height:40cqw}
 #home>*{flex-shrink:0}
 #oddsModal{z-index:14}
-#oddsBtn{position:absolute;right:-13cqw;top:6cqw;width:9cqw;height:9cqw;font-size:5cqw;padding:0}
 #hName{font-size:6cqw;line-height:1;margin-top:2.5cqw}
-#shopBtn{margin-top:3.5cqw;width:56cqw;height:12cqw;font-size:5.6cqw}
-#hWait{font-size:4.6cqw;margin-top:3cqw}
-#hLevels.few{overflow:visible;justify-content:center}
-.lvc.pend{background:#fff;box-shadow:inset 0 -1cqw 0 #cfd6ec,0 1cqw 2cqw #0003;padding:0}
-.lvc.pend img{width:92%;height:92%}
-.lvc.pend.sp{background:linear-gradient(#fff6c8,#ffe27a)}
+#hLevels.few{overflow:visible}
+/* bố cục home: thanh trên · cột nút trái · cột chờ lắp phải · hộp + MỞ HỘP giữa · thanh 3 mục dưới */
+#hSetBtn{position:absolute;top:6.4cqw;right:5cqw;width:11cqw;height:11cqw;font-size:6.4cqw;padding:0 0 .8cqw}
+.hSide{position:absolute;top:24cqw;width:20cqw;display:flex;flex-direction:column;align-items:center;gap:3.5cqw}
+#hLeft{left:2cqw} #hRight{right:2cqw}
+#hWait{font-size:3.8cqw;margin-bottom:-2cqw}
+.sideB{position:relative;border:none;background:none;padding:0;margin:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;font-family:inherit;flex:none}
+.sideB i{font-style:normal;width:14cqw;height:14cqw;border-radius:3.6cqw;display:flex;align-items:center;justify-content:center;font-size:8cqw;
+  background:linear-gradient(#66c8ff,#2f8cf0);box-shadow:inset 0 -1.2cqw 0 #1c5fc2,inset 0 .6cqw 0 #a8e3ff,0 1cqw 1.6cqw #0003}
+.sideB span{position:relative;margin-top:-2.4cqw;background:#2b3150;color:#fff;font-size:3.3cqw;font-weight:800;line-height:1.3;padding:0 2cqw;border-radius:2cqw;white-space:nowrap;border:.5cqw solid #fff}
+.sideB .badge{position:absolute;top:-1.4cqw;right:1cqw;width:5.4cqw;height:5.4cqw;border-radius:50%;background:#ff3b30;color:#fff;font-size:3.6cqw;font-weight:800;
+  display:flex;align-items:center;justify-content:center;border:.6cqw solid #fff;font-style:normal}
+.sideB.pend i{background:#fff;box-shadow:inset 0 -1.2cqw 0 #cfd6ec,0 1cqw 1.6cqw #0003}
+.sideB.pend.sp i{background:linear-gradient(#fff6c8,#ffe27a);box-shadow:inset 0 -1.2cqw 0 #d9a520,0 1cqw 1.6cqw #0003}
+.sideB.pend img{width:90%;height:90%;object-fit:contain}
+.sideB.pend span{background:#33b44a}
+#home .logo{transform:scale(.62);margin:-7cqw 0 -6cqw}
+.btn.yellow{background:linear-gradient(#ffe45c,#ffb800);box-shadow:inset 0 -1.4cqw 0 #c98a00,inset 0 .7cqw 0 #fff3b0,0 1.6cqw 0 #8a5a2b,0 2.6cqw 2cqw #0004}
+#hNav{position:absolute;left:0;right:0;bottom:0;height:20cqw;display:flex;align-items:flex-end;justify-content:space-around;
+  background:repeating-linear-gradient(90deg,#0000 0 2.6cqw,#0000000f 2.6cqw 3cqw),linear-gradient(#7a3f17,#55290c);box-shadow:0 -1.2cqw 0 #d79a5a,0 -1.8cqw 0 #5a2d0e}
+.navB{border:none;background:none;font-family:inherit;color:#fff;cursor:pointer;width:30cqw;height:20cqw;padding:0 0 2cqw;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.5cqw}
+.navB i{font-style:normal;font-size:8.5cqw;line-height:1}
+.navB span{font-size:3.8cqw;font-weight:800}
+.navB.cur{height:27cqw;border-radius:9cqw 9cqw 0 0;background:linear-gradient(#ffb547,#e07a12);box-shadow:inset 0 1cqw 0 #ffe1a1}
+.navB.cur i{font-size:12cqw}
 #unbox{background:radial-gradient(circle at 50% 40%,#5a5fb8,#1b1f4a 72%);z-index:13;justify-content:flex-start;padding-top:12cqw;--rc:#fff}
 #ubStage{position:relative;width:90cqw;height:80cqw;display:flex;align-items:flex-end;justify-content:center;flex:none}
 #ubRays{position:absolute;left:50%;top:46%;width:150cqw;height:150cqw;margin:-75cqw 0 0 -75cqw;border-radius:50%;opacity:0;transition:opacity .5s;
@@ -331,8 +350,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #tip{display:none;position:absolute;z-index:25;pointer-events:none;left:50%;bottom:calc(100% + 3.5cqw);transform:translateX(-50%);line-height:1.3;background:#fff;color:#2b3150;font-size:4.4cqw;font-weight:800;
   padding:2cqw 4cqw;border-radius:3.5cqw;border:.7cqw solid #ffd43b;box-shadow:0 1.5cqw 3cqw #0004;white-space:nowrap;animation:tipbob 1s ease-in-out infinite}
 #tip::after{content:"";position:absolute;left:calc(50% - var(--dx,0px));bottom:-3.4cqw;transform:translateX(-50%);border:2.4cqw solid transparent;border-top-color:#ffd43b}
-#tip.below{bottom:auto;top:calc(100% + 3.5cqw)}
-#tip.below::after{bottom:auto;top:-3.4cqw;border-top-color:transparent;border-bottom-color:#ffd43b}
 #tip.show{display:block}
 @keyframes tipbob{50%{margin-top:-1.5cqw}}
 </style>
@@ -455,18 +472,24 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   <div id="home" class="screen show">
     <button class="btn orange" id="serBtn"><span>📚</span><span class="outline o" id="serName">Khởi động</span></button>
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">100</span></div>
-    <div id="homeTools"><button class="btn blue" id="shelfBtn" aria-label="Kệ trưng bày">🏛</button></div>
+    <button class="btn blue" id="hSetBtn" aria-label="Cài đặt">⚙</button>
+    <div id="hLeft" class="hSide">
+      <button class="sideB" id="hColBtn"><i>📚</i><span>Bộ sưu tập</span></button>
+      <button class="sideB" id="oddsBtn"><i>🎲</i><span>Tỉ lệ</span></button>
+    </div>
+    <div id="hRight" class="hSide"><div id="hWait" class="outline">Chờ lắp</div><div id="hLevels"></div></div>
     <div class="logo">
       <div class="r"><b style="--c:#e2342a">X</b><b style="--c:#f5b700">Ế</b><b style="--c:#2fa04f">P</b></div>
       <div class="r"><b style="--c:#2f7fd6">G</b><b style="--c:#ef7d1a">Ạ</b><b style="--c:#9b59d0">C</b><b style="--c:#e2342a">H</b></div>
     </div>
-    <div id="hBoxWrap"><div id="hBox" class="mbox" role="button" aria-label="Lắc thử hộp"><i class="lid"></i><i class="body"><b>?</b></i></div>
-      <button class="btn blue" id="oddsBtn" aria-label="Tỉ lệ"><span class="outline">i</span></button></div>
+    <div id="hBoxWrap"><div id="hBox" class="mbox" role="button" aria-label="Lắc thử hộp"><i class="lid"></i><i class="body"><b>?</b></i></div></div>
     <div id="hName" class="outline"></div>
-    <button class="btn green" id="playBtn"><span class="t outline g">MỞ HỘP</span><small id="playSub"></small></button>
-    <button class="btn orange" id="shopBtn"><span class="outline o">🛒 Cửa hàng</span></button>
-    <div id="hWait" class="outline">Chờ lắp</div>
-    <div id="hLevels"></div>
+    <button class="btn yellow" id="playBtn"><span class="t outline o">MỞ HỘP</span><small id="playSub"></small></button>
+    <div id="hNav">
+      <button class="navB" id="shopBtn"><i>🛒</i><span class="outline">Cửa hàng</span></button>
+      <button class="navB cur" id="hHomeTab"><i>🎁</i><span class="outline">Hộp bí ẩn</span></button>
+      <button class="navB" id="shelfBtn"><i>🏛</i><span class="outline">Kệ</span></button>
+    </div>
   </div>
 </div></div>
 
@@ -1564,8 +1587,7 @@ function tutStep(){
   }
   if (!el) return;
 // gắn bong bóng vào chính nút để luôn bám theo dù bố cục đổi (font tải xong...)
-  const below=el===$('shopBtn'); // phía trên là nút mở hộp: chỉ từ dưới lên cho khỏi nhầm
-  tip.textContent=txt; tip.classList.toggle('below',below); el.appendChild(tip);
+  tip.textContent=txt; el.appendChild(tip);
   tip.style.marginLeft='0px'; tip.classList.add('show'); tipAt=el;
   const a=$('app').getBoundingClientRect(), r=tip.getBoundingClientRect(), pad=a.width*0.02;
   const dx=Math.max(0,a.left+pad-r.left)-Math.max(0,r.right-(a.right-pad));
@@ -1593,8 +1615,8 @@ function renderHome(){
   $('playSub').textContent=nx?(c?`Hộp bí ẩn · ${c}🪙`:'Miễn phí'):'Xem bộ khác ở 📚';
   $('playBtn').classList.toggle('dis',!nx);
   $('hWait').style.display=pend.length?'':'none';
-  $('hLevels').classList.toggle('few',pend.length<=4);
-  $('hLevels').innerHTML=pend.map(i=>`<button class="btn lvc pend${special(i)?' sp':''}" data-i="${i}" aria-label="${LEVELS[i].name}"><img src="${thumbLevel(i,special(i))}" alt=""></button>`).join('');
+  $('hLevels').classList.toggle('few',pend.length<=3); // ≤3 ô không cần cuộn → để bong bóng hướng dẫn tràn ra ngoài được
+  $('hLevels').innerHTML=pend.map(i=>`<button class="sideB pend${special(i)?' sp':''}" data-i="${i}" aria-label="${LEVELS[i].name}"><i><img src="${thumbLevel(i,special(i))}" alt=""></i><span>LẮP</span><b class="badge">!</b></button>`).join('');
 }
 $('hLevels').onclick=e=>{ const b=e.target.closest('[data-i]'); if(!b) return; sfx.pick(); openBlueprint(+b.dataset.i); };
 // ====================== BỘ SƯU TẬP ======================
@@ -1791,13 +1813,14 @@ function startBuild(i){
 // ====================== NÚT ======================
 const show=(id,on)=>{ $(id).classList.toggle('show',on); tutStep(); };
 $('hintBtn').onclick=useHint;
-$('setBtn').onclick=()=>{ $('sndSw').classList.toggle('on',S.snd); $('vibSw').classList.toggle('on',S.vib); show('setModal',true); sfx.pick(); };
+$('setBtn').onclick=$('hSetBtn').onclick=()=>{ $('sndSw').classList.toggle('on',S.snd); $('vibSw').classList.toggle('on',S.vib); show('setModal',true); sfx.pick(); };
 $('setClose').onclick=()=>show('setModal',false);
 $('sndSw').onclick=()=>{ S.snd=!S.snd; save(); $('sndSw').classList.toggle('on',S.snd); sfx.pick(); };
 $('vibSw').onclick=()=>{ S.vib=!S.vib; save(); $('vibSw').classList.toggle('on',S.vib); vib(30); };
 $('sRestart').onclick=()=>loadLevel(levelIdx);
 $('sMenu').onclick=toMenu;
-$('serBtn').onclick=()=>{ sfx.pick(); showSeries(); };
+$('serBtn').onclick=$('hColBtn').onclick=()=>{ sfx.pick(); showSeries(); };
+$('hHomeTab').onclick=()=>sfx.pick();
 $('serClose').onclick=()=>show('series',false);
 $('infoBtn').onclick=()=>{ show('infoModal',true); sfx.pick(); };
 $('infoClose').onclick=()=>show('infoModal',false);
