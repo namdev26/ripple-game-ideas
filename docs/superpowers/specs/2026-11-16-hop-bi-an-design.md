@@ -97,7 +97,7 @@ Mô hình nhỏ có trọng số cao hơn, nên **hay ra trước**. Nhờ vậy
 
 | Nhịp | Thời gian | Nội dung |
 |---|---|---|
-| Bấm "Mở hộp" | 0s | Dải 40 ô chạy qua vạch vàng ở giữa, mỗi ô là một hộp sản phẩm 3D. Các ô lấp chỗ được rút theo đúng tỉ lệ của hộp, nên chỉ có mô hình thật sự có thể ra. Có tiếng tích mỗi khi một ô qua vạch. |
+| Bấm "Mở hộp" | 0s | Dải 40 ô chạy qua mũi tên vàng chỉ xuống ở giữa (phía trên dải), mỗi ô là một hộp sản phẩm 3D. Các ô lấp chỗ được rút theo đúng tỉ lệ của hộp, nên chỉ có mô hình thật sự có thể ra. Có tiếng tích mỗi khi một ô qua vạch. |
 | Chậm dần, dừng | 0–3,4s | Dừng lệch trong ô trúng một chút rồi trượt vào giữa. Ô trúng phóng to và sáng theo màu độ hiếm. |
 | Lộ hộp | 3,85s | Trên cùng là tên bộ (vàng), rồi tên mô hình và nhãn độ hiếm. Hộp sản phẩm lớn hiện ra ở giữa, có tia sáng phía sau. |
 | Bản đặc biệt | +0,65s | Hộp đổi sang vàng kim, có viền sáng và vệt bóng chạy qua, kèm chữ "✨ BẢN ĐẶC BIỆT". |

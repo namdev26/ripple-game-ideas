@@ -29,6 +29,8 @@ module.exports = [
       ok(+cards[REEL_WIN].dataset.i === nx.i, 'ô trúng phải là mô hình đã tung trước');
       ok(cards.every(c => pool.includes(+c.dataset.i)), 'dải chỉ gồm mô hình có thể ra');
       ok(cards.every(c => c.querySelector('.pbox img') && c.textContent.includes(LEVELS[c.dataset.i].name)), 'mỗi ô là một hộp sản phẩm có tên');
+      const A = $('ubArrow').getBoundingClientRect(), R0 = $('ubReel').getBoundingClientRect();
+      ok(A.width > 0 && A.bottom <= R0.top + 1 && Math.abs(A.left + A.width / 2 - (R0.left + R0.width / 2)) < 2, 'mũi tên chỉ xuống ở giữa, phía trên dải');
       await wait(5600);
       ok(cards[REEL_WIN].classList.contains('win') && $('ubBtns').classList.contains('on'), 'dừng ở ô trúng rồi lộ mô hình');
       const pz = $('ubPrize').textContent;
