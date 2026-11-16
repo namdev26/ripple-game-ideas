@@ -1,6 +1,6 @@
 # Hộp bí ẩn: thiết kế game (GDD)
 
-Trạng thái: **đề xuất, chờ duyệt** (đã cập nhật: kết hợp cửa hàng mô hình và hộp bí ẩn). Bản này thay vòng chơi "mua bản thiết kế, đi tiệm mua gạch" trong `2026-11-16-mua-ban-thiet-ke-design.md`.
+Trạng thái: **đã duyệt, đã làm MVP** (kết hợp cửa hàng mô hình và hộp bí ẩn). Bản này thay vòng chơi "mua bản thiết kế, đi tiệm mua gạch" trong `2026-11-16-mua-ban-thiet-ke-design.md`.
 
 ## 1. Vì sao đổi
 

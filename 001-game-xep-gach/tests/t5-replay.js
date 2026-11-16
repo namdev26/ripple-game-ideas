@@ -1,7 +1,7 @@
 // Task 5: phát lại + kệ trưng bày
 module.exports = [
   { name: 'phat-lai-sau-khi-thang', post: async () => {
-      fillInv(0); startBuild(0); const order = commitAll();
+      giveModel(0); startBuild(0); const order = commitAll();
       await new Promise(r => setTimeout(r, 1500));
       ok(replaying, 'phải đang phát lại sau khi thắng');
       ok($('app').classList.contains('replaying'), 'thiếu class replaying');
@@ -14,7 +14,7 @@ module.exports = [
       ok($('result').classList.contains('show'), 'skip xong phải hiện kết quả');
   } },
   { name: 'phat-lai-tu-chay-het', budget: 30000, post: async () => {
-      fillInv(0); startBuild(0); commitAll();
+      giveModel(0); startBuild(0); commitAll();
       await pump(1500 + 9500);
       ok(!replaying && $('result').classList.contains('show'), 'hết phát lại phải hiện kết quả');
       ok(targets.every(t => t.obj.visible && t.obj.scale.x === 1), 'mảnh phải hiện đủ, đúng cỡ');
@@ -23,7 +23,7 @@ module.exports = [
     post: async () => {
       $('shelfBtn').click();
       ok($('shelf').classList.contains('show'), 'kệ phải hiện');
-      ok(document.querySelectorAll('#shGrid .shItem').length === 2, 'kệ có 2 mô hình');
+      ok(document.querySelectorAll('#shGrid .shItem:not(.sil)').length === 2, 'kệ có 2 mô hình');
       document.querySelector('#shGrid .shItem').click();
       $('shReplay').click();
       ok(replaying && L.name === 'Cây nấm' && !$('shelf').classList.contains('show'), 'phải phát lại Cây nấm');
@@ -32,13 +32,5 @@ module.exports = [
       document.querySelector('#shGrid .shItem').click(); $('shBuild').click();
       ok(L.name === 'Cây nấm' && rebuild && !replaying, 'lắp lại từ kệ');
   } },
-  { name: 'home-da-lap-mo-ke', pre: () => localStorage.setItem('xepgach.v2', JSON.stringify({ coins: 0, best: { 'Cây nấm': 3 } })),
-    post: async () => {
-      showHome(0); homeSel = 0; renderHome(); $('playBtn').click();
-      ok($('shelf').classList.contains('show'), 'nút chính của màn đã lắp phải mở kệ');
-  } },
 ];
-// lib là chuỗi nguồn hàm (runner chèn nguyên văn): dùng lại helper của t4 + wait
-module.exports.lib = `()=>{(${require('./t4-build.js').lib})(); window.wait=ms=>new Promise(r=>setTimeout(r,ms));
-  window.pump=ms=>new Promise(r=>{ const id=setInterval(()=>frame(),150); setTimeout(()=>{ clearInterval(id); r(); },ms); });}`;
-// pump: Chrome headless với virtual-time gần như không chạy requestAnimationFrame, nên tự gọi frame()
+module.exports.lib = require('./t4-build.js').lib;

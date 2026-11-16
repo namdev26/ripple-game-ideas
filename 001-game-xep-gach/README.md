@@ -26,14 +26,15 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
   - Khởi động: Cây nấm, Ngôi nhà, Dưa hấu, Lâu đài
   - Kỳ quan cổ đại: Kim tự tháp Giza, Vườn treo Babylon, Tượng Zeus, Đền Artemis, Lăng Halicarnassus, Tượng Rhodes, Hải đăng Alexandria
   - Việt Nam: Chùa Một Cột, Cột cờ Hà Nội, Cầu Vàng, Chùa Cầu Hội An, Khuê Văn Các
-  **Vòng chơi:** mua bản thiết kế → xem danh sách mảnh (lật từng bước) → ra tiệm gạch mua đủ mảnh → lắp → xem phát lại → mô hình lên kệ trưng bày.
-  - Tiệm gạch: "Mua phần thiếu" (giá lẻ) hoặc "Túi combo −20%" (nguyên bộ), nút nào rẻ hơn có nhãn. Tab "Kệ hàng" mua lẻ từng mảnh/màu.
-  - Kho mảnh giữ lâu dài, bán lại 50% giá. Thắng mới trừ mảnh khỏi kho; bỏ giữa chừng không mất gì.
-  - Giá tự tính từ cỡ mảnh; bản thiết kế = 60% tiền gạch; thưởng lần đầu luôn lời (1★ ×1,2 · 2★ ×1,35 · 3★ ×1,5). Bắt đầu 200 xu.
-  - Lắp lại từ kệ: miễn phí, +15 xu (không bao giờ kẹt tiền). Phát lại theo đúng thứ tự người chơi đã lắp, có nút bỏ qua.
-  - Bộ Khởi động tặng sẵn bản thiết kế, màn 1 có bong bóng hướng dẫn mua gạch lần đầu.
-  Xong cả bộ mới mở bộ sau; trong bộ đã mở mua bản nào trước cũng được. Thêm `?all` vào cuối link để mở hết + 99999 xu ảo khi test.
-  Thiết kế: `docs/superpowers/specs/2026-11-16-mua-ban-thiet-ke-design.md`. Test: `sh tests/run-all.sh` (cần node + Chrome).
+  **Vòng chơi:** có bộ mô hình (🎁 hộp bí ẩn hoặc 🛒 cửa hàng) → mở hộp → sách hướng dẫn kiểu LEGO → lắp → xem phát lại → lên kệ trưng bày.
+  - 🎁 Hộp bí ẩn: đồng giá (Khởi động 30 · Kỳ quan 120 · Việt Nam 160), ra ngẫu nhiên mô hình **chưa có** (không trùng), mô hình dễ hay ra trước (Thường 6 · Hiếm 3 · Huyền thoại 1). Kết quả tung trước và lưu lại; chạm hộp để lắc thử. Nút ⓘ xem tỉ lệ.
+  - ✨ Bản đặc biệt (vàng kim, chỉ có trong hộp): 12% mỗi hộp; hộp ra mô hình cuối của bộ mà bộ chưa có bản đặc biệt thì chắc chắn ra.
+  - 🛒 Cửa hàng: chọn đúng mô hình, giá theo độ hiếm (giá gốc ×1 / ×1,3 / ×1,8), đắt hơn hộp.
+  - Sách: bìa → mỗi bước một trang có khung mảnh "2x + tên màu" → trang danh sách mảnh. Vuốt hoặc ◀ ▶ để lật.
+  - Thưởng = giá gốc bộ × độ hiếm (1 / 1,2 / 1,5) × sao (1 / 1,2 / 1,4), bản đặc biệt ×1,2; lắp xong dù 1★ luôn đủ mở 1 hộp. Đủ bộ thưởng thêm + mở bộ sau. Lắp lại từ kệ +15.
+  - Hộp đầu tiên tặng, luôn ra Cây nấm, có bong bóng hướng dẫn. Bắt đầu 0 xu. Save cũ: bản thiết kế đã mua → chờ lắp, kho mảnh hoàn 100% ra xu.
+  Thêm `?all` vào cuối link để mở hết + 99999 xu ảo khi test (không lưu gì).
+  Thiết kế: `docs/superpowers/specs/2026-11-16-hop-bi-an-design.md`. Test: `sh tests/run-all.sh` (cần node + Chrome); ảnh xem bằng mắt: `SHOT=1 node tests/run-headless.js tests/shots-hb.js`.
   Mảnh trên chỉ lắp được khi mảnh dưới đã có.
   Loại gạch: brick/plate các cỡ, tile (trơn, không núm), dốc 2x2/1x2/2x4, dốc cheese, gạch tròn 1x1/2x2,
   nón vuông/tròn, mái vòm 2x2/4x4, vòm cửa 1x4/1x6, dốc nghiêng + góc chéo (mặt kim tự tháp).
@@ -51,4 +52,4 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
 
 ## Bước tiếp theo
 - [ ] Chơi thử prototype, ghi lại cảm giác
-- [x] Quyết định hướng: thư giãn, sưu tầm (hướng A: mua bản thiết kế → mua gạch → lắp)
+- [x] Quyết định hướng: thư giãn, sưu tầm. Đã đổi từ "mua bản thiết kế → mua gạch" sang hộp bí ẩn + cửa hàng mô hình
