@@ -22,8 +22,11 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
   tượng đất sét trắng hiện theo từng bước, kéo mảnh màu từ khay vào đúng hình là tự khớp.
   Mảnh trong khay xoay theo góc nhìn của bàn chính. HUD: tên màn + % hoàn thành. Thả sai hình bị tính lỗi (trừ sao),
   xu (thưởng khi thắng, dùng mua gợi ý), gợi ý phát sáng, cài đặt âm thanh/rung,
-  11 màn: Cây nấm, Ngôi nhà, Dưa hấu, Lâu đài (81 mảnh) + 7 kỳ quan thế giới cổ đại (Kim tự tháp Giza,
-  Vườn treo Babylon, Tượng Zeus, Đền Artemis, Lăng Halicarnassus, Tượng Rhodes, Hải đăng Alexandria).
+  16 màn chia 3 bộ (nút 📚 góc trái trên để chọn bộ):
+  - Khởi động: Cây nấm, Ngôi nhà, Dưa hấu, Lâu đài
+  - Kỳ quan cổ đại: Kim tự tháp Giza, Vườn treo Babylon, Tượng Zeus, Đền Artemis, Lăng Halicarnassus, Tượng Rhodes, Hải đăng Alexandria
+  - Việt Nam: Chùa Một Cột, Cột cờ Hà Nội, Cầu Vàng, Chùa Cầu Hội An, Khuê Văn Các
+  Xong màn trước mới mở màn sau, xong cả bộ mới mở bộ sau. Thêm `?all` vào cuối link để mở hết khi test.
   Mảnh trên chỉ lắp được khi mảnh dưới đã có.
   Loại gạch: brick/plate các cỡ, tile (trơn, không núm), dốc 2x2/1x2/2x4, dốc cheese, gạch tròn 1x1/2x2,
   nón vuông/tròn, mái vòm 2x2/4x4, vòm cửa 1x4/1x6, dốc nghiêng + góc chéo (mặt kim tự tháp).

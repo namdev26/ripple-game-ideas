@@ -89,7 +89,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #dragImg{position:absolute;width:26cqw;height:26cqw;transform:translate(-50%,-50%);pointer-events:none;display:none;z-index:5;filter:drop-shadow(0 3cqw 2cqw #2a2f6a55)}
 
 #toast{position:absolute;top:35cqw;left:50%;transform:translate(-50%,2cqw);background:#2b2f63e0;color:#fff;padding:1.6cqw 4.6cqw;border-radius:4cqw;
-  font-size:4.2cqw;font-weight:700;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;white-space:nowrap;border:.5cqw solid #ffffff55;z-index:6}
+  font-size:4.2cqw;font-weight:700;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;white-space:nowrap;border:.5cqw solid #ffffff55;z-index:20}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ---------- nút & màn phủ ---------- */
@@ -151,6 +151,26 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .lvc.cur{outline:1cqw solid #ffd43b;outline-offset:.6cqw}
 .lvc .st{position:absolute;bottom:-5.6cqw;left:50%;transform:translateX(-50%);font-size:3.8cqw;letter-spacing:-.2cqw;color:#ffc21a;text-shadow:0 .3cqw 0 #c98a00;white-space:nowrap}
 .lvc .st .off{color:#ffffffb0;text-shadow:none}
+.lvc.lock{filter:grayscale(.9);opacity:.7;font-size:6cqw}
+#serBtn{position:absolute;top:6.4cqw;left:5cqw;height:10cqw;max-width:52cqw;padding:0 3.5cqw;font-size:4.4cqw;flex-direction:row;gap:1.5cqw}
+#serBtn .outline{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* ---------- bộ sưu tập ---------- */
+#series{background:linear-gradient(#6a72d6 0%,#7d8fe4 28%,#9cc0f2 60%,#c3e2fb 100%);justify-content:flex-start;padding-top:9cqw;z-index:11}
+#series .close{top:6cqw;right:5cqw}
+.sHead{font-size:9cqw;font-weight:800;color:#fff;margin-bottom:3cqw}
+#sList{width:100%;flex:1;overflow-y:auto;padding:3cqw 7cqw 10cqw;box-sizing:border-box;display:flex;flex-direction:column;gap:5cqw;touch-action:pan-y;scrollbar-width:none}
+.scard{position:relative;display:flex;align-items:center;gap:4cqw;background:#fff;border:1cqw solid var(--c);border-radius:5cqw;padding:3cqw;flex:none;cursor:pointer;
+  box-shadow:inset 0 -1.4cqw 0 #cfd6ec,0 1.5cqw 3cqw #0003}
+.scard.cur{outline:1cqw solid #ffd43b;outline-offset:.8cqw}
+.scard img{width:30cqw;height:30cqw;flex:none;background:#eef3ff;border-radius:3.5cqw}
+.sInfo{flex:1;min-width:0;text-align:left}
+.sInfo b{display:block;font-size:6cqw;line-height:1.1;color:#2b3150}
+.sbar{height:3.4cqw;background:#e3e8f5;border-radius:2cqw;margin:2.5cqw 0 1.5cqw;overflow:hidden}
+.sbar i{display:block;height:100%;background:var(--c)}
+.sInfo small{font-size:4cqw;font-weight:700;color:#6a7195}
+.scard.lock img{filter:grayscale(1) opacity(.5)}
+.slock{position:absolute;inset:0;border-radius:4cqw;background:#ffffffa0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10cqw;text-align:center}
+.slock small{font-size:4cqw;font-weight:800;color:#4b5275;padding:0 6cqw}
 </style>
 </head>
 <body>
@@ -218,7 +238,14 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   </div></div>
 
 
+  <div id="series" class="screen">
+    <div class="sHead outline">BỘ SƯU TẬP</div>
+    <button class="btn blue close" id="serClose" aria-label="Đóng">✕</button>
+    <div id="sList"></div>
+  </div>
+
   <div id="home" class="screen show">
+    <button class="btn orange" id="serBtn"><span>📚</span><span class="outline o" id="serName">Khởi động</span></button>
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">100</span></div>
     <div class="logo">
       <div class="r"><b style="--c:#e2342a">X</b><b style="--c:#f5b700">Ế</b><b style="--c:#2fa04f">P</b></div>
@@ -279,15 +306,18 @@ const PARTS={
   sail_1x2:{w:1,d:2,h:5,shape:'sail'},
   // dốc nghiêng 1 ô (không đỉnh phẳng) + góc chéo: ghép thành mặt kim tự tháp liền
   wedge_1x2:{w:2,d:1,h:3,shape:'slope',flat:0}, wcorner_1x1:{w:1,d:1,h:3,shape:'wcorner'}, pyr_2x2:{w:2,d:2,h:3,shape:'cone'},
+  rwindow_1x2:{w:2,d:1,h:3,shape:'window',round:1},
+  // lá cờ bay về +X; ngôi sao gắn lên lá cờ ngay dưới nó (đặt ở ô trên đỉnh cờ)
+  flag_1x1:{w:1,d:1,h:3,shape:'flag'}, star_1x1:{w:1,d:1,h:1,shape:'star'},
 };
 // [part, màu, x, y(plate), z, xoay]. Dốc: xoay 0 thấp về -Z, 1 về -X, 2 về +Z, 3 về +X
 const T4=y=>[['brick_2x2','gray',0,y,0,0],['brick_2x2','gray',8,y,0,0],['brick_2x2','gray',0,y,8,0],['brick_2x2','gray',8,y,8,0]];
 // cùng 1 loại mảnh đặt ở nhiều điểm [x,z]
 const at=(pts,key,c,y)=>pts.map(([x,z])=>[key,c,x,y,z,0]);
 // vòng dốc 2x2 quanh hình vuông n×n góc (x,z), mặt dốc quay ra ngoài
-const slopeRing=(c,x,z,y,n)=>{ const o=[];
-  for(let i=0;i<n;i+=2) o.push(['slope_2x2',c,x+i,y,z,0],['slope_2x2',c,x+i,y,z+n-2,2]);
-  for(let i=2;i<n-2;i+=2) o.push(['slope_2x2',c,x,y,z+i,1],['slope_2x2',c,x+n-2,y,z+i,3]);
+const slopeRing=(c,x,z,y,n,k='slope_2x2')=>{ const o=[];
+  for(let i=0;i<n;i+=2) o.push([k,c,x+i,y,z,0],[k,c,x+i,y,z+n-2,2]);
+  for(let i=2;i<n-2;i+=2) o.push([k,c,x,y,z+i,1],[k,c,x+n-2,y,z+i,3]);
   return o; };
 // 1 tầng kim tự tháp n×n: lõi gạch + viền dốc 1 ô + 4 góc chéo
 const pyrLayer=(c,x,z,y,n,core)=>{ const o=[...core], m=n-1;
@@ -501,7 +531,133 @@ const LEVELS=[
     [['flame_2x2','orange',5,25,5,0]],
     [...palm(2,9,2),...palm(9,2,2)],
   ]},
+  // ---- Việt Nam ----
+  {name:'Chùa Một Cột', size:[12,12], steps:[
+    [['base_12x12','green',0,0,0,0]],
+    // hồ sen vuông: thành gạch + nước
+    [['brick_1x4','sand',2,1,2,0],['brick_1x4','sand',6,1,2,0],['brick_1x4','sand',2,1,9,0],['brick_1x4','sand',6,1,9,0],
+     ['brick_1x6','sand',2,1,3,1],['brick_1x6','sand',9,1,3,1]],
+    [3,5,7].flatMap(z=>[['tile_2x4','water',3,1,z,0],['tile_2x2','water',7,1,z,0]]),
+    [['flower_1x1','pink',3,2,3,0],['flower_1x1','pink',8,2,8,0],['flower_1x1','pink',3,2,8,0],['flower_1x1','pink',8,2,3,0],
+     ['round_tile_1x1','lime',4,2,7,0],['round_tile_1x1','lime',7,2,4,0],['round_tile_1x1','lime',3,2,5,0],['round_tile_1x1','lime',8,2,6,0]],
+    // cột đá giữa hồ
+    [['cyl_2x2','gray',5,2,5,0]],
+    [['cyl_2x2','gray',5,5,5,0]],
+    [['cyl_2x2','gray',5,8,5,0]],
+    // điện gỗ đỏ, cửa sổ tròn
+    [['plate_4x4','darkred',4,11,4,0]],
+    [['brick_1x4','darkred',4,12,4,0],['brick_1x1','darkred',4,12,7,0],['rwindow_1x2','darkred',5,12,7,0],['brick_1x1','darkred',7,12,7,0],
+     ['rwindow_1x2','darkred',4,12,5,1],['rwindow_1x2','darkred',7,12,5,1]],
+    // mái cong
+    [['plate_6x6','darkgray',3,15,3,0]],
+    [['brick_2x2','darkgray',5,16,5,0],...slopeRing('darkgray',3,3,16,6,'curve_2x2')],
+    [['pyr_2x2','darkgray',5,19,5,0]],
+    // vườn
+    [['tile_2x2','sand',5,1,10,0],['pine_2x2','darkgreen',0,1,0,0],['pine_2x2','darkgreen',10,1,0,0],
+     ['bush_2x2','green',0,1,10,0],['bush_2x2','green',10,1,10,0],['bush_2x2','lime',0,1,5,0],['bush_2x2','lime',10,1,5,0],
+     ['flower_1x1','yellow',1,1,3,0],['flower_1x1','red',10,1,8,0]],
+  ]},
+  {name:'Cột cờ Hà Nội', size:[12,12], steps:[
+    [['base_12x12','green',0,0,0,0]],
+    // 3 tầng bệ, mỗi tầng có cửa vòm
+    [['brick_1x4','darktan',2,1,2,0],['brick_1x4','darktan',6,1,2,0],['brick_1x2','darktan',2,1,9,0],['arch_1x4','darktan',4,1,9,0],
+     ['brick_1x2','darktan',8,1,9,0],['brick_1x6','darktan',2,1,3,1],['brick_1x6','darktan',9,1,3,1]],
+    [['plate_8x8','sand',2,4,2,0]],
+    [['brick_1x6','darktan',3,5,3,0],['brick_1x1','darktan',3,5,8,0],['arch_1x4','darktan',4,5,8,0],['brick_1x1','darktan',8,5,8,0],
+     ['brick_1x4','darktan',3,5,4,1],['brick_1x4','darktan',8,5,4,1]],
+    [['plate_6x6','sand',3,8,3,0]],
+    [['brick_2x4','darktan',4,9,4,0],['brick_2x4','darktan',4,9,6,0]],
+    [['plate_4x4','sand',4,12,4,0]],
+    // thân tháp tròn
+    [['cyl_2x2','darktan',5,13,5,0]], [['cyl_2x2','sand',5,16,5,0]], [['cyl_2x2','darktan',5,19,5,0]], [['cyl_2x2','sand',5,22,5,0]],
+    // vọng canh + cột cờ + cờ đỏ sao vàng
+    [['plate_2x2','darkred',5,25,5,0],['brick_2x2','white',5,26,5,0],['plate_2x2','darkred',5,29,5,0]],
+    [['spire_1x1','white',5,30,5,0]],
+    [['flag_1x1','red',5,36,5,0]],
+    [['star_1x1','yellow',5,39,5,0]],
+    // cây + bồn hoa
+    [['pine_2x2','darkgreen',0,1,0,0],['pine_2x2','darkgreen',10,1,0,0],['pine_2x2','darkgreen',0,1,10,0],['pine_2x2','darkgreen',10,1,10,0]],
+    [3,4,5,6,7,8].map((x,i)=>['flower_1x1',i%2?'yellow':'red',x,1,11,0]),
+  ]},
+  {name:'Cầu Vàng', size:[12,12], steps:[
+    [['base_12x12','darkgreen',0,0,0,0]],
+    [['dome_4x4','green',0,1,8,0],['dome_4x4','green',8,1,0,0]],
+    // 2 bàn tay đá rêu phong
+    [['brick_2x2','darkgray',2,1,5,0],['brick_2x2','darkgray',8,1,5,0]],
+    [['brick_2x2','darkgray',2,4,5,0],['brick_2x2','darkgray',8,4,5,0]],
+    [['brick_2x4','gray',2,7,4,1],['brick_2x4','gray',8,7,4,1]],
+    [...[4,5,6,7].map(z=>['cyl_1x1','gray',2,10,z,0]),['cyl_1x1','gray',3,10,7,0]],
+    [...[4,5,6,7].map(z=>['cyl_1x1','gray',9,10,z,0]),['cyl_1x1','gray',8,10,7,0]],
+    // mặt cầu vàng + lan can
+    [['plate_2x6','gold',0,13,4,0],['plate_2x6','gold',6,13,4,0],['plate_2x6','gold',0,13,6,0],['plate_2x6','gold',6,13,6,0]],
+    [0,4,8].flatMap(x=>[['plate_1x4','gold',x,14,4,0],['plate_1x4','gold',x,14,7,0]]),
+    // đèn + chậu hoa tím dọc lan can
+    [['spire_1x1','white',0,15,4,0],['spire_1x1','white',11,15,4,0],['spire_1x1','white',0,15,7,0],['spire_1x1','white',11,15,7,0]],
+    [['flower_1x1','lavender',3,15,4,0],['flower_1x1','pink',6,15,4,0],['flower_1x1','lavender',9,15,4,0],
+     ['flower_1x1','pink',2,15,7,0],['flower_1x1','lavender',5,15,7,0],['flower_1x1','pink',8,15,7,0]],
+    // rừng núi
+    [['pine_2x2','darkgreen',1,7,9,0],['pine_2x2','darkgreen',9,7,1,0],['pine_2x2','darkgreen',0,1,0,0],['pine_2x2','darkgreen',10,1,10,0],
+     ['bush_2x2','lime',5,1,9,0],['bush_2x2','green',5,1,1,0]],
+  ]},
+  {name:'Chùa Cầu Hội An', size:[12,12], steps:[
+    [['base_12x12','darkazure',0,0,0,0]],
+    // 2 bờ sông + dòng sông
+    [['plate_4x4','sand',0,1,0,0],['plate_4x4','sand',0,1,4,0],['plate_4x4','sand',0,1,8,0],
+     ['plate_4x4','sand',8,1,0,0],['plate_4x4','sand',8,1,4,0],['plate_4x4','sand',8,1,8,0]],
+    [0,4,8].flatMap(z=>[['tile_2x4','water',4,1,z,1],['tile_2x4','water',6,1,z,1]]),
+    // vòm đá + mặt cầu gỗ
+    [['arch_1x6','darkgray',3,2,4,0],['arch_1x6','darkgray',3,2,7,0]],
+    [['plate_2x8','brown',2,8,4,0],['plate_2x8','brown',2,8,6,0]],
+    // cột đỏ + mái ngói
+    [2,4,7,9].flatMap(x=>[['column_1x1','darkred',x,9,4,0],['column_1x1','darkred',x,9,7,0]]),
+    [['plate_2x8','darkred',2,12,4,0],['plate_2x8','darkred',2,12,6,0]],
+    [['slope_2x4','orange',2,13,4,0],['slope_2x4','orange',6,13,4,0],['slope_2x4','orange',2,13,6,2],['slope_2x4','orange',6,13,6,2]],
+    [['ball_1x1','gold',3,16,5,0],['ball_1x1','gold',8,16,6,0]],
+    // phố cổ: nhà vàng mái ngói
+    [['brick_2x4','yellow',0,2,4,1],['brick_2x4','yellow',10,2,4,1]],
+    [['slope_2x4','darkred',0,5,4,1],['slope_2x4','darkred',10,5,4,3]],
+    // đèn lồng trên bờ
+    [['column_1x1','brown',1,2,1,0],['column_1x1','brown',10,2,1,0],['column_1x1','brown',1,2,10,0],['column_1x1','brown',10,2,10,0]],
+    [['ball_1x1','red',1,5,1,0],['ball_1x1','yellow',10,5,1,0],['ball_1x1','orange',1,5,10,0],['ball_1x1','pink',10,5,10,0]],
+    // hoa đăng trên sông
+    [['flower_1x1','yellow',5,2,1,0],['flower_1x1','pink',6,2,10,0],['flower_1x1','orange',4,2,9,0],['flower_1x1','red',7,2,2,0]],
+  ]},
+  {name:'Khuê Văn Các', size:[12,12], steps:[
+    [['base_12x12','green',0,0,0,0]],
+    [['plate_8x8','sand',2,1,2,0]],
+    // 4 trụ gạch trắng
+    [['brick_2x2','white',3,2,3,0],['brick_2x2','white',7,2,3,0],['brick_2x2','white',3,2,7,0],['brick_2x2','white',7,2,7,0]],
+    [['brick_2x2','white',3,5,3,0],['brick_2x2','white',7,5,3,0],['brick_2x2','white',3,5,7,0],['brick_2x2','white',7,5,7,0]],
+    [['arch_1x4','white',4,8,3,0],['arch_1x4','white',4,8,8,0],['arch_1x4','white',3,8,4,1],['arch_1x4','white',8,8,4,1],
+     ['brick_1x1','white',3,8,3,0],['brick_1x1','white',8,8,3,0],['brick_1x1','white',3,8,8,0],['brick_1x1','white',8,8,8,0]],
+    [['plate_6x6','brown',3,11,3,0]],
+    // gác trên: tầng gỗ đỏ sau mái hiên, rồi tầng cửa sổ tròn vàng 4 mặt
+    [['brick_1x4','darkred',4,12,4,0],['brick_1x4','darkred',4,12,7,0],['brick_1x2','darkred',4,12,5,1],['brick_1x2','darkred',7,12,5,1]],
+    pyrLayer('darkgray',3,3,12,6,[]),
+    [['brick_1x1','darkred',4,15,4,0],['rwindow_1x2','gold',5,15,4,0],['brick_1x1','darkred',7,15,4,0],
+     ['brick_1x1','darkred',4,15,7,0],['rwindow_1x2','gold',5,15,7,0],['brick_1x1','darkred',7,15,7,0],
+     ['rwindow_1x2','gold',4,15,5,1],['rwindow_1x2','gold',7,15,5,1]],
+    // mái trên
+    [['plate_6x6','darkgray',3,18,3,0]],
+    pyrLayer('darkgray',3,3,19,6,[['brick_2x4','darkgray',4,19,4,0],['brick_2x4','darkgray',4,19,6,0]]),
+    pyrLayer('darkgray',4,4,22,4,[['brick_2x2','darkgray',5,22,5,0]]),
+    [['pyr_2x2','gold',5,25,5,0]],
+    // giếng Thiên Quang + vườn
+    [['tile_2x4','water',4,1,10,0],['pine_2x2','darkgreen',0,1,0,0],['pine_2x2','darkgreen',10,1,0,0],
+     ['pine_2x2','darkgreen',0,1,8,0],['pine_2x2','darkgreen',10,1,8,0]],
+    [['bush_2x2','lime',0,1,4,0],['bush_2x2','lime',10,1,4,0],['flower_1x1','pink',1,1,11,0],['flower_1x1','yellow',10,1,11,0],
+     ['flower_1x1','red',2,1,11,0],['flower_1x1','pink',9,1,11,0]],
+  ]},
 ];
+// bộ màn = các màn liền nhau trong LEVELS (thêm màn mới: chèn vào LEVELS rồi tăng n của bộ)
+const SERIES=[
+  {name:'Khởi động', n:4, c:'#3fa9f5'},
+  {name:'Kỳ quan cổ đại', n:7, c:'#e3a923'},
+  {name:'Việt Nam', n:5, c:'#e8463a'},
+];
+SERIES.reduce((a,s)=>(s.from=a)+s.n,0);
+console.assert(SERIES.reduce((a,s)=>a+s.n,0)===LEVELS.length,'SERIES.n không khớp số màn');
+const seriesOf=i=>SERIES.findIndex(s=>i>=s.from&&i<s.from+s.n);
 const levelTargets=lv=>{ const out=[]; lv.steps.forEach((s,si)=>s.forEach(([key,color,x,y,z,rot])=>out.push({key,color,x,y,z,rot,step:si}))); return out; };
 
 // ====================== HÌNH HỌC ======================
@@ -580,7 +736,9 @@ function partGeos(key){
   } else if (p.shape==='window'){
     const W=p.w/2-0.02, s=new THREE.Shape(), h=new THREE.Path();
     s.moveTo(-W,0); s.lineTo(W,0); s.lineTo(W,H); s.lineTo(-W,H); s.lineTo(-W,0);
-    h.moveTo(-0.42,0.2); h.lineTo(0.42,0.2); h.lineTo(0.42,0.6); h.absarc(0,0.6,0.42,0,Math.PI,false); h.lineTo(-0.42,0.2); s.holes.push(h);
+    if (p.round) h.absarc(0,0.6,0.38,0,Math.PI*2,false);
+    else { h.moveTo(-0.42,0.2); h.lineTo(0.42,0.2); h.lineTo(0.42,0.6); h.absarc(0,0.6,0.42,0,Math.PI,false); h.lineTo(-0.42,0.2); }
+    s.holes.push(h);
     body=new THREE.ExtrudeGeometry(s,{depth:p.d-0.04,bevelEnabled:false,curveSegments:12}).translate(0,0,-(p.d-0.04)/2);
     grid();
   } else if (p.shape==='corner'){
@@ -594,6 +752,14 @@ function partGeos(key){
     const e=0.48, A=[-e,0,-e], B=[e,0,-e], C=[e,0,e], D=[-e,0,e], T=[e,H,e], tri=[];
     for (const f of [[A,B,C],[A,C,D],[A,T,B],[A,D,T],[B,T,C],[C,T,D]]) for (const v of f) tri.push(...v);
     body=new THREE.BufferGeometry(); body.setAttribute('position',new THREE.Float32BufferAttribute(tri,3)); body.computeVertexNormals();
+  } else if (p.shape==='flag'){
+    body=mergeGeos([new THREE.CylinderGeometry(0.06,0.06,H,8).translate(0,H/2,0), new THREE.BoxGeometry(1.5,0.95,0.05).translate(0.8,0.62,0)]);
+  } else if (p.shape==='star'){
+    // hình sao nằm giữa lá cờ bên dưới (cờ cao 3 plate), 2 mặt
+    const s=new THREE.Shape();
+    for(let i=0;i<10;i++){ const a=Math.PI/2+i*Math.PI/5, r=i%2?0.11:0.27; i?s.lineTo(r*Math.cos(a),r*Math.sin(a)):s.moveTo(r*Math.cos(a),r*Math.sin(a)); }
+    const g=z=>new THREE.ExtrudeGeometry(s,{depth:0.02,bevelEnabled:false}).translate(0.8,0.62-3*PLATE,z);
+    body=mergeGeos([g(0.026),g(-0.046)]);
   } else if (p.shape==='sail'){
     const hd=p.d/2-0.05, s=new THREE.Shape();
     s.moveTo(hd,0.1); s.lineTo(-hd,0.1); s.quadraticCurveTo(-hd*0.2,H*0.5,-hd*0.6,H); s.lineTo(hd,0.1);
@@ -696,6 +862,13 @@ const store={
   set(v){ try{ localStorage.setItem('xepgach.v2',JSON.stringify(v)); }catch(e){} },
 };
 let S=store.get();
+// tiến độ lưu theo tên màn (bản cũ lưu theo số thứ tự) để chèn màn mới không bị lệch
+Object.keys(S.best).forEach(k=>{ if(/^\d+$/.test(k)){ const lv=LEVELS[+k]; if(lv) S.best[lv.name]=Math.max(S.best[lv.name]||0,S.best[k]); delete S.best[k]; } });
+const best=i=>S.best[LEVELS[i].name]||0;
+const UNLOCK_ALL=/[?&]all\b/.test(location.search); // thêm ?all vào link để mở hết khi test
+const seriesDone=s=>{ const r=SERIES[s]; for(let i=r.from;i<r.from+r.n;i++) if(!best(i)) return false; return true; };
+const seriesOpen=s=>UNLOCK_ALL||s===0||seriesDone(s-1);
+const levelOpen=i=>{ const s=seriesOf(i); return seriesOpen(s)&&(UNLOCK_ALL||i===SERIES[s].from||best(i-1)>0); };
 const save=()=>store.set(S);
 let actx=null;
 function tone(f,dur,type='triangle',vol=0.12,delay=0){
@@ -747,7 +920,7 @@ function loadLevel(i){
   if (levelRoot) scene.remove(levelRoot);
   levelRoot=new THREE.Group(); scene.add(levelRoot);
   mistakes=0; hintsLeft=3; done=false; anims=[]; hintT=null; endDrag(true);
-  ['result','setModal','infoModal','home'].forEach(id=>$(id).classList.remove('show'));
+  ['result','setModal','infoModal','home','series'].forEach(id=>$(id).classList.remove('show'));
   controls.autoRotate=false;
 
   targets=levelTargets(L).map(t=>({...t,placed:false}));
@@ -793,7 +966,7 @@ function loadLevel(i){
     el.addEventListener('pointerdown',e=>trayDown(e,idx));
     it.el=el; box.appendChild(el);
   });
-  $('lvText').textContent=`MÀN ${i+1}`;
+  $('lvText').textContent=`MÀN ${i-SERIES[seriesOf(i)].from+1}`;
   $('lvName').textContent=L.name; updateCoins(); updateCount(); updateHint(); updateTray();
   buildTrayObjs();
   showStep(0);
@@ -1000,7 +1173,7 @@ function useHint(){
 function win(){
   done=true; endDrag(true); sfx.win();
   const stars=starsNow(), reward=20+stars*10;
-  S.best[levelIdx]=Math.max(S.best[levelIdx]||0,stars); S.coins+=reward; save();
+  S.best[L.name]=Math.max(best(levelIdx),stars); S.coins+=reward; save();
   setTimeout(confetti,250);
   controls.autoRotate=true; controls.autoRotateSpeed=3;
   setTimeout(()=>showResult(stars,reward),1700);
@@ -1015,27 +1188,52 @@ function showResult(stars,reward){
 }
 
 // ====================== HOME ======================
-let homeSel=0;
-function showHome(){
-  const first=LEVELS.findIndex((_,i)=>!S.best[i]);
-  homeSel=first<0?LEVELS.length-1:first;
+let homeSel=0, curSeries=0;
+// màn nên chơi tiếp trong bộ: màn mở đầu tiên chưa xong, không có thì màn mở cuối cùng
+function pickInSeries(s){
+  const r=SERIES[s]; let k=r.from;
+  for(let i=r.from;i<r.from+r.n;i++){ if(!levelOpen(i)) break; k=i; if(!best(i)) return i; }
+  return k;
+}
+function showHome(s){
+  if (typeof s!=='number'){ s=0; while(s<SERIES.length-1&&seriesOpen(s+1)) s++; } // mặc định: bộ mới nhất đã mở
+  curSeries=s; homeSel=pickInSeries(s);
   renderHome(); updateCoins();
-  ['result','setModal','infoModal'].forEach(id=>$(id).classList.remove('show'));
+  ['result','setModal','infoModal','series'].forEach(id=>$(id).classList.remove('show'));
   $('home').classList.add('show');
 }
+const toMenu=()=>showHome(seriesOf(levelIdx));
 function renderHome(){
+  const r=SERIES[curSeries];
+  $('serName').textContent=r.name;
   $('hImg').src=thumbLevel(homeSel); $('hName').textContent=LEVELS[homeSel].name;
-  $('playSub').textContent=`Màn ${homeSel+1} · ${levelTargets(LEVELS[homeSel]).length} mảnh`;
+  $('playSub').textContent=`Màn ${homeSel-r.from+1} · ${levelTargets(LEVELS[homeSel]).length} mảnh`;
   $('hLevels').innerHTML='';
-  LEVELS.forEach((lv,i)=>{
-    const s=S.best[i]||0, b=document.createElement('button');
-    b.className='btn '+(s?'green':'blue')+' lvc'+(i===homeSel?' cur':'');
-    b.innerHTML=`<span class="outline${s?' g':''}">${i+1}</span><span class="st">${[0,1,2].map(k=>`<span class="${k<s?'':'off'}">★</span>`).join('')}</span>`;
-    b.onclick=()=>{ homeSel=i; renderHome(); sfx.pick(); };
+  for(let i=r.from;i<r.from+r.n;i++){
+    const s=best(i), open=levelOpen(i), b=document.createElement('button');
+    b.className='btn '+(s?'green':'blue')+' lvc'+(i===homeSel?' cur':'')+(open?'':' lock');
+    b.innerHTML=open ? `<span class="outline${s?' g':''}">${i-r.from+1}</span><span class="st">${[0,1,2].map(k=>`<span class="${k<s?'':'off'}">★</span>`).join('')}</span>`
+      : `<span>🔒</span>`;
+    b.onclick=()=>{ if(!open){ toast('Hoàn thành màn trước để mở khóa'); sfx.back(); return; } homeSel=i; renderHome(); sfx.pick(); };
     $('hLevels').appendChild(b);
-  });
-  const cur=$('hLevels').children[homeSel], box=$('hLevels');
+  }
+  const cur=$('hLevels').children[homeSel-r.from], box=$('hLevels');
   box.scrollLeft=cur.offsetLeft-box.firstChild.offsetLeft-(box.clientWidth-cur.offsetWidth)/2;
+}
+// ====================== BỘ SƯU TẬP ======================
+function showSeries(){
+  $('sList').innerHTML='';
+  SERIES.forEach((r,s)=>{
+    let done=0, stars=0; for(let i=r.from;i<r.from+r.n;i++){ done+=best(i)?1:0; stars+=best(i); }
+    const open=seriesOpen(s), c=document.createElement('div');
+    c.className='scard'+(open?'':' lock')+(s===curSeries?' cur':''); c.style.setProperty('--c',r.c);
+    c.innerHTML=`<img src="${thumbLevel(r.from+r.n-1)}" alt=""><div class="sInfo"><b>${r.name}</b>
+      <div class="sbar"><i style="width:${100*done/r.n}%"></i></div><small>${done}/${r.n} màn · ★ ${stars}/${r.n*3}</small></div>`
+      +(open?'':`<div class="slock">🔒<small>Hoàn thành bộ "${SERIES[s-1].name}" để mở</small></div>`);
+    c.onclick=()=>{ if(!open){ toast('Bộ này chưa mở khóa'); sfx.back(); return; } sfx.pick(); showHome(s); };
+    $('sList').appendChild(c);
+  });
+  show('series',true);
 }
 
 // ====================== NÚT ======================
@@ -1046,13 +1244,20 @@ $('setClose').onclick=()=>show('setModal',false);
 $('sndSw').onclick=()=>{ S.snd=!S.snd; save(); $('sndSw').classList.toggle('on',S.snd); sfx.pick(); };
 $('vibSw').onclick=()=>{ S.vib=!S.vib; save(); $('vibSw').classList.toggle('on',S.vib); vib(30); };
 $('sRestart').onclick=()=>loadLevel(levelIdx);
-$('sMenu').onclick=showHome;
+$('sMenu').onclick=toMenu;
+$('serBtn').onclick=()=>{ sfx.pick(); showSeries(); };
+$('serClose').onclick=()=>show('series',false);
 $('infoBtn').onclick=()=>{ show('infoModal',true); sfx.pick(); };
 $('infoClose').onclick=()=>show('infoModal',false);
 $('infoModal').onclick=e=>{ if(e.target.id==='infoModal') show('infoModal',false); };
-$('rMenu').onclick=showHome;
+$('rMenu').onclick=toMenu;
 $('rAgain').onclick=()=>loadLevel(levelIdx);
-$('rNext').onclick=()=>{ if (levelIdx<LEVELS.length-1) loadLevel(levelIdx+1); else showHome(); };
+$('rNext').onclick=()=>{
+  const n=levelIdx+1;
+  if (n>=LEVELS.length||!levelOpen(n)) return toMenu();
+  if (seriesOf(n)!==seriesOf(levelIdx)) toast(`🎉 Mở khóa bộ mới: ${SERIES[seriesOf(n)].name}`,2500);
+  loadLevel(n);
+};
 $('playBtn').onclick=()=>{ loadLevel(homeSel); sfx.pick(); };
 $('coinPill').onclick=()=>toast('Thắng màn để nhận thêm xu');
 
