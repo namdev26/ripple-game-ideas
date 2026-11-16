@@ -1,0 +1,27 @@
+// Kiểm tra hàm kinh tế trong khối DỮ LIỆU của mobile.html. Chạy: node tests/check-econ.js mobile.html
+const fs = require('fs'), assert = require('assert');
+const html = fs.readFileSync(process.argv[2] || __dirname + '/../mobile.html', 'utf8');
+const a = html.indexOf('// ====================== DỮ LIỆU'), b = html.indexOf('// ====================== HÌNH HỌC');
+const E = new Function(html.slice(a, b) + ';return {partPrice,bomOf,brickCost,bpPrice,comboPrice,missingOf,missingCost,rewardFor,buy,sell,LEVELS,levelTargets,REBUILD_REWARD};')();
+const idx = n => E.LEVELS.findIndex(l => l.name === n);
+const eq = (x, y, m) => assert.strictEqual(x, y, m);
+eq(E.partPrice('plate_1x1'), 1); eq(E.partPrice('brick_2x4'), 2); eq(E.partPrice('base_12x12'), 12);
+eq(E.partPrice('flower_1x1'), 3); eq(E.partPrice('pine_2x2'), 4);
+const giza = idx('Kim tự tháp Giza');
+eq(E.brickCost(giza), 162); eq(E.brickCost(idx('Đền Artemis')), 233); eq(E.brickCost(idx('Tượng Rhodes')), 69);
+eq([0, 1, 2, 3].reduce((s, i) => s + E.brickCost(i), 0), 160);
+eq(E.bpPrice(giza), 100); eq(E.bpPrice(0), 0);
+eq(E.comboPrice(giza), Math.ceil(162 * 0.8));
+E.LEVELS.forEach((l, i) => assert(E.rewardFor(i, 1) >= E.bpPrice(i) + E.brickCost(i), 'lỗ: ' + l.name));
+eq(E.rewardFor(0, 1), 20); eq(E.REBUILD_REWARD, 15);
+eq(E.missingOf(0, {}).reduce((s, m) => s + m.n, 0), E.levelTargets(E.LEVELS[0]).length);
+const full = {}; E.bomOf(giza).forEach(m => full[m.key + '|' + m.color] = m.n);
+eq(E.missingOf(giza, full).length, 0); eq(E.missingCost(giza, full), 0);
+eq(E.missingCost(giza, {}), 162);
+let st = { coins: 5, inv: {} };
+eq(E.buy(st, [{ key: 'brick_2x4', color: 'red', n: 1 }], 10), false); eq(st.coins, 5); assert.deepStrictEqual(st.inv, {});
+st = { coins: 50, inv: { 'brick_2x4|red': 1 } };
+eq(E.buy(st, [{ key: 'brick_2x4', color: 'red', n: 2 }], 4), true); eq(st.coins, 46); eq(st.inv['brick_2x4|red'], 3);
+st = { coins: 0, inv: {} }; eq(E.sell(st, 'brick_2x4', 'red'), false); eq(st.coins, 0);
+st = { coins: 0, inv: { 'base_12x12|green': 1 } }; eq(E.sell(st, 'base_12x12', 'green'), true); eq(st.coins, 6); eq(st.inv['base_12x12|green'], 0);
+console.log('check-econ OK');
