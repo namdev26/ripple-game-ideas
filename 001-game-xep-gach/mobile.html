@@ -145,8 +145,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #playBtn{margin-top:6cqw;width:66cqw;height:21cqw}
 #playBtn .t{font-size:10.5cqw;line-height:.95}
 #playBtn small{font-size:4.2cqw;font-weight:700;opacity:.95}
-#hLevels{display:flex;gap:4.5cqw;margin-top:7cqw}
-.lvc{width:15cqw;height:15cqw;font-size:7cqw}
+#hLevels{display:flex;gap:4.5cqw;margin-top:5cqw;max-width:100cqw;box-sizing:border-box;padding:2cqw 7cqw 7cqw;overflow-x:auto;scrollbar-width:none;touch-action:pan-x}
+#hLevels::-webkit-scrollbar{display:none}
+.lvc{width:15cqw;height:15cqw;font-size:7cqw;flex:none}
 .lvc.cur{outline:1cqw solid #ffd43b;outline-offset:.6cqw}
 .lvc .st{position:absolute;bottom:-5.6cqw;left:50%;transform:translateX(-50%);font-size:3.8cqw;letter-spacing:-.2cqw;color:#ffc21a;text-shadow:0 .3cqw 0 #c98a00;white-space:nowrap}
 .lvc .st .off{color:#ffffffb0;text-shadow:none}
@@ -238,12 +239,15 @@ const PLATE=0.4, M=1;
 const COLORS={
   green:{hex:0x2a8a48}, lime:{hex:0x9fcb2c}, white:{hex:0xf4f4ef}, red:{hex:0xd42a1f}, black:{hex:0x2b3036},
   brown:{hex:0x8a5a33}, yellow:{hex:0xf5c518}, gray:{hex:0xa9afb6}, blue:{hex:0x2f6fd6},
+  sand:{hex:0xe6cf98}, tan:{hex:0xc79a5b}, bronze:{hex:0xb8783a},
 };
 const PARTS={
   plate_2x4:{w:4,d:2,h:1,shape:'box'}, plate_2x6:{w:6,d:2,h:1,shape:'box'}, plate_2x8:{w:8,d:2,h:1,shape:'box'},
-  plate_4x4:{w:4,d:4,h:1,shape:'box'}, base_10x10:{w:10,d:10,h:1,shape:'box'},
+  plate_4x4:{w:4,d:4,h:1,shape:'box'}, plate_6x6:{w:6,d:6,h:1,shape:'box'}, plate_8x8:{w:8,d:8,h:1,shape:'box'},
+  base_10x10:{w:10,d:10,h:1,shape:'box'}, base_12x12:{w:12,d:12,h:1,shape:'box'},
   brick_1x1:{w:1,d:1,h:3,shape:'box'}, brick_1x2:{w:2,d:1,h:3,shape:'box'}, brick_1x4:{w:4,d:1,h:3,shape:'box'},
-  brick_2x2:{w:2,d:2,h:3,shape:'box'}, brick_2x4:{w:4,d:2,h:3,shape:'box'},
+  brick_1x6:{w:6,d:1,h:3,shape:'box'}, brick_2x2:{w:2,d:2,h:3,shape:'box'}, brick_2x4:{w:4,d:2,h:3,shape:'box'},
+  brick_2x6:{w:6,d:2,h:3,shape:'box'},
   slope_2x2:{w:2,d:2,h:3,shape:'slope'}, round_1x1:{w:1,d:1,h:1,shape:'round'}, cone_2x2:{w:2,d:2,h:6,shape:'cone'},
 };
 // [part, màu, x, y(plate), z, xoay]. Dốc: xoay 0 thấp về -Z, 1 về -X, 2 về +Z, 3 về +X
@@ -299,6 +303,94 @@ const LEVELS=[
     [['cone_2x2','blue',0,13,0,0],['cone_2x2','blue',8,13,0,0],['cone_2x2','blue',0,13,8,0],['cone_2x2','blue',8,13,8,0]],
     [['slope_2x2','red',3,16,3,1],['slope_2x2','red',3,16,5,1],['slope_2x2','red',5,16,3,3],['slope_2x2','red',5,16,5,3]],
     [['round_1x1','yellow',4,19,4,0],['round_1x1','yellow',5,19,5,0]],
+  ]},
+  // ---- 7 kỳ quan thế giới cổ đại (mặt trước quay về +Z) ----
+  {name:'Kim tự tháp Giza', size:[12,12], steps:[
+    [['base_12x12','sand',0,0,0,0]],
+    [['brick_2x4','tan',2,1,0,0],['brick_2x4','tan',6,1,0,0],['brick_2x4','tan',2,1,2,0],['brick_2x4','tan',6,1,2,0]],
+    [['brick_2x4','tan',2,1,4,0],['brick_2x4','tan',6,1,4,0],['brick_2x4','tan',2,1,6,0],['brick_2x4','tan',6,1,6,0]],
+    [['brick_2x6','tan',3,4,1,0],['brick_2x6','tan',3,4,3,0],['brick_2x6','tan',3,4,5,0]],
+    [['brick_2x4','tan',4,7,2,0],['brick_2x4','tan',4,7,4,0]],
+    [['cone_2x2','yellow',5,10,3,0]],
+    // tượng Nhân sư nằm trước kim tự tháp
+    [['plate_2x4','tan',5,1,8,1],['brick_2x2','tan',5,2,8,0],['brick_1x2','tan',5,2,10,0]],
+    [['brick_1x2','tan',5,5,10,0],['round_1x1','blue',5,8,10,0],['round_1x1','blue',6,8,10,0]],
+    // 2 cây cọ
+    [['brick_1x1','brown',1,1,9,0],['brick_1x1','brown',10,1,9,0]],
+    [['brick_1x1','brown',1,4,9,0],['brick_1x1','brown',10,4,9,0]],
+    [['cone_2x2','green',0,7,8,0],['cone_2x2','green',10,7,8,0]],
+  ]},
+  {name:'Vườn treo Babylon', size:[8,8], steps:[
+    [['plate_8x8','sand',0,0,0,0]],
+    [['brick_2x4','tan',0,1,0,0],['brick_2x4','tan',4,1,0,0],['brick_2x4','tan',0,1,2,0],['brick_2x4','tan',4,1,2,0]],
+    [['brick_2x4','tan',0,1,4,0],['brick_2x4','tan',4,1,4,0],['brick_2x4','tan',0,1,6,0],['brick_2x4','tan',4,1,6,0]],
+    [['brick_2x6','tan',0,4,0,1],['brick_2x6','tan',2,4,0,1],['brick_2x6','tan',4,4,0,1],['brick_2x6','tan',6,4,0,1],['plate_2x8','green',0,4,6,0]],
+    [['round_1x1','lime',0,5,7,0],['round_1x1','red',1,5,6,0],['round_1x1','lime',3,5,6,0],['round_1x1','red',5,5,7,0],['round_1x1','lime',7,5,7,0]],
+    [['brick_2x4','tan',0,7,0,0],['brick_2x4','tan',4,7,0,0],['brick_2x4','tan',0,7,2,0],['brick_2x4','tan',4,7,2,0],['plate_2x8','green',0,7,4,0]],
+    [['round_1x1','lime',1,8,5,0],['round_1x1','red',3,8,4,0],['round_1x1','red',4,8,5,0],['round_1x1','lime',6,8,4,0]],
+    [['brick_2x4','tan',2,10,0,0],['plate_2x4','green',2,10,2,0]],
+    [['cone_2x2','green',2,13,0,0],['cone_2x2','green',4,13,0,0],['round_1x1','red',2,11,3,0],['round_1x1','lime',5,11,2,0]],
+  ]},
+  {name:'Tượng Zeus', size:[6,6], steps:[
+    [['plate_6x6','gray',0,0,0,0]],
+    [['brick_2x6','white',0,1,0,0],['brick_2x6','white',0,1,2,0],['brick_2x6','white',0,1,4,0]],
+    [['brick_2x6','brown',0,4,0,0],['brick_2x6','brown',0,4,2,0],['brick_1x2','yellow',1,4,4,0],['brick_1x2','yellow',3,4,4,0],
+     ['round_1x1','white',1,4,5,0],['round_1x1','white',4,4,5,0]],
+    [['brick_1x6','brown',0,7,0,0],['brick_1x2','brown',0,7,1,1],['brick_1x2','brown',5,7,1,1],['brick_2x4','yellow',1,7,1,0],['plate_2x4','yellow',1,7,3,0]],
+    [['brick_1x6','brown',0,10,0,0],['brick_2x4','yellow',1,10,1,0],['brick_1x2','white',0,10,1,1],['brick_1x2','white',5,10,1,1]],
+    [['brick_2x2','white',2,13,1,0],['brick_1x1','brown',0,13,2,0],['round_1x1','white',5,13,2,0]],
+    [['round_1x1','lime',2,16,1,0],['round_1x1','lime',3,16,1,0],['brick_1x1','brown',0,16,2,0]],
+    [['round_1x1','yellow',0,19,2,0]],
+  ]},
+  {name:'Đền Artemis', size:[8,6], steps:[
+    [['plate_2x8','gray',0,0,0,0],['plate_2x8','gray',0,0,2,0],['plate_2x8','gray',0,0,4,0]],
+    [['brick_1x1','white',0,1,0,0],['brick_1x1','white',2,1,0,0],['brick_1x1','white',5,1,0,0],['brick_1x1','white',7,1,0,0]],
+    [['brick_1x1','white',0,1,5,0],['brick_1x1','white',2,1,5,0],['brick_1x1','white',5,1,5,0],['brick_1x1','white',7,1,5,0]],
+    [['brick_2x4','white',2,1,2,0],['round_1x1','yellow',3,4,2,0]],
+    [['brick_1x1','white',0,4,0,0],['brick_1x1','white',2,4,0,0],['brick_1x1','white',5,4,0,0],['brick_1x1','white',7,4,0,0],
+     ['brick_1x1','white',0,4,5,0],['brick_1x1','white',2,4,5,0],['brick_1x1','white',5,4,5,0],['brick_1x1','white',7,4,5,0]],
+    [['plate_2x6','white',0,7,0,1],['plate_2x6','white',2,7,0,1],['plate_2x6','white',4,7,0,1],['plate_2x6','white',6,7,0,1]],
+    [['slope_2x2','white',0,8,0,1],['slope_2x2','white',0,8,2,1],['slope_2x2','white',0,8,4,1],
+     ['slope_2x2','white',6,8,0,3],['slope_2x2','white',6,8,2,3],['slope_2x2','white',6,8,4,3]],
+    [['brick_2x6','white',2,8,0,1],['brick_2x6','white',4,8,0,1]],
+    [['slope_2x2','white',2,11,0,1],['slope_2x2','white',2,11,2,1],['slope_2x2','white',2,11,4,1],
+     ['slope_2x2','white',4,11,0,3],['slope_2x2','white',4,11,2,3],['slope_2x2','white',4,11,4,3]],
+  ]},
+  {name:'Lăng Halicarnassus', size:[8,8], steps:[
+    [['plate_8x8','green',0,0,0,0]],
+    [['brick_2x6','white',1,1,1,0],['brick_2x6','white',1,1,3,0],['brick_2x6','white',1,1,5,0]],
+    [['brick_2x6','white',1,4,1,0],['brick_2x6','white',1,4,3,0],['brick_2x6','white',1,4,5,0]],
+    [['brick_1x1','white',1,7,1,0],['brick_1x1','white',6,7,1,0],['brick_1x1','white',1,7,6,0],['brick_1x1','white',6,7,6,0],['brick_2x2','gray',3,7,3,0]],
+    [['brick_1x1','white',1,10,1,0],['brick_1x1','white',6,10,1,0],['brick_1x1','white',1,10,6,0],['brick_1x1','white',6,10,6,0],['brick_2x2','gray',3,10,3,0]],
+    [['plate_6x6','white',1,13,1,0]],
+    [['brick_2x4','tan',2,14,2,0],['brick_2x4','tan',2,14,4,0]],
+    [['brick_2x2','tan',3,17,3,0]],
+    [['brick_1x1','bronze',3,20,4,0],['brick_1x1','bronze',4,20,4,0],['round_1x1','bronze',3,20,3,0],['round_1x1','bronze',4,20,3,0]],
+  ]},
+  {name:'Tượng Rhodes', size:[6,6], steps:[
+    [['plate_6x6','blue',0,0,0,0]],
+    [['brick_2x6','white',0,1,1,0],['brick_2x6','white',0,1,3,0]],
+    // 2 chân + áo choàng buông từ vai trái xuống bệ
+    [['brick_1x2','bronze',1,4,2,1],['brick_1x2','bronze',4,4,2,1],['brick_1x1','bronze',0,4,3,0]],
+    [['brick_1x2','bronze',1,7,2,1],['brick_1x2','bronze',4,7,2,1],['brick_1x1','bronze',0,7,3,0]],
+    [['brick_1x2','bronze',1,10,2,1],['brick_1x2','bronze',4,10,2,1],['brick_1x1','bronze',0,10,3,0]],
+    [['brick_2x4','bronze',1,13,2,0],['brick_1x1','bronze',0,13,3,0]],
+    [['brick_2x6','bronze',0,16,2,0]],
+    [['brick_2x2','bronze',2,19,2,0],['brick_1x1','bronze',5,19,2,0]],
+    [['brick_1x1','bronze',5,22,2,0],['round_1x1','yellow',2,22,2,0],['round_1x1','yellow',3,22,2,0],['round_1x1','yellow',2,22,3,0],['round_1x1','yellow',3,22,3,0]],
+    [['round_1x1','yellow',5,25,2,0],['round_1x1','red',5,26,2,0]],
+  ]},
+  {name:'Hải đăng Alexandria', size:[10,10], steps:[
+    [['base_10x10','blue',0,0,0,0]],
+    [['plate_8x8','sand',1,1,1,0]],
+    [['brick_2x6','white',2,2,2,0],['brick_2x6','white',2,2,4,0],['brick_2x6','white',2,2,6,0]],
+    [['brick_2x6','white',2,5,2,0],['brick_2x6','white',2,5,4,0],['brick_2x6','white',2,5,6,0]],
+    [['brick_2x4','white',3,8,3,0],['brick_2x4','white',3,8,5,0],
+     ['round_1x1','white',2,8,2,0],['round_1x1','white',7,8,2,0],['round_1x1','white',2,8,7,0],['round_1x1','white',7,8,7,0]],
+    [['brick_2x4','white',3,11,3,0],['brick_2x4','white',3,11,5,0]],
+    [['brick_2x2','white',4,14,4,0],['round_1x1','white',3,14,3,0],['round_1x1','white',6,14,3,0],['round_1x1','white',3,14,6,0],['round_1x1','white',6,14,6,0]],
+    [['brick_1x1','yellow',4,17,4,0],['brick_1x1','red',5,17,4,0],['brick_1x1','red',4,17,5,0],['brick_1x1','yellow',5,17,5,0]],
+    [['cone_2x2','gray',4,20,4,0]],
   ]},
 ];
 const levelTargets=lv=>{ const out=[]; lv.steps.forEach((s,si)=>s.forEach(([key,color,x,y,z,rot])=>out.push({key,color,x,y,z,rot,step:si}))); return out; };
@@ -756,6 +848,8 @@ function renderHome(){
     b.onclick=()=>{ homeSel=i; renderHome(); sfx.pick(); };
     $('hLevels').appendChild(b);
   });
+  const cur=$('hLevels').children[homeSel], box=$('hLevels');
+  box.scrollLeft=cur.offsetLeft-box.firstChild.offsetLeft-(box.clientWidth-cur.offsetWidth)/2;
 }
 
 // ====================== NÚT ======================

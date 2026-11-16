@@ -22,7 +22,9 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
   tượng đất sét trắng hiện theo từng bước, kéo mảnh màu từ khay vào đúng hình là tự khớp.
   Mảnh trong khay xoay theo góc nhìn của bàn chính. HUD: tên màn + % hoàn thành. Thả sai hình bị tính lỗi (trừ sao),
   xu (thưởng khi thắng, dùng mua gợi ý), gợi ý phát sáng, cài đặt âm thanh/rung,
-  4 màn (Cây nấm, Ngôi nhà, Dưa hấu, Lâu đài 81 mảnh). Mảnh trên chỉ lắp được khi mảnh dưới đã có.
+  11 màn: Cây nấm, Ngôi nhà, Dưa hấu, Lâu đài (81 mảnh) + 7 kỳ quan thế giới cổ đại (Kim tự tháp Giza,
+  Vườn treo Babylon, Tượng Zeus, Đền Artemis, Lăng Halicarnassus, Tượng Rhodes, Hải đăng Alexandria).
+  Mảnh trên chỉ lắp được khi mảnh dưới đã có.
 - `mobile-v2.html`: bản điện thoại trước đó (khung hướng dẫn từng bước ở trên, thanh booster).
 - `index.html`: bản desktop đầu tiên (rê chuột + click để lắp).
 
