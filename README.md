@@ -16,6 +16,6 @@ Idea bỏ hoặc tạm dừng thì chuyển vào `_archive/` (giữ nguyên số
 
 | # | Tên | Chơi thử | Trạng thái | Ngày tạo |
 |---|-----|----------|------------|----------|
-| 001 | [Game xếp gạch](001-game-xep-gach/) — puzzle lắp mô hình theo hướng dẫn | [index](https://namdev26.github.io/ripple-game-ideas/001-game-xep-gach/index.html) · [mobile](https://namdev26.github.io/ripple-game-ideas/001-game-xep-gach/mobile.html) · [mobile-v2](https://namdev26.github.io/ripple-game-ideas/001-game-xep-gach/mobile-v2.html) | Đang làm | 2026-11-15 |
+| 001 | [Game xếp gạch](001-game-xep-gach/) — puzzle lắp mô hình theo hướng dẫn | [mobile](https://namdev26.github.io/ripple-game-ideas/001-game-xep-gach/mobile.html) | Đang làm | 2026-11-15 |
 
 Trạng thái: `Mới` · `Đang làm` · `Tạm dừng` · `Xong` · `Bỏ`

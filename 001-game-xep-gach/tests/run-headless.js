@@ -1,4 +1,5 @@
 // Chạy test trong Chrome headless: node tests/run-headless.js tests/t2-state.js
+// Tắt âm thanh: WebAudio trong headless có lúc treo hẳn trang (lỗi phat-lai-tu-chay-het).
 // File case export mảng {name, query?, pre?(), post: async()} (+ tuỳ chọn .lib(): định nghĩa hàm dùng chung trên window); post ném lỗi = ERR. Lỗi JS/console.assert/console.error cũng = ERR.
 const fs = require('fs'), path = require('path'), os = require('os'), { execFileSync } = require('child_process');
 const CHROME = process.env.CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
@@ -26,16 +27,18 @@ document.title=r;const d=document.createElement('pre');d.id='__res';d.textConten
   let out = '';
   if (process.env.SHOT) { // SHOT=1: chụp ảnh tests/.tmp/<case>.png thay vì kiểm kết quả
     const png = f.replace(/\.html$/, '.png');
-    try { execFileSync(CHROME, ['--headless=new', '--enable-unsafe-swiftshader', '--use-angle=swiftshader', `--user-data-dir=${ud}`, '--hide-scrollbars',
+    try { execFileSync(CHROME, ['--headless=new', '--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--disable-audio-output', '--mute-audio', `--user-data-dir=${ud}`, '--hide-scrollbars',
       '--window-size=432,768', `--virtual-time-budget=${c.budget || 15000}`, `--screenshot=${png}`, 'file:///' + f.split(path.sep).join('/') + (c.query || '')],
       { stdio: 'ignore', timeout: 90000 }); } catch (e) {}
+    fs.rmSync(ud, { recursive: true, force: true });
     console.log('📷 ' + png); continue;
   }
   try {
-    out = execFileSync(CHROME, ['--headless=new', '--enable-unsafe-swiftshader', '--use-angle=swiftshader', `--user-data-dir=${ud}`,
+    out = execFileSync(CHROME, ['--headless=new', '--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--disable-audio-output', '--mute-audio', `--user-data-dir=${ud}`,
       '--window-size=432,768', `--virtual-time-budget=${c.budget || 15000}`, '--dump-dom', 'file:///' + f.split(path.sep).join('/') + (c.query || '')],
       { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: 90000, maxBuffer: 1 << 28 });
   } catch (e) { out = e.stdout || ''; }
+  fs.rmSync(ud, { recursive: true, force: true }); // mỗi hồ sơ Chrome ~30MB, không xóa sẽ đầy ổ
   const m = out.match(/<pre id="__res">([\s\S]*?)<\/pre>/);
   const res = m ? m[1].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>') : 'ERR: không có kết quả (trang treo/lỗi tải)';
   if (res !== 'OK') fail++;
