@@ -25,6 +25,8 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
   11 màn: Cây nấm, Ngôi nhà, Dưa hấu, Lâu đài (81 mảnh) + 7 kỳ quan thế giới cổ đại (Kim tự tháp Giza,
   Vườn treo Babylon, Tượng Zeus, Đền Artemis, Lăng Halicarnassus, Tượng Rhodes, Hải đăng Alexandria).
   Mảnh trên chỉ lắp được khi mảnh dưới đã có.
+  Loại gạch: brick/plate các cỡ, tile (trơn, không núm), dốc 2x2/1x2/2x4, dốc cheese, gạch tròn 1x1/2x2,
+  nón vuông/tròn, mái vòm 2x2/4x4, vòm cửa 1x4/1x6.
 - `mobile-v2.html`: bản điện thoại trước đó (khung hướng dẫn từng bước ở trên, thanh booster).
 - `index.html`: bản desktop đầu tiên (rê chuột + click để lắp).
 

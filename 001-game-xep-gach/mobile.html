@@ -239,19 +239,41 @@ const PLATE=0.4, M=1;
 const COLORS={
   green:{hex:0x2a8a48}, lime:{hex:0x9fcb2c}, white:{hex:0xf4f4ef}, red:{hex:0xd42a1f}, black:{hex:0x2b3036},
   brown:{hex:0x8a5a33}, yellow:{hex:0xf5c518}, gray:{hex:0xa9afb6}, blue:{hex:0x2f6fd6},
-  sand:{hex:0xe6cf98}, tan:{hex:0xc79a5b}, bronze:{hex:0xb8783a},
+  sand:{hex:0xe6cf98}, tan:{hex:0xc79a5b}, bronze:{hex:0xb8783a}, orange:{hex:0xf28a1a},
 };
 const PARTS={
   plate_2x4:{w:4,d:2,h:1,shape:'box'}, plate_2x6:{w:6,d:2,h:1,shape:'box'}, plate_2x8:{w:8,d:2,h:1,shape:'box'},
   plate_4x4:{w:4,d:4,h:1,shape:'box'}, plate_6x6:{w:6,d:6,h:1,shape:'box'}, plate_8x8:{w:8,d:8,h:1,shape:'box'},
-  base_10x10:{w:10,d:10,h:1,shape:'box'}, base_12x12:{w:12,d:12,h:1,shape:'box'},
+  base_10x10:{w:10,d:10,h:1,shape:'box'}, base_12x12:{w:12,d:12,h:1,shape:'box'}, base_16x16:{w:16,d:16,h:1,shape:'box'},
   brick_1x1:{w:1,d:1,h:3,shape:'box'}, brick_1x2:{w:2,d:1,h:3,shape:'box'}, brick_1x4:{w:4,d:1,h:3,shape:'box'},
   brick_1x6:{w:6,d:1,h:3,shape:'box'}, brick_2x2:{w:2,d:2,h:3,shape:'box'}, brick_2x4:{w:4,d:2,h:3,shape:'box'},
   brick_2x6:{w:6,d:2,h:3,shape:'box'},
   slope_2x2:{w:2,d:2,h:3,shape:'slope'}, round_1x1:{w:1,d:1,h:1,shape:'round'}, cone_2x2:{w:2,d:2,h:6,shape:'cone'},
+  // ns = không có núm (tile, phần trên trơn)
+  tile_1x1:{w:1,d:1,h:1,shape:'box',ns:1}, tile_1x2:{w:2,d:1,h:1,shape:'box',ns:1}, tile_1x4:{w:4,d:1,h:1,shape:'box',ns:1},
+  tile_2x2:{w:2,d:2,h:1,shape:'box',ns:1}, tile_2x4:{w:4,d:2,h:1,shape:'box',ns:1}, round_tile_1x1:{w:1,d:1,h:1,shape:'round',ns:1},
+  plate_1x1:{w:1,d:1,h:1,shape:'box'}, plate_1x2:{w:2,d:1,h:1,shape:'box'}, plate_1x4:{w:4,d:1,h:1,shape:'box'}, plate_2x2:{w:2,d:2,h:1,shape:'box'},
+  slope_1x2:{w:1,d:2,h:3,shape:'slope'}, slope_2x4:{w:4,d:2,h:3,shape:'slope'}, cheese_1x1:{w:1,d:1,h:2,shape:'slope',flat:0},
+  cheese_1x2:{w:2,d:1,h:2,shape:'slope',flat:0},
+  cyl_1x1:{w:1,d:1,h:3,shape:'round'}, cyl_2x2:{w:2,d:2,h:3,shape:'round'}, cone_1x1:{w:1,d:1,h:3,shape:'rcone'},
+  dome_2x2:{w:2,d:2,h:3,shape:'dome'}, dome_4x4:{w:4,d:4,h:6,shape:'dome',ns:1},
+  arch_1x4:{w:4,d:1,h:3,shape:'arch'}, arch_1x6:{w:6,d:1,h:6,shape:'arch'},
 };
 // [part, màu, x, y(plate), z, xoay]. Dốc: xoay 0 thấp về -Z, 1 về -X, 2 về +Z, 3 về +X
 const T4=y=>[['brick_2x2','gray',0,y,0,0],['brick_2x2','gray',8,y,0,0],['brick_2x2','gray',0,y,8,0],['brick_2x2','gray',8,y,8,0]];
+// cùng 1 loại mảnh đặt ở nhiều điểm [x,z]
+const at=(pts,key,c,y)=>pts.map(([x,z])=>[key,c,x,y,z,0]);
+// vòng dốc 2x2 quanh hình vuông n×n góc (x,z), mặt dốc quay ra ngoài
+const slopeRing=(c,x,z,y,n)=>{ const o=[];
+  for(let i=0;i<n;i+=2) o.push(['slope_2x2',c,x+i,y,z,0],['slope_2x2',c,x+i,y,z+n-2,2]);
+  for(let i=2;i<n-2;i+=2) o.push(['slope_2x2',c,x,y,z+i,1],['slope_2x2',c,x+n-2,y,z+i,3]);
+  return o; };
+const tree=(x,y,z)=>[['cyl_1x1','brown',x,y,z,0],['dome_2x2','green',x,y+3,z,0]];
+const palm=(x,z)=>[['cyl_1x1','brown',x,1,z,0],['cyl_1x1','brown',x,4,z,0],['plate_2x2','green',x,7,z,0],
+  ['cheese_1x1','green',x,8,z,1],['cheese_1x1','green',x+1,8,z,3],['cheese_1x1','green',x,8,z+1,1],['cheese_1x1','green',x+1,8,z+1,3]];
+const CORNERS8=[[0,0],[7,0],[0,7],[7,7]];
+const ART_COLS=[[2,1],[4,1],[7,1],[9,1],[2,10],[4,10],[7,10],[9,10],[2,4],[2,7],[9,4],[9,7]];
+const HAL_COLS=[[2,2],[4,2],[7,2],[9,2],[2,9],[4,9],[7,9],[9,9],[2,4],[2,7],[9,4],[9,7]];
 const LEVELS=[
   {name:'Cây nấm', size:[4,4], steps:[
     [['brick_2x2','white',1,0,1,0]],
@@ -305,92 +327,142 @@ const LEVELS=[
     [['round_1x1','yellow',4,19,4,0],['round_1x1','yellow',5,19,5,0]],
   ]},
   // ---- 7 kỳ quan thế giới cổ đại (mặt trước quay về +Z) ----
-  {name:'Kim tự tháp Giza', size:[12,12], steps:[
+  {name:'Kim tự tháp Giza', size:[16,16], steps:[
+    [['base_16x16','sand',0,0,0,0]],
+    [['brick_2x6','tan',2,1,2,0],['brick_2x6','tan',2,1,4,0],['brick_2x6','tan',2,1,6,0]],
+    slopeRing('tan',0,0,1,10),
+    [['brick_2x2','tan',4,4,4,0]],
+    slopeRing('tan',2,2,4,6),
+    [['cone_2x2','yellow',4,7,4,0]],
+    // kim tự tháp nhỏ (Menkaure)
+    [['brick_2x2','tan',12,1,2,0],...slopeRing('tan',10,0,1,6)],
+    [['cone_2x2','tan',12,4,2,0]],
+    // Nhân sư
+    [['brick_2x4','tan',12,1,7,1],['plate_2x2','tan',12,1,11,0]],
+    [['brick_2x2','tan',12,4,9,0],['plate_2x2','blue',12,7,9,0]],
+    palm(1,11), palm(6,11), palm(14,7),
+    // sông Nile + thuyền buồm
+    [['tile_2x4','blue',0,1,14,0],['tile_2x4','blue',4,1,14,0],['tile_2x4','blue',12,1,14,0],
+     ['plate_2x4','brown',8,1,14,0],['slope_1x2','white',9,2,14,0]],
+  ]},
+  {name:'Vườn treo Babylon', size:[12,12], steps:[
     [['base_12x12','sand',0,0,0,0]],
-    [['brick_2x4','tan',2,1,0,0],['brick_2x4','tan',6,1,0,0],['brick_2x4','tan',2,1,2,0],['brick_2x4','tan',6,1,2,0]],
-    [['brick_2x4','tan',2,1,4,0],['brick_2x4','tan',6,1,4,0],['brick_2x4','tan',2,1,6,0],['brick_2x4','tan',6,1,6,0]],
-    [['brick_2x6','tan',3,4,1,0],['brick_2x6','tan',3,4,3,0],['brick_2x6','tan',3,4,5,0]],
-    [['brick_2x4','tan',4,7,2,0],['brick_2x4','tan',4,7,4,0]],
-    [['cone_2x2','yellow',5,10,3,0]],
-    // tượng Nhân sư nằm trước kim tự tháp
-    [['plate_2x4','tan',5,1,8,1],['brick_2x2','tan',5,2,8,0],['brick_1x2','tan',5,2,10,0]],
-    [['brick_1x2','tan',5,5,10,0],['round_1x1','blue',5,8,10,0],['round_1x1','blue',6,8,10,0]],
-    // 2 cây cọ
-    [['brick_1x1','brown',1,1,9,0],['brick_1x1','brown',10,1,9,0]],
-    [['brick_1x1','brown',1,4,9,0],['brick_1x1','brown',10,4,9,0]],
-    [['cone_2x2','green',0,7,8,0],['cone_2x2','green',10,7,8,0]],
+    // tầng 1: vòm cửa phía trước, tường 3 mặt còn lại
+    [['arch_1x4','tan',0,1,11,0],['arch_1x4','tan',4,1,11,0],['arch_1x4','tan',8,1,11,0]],
+    [['brick_1x6','tan',0,1,0,0],['brick_1x6','tan',6,1,0,0],['brick_1x6','tan',0,1,1,1],['brick_1x6','tan',11,1,1,1],
+     ['brick_1x4','tan',0,1,7,1],['brick_1x4','tan',11,1,7,1]],
+    [['plate_6x6','green',0,4,0,0],['plate_6x6','green',6,4,0,0],['plate_6x6','green',0,4,6,0],['plate_6x6','green',6,4,6,0]],
+    // vườn tầng 1: cây, hoa, hồ nước, lá rủ qua mép
+    [...tree(1,5,9),...tree(9,5,9),['tile_2x2','blue',5,5,8,0],
+     ['round_1x1','red',4,5,9,0],['round_1x1','yellow',7,5,10,0],['round_1x1','red',5,5,10,0]],
+    [0,3,4,7,8,11].map(x=>['cheese_1x1','green',x,5,11,2]),
+    // tầng 2
+    [['arch_1x4','tan',2,5,7,0],['arch_1x4','tan',6,5,7,0],['brick_1x4','tan',2,5,0,0],['brick_1x4','tan',6,5,0,0],
+     ['brick_1x6','tan',2,5,1,1],['brick_1x6','tan',9,5,1,1]],
+    [['plate_2x8','green',2,8,0,0],['plate_2x8','green',2,8,2,0],['plate_2x8','green',2,8,4,0],['plate_2x8','green',2,8,6,0]],
+    [['dome_2x2','green',2,9,5,0],['dome_2x2','green',8,9,5,0],['round_1x1','red',5,9,5,0],['round_1x1','yellow',6,9,6,0],
+     ...[2,4,7,9].map(x=>['cheese_1x1','green',x,9,7,2])],
+    // tầng 3
+    [['arch_1x4','tan',4,9,3,0],['brick_1x1','tan',3,9,3,0],['brick_1x1','tan',8,9,3,0],['brick_1x6','tan',3,9,0,0],
+     ['brick_1x2','tan',3,9,1,1],['brick_1x2','tan',8,9,1,1]],
+    [['plate_2x6','green',3,12,0,0],['plate_2x6','green',3,12,2,0]],
+    // cây lớn trên đỉnh
+    [['cyl_2x2','brown',5,13,1,0],['round_1x1','red',3,13,0,0],['round_1x1','lime',8,13,0,0],['round_1x1','lime',3,13,3,0],['round_1x1','red',8,13,3,0]],
+    [['dome_4x4','green',4,16,0,0]],
   ]},
-  {name:'Vườn treo Babylon', size:[8,8], steps:[
-    [['plate_8x8','sand',0,0,0,0]],
-    [['brick_2x4','tan',0,1,0,0],['brick_2x4','tan',4,1,0,0],['brick_2x4','tan',0,1,2,0],['brick_2x4','tan',4,1,2,0]],
-    [['brick_2x4','tan',0,1,4,0],['brick_2x4','tan',4,1,4,0],['brick_2x4','tan',0,1,6,0],['brick_2x4','tan',4,1,6,0]],
-    [['brick_2x6','tan',0,4,0,1],['brick_2x6','tan',2,4,0,1],['brick_2x6','tan',4,4,0,1],['brick_2x6','tan',6,4,0,1],['plate_2x8','green',0,4,6,0]],
-    [['round_1x1','lime',0,5,7,0],['round_1x1','red',1,5,6,0],['round_1x1','lime',3,5,6,0],['round_1x1','red',5,5,7,0],['round_1x1','lime',7,5,7,0]],
-    [['brick_2x4','tan',0,7,0,0],['brick_2x4','tan',4,7,0,0],['brick_2x4','tan',0,7,2,0],['brick_2x4','tan',4,7,2,0],['plate_2x8','green',0,7,4,0]],
-    [['round_1x1','lime',1,8,5,0],['round_1x1','red',3,8,4,0],['round_1x1','red',4,8,5,0],['round_1x1','lime',6,8,4,0]],
-    [['brick_2x4','tan',2,10,0,0],['plate_2x4','green',2,10,2,0]],
-    [['cone_2x2','green',2,13,0,0],['cone_2x2','green',4,13,0,0],['round_1x1','red',2,11,3,0],['round_1x1','lime',5,11,2,0]],
+  {name:'Tượng Zeus', size:[8,8], steps:[
+    [['plate_8x8','gray',0,0,0,0]],
+    [['brick_2x6','white',1,1,1,0],['brick_2x6','white',1,1,3,0],['brick_1x6','white',1,1,5,0],['tile_2x4','blue',2,1,6,0]],
+    // ngai vàng + cẳng chân
+    [['brick_2x6','brown',1,4,1,0],['brick_1x6','brown',1,4,3,0],['brick_1x2','yellow',2,4,4,0],['brick_1x2','yellow',4,4,4,0],
+     ['cheese_1x1','white',2,4,5,2],['cheese_1x1','white',5,4,5,2]],
+    [['brick_1x6','brown',1,7,1,0],['brick_1x2','brown',1,7,2,1],['brick_1x2','brown',6,7,2,1],['brick_2x4','yellow',2,7,2,0],['plate_1x4','yellow',2,7,4,0]],
+    [['brick_1x6','brown',1,10,1,0],['brick_2x4','white',2,10,2,0],['brick_1x2','white',1,10,2,1],['brick_1x2','white',6,10,2,1]],
+    // đầu, tượng Nike trên tay phải, quyền trượng tay trái
+    [['brick_2x2','white',3,13,2,0],['cone_1x1','yellow',1,13,1,0],['cone_1x1','yellow',6,13,1,0],['cone_1x1','yellow',6,13,3,0],['cyl_1x1','brown',1,13,3,0]],
+    [['round_1x1','lime',3,16,2,0],['round_1x1','lime',4,16,3,0],['cyl_1x1','brown',1,16,3,0]],
+    [['cheese_1x1','yellow',1,19,3,2]],
+    // 4 cột đền
+    ...[1,4,7,10].map(y=>at(CORNERS8,'cyl_1x1','white',y)),
+    at(CORNERS8,'round_tile_1x1','white',13),
   ]},
-  {name:'Tượng Zeus', size:[6,6], steps:[
-    [['plate_6x6','gray',0,0,0,0]],
-    [['brick_2x6','white',0,1,0,0],['brick_2x6','white',0,1,2,0],['brick_2x6','white',0,1,4,0]],
-    [['brick_2x6','brown',0,4,0,0],['brick_2x6','brown',0,4,2,0],['brick_1x2','yellow',1,4,4,0],['brick_1x2','yellow',3,4,4,0],
-     ['round_1x1','white',1,4,5,0],['round_1x1','white',4,4,5,0]],
-    [['brick_1x6','brown',0,7,0,0],['brick_1x2','brown',0,7,1,1],['brick_1x2','brown',5,7,1,1],['brick_2x4','yellow',1,7,1,0],['plate_2x4','yellow',1,7,3,0]],
-    [['brick_1x6','brown',0,10,0,0],['brick_2x4','yellow',1,10,1,0],['brick_1x2','white',0,10,1,1],['brick_1x2','white',5,10,1,1]],
-    [['brick_2x2','white',2,13,1,0],['brick_1x1','brown',0,13,2,0],['round_1x1','white',5,13,2,0]],
-    [['round_1x1','lime',2,16,1,0],['round_1x1','lime',3,16,1,0],['brick_1x1','brown',0,16,2,0]],
-    [['round_1x1','yellow',0,19,2,0]],
+  {name:'Đền Artemis', size:[12,12], steps:[
+    [['base_12x12','green',0,0,0,0]],
+    [1,3,5,7,9].map(z=>['plate_2x8','white',2,1,z,0]).concat([['tile_1x4','white',2,1,11,0],['tile_1x4','white',6,1,11,0]]),
+    // gian thờ + tượng nữ thần
+    [['brick_1x4','white',4,2,3,0],['brick_1x2','white',4,2,4,1],['brick_1x2','white',7,2,4,1],['arch_1x4','white',4,2,6,0],
+     ['cyl_1x1','yellow',5,2,4,0]],
+    [['brick_1x4','white',4,5,3,0],['brick_1x2','white',4,5,4,1],['brick_1x2','white',7,5,4,1],['brick_1x4','white',4,5,6,0],
+     ['cone_1x1','yellow',5,5,4,0]],
+    [['brick_1x4','white',4,8,3,0],['brick_1x2','white',4,8,4,1],['brick_1x2','white',7,8,4,1],['brick_1x4','white',4,8,6,0]],
+    // 12 cột, mỗi cột 3 tầng
+    at(ART_COLS,'cyl_1x1','white',2), at(ART_COLS,'cyl_1x1','white',5), at(ART_COLS,'cyl_1x1','white',8),
+    [1,3,5,7,9].map(z=>['plate_2x8','white',2,11,z,0]),
+    // mái ngói đỏ hai mái, trán tường trắng
+    [['slope_2x4','red',2,12,1,1],['slope_2x4','red',2,12,5,1],['slope_2x2','red',2,12,9,1],
+     ['slope_2x4','red',8,12,1,3],['slope_2x4','red',8,12,5,3],['slope_2x2','red',8,12,9,3]],
+    [['brick_2x4','white',4,12,1,1],['brick_2x4','white',6,12,1,1],['brick_2x4','white',4,12,5,1],['brick_2x4','white',6,12,5,1],
+     ['brick_2x2','white',4,12,9,0],['brick_2x2','white',6,12,9,0]],
+    [['slope_2x4','red',4,15,1,1],['slope_2x4','red',4,15,5,1],['slope_2x2','red',4,15,9,1],
+     ['slope_2x4','red',6,15,1,3],['slope_2x4','red',6,15,5,3],['slope_2x2','red',6,15,9,3]],
   ]},
-  {name:'Đền Artemis', size:[8,6], steps:[
-    [['plate_2x8','gray',0,0,0,0],['plate_2x8','gray',0,0,2,0],['plate_2x8','gray',0,0,4,0]],
-    [['brick_1x1','white',0,1,0,0],['brick_1x1','white',2,1,0,0],['brick_1x1','white',5,1,0,0],['brick_1x1','white',7,1,0,0]],
-    [['brick_1x1','white',0,1,5,0],['brick_1x1','white',2,1,5,0],['brick_1x1','white',5,1,5,0],['brick_1x1','white',7,1,5,0]],
-    [['brick_2x4','white',2,1,2,0],['round_1x1','yellow',3,4,2,0]],
-    [['brick_1x1','white',0,4,0,0],['brick_1x1','white',2,4,0,0],['brick_1x1','white',5,4,0,0],['brick_1x1','white',7,4,0,0],
-     ['brick_1x1','white',0,4,5,0],['brick_1x1','white',2,4,5,0],['brick_1x1','white',5,4,5,0],['brick_1x1','white',7,4,5,0]],
-    [['plate_2x6','white',0,7,0,1],['plate_2x6','white',2,7,0,1],['plate_2x6','white',4,7,0,1],['plate_2x6','white',6,7,0,1]],
-    [['slope_2x2','white',0,8,0,1],['slope_2x2','white',0,8,2,1],['slope_2x2','white',0,8,4,1],
-     ['slope_2x2','white',6,8,0,3],['slope_2x2','white',6,8,2,3],['slope_2x2','white',6,8,4,3]],
-    [['brick_2x6','white',2,8,0,1],['brick_2x6','white',4,8,0,1]],
-    [['slope_2x2','white',2,11,0,1],['slope_2x2','white',2,11,2,1],['slope_2x2','white',2,11,4,1],
-     ['slope_2x2','white',4,11,0,3],['slope_2x2','white',4,11,2,3],['slope_2x2','white',4,11,4,3]],
+  {name:'Lăng Halicarnassus', size:[12,12], steps:[
+    [['base_12x12','green',0,0,0,0]],
+    // bệ cao 2 tầng gạch
+    ...[1,4].map(y=>[['brick_1x4','white',2,y,2,0],['brick_1x4','white',6,y,2,0],['brick_1x4','white',2,y,9,0],['brick_1x4','white',6,y,9,0],
+      ['brick_1x6','white',2,y,3,1],['brick_1x6','white',9,y,3,1]]),
+    [['plate_8x8','white',2,7,2,0]],
+    // hàng cột bao quanh gian giữa
+    [['brick_2x4','gray',4,8,4,0],['brick_2x4','gray',4,8,6,0],...at(HAL_COLS,'cyl_1x1','white',8)],
+    [['brick_2x4','gray',4,11,4,0],['brick_2x4','gray',4,11,6,0],...at(HAL_COLS,'cyl_1x1','white',11)],
+    [['plate_8x8','white',2,14,2,0]],
+    // mái chóp bậc thang
+    [['brick_2x4','tan',4,15,4,0],['brick_2x4','tan',4,15,6,0]],
+    slopeRing('tan',2,2,15,8),
+    [['plate_4x4','tan',4,18,4,0]],
+    // xe ngựa 4 ngựa bằng đồng trên đỉnh
+    [['brick_1x2','bronze',5,19,4,0],...[4,5,6,7].map(x=>['brick_1x2','bronze',x,19,5,1])],
+    [['cone_1x1','yellow',5,22,4,0],...[4,5,6,7].map(x=>['cheese_1x1','bronze',x,22,6,2])],
+    [...tree(0,1,10),...tree(10,1,10)],
   ]},
-  {name:'Lăng Halicarnassus', size:[8,8], steps:[
-    [['plate_8x8','green',0,0,0,0]],
-    [['brick_2x6','white',1,1,1,0],['brick_2x6','white',1,1,3,0],['brick_2x6','white',1,1,5,0]],
-    [['brick_2x6','white',1,4,1,0],['brick_2x6','white',1,4,3,0],['brick_2x6','white',1,4,5,0]],
-    [['brick_1x1','white',1,7,1,0],['brick_1x1','white',6,7,1,0],['brick_1x1','white',1,7,6,0],['brick_1x1','white',6,7,6,0],['brick_2x2','gray',3,7,3,0]],
-    [['brick_1x1','white',1,10,1,0],['brick_1x1','white',6,10,1,0],['brick_1x1','white',1,10,6,0],['brick_1x1','white',6,10,6,0],['brick_2x2','gray',3,10,3,0]],
-    [['plate_6x6','white',1,13,1,0]],
-    [['brick_2x4','tan',2,14,2,0],['brick_2x4','tan',2,14,4,0]],
-    [['brick_2x2','tan',3,17,3,0]],
-    [['brick_1x1','bronze',3,20,4,0],['brick_1x1','bronze',4,20,4,0],['round_1x1','bronze',3,20,3,0],['round_1x1','bronze',4,20,3,0]],
+  {name:'Tượng Rhodes', size:[12,12], steps:[
+    [['base_12x12','blue',0,0,0,0]],
+    // 2 cầu cảng + bệ đá
+    [['brick_2x4','gray',2,1,4,1],['brick_2x4','gray',8,1,4,1]],
+    [['brick_2x4','gray',2,4,4,1],['brick_2x4','gray',8,4,4,1]],
+    [['brick_2x2','white',2,7,5,0],['brick_2x2','white',8,7,5,0]],
+    // thuyền buồm chạy giữa 2 chân tượng
+    [['plate_2x6','brown',5,1,1,1],['cyl_1x1','brown',5,2,3,0],['cyl_1x1','brown',5,5,3,0],['brick_1x2','white',5,8,3,0],['cone_1x1','red',5,11,3,0]],
+    // 2 chân dạng trên 2 bờ
+    ...[10,13,16,19].map(y=>[['brick_1x2','bronze',3,y,5,1],['brick_1x2','bronze',8,y,5,1]]),
+    [['arch_1x6','bronze',3,22,5,0],['arch_1x6','bronze',3,22,6,0]],
+    [['brick_2x4','bronze',4,28,5,0]],
+    [['brick_2x6','bronze',3,31,5,0]],
+    // đầu đội vương miện tia nắng, tay phải giơ đuốc
+    [['brick_2x2','bronze',5,34,5,0],['brick_1x1','bronze',8,34,5,0]],
+    [['cone_1x1','yellow',5,37,5,0],['cone_1x1','yellow',6,37,5,0],['cone_1x1','yellow',5,37,6,0],['cone_1x1','yellow',6,37,6,0],
+     ['brick_1x1','bronze',8,37,5,0]],
+    [['brick_1x1','bronze',8,40,5,0],['round_1x1','yellow',8,43,5,0],['cone_1x1','orange',8,44,5,0]],
   ]},
-  {name:'Tượng Rhodes', size:[6,6], steps:[
-    [['plate_6x6','blue',0,0,0,0]],
-    [['brick_2x6','white',0,1,1,0],['brick_2x6','white',0,1,3,0]],
-    // 2 chân + áo choàng buông từ vai trái xuống bệ
-    [['brick_1x2','bronze',1,4,2,1],['brick_1x2','bronze',4,4,2,1],['brick_1x1','bronze',0,4,3,0]],
-    [['brick_1x2','bronze',1,7,2,1],['brick_1x2','bronze',4,7,2,1],['brick_1x1','bronze',0,7,3,0]],
-    [['brick_1x2','bronze',1,10,2,1],['brick_1x2','bronze',4,10,2,1],['brick_1x1','bronze',0,10,3,0]],
-    [['brick_2x4','bronze',1,13,2,0],['brick_1x1','bronze',0,13,3,0]],
-    [['brick_2x6','bronze',0,16,2,0]],
-    [['brick_2x2','bronze',2,19,2,0],['brick_1x1','bronze',5,19,2,0]],
-    [['brick_1x1','bronze',5,22,2,0],['round_1x1','yellow',2,22,2,0],['round_1x1','yellow',3,22,2,0],['round_1x1','yellow',2,22,3,0],['round_1x1','yellow',3,22,3,0]],
-    [['round_1x1','yellow',5,25,2,0],['round_1x1','red',5,26,2,0]],
-  ]},
-  {name:'Hải đăng Alexandria', size:[10,10], steps:[
-    [['base_10x10','blue',0,0,0,0]],
-    [['plate_8x8','sand',1,1,1,0]],
-    [['brick_2x6','white',2,2,2,0],['brick_2x6','white',2,2,4,0],['brick_2x6','white',2,2,6,0]],
-    [['brick_2x6','white',2,5,2,0],['brick_2x6','white',2,5,4,0],['brick_2x6','white',2,5,6,0]],
-    [['brick_2x4','white',3,8,3,0],['brick_2x4','white',3,8,5,0],
-     ['round_1x1','white',2,8,2,0],['round_1x1','white',7,8,2,0],['round_1x1','white',2,8,7,0],['round_1x1','white',7,8,7,0]],
-    [['brick_2x4','white',3,11,3,0],['brick_2x4','white',3,11,5,0]],
-    [['brick_2x2','white',4,14,4,0],['round_1x1','white',3,14,3,0],['round_1x1','white',6,14,3,0],['round_1x1','white',3,14,6,0],['round_1x1','white',6,14,6,0]],
-    [['brick_1x1','yellow',4,17,4,0],['brick_1x1','red',5,17,4,0],['brick_1x1','red',4,17,5,0],['brick_1x1','yellow',5,17,5,0]],
-    [['cone_2x2','gray',4,20,4,0]],
+  {name:'Hải đăng Alexandria', size:[12,12], steps:[
+    [['base_12x12','blue',0,0,0,0]],
+    [['plate_8x8','sand',2,1,2,0],['dome_2x2','gray',0,1,10,0],['dome_2x2','gray',10,1,0,0],
+     ['plate_2x4','brown',6,1,10,0],['slope_1x2','white',7,2,10,0]],
+    // tầng vuông: cửa vòm, cửa sổ đen
+    [['brick_1x6','white',3,2,3,0],['brick_1x4','white',3,2,4,1],['brick_1x4','white',8,2,4,1],
+     ['brick_1x1','white',3,2,8,0],['arch_1x4','white',4,2,8,0],['brick_1x1','white',8,2,8,0]],
+    [['brick_1x6','white',3,5,3,0],['brick_1x4','white',3,5,4,1],['brick_1x4','white',8,5,4,1],
+     ['brick_1x2','white',3,5,8,0],['brick_1x2','black',5,5,8,0],['brick_1x2','white',7,5,8,0]],
+    [['brick_1x6','white',3,8,3,0],['brick_1x4','white',3,8,4,1],['brick_1x4','white',8,8,4,1],['brick_1x6','white',3,8,8,0]],
+    [['plate_6x6','white',3,11,3,0]],
+    [['cone_1x1','bronze',3,12,3,0],['cone_1x1','bronze',8,12,3,0],['cone_1x1','bronze',3,12,8,0],['cone_1x1','bronze',8,12,8,0]],
+    // tầng bát giác
+    ...[12,15].map(y=>[['brick_2x4','white',4,y,5,0],['brick_1x2','white',5,y,4,0],['brick_1x2','white',5,y,7,0]]),
+    // tầng trụ tròn + ngọn lửa
+    [['cyl_2x2','white',5,18,5,0]],
+    [['cyl_2x2','white',5,21,5,0]],
+    [['plate_2x2','gray',5,24,5,0]],
+    [['cone_1x1','orange',5,25,5,0],['cone_1x1','yellow',6,25,5,0],['cone_1x1','yellow',5,25,6,0],['cone_1x1','orange',6,25,6,0]],
   ]},
 ];
 const levelTargets=lv=>{ const out=[]; lv.steps.forEach((s,si)=>s.forEach(([key,color,x,y,z,rot])=>out.push({key,color,x,y,z,rot,step:si}))); return out; };
@@ -404,20 +476,34 @@ const geoCache={};
 function partGeos(key){
   if (geoCache[key]) return geoCache[key];
   const p=PARTS[key], H=p.h*PLATE, studs=[]; let body;
+  const R=p.w/2-0.04, grid=()=>{ if (!p.ns) for(let i=0;i<p.w;i++) for(let j=0;j<p.d;j++) studs.push([i-p.w/2+0.5,H,j-p.d/2+0.5]); };
   if (p.shape==='slope'){
-    const hd=p.d/2-0.02, s=new THREE.Shape();
-    s.moveTo(hd,0); s.lineTo(-hd,0); s.lineTo(-hd,H); s.lineTo(-hd+1,H); s.lineTo(hd,0.12);
+    // flat = bề rộng phần đỉnh phẳng (0 = dốc "cheese" không núm)
+    const hd=p.d/2-0.02, flat=p.flat??1, s=new THREE.Shape();
+    s.moveTo(hd,0); s.lineTo(-hd,0); s.lineTo(-hd,H); if (flat) s.lineTo(-hd+flat,H); s.lineTo(hd,0.08);
     body=new THREE.ExtrudeGeometry(s,{depth:p.w-0.04,bevelEnabled:false});
     body.rotateY(Math.PI/2); body.translate(-(p.w-0.04)/2,0,0);
-    for(let i=0;i<p.w;i++) studs.push([i-p.w/2+0.5,H,p.d/2-0.5]);
+    if (flat) for(let i=0;i<p.w;i++) studs.push([i-p.w/2+0.5,H,p.d/2-0.5]);
   } else if (p.shape==='cone'){
     body=new THREE.ConeGeometry((p.w-0.04)/Math.SQRT2,H,4).rotateY(Math.PI/4).translate(0,H/2,0).toNonIndexed();
     body.computeVertexNormals();
   } else if (p.shape==='round'){
-    body=new THREE.CylinderGeometry(0.46,0.46,H,24).translate(0,H/2,0); studs.push([0,H,0]);
+    body=new THREE.CylinderGeometry(R,R,H,32).translate(0,H/2,0);
+    if (!p.ns) p.w===1 ? studs.push([0,H,0]) : grid();
+  } else if (p.shape==='rcone'){
+    body=new THREE.CylinderGeometry(R*0.3,R,H,32).translate(0,H/2,0);
+  } else if (p.shape==='dome'){
+    body=new THREE.SphereGeometry(R,32,12,0,Math.PI*2,0,Math.PI/2).scale(1,H/R,1);
+    if (!p.ns) studs.push([0,H,0]);
+  } else if (p.shape==='arch'){
+    // vòm: chân 1 ô mỗi bên, khoét nửa tròn ở giữa
+    const W=p.w/2-0.02, a=p.w/2-1, hb=Math.max(0,H-0.25-a), s=new THREE.Shape();
+    s.moveTo(-W,0); s.lineTo(-a,0); if (hb) s.lineTo(-a,hb); s.absarc(0,hb,a,Math.PI,0,true); if (hb) s.lineTo(a,0); s.lineTo(W,0); s.lineTo(W,H); s.lineTo(-W,H);
+    body=new THREE.ExtrudeGeometry(s,{depth:p.d-0.04,bevelEnabled:false,curveSegments:16}).translate(0,0,-(p.d-0.04)/2);
+    grid();
   } else {
     body=new THREE.BoxGeometry(p.w-0.04,H,p.d-0.04).translate(0,H/2,0);
-    for(let i=0;i<p.w;i++) for(let j=0;j<p.d;j++) studs.push([i-p.w/2+0.5,H,j-p.d/2+0.5]);
+    grid();
   }
   const arr=[...new THREE.EdgesGeometry(body,25).attributes.position.array], se=STUD_EDGES.attributes.position.array;
   for(const [x,y,z] of studs) for(let i=0;i<se.length;i+=3) arr.push(se[i]+x,se[i+1]+y,se[i+2]+z);
