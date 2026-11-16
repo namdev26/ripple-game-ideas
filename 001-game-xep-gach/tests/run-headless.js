@@ -1,5 +1,5 @@
 // Chạy test trong Chrome headless: node tests/run-headless.js tests/t2-state.js
-// File case export mảng {name, query?, pre?(), post: async()} ; post ném lỗi = ERR. Lỗi JS/console.assert/console.error cũng = ERR.
+// File case export mảng {name, query?, pre?(), post: async()} (+ tuỳ chọn .lib(): định nghĩa hàm dùng chung trên window); post ném lỗi = ERR. Lỗi JS/console.assert/console.error cũng = ERR.
 const fs = require('fs'), path = require('path'), os = require('os'), { execFileSync } = require('child_process');
 const CHROME = process.env.CHROME || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
 const src = fs.readFileSync(path.join(__dirname, '../mobile.html'), 'utf8');
@@ -14,6 +14,7 @@ const _a=console.assert;console.assert=(c,...m)=>{if(!c)__errs.push('assert: '+m
 const _e=console.error;console.error=(...m)=>{__errs.push('console.error: '+m.join(' '));};
 window.ok=(c,m)=>{if(!c)throw m;};
 try{localStorage.clear();}catch(e){}
+(${cases.lib || (() => {})})();
 (${c.pre || (() => {})})();</script>`;
   const post = `<script>window.addEventListener('load',()=>setTimeout(async()=>{let r;try{await (${c.post})();r=__errs.length?'ERR:'+__errs.join(' | '):'OK';}catch(e){r='ERR:'+(e&&e.message||e)+(__errs.length?' | '+__errs.join(' | '):'');}
 document.title=r;const d=document.createElement('pre');d.id='__res';d.textContent=r;document.body.appendChild(d);},300));</script>`;

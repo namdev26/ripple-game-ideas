@@ -1024,6 +1024,7 @@ const sfx={
 
 // ====================== TRẠNG THÁI ======================
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
+let rebuild=false, placedOrder=[]; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
 const HINT_COST=30;
 const starsNow=()=>mistakes===0?3:mistakes<=2?2:1;
@@ -1045,14 +1046,14 @@ function updateHint(){ $('hintN').textContent=hintsLeft>0?hintsLeft:'+'; }
 const supported=t=>t.deps.every(u=>u.placed);
 
 function loadLevel(i){
-  levelIdx=i; L=LEVELS[i];
+  levelIdx=i; L=LEVELS[i]; rebuild=built(i); placedOrder=[];
   if (levelRoot) scene.remove(levelRoot);
   levelRoot=new THREE.Group(); scene.add(levelRoot);
   mistakes=0; hintsLeft=3; done=false; anims=[]; hintT=null; endDrag(true);
   ['result','setModal','infoModal','home','series','bpView','shop','invView'].forEach(id=>$(id).classList.remove('show'));
   controls.autoRotate=false;
 
-  targets=levelTargets(L).map(t=>({...t,placed:false}));
+  targets=levelTargets(L).map((t,idx)=>({...t,idx,placed:false}));
   targets.forEach(t=>{ [t.fx,t.fz]=footprint(t.key,t.rot); t.top=t.y+PARTS[t.key].h; });
   // mảnh u là "bên dưới" t nếu chồng diện tích và nằm thấp hơn → phải lắp trước
   targets.forEach(t=>{ t.deps=targets.filter(u=>u!==t&&u.top<=t.y&&u.x<t.x+t.fx&&t.x<u.x+u.fx&&u.z<t.z+t.fz&&t.z<u.z+u.fz); });
@@ -1256,7 +1257,7 @@ function confetti(){
   }
 }
 function commit(t,from){
-  t.placed=true;
+  t.placed=true; placedOrder.push(t.idx);
   if (t.ghost){ levelRoot.remove(t.ghost); t.ghost=null; }
   if (hintT===t) hintT=null;
   const o=makeBrick(t.key,t.color); placeObj(o,t.key,t.x,t.y,t.z,t.rot); levelRoot.add(o); t.obj=o;
@@ -1301,8 +1302,10 @@ function useHint(){
 // ====================== KẾT THÚC ======================
 function win(){
   done=true; endDrag(true); sfx.win();
-  const stars=starsNow(), reward=20+stars*10;
-  S.best[L.name]=Math.max(best(levelIdx),stars); S.coins+=reward; save();
+  const stars=starsNow(), reward=rebuild?REBUILD_REWARD:rewardFor(levelIdx,stars);
+  // lần đầu: mảnh rời kho vào mô hình; lắp lại thì mô hình đã giữ sẵn mảnh
+  if (!rebuild) bomOf(levelIdx).forEach(m=>{ const k=invKey(m); S.inv[k]=Math.max(0,(S.inv[k]||0)-m.n); });
+  S.best[L.name]=Math.max(best(levelIdx),stars); S.order[L.name]=placedOrder.slice(); S.coins+=reward; save();
   setTimeout(confetti,250);
   controls.autoRotate=true; controls.autoRotateSpeed=3;
   setTimeout(()=>showResult(stars,reward),1700);
@@ -1536,7 +1539,9 @@ $('rNext').onclick=()=>{
   const n=levelIdx+1;
   if (n>=LEVELS.length||!levelOpen(n)) return toMenu();
   if (seriesOf(n)!==seriesOf(levelIdx)) toast(`🎉 Mở khóa bộ mới: ${SERIES[seriesOf(n)].name}`,2500);
-  loadLevel(n);
+  const st=cardState(n);
+  if (st==='ready'||st==='built') return startBuild(n,st==='built');
+  showHome(seriesOf(n)); homeSel=n; renderHome(); // chưa có bản thiết kế/chưa đủ mảnh: về home ở màn đó
 };
 $('playBtn').onclick=()=>{
   const i=homeSel, st=cardState(i); sfx.pick();
