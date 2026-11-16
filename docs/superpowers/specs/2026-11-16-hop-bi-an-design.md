@@ -1,0 +1,186 @@
+# Hộp bí ẩn: thiết kế game (GDD)
+
+Trạng thái: **đề xuất, chờ duyệt**. Bản này thay vòng chơi "mua bản thiết kế, đi tiệm mua gạch" trong `2026-11-16-mua-ban-thiet-ke-design.md`.
+
+## 1. Vì sao đổi
+
+- Vòng hiện tại là: mua bản vẽ → vào tiệm → bấm "Túi combo" → quay lại → lắp. Từ màn thứ 3 trở đi, ai cũng chỉ bấm combo, nên tiệm thành việc vặt. Nó thêm 4 lần chạm mà không thêm cảm xúc nào.
+- Ý của người dùng: **mua một hộp bí ẩn, mở ra là có nguyên một bộ hoàn chỉnh** (sách hướng dẫn và đủ mảnh), chỉ cần lắp.
+- Đây là mô hình blind box kiểu Pop Mart hay LEGO Minifigures. Niềm vui đến từ ba khoảnh khắc: **chờ, mở, khoe**. Game đã có sẵn khoảnh khắc "khoe" (kệ trưng bày, phát lại), giờ thêm hai khoảnh khắc đầu.
+
+## 2. Trụ cột
+
+1. **Mở hộp đã tay.** Khoảnh khắc mở là phần thưởng, nên phải có nhịp, âm thanh và rung.
+2. **Lắp thư giãn.** Không có trạng thái thua, không bao giờ kẹt vì thiếu mảnh hay hết xu.
+3. **Sưu tầm có đích.** Luôn thấy bộ còn thiếu mô hình nào, và có một thứ hiếm để săn.
+
+**Chống mục tiêu** (làm vậy là hỏng, dù chạy được):
+- Ra trùng mô hình rồi mất xu oan.
+- Người chơi bị kẹt không đủ xu để đi tiếp.
+- Mô hình khó nhất ra đầu tiên khiến người mới bỏ game.
+- Tỉ lệ bị giấu.
+
+## 3. Vòng chơi chính
+
+```
+Có xu → Mua hộp của bộ đang mở → Lắc thử / Mở hộp (hiệu ứng lộ mô hình)
+  → Sách hướng dẫn kiểu LEGO → Lắp (sao) → Phát lại → Lên kệ → Nhận xu → hộp tiếp theo
+                                                          ↘ Đủ bộ: thưởng bộ + mở bộ sau
+```
+
+Một vòng mất khoảng 3–6 phút. Thắng một màn đủ tiền mua hộp tiếp theo (xem mục 6).
+
+## 4. Hộp bí ẩn
+
+### 4.1 Luật rút
+- Mỗi bộ sưu tập có một loại hộp. Hộp chỉ ra **mô hình người chơi chưa có trong bộ đó** (rút không hoàn lại), nên **không bao giờ trùng**.
+- Mở hết bộ thì hộp của bộ đó hết hàng, nút chuyển sang "Đủ bộ ✓".
+- **Kết quả của hộp kế tiếp được tung trước** khi người chơi chưa mua, rồi lưu vào save. Có hai tác dụng:
+  - Tải lại trang không đổi được kết quả.
+  - "Lắc thử" luôn khớp với thứ sẽ ra.
+
+### 4.2 Độ hiếm = độ khó
+Độ hiếm xếp theo số mảnh trong từng bộ:
+
+| Bộ | Thường ⚪ (trọng số 6) | Hiếm 🔵 (3) | Huyền thoại 🟡 (1) |
+|---|---|---|---|
+| Khởi động | Cây nấm (hộp đầu cố định), Ngôi nhà, Dưa hấu | | Lâu đài |
+| Kỳ quan cổ đại | Tượng Rhodes, Tượng Zeus, Hải đăng Alexandria | Vườn treo Babylon, Lăng Halicarnassus, Kim tự tháp Giza | Đền Artemis |
+| Việt Nam | Cột cờ Hà Nội, Cầu Vàng | Chùa Cầu Hội An, Chùa Một Cột | Khuê Văn Các |
+
+Mô hình nhỏ có trọng số cao hơn, nên **hay ra trước**. Nhờ vậy độ khó vẫn tăng dần một cách tự nhiên, dù thứ tự là ngẫu nhiên.
+- Ví dụ bộ Kỳ quan cổ đại: Đền Artemis ra ở hộp đầu chỉ có 1/28 ≈ 3,6%.
+- Đây là cách giữ đường cong độ khó mà không phải khóa thứ tự.
+
+### 4.3 Bản đặc biệt (thứ để săn)
+- Mỗi hộp có **12%** ra mô hình ở **bản đặc biệt**: lắp bằng mảnh vàng kim hoặc chrome, có hiệu ứng lấp lánh trên kệ.
+- Người chơi **vẫn nhận đúng mô hình mới**. Bản đặc biệt chỉ là phần thêm, nên trượt cũng không mất gì.
+- **Bảo hiểm:** mở tới hộp cuối của bộ mà chưa ra bản đặc biệt nào thì hộp cuối chắc chắn là bản đặc biệt. Cách này cũng xử lý được việc hộp cuối nhàm vì người chơi đã biết trước sẽ ra mô hình gì.
+- Kệ trưng bày đếm "Bản đặc biệt x/16". Đây là mục tiêu dài hạn cho người chơi kỹ.
+
+### 4.4 Minh bạch
+- Nút "ⓘ" trên hộp hiện tỉ lệ hiện tại của từng mô hình còn lại, cộng với 12% bản đặc biệt.
+- Lý do: người chơi tin hơn, và chuẩn chung của store và luật nhiều nước đều bắt công khai tỉ lệ.
+
+### 4.5 Lắc thử (miễn phí, không bắt buộc)
+- Chạm vào hộp chưa mua: hộp lắc, phát tiếng lạch cạch và rung theo độ hiếm (nhẹ, vừa, nặng).
+- Hộp đang giấu bản đặc biệt thì có thêm một tiếng "ting".
+- Chỉ là gợi ý. Đây là thói quen có thật của người mua blind box, chi phí làm rất thấp mà tạo được cảm giác chờ đợi.
+
+## 5. Khoảnh khắc mở hộp (nhịp ASMR)
+
+| Nhịp | Thời gian | Thường | Hiếm | Huyền thoại |
+|---|---|---|---|---|
+| Bấm "Mở hộp" | 0s | Hộp rơi xuống bàn, bịch | | |
+| Lắc lấy đà | 0,0–1,2s | Lắc 2 lần | Lắc 3 lần | Lắc 3 lần, mạnh dần |
+| Khe sáng (lộ độ hiếm) | 1,2s | Sáng trắng | Sáng xanh | Sáng vàng, rung mạnh |
+| Nắp bật, cột sáng | 1,5s | Chớp nhẹ | + Hạt sáng | + Pháo giấy, nhạc riêng |
+| Mô hình bay lên xoay | 1,8–3,0s | Tên + ⚪ | Tên + 🔵 | Tên + 🟡 + "HUYỀN THOẠI!" |
+| Bản đặc biệt | +0,6s | Mô hình đổi sang vàng kim, "✨ BẢN ĐẶC BIỆT" | | |
+| Nút "Mở sách" | | | | |
+
+- Từ lần mở thứ hai trở đi, chạm màn hình sẽ tua nhanh tới chỗ lộ mô hình, nhưng không bỏ được khe sáng (đó là phần hồi hộp).
+- Mô hình hiện ra bằng cách dùng lại code `thumbLevel` hoặc scene 3D có sẵn, nên không cần làm art mới.
+
+## 6. Kinh tế
+
+Xu chỉ có một việc là mua hộp. Mục tiêu: **mỗi lần lắp xong (dù 1★) đủ tiền mua hộp kế**, còn sao cao thì dư để tích.
+
+| Bộ | Giá hộp | Ghi chú |
+|---|---|---|
+| Khởi động | Hộp đầu **miễn phí**, luôn ra Cây nấm (hướng dẫn); các hộp sau 40🪙 | |
+| Kỳ quan cổ đại | 150🪙 | |
+| Việt Nam | 200🪙 | |
+
+- **Thưởng khi lắp** = giá hộp × hệ số độ hiếm × hệ số sao, làm tròn lên hàng chục.
+  - Hệ số độ hiếm: Thường 1,0 · Hiếm 1,2 · Huyền thoại 1,5.
+  - Hệ số sao: 1★ 1,0 · 2★ 1,2 · 3★ 1,4.
+  - Bản đặc biệt được thêm ×1,2.
+- **Đủ bộ:** thưởng thêm bằng 1 giá hộp của bộ sau và mở khóa bộ sau.
+- **Lắp lại** từ kệ: +15🪙. Đây là lưới an toàn, không phải cách cày chính.
+- **Xu ban đầu:** 0 (hộp đầu đã miễn phí).
+- Kiểm tra tự động (assert): với mọi thứ tự rút, lắp mỗi màn 1★ thì không lúc nào xu thấp hơn giá hộp kế tiếp. Nghĩa là không bao giờ kẹt.
+- Hệ quả: người chơi giỏi sẽ dư xu. Tạm chấp nhận vì game mới có 16 mô hình. Muốn có chỗ tiêu xu thì làm thêm ở giai đoạn 2 (mục 10).
+
+## 7. Sách hướng dẫn (kiểu LEGO)
+
+- **Bìa:** ảnh mô hình hoàn chỉnh, tên, bộ, độ hiếm, số bước, số mảnh, góc vàng như bìa sách LEGO.
+- **Trang bước:** nền trắng ngà, số bước to ở góc trái.
+  - Khung bo tròn viền đen chứa các mảnh của bước đó. Dưới mỗi mảnh ghi `2x` và tên màu tiếng Việt (giống ảnh mẫu người dùng gửi).
+  - Bên dưới là ảnh mô hình đã lắp tới bước đó.
+- **Trang cuối:** danh sách toàn bộ mảnh.
+- Lật trang bằng cách vuốt hoặc ◀ ▶, có hiệu ứng lật giấy. Nút "▶ Lắp" cố định ở chân màn hình.
+- Lúc đang lắp, vẫn mở sách xem lại được (nút 📖) mà không mất tiến độ.
+
+## 8. Màn hình chính và kệ
+
+```
+┌──────────────────────────┐
+│ 🪙 320        ⚙          │
+│   KỲ QUAN CỔ ĐẠI  ◀ ▶   │  ← đổi bộ
+│      ┌────────┐          │
+│      │  HỘP   │  ⓘ       │  ← chạm để lắc thử
+│      │ BÍ ẨN  │          │
+│      └────────┘          │
+│   Còn 4/7 hộp            │
+│  [ 🎁 MỞ HỘP · 150🪙 ]   │
+│                          │
+│ Chờ lắp:  [Zeus][Rhodes] │  ← hộp đã mở, chưa lắp
+│ 🏛 Kệ trưng bày (3/7 ✨1) │
+└──────────────────────────┘
+```
+
+- **Chờ lắp:** người chơi có thể mở nhiều hộp rồi lắp sau. Mỗi thẻ mở sách của mô hình đó.
+- **Kệ:** lưới theo bộ. Mô hình chưa có hiện **bóng đen kèm dấu "?"**, giống mặt sau hộp blind box. Thấy chỗ trống sẽ khiến người chơi muốn mở tiếp.
+  - Bản đặc biệt có khung vàng và lấp lánh.
+  - Nút Phát lại và Lắp lại giữ như hiện nay.
+- Mở hộp ở bộ đã đủ thì nút xám, hiện "Đủ bộ ✓".
+- Bộ chưa mở khóa hiện hộp có ổ khóa.
+
+## 9. Hướng dẫn lần đầu
+
+1. Bong bóng chỉ vào "🎁 MỞ HỘP · Miễn phí".
+2. Mở hộp ra Cây nấm, kèm hiệu ứng.
+3. Bong bóng chỉ "Mở sách".
+4. Chỉ ◀ ▶ một lần.
+5. Bấm "▶ Lắp", rồi hiện toast "Kéo mảnh vào đúng hình" như hiện nay.
+
+Xong Cây nấm thì nhận 40🪙, vừa đủ mua hộp thứ hai. Người chơi tự mở mà không cần chỉ.
+
+## 10. Phạm vi
+
+**MVP (làm ngay):**
+- Hộp theo bộ, rút không trùng có trọng số, tung trước kết quả.
+- Lắc thử, hiệu ứng mở 3 cấp độ hiếm.
+- Bản đặc biệt kèm bảo hiểm.
+- Sách hướng dẫn kiểu LEGO.
+- Danh sách "Chờ lắp", kệ có bóng đen "?".
+- Kinh tế mới kèm assert chống kẹt, hướng dẫn mới, bảng tỉ lệ.
+
+**Bỏ:**
+- Tiệm gạch, mua phần thiếu, túi combo, kệ hàng.
+- Kho và bán mảnh.
+- Giá bản thiết kế theo màn.
+- Hướng dẫn mua gạch.
+
+**Giai đoạn 2 (chưa làm):**
+- **Túi đánh số:** mảnh chia thành túi 1, 2, 3 theo nhóm bước. Lắp tới đâu xé túi tới đó, mảnh đổ ra khay. Đây là một khoảnh khắc ASMR nữa.
+- **Chỗ tiêu xu:** nền kệ, bệ trưng bày, sơn lại mô hình.
+- **Hộp sự kiện / bộ giới hạn.**
+
+## 11. Chuyển save cũ
+
+- Mô hình đã lắp được tính là đã sở hữu.
+- Bản thiết kế đã mua mà chưa lắp thì đưa vào "Chờ lắp".
+- Mảnh trong kho được hoàn 100% giá ra xu.
+- Bỏ các trường `bp`, `inv`, `tut` cũ. Hướng dẫn mới chỉ hiện nếu chưa lắp mô hình nào.
+
+## 12. Rủi ro và cách đỡ
+
+| Rủi ro | Cách đỡ |
+|---|---|
+| Người chơi ghét chữ "gacha" | Không trùng, không tốn tiền thật, công khai tỉ lệ. Thực chất là thứ tự ngẫu nhiên có quà phụ. |
+| Thứ tự ngẫu nhiên làm hỏng đường cong độ khó | Trọng số theo độ hiếm (mục 4.2). Bộ đã chia theo độ khó sẵn. |
+| Hộp cuối mỗi bộ biết trước, nhàm | Bảo hiểm bản đặc biệt rơi vào hộp cuối, cộng màn ăn mừng đủ bộ. |
+| Hiệu ứng mở lặp lại 16 lần thấy dài | Tua nhanh từ lần thứ 2, giữ lại khe sáng. |
+| Dư xu, không có gì để tiêu | Chấp nhận ở MVP. Giai đoạn 2 thêm chỗ tiêu xu. |
