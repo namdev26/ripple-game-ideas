@@ -891,7 +891,8 @@ function thumbLevel(i){
 
 // ====================== LƯU / ÂM THANH ======================
 const store={
-  get(){ try{ return Object.assign({coins:100,best:{},snd:true,vib:true},JSON.parse(localStorage.getItem('xepgach.v2')||'{}')); }catch(e){ return {coins:100,best:{},snd:true,vib:true}; } },
+  def:()=>({coins:200,best:{},snd:true,vib:true,bp:{},inv:{},order:{},tut:0}),
+  get(){ try{ return Object.assign(this.def(),JSON.parse(localStorage.getItem('xepgach.v2')||'{}')); }catch(e){ return this.def(); } },
   set(v){ try{ localStorage.setItem('xepgach.v2',JSON.stringify(v)); }catch(e){} },
 };
 let S=store.get();
@@ -901,8 +902,13 @@ const best=i=>S.best[LEVELS[i].name]||0;
 const UNLOCK_ALL=/[?&]all\b/.test(location.search); // thêm ?all vào link để mở hết khi test
 const seriesDone=s=>{ const r=SERIES[s]; for(let i=r.from;i<r.from+r.n;i++) if(!best(i)) return false; return true; };
 const seriesOpen=s=>UNLOCK_ALL||s===0||seriesDone(s-1);
-const levelOpen=i=>{ const s=seriesOf(i); return seriesOpen(s)&&(UNLOCK_ALL||i===SERIES[s].from||best(i-1)>0); };
-const save=()=>store.set(S);
+const levelOpen=i=>seriesOpen(seriesOf(i)); // khóa theo bộ; trong bộ mua bản nào trước cũng được
+const built=i=>best(i)>0;
+const owned=i=>UNLOCK_ALL||bpPrice(i)===0||!!S.bp[LEVELS[i].name]||built(i);
+const cardState=i=>built(i)?'built':!owned(i)?'buy':missingOf(i,S.inv).length?'need':'ready';
+// ?all: xu ảo để test, không ghi đè xu thật đã lưu
+const realCoins=S.coins; if (UNLOCK_ALL) S.coins=99999;
+const save=()=>store.set(UNLOCK_ALL?{...S,coins:realCoins}:S);
 let actx=null;
 function tone(f,dur,type='triangle',vol=0.12,delay=0){
   if (!S.snd) return;
