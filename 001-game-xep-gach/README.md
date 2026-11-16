@@ -26,7 +26,14 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
   - Khởi động: Cây nấm, Ngôi nhà, Dưa hấu, Lâu đài
   - Kỳ quan cổ đại: Kim tự tháp Giza, Vườn treo Babylon, Tượng Zeus, Đền Artemis, Lăng Halicarnassus, Tượng Rhodes, Hải đăng Alexandria
   - Việt Nam: Chùa Một Cột, Cột cờ Hà Nội, Cầu Vàng, Chùa Cầu Hội An, Khuê Văn Các
-  Xong màn trước mới mở màn sau, xong cả bộ mới mở bộ sau. Thêm `?all` vào cuối link để mở hết khi test.
+  **Vòng chơi:** mua bản thiết kế → xem danh sách mảnh (lật từng bước) → ra tiệm gạch mua đủ mảnh → lắp → xem phát lại → mô hình lên kệ trưng bày.
+  - Tiệm gạch: "Mua phần thiếu" (giá lẻ) hoặc "Túi combo −20%" (nguyên bộ), nút nào rẻ hơn có nhãn. Tab "Kệ hàng" mua lẻ từng mảnh/màu.
+  - Kho mảnh giữ lâu dài, bán lại 50% giá. Thắng mới trừ mảnh khỏi kho; bỏ giữa chừng không mất gì.
+  - Giá tự tính từ cỡ mảnh; bản thiết kế = 60% tiền gạch; thưởng lần đầu luôn lời (1★ ×1,2 · 2★ ×1,35 · 3★ ×1,5). Bắt đầu 200 xu.
+  - Lắp lại từ kệ: miễn phí, +15 xu (không bao giờ kẹt tiền). Phát lại theo đúng thứ tự người chơi đã lắp, có nút bỏ qua.
+  - Bộ Khởi động tặng sẵn bản thiết kế, màn 1 có bong bóng hướng dẫn mua gạch lần đầu.
+  Xong cả bộ mới mở bộ sau; trong bộ đã mở mua bản nào trước cũng được. Thêm `?all` vào cuối link để mở hết + 99999 xu ảo khi test.
+  Thiết kế: `docs/superpowers/specs/2026-11-16-mua-ban-thiet-ke-design.md`. Test: `sh tests/run-all.sh` (cần node + Chrome).
   Mảnh trên chỉ lắp được khi mảnh dưới đã có.
   Loại gạch: brick/plate các cỡ, tile (trơn, không núm), dốc 2x2/1x2/2x4, dốc cheese, gạch tròn 1x1/2x2,
   nón vuông/tròn, mái vòm 2x2/4x4, vòm cửa 1x4/1x6, dốc nghiêng + góc chéo (mặt kim tự tháp).
@@ -44,4 +51,4 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
 
 ## Bước tiếp theo
 - [ ] Chơi thử prototype, ghi lại cảm giác
-- [ ] Quyết định hướng: thư giãn (ASMR) hay giải đố (khó)
+- [x] Quyết định hướng: thư giãn, sưu tầm (hướng A: mua bản thiết kế → mua gạch → lắp)
