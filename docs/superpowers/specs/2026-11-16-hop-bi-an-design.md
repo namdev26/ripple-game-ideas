@@ -91,20 +91,21 @@ Mô hình nhỏ có trọng số cao hơn, nên **hay ra trước**. Nhờ vậy
 - Hộp đang giấu bản đặc biệt thì có thêm một tiếng "ting".
 - Chỉ là gợi ý. Đây là thói quen có thật của người mua blind box, chi phí làm rất thấp mà tạo được cảm giác chờ đợi.
 
-## 5. Khoảnh khắc mở hộp (nhịp ASMR)
+## 5. Khoảnh khắc mở hộp (vòng quay ngang)
 
-| Nhịp | Thời gian | Thường | Hiếm | Huyền thoại |
-|---|---|---|---|---|
-| Bấm "Mở hộp" | 0s | Hộp rơi xuống bàn, bịch | | |
-| Lắc lấy đà | 0,0–1,2s | Lắc 2 lần | Lắc 3 lần | Lắc 3 lần, mạnh dần |
-| Khe sáng (lộ độ hiếm) | 1,2s | Sáng trắng | Sáng xanh | Sáng vàng, rung mạnh |
-| Nắp bật, cột sáng | 1,5s | Chớp nhẹ | + Hạt sáng | + Pháo giấy, nhạc riêng |
-| Mô hình bay lên xoay | 1,8–3,0s | Tên + ⚪ | Tên + 🔵 | Tên + 🟡 + "HUYỀN THOẠI!" |
-| Bản đặc biệt | +0,6s | Mô hình đổi sang vàng kim, "✨ BẢN ĐẶC BIỆT" | | |
-| Nút "Mở sách" | | | | |
+Đổi theo ảnh mẫu người dùng gửi (16/11): bỏ cảnh hộp rơi, lắc và bật nắp, thay bằng vòng quay ngang.
 
-- Từ lần mở thứ hai trở đi, chạm màn hình sẽ tua nhanh tới chỗ lộ mô hình, nhưng không bỏ được khe sáng (đó là phần hồi hộp).
-- Mô hình hiện ra bằng cách dùng lại code `thumbLevel` hoặc scene 3D có sẵn, nên không cần làm art mới.
+| Nhịp | Thời gian | Nội dung |
+|---|---|---|
+| Bấm "Mở hộp" | 0s | Dải 40 ô chạy qua vạch vàng ở giữa, mỗi ô là một hộp sản phẩm 3D. Các ô lấp chỗ được rút theo đúng tỉ lệ của hộp, nên chỉ có mô hình thật sự có thể ra. Có tiếng tích mỗi khi một ô qua vạch. |
+| Chậm dần, dừng | 0–3,4s | Dừng lệch trong ô trúng một chút rồi trượt vào giữa. Ô trúng phóng to và sáng theo màu độ hiếm. |
+| Lộ hộp | 3,85s | Trên cùng là tên bộ (vàng), rồi tên mô hình và nhãn độ hiếm. Hộp sản phẩm lớn hiện ra ở giữa, có tia sáng phía sau. |
+| Bản đặc biệt | +0,65s | Hộp đổi sang vàng kim, có viền sáng và vệt bóng chạy qua, kèm chữ "✨ BẢN ĐẶC BIỆT". |
+| Nút "Mở sách" / "Để sau" | +0,5s | |
+
+- **Hộp sản phẩm:** mặt trước có hình mô hình, tên, số mảnh và nhãn độ hiếm ở góc; mặt bên có hình nhỏ và tên. Mua ở cửa hàng cũng hiện hộp này nhưng bỏ qua vòng quay.
+- **Tua nhanh:** từ lần mở thứ hai trở đi, chạm màn hình thì dải trượt nhanh tới ô trúng. Hộp đầu tiên (trong hướng dẫn) không tua được.
+- Hình dùng lại `thumbLevel`, không cần làm art mới.
 
 ## 6. Kinh tế
 

@@ -224,33 +224,55 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .lvc.pend img{width:92%;height:92%}
 .lvc.pend.sp{background:linear-gradient(#fff6c8,#ffe27a)}
 #unbox{background:radial-gradient(circle at 50% 40%,#5a5fb8,#1b1f4a 72%);z-index:13;justify-content:flex-start;padding-top:12cqw;--rc:#fff}
-#ubStage{position:relative;width:90cqw;height:86cqw;display:flex;align-items:flex-end;justify-content:center;flex:none}
+#ubStage{position:relative;width:90cqw;height:80cqw;display:flex;align-items:flex-end;justify-content:center;flex:none}
 #ubRays{position:absolute;left:50%;top:46%;width:150cqw;height:150cqw;margin:-75cqw 0 0 -75cqw;border-radius:50%;opacity:0;transition:opacity .5s;
   background:repeating-conic-gradient(var(--rc) 0 7deg,#0000 7deg 20deg);-webkit-mask:radial-gradient(#000 12%,#0000 62%);mask:radial-gradient(#000 12%,#0000 62%)}
 #unbox.open #ubRays{opacity:.5;animation:spin 9s linear infinite}
 @keyframes spin{to{rotate:360deg}}
-#ubBox{width:48cqw;height:48cqw;margin-bottom:6cqw}
-#ubBox.drop{animation:drop .5s cubic-bezier(.3,1.5,.6,1)}
-@keyframes drop{from{transform:translateY(-90cqw)}}
-#ubBox.rat{animation:rat .28s}
-@keyframes rat{25%{transform:rotate(-7deg) translateY(-1.5cqw)}75%{transform:rotate(7deg)}}
-#unbox.glow #ubBox .lid{box-shadow:0 0 6cqw 3cqw var(--rc),inset 0 -1.2cqw 0 #0003}
-#unbox.glow #ubBox .body{box-shadow:0 -2cqw 6cqw 1cqw var(--rc),inset 0 -1.6cqw 0 #0003}
-#unbox.open #ubBox .lid{transform:translate(10cqw,-55cqw) rotate(35deg);opacity:0}
-#unbox.reveal #ubBox{opacity:0;transform:scale(.8);transition:opacity .35s,transform .35s}
-#ubImg{position:absolute;left:50%;bottom:14cqw;width:66cqw;height:66cqw;margin-left:-33cqw;opacity:0;transform:translateY(25cqw) scale(.2);
-  transition:transform .6s cubic-bezier(.3,1.5,.5,1),opacity .3s;filter:drop-shadow(0 2cqw 2.5cqw #0007)}
-#unbox.reveal #ubImg{opacity:1;transform:none}
-#unbox.spc #ubImg{animation:spflash .6s}
+#ubPrize{position:absolute;left:50%;top:16cqw;font-size:6.6cqw;margin-left:-5.6em;opacity:0;transform:translateY(20cqw) scale(.25);
+  transition:transform .6s cubic-bezier(.3,1.5,.5,1),opacity .3s;filter:drop-shadow(0 3cqw 3cqw #0008)}
+#unbox.reveal #ubPrize{opacity:1;transform:none}
+#unbox.spc #ubPrize{animation:spflash .6s}
 @keyframes spflash{30%{filter:brightness(2.2) drop-shadow(0 0 6cqw #ffd84a)}}
+#unbox.reveal #ubTitle{color:#ffd84a;font-size:6cqw}
+/* hộp sản phẩm 3D: mặt trước (hình, tên, số mảnh, nhãn độ hiếm) + mặt bên; kích thước theo font-size */
+.pbox{position:relative;width:10em;height:7.4em;transform-style:preserve-3d;transform:perspective(40em) rotateY(-24deg) rotateX(5deg);--bc:#3fa9f5;--rc:#dfe6f3}
+.pbox .pf,.pbox .ps{position:absolute;top:0;height:100%;overflow:hidden;box-shadow:inset 0 0 0 .07em #ffffff50}
+.pbox .pf{left:0;width:100%;border-radius:.25em .1em .1em .25em;
+  background:radial-gradient(circle at 66% 62%,#ffffff70,#0000 55%),linear-gradient(140deg,var(--bc),#1b1f4a 130%)}
+.pbox .ps{left:100%;width:2.4em;transform-origin:left;transform:rotateY(90deg);border-radius:0 .2em .2em 0;
+  background:linear-gradient(160deg,var(--bc),#1b1f4a 110%);filter:brightness(.8)}
+.pbox .pf img{position:absolute;right:-.2em;bottom:-.1em;width:7.4em;height:7.4em;object-fit:contain;filter:drop-shadow(0 .2em .3em #0006)}
+.pbox .ps img{position:absolute;left:-.3em;top:1.2em;width:3em;height:3em;object-fit:contain}
+.pbox .pn{position:absolute;left:.35em;top:.3em;width:5.6em;font-size:.95em;line-height:.95;color:#fff;text-transform:uppercase;font-weight:800;
+  -webkit-text-stroke:.09em #2b3150;paint-order:stroke;text-shadow:0 .06em 0 #2b315088}
+.pbox .pc{position:absolute;left:.4em;bottom:.3em;font-size:.6em;font-weight:800;color:#fff;background:#0005;padding:0 .4em;border-radius:.3em}
+.pbox .pr{position:absolute;right:0;top:0;font-style:normal;font-size:.5em;font-weight:800;color:#2b3150;background:var(--rc);padding:.1em .5em .1em .7em;border-radius:0 0 0 .7em}
+.pbox .ps b{position:absolute;left:.15em;bottom:.4em;width:2.1em;font-size:.42em;line-height:1;color:#fff;font-weight:800;text-align:center}
+.pbox.sp{--bc:#f3b928}
+.pbox.sp .pf{box-shadow:inset 0 0 0 .14em #fff3b0,0 0 .5em #ffd84a;background:linear-gradient(110deg,#0000 35%,#ffffffb0 47%,#0000 59%) -10em 0/30em 100% no-repeat,
+  radial-gradient(circle at 66% 62%,#ffffff70,#0000 55%),linear-gradient(140deg,#fff0a0,#e8a810 45%,#8a5a00);animation:shine 2.2s linear infinite}
+@keyframes shine{to{background-position:20em 0,0 0,0 0}}
+.pbox.sp .pf::after{content:"✨";position:absolute;left:.35em;bottom:1.1em;font-size:.8em}
 #ubRar,#ubName,#ubSp{opacity:0;transform:scale(.5);transition:opacity .3s,transform .35s cubic-bezier(.3,1.6,.5,1);text-align:center}
 #unbox.reveal #ubRar,#unbox.reveal #ubName,#unbox.spc #ubSp{opacity:1;transform:none}
-#ubRar{font-size:5.6cqw;color:var(--rc);margin-top:1cqw}
+#ubRar{font-size:5cqw;color:#2b3150;background:var(--rc);padding:0 3cqw;border-radius:2cqw;margin-top:1cqw;-webkit-text-stroke:0}
 #ubName{font-size:9cqw;line-height:1.05;max-width:90cqw}
 #ubSp{font-size:6cqw;color:#ffd84a;margin-top:1cqw}
 #ubBtns{display:flex;gap:4cqw;margin-top:5cqw;opacity:0;pointer-events:none;transition:opacity .3s}
 #ubBtns.on{opacity:1;pointer-events:auto}
 #ubBtns .btn{height:14cqw;padding:0 5cqw;font-size:5.4cqw}
+/* vòng quay ngang: dải thẻ chạy qua vạch vàng giữa, chậm dần, dừng ở ô trúng */
+#ubReel{display:none;position:absolute;left:-5cqw;width:100cqw;top:22cqw;height:38cqw;overflow:hidden;background:#0d1030aa;
+  border-block:.5cqw solid #ffffff22;-webkit-mask:linear-gradient(90deg,#0000,#000 20%,#000 80%,#0000);mask:linear-gradient(90deg,#0000,#000 20%,#000 80%,#0000);transition:opacity .35s}
+#unbox.reel #ubReel{display:block}
+#unbox.reel.reveal #ubReel{opacity:0}
+#ubReel::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:.9cqw;margin-left:-.45cqw;background:#ffd43b;box-shadow:0 0 2.5cqw #ffd43b;z-index:2}
+#ubStrip{display:flex;height:100%;align-items:center;will-change:transform}
+.rc{flex:none;width:28cqw;height:32cqw;margin-right:2cqw;border-radius:1.6cqw;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(#7b8196,#40465a);box-shadow:inset 0 -1.8cqw 0 var(--rc),inset 0 0 0 .4cqw #ffffff22;transition:transform .25s,box-shadow .25s}
+.rc .pbox{font-size:2.2cqw;margin-right:2.4cqw}
+.rc.win{transform:scale(1.1);box-shadow:inset 0 -1.8cqw 0 var(--rc),0 0 5cqw 1.5cqw var(--rc)}
 #oddsList p{display:flex;justify-content:space-between;gap:3cqw}
 #oddsList p.note{display:block;font-size:4cqw}
 /* ---------- cửa hàng mô hình ---------- */
@@ -403,9 +425,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 
   <div id="unbox" class="screen">
     <div id="ubTitle" class="sHead outline">HỘP BÍ ẨN</div>
-    <div id="ubStage"><div id="ubRays"></div><div id="ubBox" class="mbox"><i class="lid"></i><i class="body"><b>?</b></i></div><img id="ubImg" alt=""></div>
-    <div id="ubRar" class="outline"></div>
     <div id="ubName" class="outline"></div>
+    <div id="ubRar"></div>
+    <div id="ubStage"><div id="ubRays"></div><div id="ubReel"><div id="ubStrip"></div></div><div id="ubPrize"></div></div>
     <div id="ubSp" class="outline">✨ BẢN ĐẶC BIỆT ✨</div>
     <div id="ubBtns"><button class="btn green" id="ubBook"><span class="outline g">📖 Mở sách</span></button><button class="btn blue" id="ubLater"><span class="outline">Để sau</span></button></div>
   </div>
@@ -1605,9 +1627,9 @@ function openBox(){
   if (!nx){ toast('Bộ này đã đủ mô hình!'); sfx.back(); return; }
   const c=boxCost(s);
   if (S.coins<c){ toast(`Không đủ xu (cần ${c}🪙)`); sfx.wrong(); return; }
-  S.coins-=c; grant(nx.i,nx.sp); delete S.next[s]; if(S.tut===5) S.tut=6;
+  const pool=poolOf(s); S.coins-=c; grant(nx.i,nx.sp); delete S.next[s]; if(S.tut===5) S.tut=6;
   peekBox(s); save(); updateCoins(true);
-  openUnbox(nx.i,nx.sp,true);
+  openUnbox(nx.i,nx.sp,true,pool);
 }
 const rattle=r=>{ for(let k=0;k<3+r;k++) tone(420-r*110+Math.random()*90,0.045,'square',0.03+r*0.02,k*0.07); vib([12,25,12,25].slice(0,2+r).map(v=>v*(r+1))); };
 $('hBox').onclick=()=>{
@@ -1626,42 +1648,68 @@ $('oddsBtn').onclick=()=>{
 $('oddsClose').onclick=()=>show('oddsModal',false);
 $('oddsModal').onclick=e=>{ if(e.target.id==='oddsModal') show('oddsModal',false); };
 
-// ---- màn mở hộp: lắc → khe sáng (lộ độ hiếm) → bật nắp → mô hình bay lên → (bản đặc biệt) ----
-let ubI=0, ubSp=false, ubT=[], ubStage=0;
-function openUnbox(i,sp,full){
-  ubI=i; ubSp=sp; ubT.forEach(clearTimeout); ubT=[]; ubStage=0;
-  const r=rarOf(i), u=$('unbox'), box=$('ubBox');
-  u.className='screen show'; u.style.setProperty('--rc',RAR[r].c); box.style.setProperty('--bc',SERIES[seriesOf(i)].c);
+// ---- màn mở hộp: hộp bí ẩn = vòng quay ngang dừng ở ô trúng → hộp sản phẩm phóng to → (bản vàng kim);
+//      cửa hàng = bản ngắn: hộp sản phẩm hiện luôn ----
+const pboxHtml=(i,sp)=>{ const n=LEVELS[i].name, im=thumbLevel(i,sp);
+  return `<div class="pbox${sp?' sp':''}" style="--bc:${SERIES[seriesOf(i)].c};--rc:${RAR[rarOf(i)].c}"><div class="pf"><img src="${im}" alt=""><b class="pn">${n}</b>`
+    +`<small class="pc">${levelTargets(LEVELS[i]).length} mảnh</small><i class="pr">${RAR[rarOf(i)].n}</i></div><div class="ps"><img src="${im}" alt=""><b>${n}</b></div></div>`; };
+const REEL_N=40, REEL_WIN=34, REEL_MS=3400, REEL_PITCH=30; // cqw: thẻ 28 + khe 2
+let ubI=0, ubSp=false, ubT=[], ubStage=0, ubFull=false, ubSpin=null;
+const reelAt=off=>`translateX(${50-REEL_WIN*REEL_PITCH-14-off}cqw)`;
+// thẻ lấp chỗ rút theo đúng tỉ lệ của hộp, nên dải quay chỉ có mô hình thật sự có thể ra
+function buildReel(i,pool){
+  const ids=Array.from({length:REEL_N},(_,k)=>k===REEL_WIN?i:rollBox(pool,true).i);
+  $('ubStrip').innerHTML=ids.map(j=>`<div class="rc" data-i="${j}" style="--rc:${RAR[rarOf(j)].c}">${pboxHtml(j,false)}</div>`).join('');
+}
+function reelTick(){
+  if (!ubSpin) return;
+  const st=$('ubStrip'), c=st.firstChild; if (!c) return;
+  const k=Math.floor((st.parentNode.offsetWidth/2-new DOMMatrix(getComputedStyle(st).transform).m41)/(c.offsetWidth*REEL_PITCH/28));
+  if (k!==ubSpin.k){ ubSpin.k=k; tone(1400+Math.random()*200,0.025,'square',0.035); }
+  requestAnimationFrame(reelTick);
+}
+function reelStop(){
+  ubSpin=null; const st=$('ubStrip'), r=rarOf(ubI);
+  st.style.transition='transform .3s ease-out'; st.style.transform=reelAt(0);
+  st.children[REEL_WIN].classList.add('win');
+  tone(880+r*220,0.35,'sine',0.08); vib(r===2?[60,40,60]:20*(r+1));
+}
+function openUnbox(i,sp,full,pool){
+  ubI=i; ubSp=sp; ubFull=full; ubT.forEach(clearTimeout); ubT=[]; ubStage=0; ubSpin=null;
+  const r=rarOf(i), u=$('unbox');
+  u.className='screen show'+(full?' reel':''); u.style.setProperty('--rc',RAR[r].c);
   $('ubTitle').textContent=full?'HỘP BÍ ẨN':'CỬA HÀNG';
-  $('ubImg').src=thumbLevel(i,false); $('ubName').textContent=LEVELS[i].name;
-  $('ubRar').textContent=['⚪ Thường','🔵 Hiếm','🟡 HUYỀN THOẠI!'][r];
+  $('ubPrize').innerHTML=pboxHtml(i,false); $('ubName').textContent=LEVELS[i].name;
+  $('ubRar').textContent=RAR[r].n+(r===2?'!':'');
   $('ubBtns').classList.remove('on');
-  box.className='mbox'; void box.offsetWidth; box.classList.add('drop'); tone(90,0.16,'sine',0.25); vib(20);
   const at=(ms,f)=>ubT.push(setTimeout(f,ms));
   if (full){
-    for(let k=0;k<(r?3:2);k++) at(500+k*330,()=>{ box.classList.remove('drop','rat'); void box.offsetWidth; box.classList.add('rat'); rattle(k===2?r:Math.min(r,1)); });
-    at(1300,()=>ubGo(1)); at(1650,()=>ubGo(2)); at(1950,()=>ubGo(3));
-  } else { at(400,()=>ubGo(2)); at(700,()=>ubGo(3)); }
+    buildReel(i,pool||[...new Set([i,...poolOf(seriesOf(i))])]);
+    const st=$('ubStrip'), off=(Math.random()*2-1)*12; // dừng lệch trong ô cho hồi hộp, rồi trượt vào giữa
+    st.style.transition='none'; st.style.transform='translateX(0)'; void st.offsetWidth;
+    st.style.transition=`transform ${REEL_MS}ms cubic-bezier(.06,.55,.12,1)`; st.style.transform=reelAt(off);
+    ubSpin={k:-1}; requestAnimationFrame(reelTick); sfx.pick();
+    at(REEL_MS,reelStop); at(REEL_MS+450,()=>ubGo(3));
+  } else at(300,()=>ubGo(3));
 }
-// 1 khe sáng, 2 bật nắp, 3 lộ mô hình, 4 bản đặc biệt, 5 xong
+// 3 lộ hộp sản phẩm, 4 bản vàng kim, 5 xong
 function ubGo(k){
   if (k<=ubStage) return; ubStage=k;
   const u=$('unbox'), r=rarOf(ubI), at=(ms,f)=>ubT.push(setTimeout(f,ms));
-  if (k===1){ u.classList.add('glow'); tone(880+r*220,0.35,'sine',0.08); vib(r===2?[60,40,60]:20*(r+1)); }
-  if (k===2){ u.classList.add('glow','open'); sfx.magic(); }
   if (k===3){
-    u.classList.add('reveal');
+    u.classList.add('open','reveal'); $('ubTitle').textContent=SERIES[seriesOf(ubI)].name; sfx.magic();
     [523,659,784,1046,1318].slice(0,3+r).forEach((f,n)=>tone(f,0.22,'triangle',0.12,n*0.09));
     at(ubSp?650:500,()=>ubGo(ubSp?4:5));
   }
-  if (k===4){ u.classList.add('spc'); $('ubImg').src=thumbLevel(ubI,true); [1568,2093,2637].forEach((f,n)=>tone(f,0.18,'sine',0.08,n*0.08)); vib([30,30,60]); at(500,()=>ubGo(5)); }
+  if (k===4){ u.classList.add('spc'); $('ubPrize').innerHTML=pboxHtml(ubI,true); [1568,2093,2637].forEach((f,n)=>tone(f,0.18,'sine',0.08,n*0.08)); vib([30,30,60]); at(500,()=>ubGo(5)); }
   if (k===5){ $('ubBtns').classList.add('on'); tutStep(); }
 }
-// chạm để tua (trừ hộp hướng dẫn đầu tiên): vẫn giữ khe sáng cho hồi hộp
+// chạm để tua (trừ hộp hướng dẫn đầu tiên): vòng quay trượt nhanh tới ô trúng
 $('unbox').onclick=e=>{
   if (e.target.closest('button')||ubStage>=3||(ubI===0&&!built(0))) return;
   ubT.forEach(clearTimeout); ubT=[]; const at=(ms,f)=>ubT.push(setTimeout(f,ms));
-  ubGo(1); at(250,()=>ubGo(2)); at(450,()=>ubGo(3));
+  if (ubFull&&ubSpin) reelStop();
+  at(ubFull?350:0,()=>ubGo(3));
 };
 $('ubBook').onclick=()=>{ sfx.pick(); $('unbox').classList.remove('show'); openBlueprint(ubI); };
 $('ubLater').onclick=()=>{ sfx.back(); showHome(seriesOf(ubI)); };

@@ -4,8 +4,9 @@ const ST = { coins: 260, best: { 'Cây nấm': 3, 'Ngôi nhà': 2, 'Dưa hấu':
 module.exports = [
   { name: 'hb-home-moi', post: async () => {} },
   { name: 'hb-home', pre: save0(ST), post: async () => {} },
-  { name: 'hb-unbox', pre: save0(ST), post: async () => { openUnbox(7, true, true); ubGo(1); ubGo(2); ubGo(3); ubGo(4); ubGo(5); } },
-  { name: 'hb-unbox-giua', pre: save0(ST), post: async () => { openUnbox(5, false, true); ubGo(1); } },
+  { name: 'hb-unbox', pre: save0(ST), post: async () => { openUnbox(7, true, true); ubGo(3); ubGo(4); ubGo(5); } },
+  { name: 'hb-unbox-giua', pre: save0(ST), post: async () => { openUnbox(5, false, true); ubT.forEach(clearTimeout); ubSpin = null; const st = $('ubStrip'); st.style.transition = 'none'; st.style.transform = 'translateX(-520cqw)'; } },
+  { name: 'hb-unbox-dung', pre: save0(ST), post: async () => { openUnbox(5, false, true); await wait(3600); ubT.forEach(clearTimeout); $('ubStrip').style.transition = 'none'; } },
   { name: 'hb-shop', pre: save0(ST), post: async () => { showHome(1); openShop(); mSel = 4; renderShopM(); } },
   { name: 'hb-bia', pre: save0(ST), post: async () => { openBlueprint(6); } },
   { name: 'hb-trang', pre: save0(ST), post: async () => { openBlueprint(6); bpPage = 3; renderBp(); } },

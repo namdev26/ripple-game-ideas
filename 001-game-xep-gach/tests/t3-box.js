@@ -7,7 +7,7 @@ module.exports = [
       ok($('playBtn').textContent.includes('Miễn phí'), 'nút mở hộp phải ghi Miễn phí: ' + $('playBtn').textContent);
       $('playBtn').click();
       ok($('unbox').classList.contains('show'), 'phải mở màn mở hộp');
-      await wait(4200);
+      await wait(5600);
       ok(owned(0) && S.coins === 0, 'phải có Cây nấm, không mất xu');
       ok($('ubName').textContent.includes('Cây nấm') && $('ubBtns').classList.contains('on'), 'phải lộ mô hình + nút');
       $('ubBook').click();
@@ -17,18 +17,36 @@ module.exports = [
       const nx = S.next[0];
       ok(nx && !owned(nx.i), 'phải tung trước hộp kế: ' + JSON.stringify(nx));
       ok(JSON.parse(localStorage.getItem('xepgach.v2')).next[0].i === nx.i, 'kết quả tung trước phải được lưu');
-      $('playBtn').click(); await wait(4200);
+      $('playBtn').click(); await wait(5600);
       ok(owned(nx.i) && S.coins === 500 - boxPrice(0), 'ra đúng mô hình đã tung trước, trừ ' + boxPrice(0) + ': ' + S.coins);
       ok(!!S.sp[LEVELS[nx.i].name] === !!nx.sp, 'bản đặc biệt theo kết quả tung');
       ok(S.next[0] && !owned(S.next[0].i), 'hộp kế không trùng');
+  } },
+  { name: 'vong-quay', pre: save0({ coins: 500, best: { 'Cây nấm': 3 } }), post: async () => {
+      const nx = S.next[0], pool = poolOf(0); $('playBtn').click();
+      const cards = [...document.querySelectorAll('#ubStrip .rc')];
+      ok(cards.length >= 30 && $('ubReel').offsetWidth > 0, 'phải có dải quay: ' + cards.length);
+      ok(+cards[REEL_WIN].dataset.i === nx.i, 'ô trúng phải là mô hình đã tung trước');
+      ok(cards.every(c => pool.includes(+c.dataset.i)), 'dải chỉ gồm mô hình có thể ra');
+      ok(cards.every(c => c.querySelector('.pbox img') && c.textContent.includes(LEVELS[c.dataset.i].name)), 'mỗi ô là một hộp sản phẩm có tên');
+      await wait(5600);
+      ok(cards[REEL_WIN].classList.contains('win') && $('ubBtns').classList.contains('on'), 'dừng ở ô trúng rồi lộ mô hình');
+      const pz = $('ubPrize').textContent;
+      ok([LEVELS[nx.i].name, levelTargets(LEVELS[nx.i]).length + ' mảnh', RAR[rarOf(nx.i)].n].every(t => pz.includes(t)), 'hộp trúng: tên, số mảnh, độ hiếm: ' + pz);
+      ok($('ubTitle').textContent === SERIES[0].name, 'trên cùng là tên bộ: ' + $('ubTitle').textContent);
+      // headless không chạy transition nên bỏ transition để đo vị trí đích
+      $('ubStrip').style.transition = 'none'; $('unbox').classList.remove('reveal'); cards[REEL_WIN].classList.remove('win');
+      const w = cards[REEL_WIN].getBoundingClientRect(), R = $('ubReel').getBoundingClientRect();
+      ok(Math.abs(w.left + w.width / 2 - (R.left + R.width / 2)) < 2, 'ô trúng phải nằm giữa vạch: ' + (w.left + w.width / 2) + ' vs ' + (R.left + R.width / 2));
   } },
   { name: 'tua-nhanh', pre: save0({ coins: 500, best: { 'Cây nấm': 3 } }), post: async () => {
       $('playBtn').click(); await wait(300); $('unbox').click(); await wait(1300);
       ok($('ubBtns').classList.contains('on'), 'chạm để tua phải lộ mô hình nhanh');
   } },
   { name: 'bao-hiem-dac-biet', pre: save0({ coins: 100, best: { 'Cây nấm': 1, 'Ngôi nhà': 1, 'Dưa hấu': 1 } }), post: async () => {
-      $('playBtn').click(); await wait(4200);
+      $('playBtn').click(); await wait(5600);
       ok(owned(3) && special(3), 'mô hình cuối của bộ, bộ chưa có bản đặc biệt → chắc chắn đặc biệt');
+      ok(document.querySelector('#ubPrize .pbox.sp'), 'hộp trúng là hộp vàng kim');
   } },
   { name: 'khong-du-xu', pre: save0({ coins: 10, best: { 'Cây nấm': 3 } }), post: async () => {
       $('playBtn').click();
@@ -57,9 +75,9 @@ module.exports = [
       ok(items[0].textContent.includes('Đã có'), 'Cây nấm đã có');
       items[1].click(); $('mBuy').click();
       ok(S.coins === 60 && owned(1) && !special(1), 'mua Ngôi nhà 40: ' + S.coins);
-      ok($('unbox').classList.contains('show'), 'mua xong có mở hộp');
+      ok($('unbox').classList.contains('show') && $('ubReel').offsetWidth === 0, 'mua xong có mở hộp, không quay');
       ok(S.next[0].i !== 1, 'mô hình đã tung trước bị mua ở cửa hàng → tung lại');
-      await wait(4200); ok($('ubBtns').classList.contains('on'), 'hiệu ứng ngắn phải xong');
+      await wait(4200); ok($('ubBtns').classList.contains('on') && $('ubPrize').textContent.includes('Ngôi nhà'), 'hiệu ứng ngắn phải xong, hiện hộp Ngôi nhà');
   } },
   { name: 'cua-hang-thieu-xu', pre: save0({ coins: 50, best: { 'Cây nấm': 3 } }), post: async () => {
       $('shopBtn').click(); document.querySelectorAll('#mGrid .mItem')[3].click(); $('mBuy').click();
