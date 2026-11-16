@@ -98,7 +98,7 @@ Xu chỉ có một việc là mua hộp. Mục tiêu: **mỗi lần lắp xong (
   - Bản đặc biệt được thêm ×1,2.
 - **Đủ bộ:** thưởng thêm bằng 1 giá hộp của bộ sau và mở khóa bộ sau.
 - **Lắp lại** từ kệ: +15🪙. Đây là lưới an toàn, không phải cách cày chính.
-- **Xu ban đầu:** 0 (hộp đầu đã miễn phí).
+- **Xu ban đầu:** 0 (hộp đầu đã miễn phí). Trường hợp xấu nhất (toàn 1★): hết bộ Khởi động còn 60🪙, cộng thưởng đủ bộ 150 = 210 ≥ 150, mua được hộp đầu bộ Kỳ quan. Từ đó mỗi lần thưởng 1★ đều ≥ giá hộp.
 - Kiểm tra tự động (assert): với mọi thứ tự rút, lắp mỗi màn 1★ thì không lúc nào xu thấp hơn giá hộp kế tiếp. Nghĩa là không bao giờ kẹt.
 - Hệ quả: người chơi giỏi sẽ dư xu. Tạm chấp nhận vì game mới có 16 mô hình. Muốn có chỗ tiêu xu thì làm thêm ở giai đoạn 2 (mục 10).
 
