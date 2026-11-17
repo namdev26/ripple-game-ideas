@@ -40,6 +40,7 @@ module.exports = [
       giveModel(0); startBuild(0); const N = L.steps.length, s0 = targets.filter(t => t.step === 0);
       const B = $('stepBook').getBoundingClientRect(), H = $('hud').getBoundingClientRect(), W = $('app').getBoundingClientRect();
       ok(B.width > 0 && B.top >= H.bottom && Math.abs(B.left + B.width / 2 - (W.left + W.width / 2)) < 2, 'sổ bước ở giữa, dưới HUD');
+      ok(B.bottom - W.top < W.width * 0.5, 'sổ bước gọn, không che nhiều bàn lắp: đáy ở ' + Math.round((B.bottom - W.top) / W.width * 100) + 'cqw');
       ok($('sbNo').textContent === '1/' + N, 'số bước: ' + $('sbNo').textContent);
       ok($('sbImg').src.startsWith('data:image'), 'có hình bước');
       const cnt = () => [...document.querySelectorAll('#sbParts b')].map(b => b.textContent);
