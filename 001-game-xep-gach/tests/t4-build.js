@@ -50,6 +50,7 @@ module.exports = [
       ok(B.bottom - W.top < W.width * 0.5, 'sổ bước gọn, không che nhiều bàn lắp: đáy ở ' + Math.round((B.bottom - W.top) / W.width * 100) + 'cqw');
       ok($('sbNo').textContent === 'Bước 1/' + N, 'số bước: ' + $('sbNo').textContent);
       ok($('sbImg').src.startsWith('data:image'), 'có hình bước');
+      ok(sbBrick({ step: 0, color: 'red' }, 1, false)[0] === 'gray' && sbBrick({ step: 1, color: 'red' }, 1, false)[0] === 'red' && sbBrick({ step: 1, color: 'red' }, 1, true)[0] === 'goldsp', 'sổ bước: mảnh bước trước xám đồng màu, bước hiện tại giữ màu');
       const cnt = () => [...document.querySelectorAll('#sbParts b')].map(b => b.textContent);
       ok(cnt().every(c => c.startsWith('0/')) && cnt().reduce((a, c) => a + +c.split('/')[1], 0) === s0.length, 'đếm mảnh bước 1: ' + cnt());
       commit(s0[0]); ok(cnt().reduce((a, c) => a + +c.split('/')[0], 0) === 1, 'lắp 1 mảnh → tăng: ' + cnt());

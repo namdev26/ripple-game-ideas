@@ -1914,11 +1914,13 @@ $('iapClose').onclick=()=>{ sfx.back(); show('iap',false); };
 $('iapBody').onclick=e=>{ if (e.target.closest('.price, .iapFoot button')){ sfx.pick(); toast('🧪 Bản thử: chưa mua thật được'); } };
 
 // ---- sách hướng dẫn kiểu LEGO: bìa → mỗi bước một trang (khung mảnh "2x + tên màu") → danh sách mảnh ----
-// ảnh mô hình lắp tới hết bước n; hl: mảnh của bước n viền đỏ
+// sổ bước: mảnh các bước trước xám nhạt đồng màu để mảnh của bước hiện tại nổi bật
+const sbBrick=(t,n,sp)=>t.step<n?['gray','ghost']:[kitColor(sp,t.color)];
+// ảnh mô hình lắp tới hết bước n; hl: mảnh của bước n viền đỏ; hl còn làm xám các bước trước
 function thumbStep(i,n,sp,hl){
   const k='st'+i+':'+n+(sp?'s':'')+(hl?'h':''); if (thumbCache[k]) return thumbCache[k];
   const info=modelInfo(LEVELS[i]), g=new THREE.Group();
-  info.ts.forEach(t=>{ if(t.step>n) return; const o=makeBrick(t.key,kitColor(sp,t.color)); if(hl&&t.step===n) o.userData.lines.material=LINE.hl; placeObj(o,t.key,t.x,t.y,t.z,t.rot); g.add(o); });
+  info.ts.forEach(t=>{ if(t.step>n) return; const o=hl?makeBrick(t.key,...sbBrick(t,n,sp)):makeBrick(t.key,kitColor(sp,t.color)); if(hl&&t.step===n) o.userData.lines.material=LINE.hl; placeObj(o,t.key,t.x,t.y,t.z,t.rot); g.add(o); });
   if (hl) thumbR.setSize(512,512); // sổ bước phóng to được → ảnh nét hơn
   thumbCache[k]=renderThumb(g,info.center,info.radius,new THREE.Vector3(0.55,0.65,1));
   if (hl) thumbR.setSize(256,256);
