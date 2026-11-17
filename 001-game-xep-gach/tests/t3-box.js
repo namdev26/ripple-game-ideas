@@ -97,7 +97,9 @@ module.exports = [
       const items = document.querySelectorAll('#mGrid .mItem');
       ok(items.length === 4, 'bộ Khởi động có 4 mô hình: ' + items.length);
       ok(items[0].textContent.includes('Đã có'), 'Cây nấm đã có');
-      items[1].click(); $('mBuy').click();
+      ok([...items].every(e => e.querySelector('.pbox') && !e.querySelector(':scope > img')), 'cửa hàng hiển thị hộp sản phẩm, không phải ảnh mô hình trần');
+      items[1].click(); ok($('mImg').querySelector('.pbox'), 'ô chọn cũng hiện hộp');
+      $('mBuy').click();
       ok(S.coins === 60 && owned(1) && !special(1), 'mua Ngôi nhà 40: ' + S.coins);
       ok($('unbox').classList.contains('show') && $('ubReel').offsetWidth === 0, 'mua xong có mở hộp, không quay');
       ok(S.next.g.i === 1, 'tỉ lệ cố định: mua ở cửa hàng không tung lại hộp');
