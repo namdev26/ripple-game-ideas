@@ -1,7 +1,9 @@
 // Ảnh để xem bằng mắt: SHOT=1 node tests/run-headless.js tests/shots-hb.js  → tests/.tmp/<case>.png
 const save0 = o => new Function("localStorage.setItem('xepgach.v2'," + JSON.stringify(JSON.stringify(o)) + ')');
-const ST = { dup: { 'Cây nấm': 2 }, coins: 260, best: { 'Cây nấm': 3, 'Ngôi nhà': 2, 'Dưa hấu': 3, 'Lâu đài': 1 }, own: { 'Tượng Zeus': true, 'Đền Artemis': true }, sp: { 'Dưa hấu': true }, tut: 6 };
+const ST = { goal: 'Khuê Văn Các', coins: 260, best: { 'Cây nấm': 3, 'Ngôi nhà': 2, 'Dưa hấu': 3, 'Lâu đài': 1 }, own: { 'Tượng Zeus': true, 'Đền Artemis': true }, sp: { 'Dưa hấu': true }, tut: 6 };
 module.exports = [
+  { name: 'hb-thieu-xu', pre: save0(ST), post: async () => { openShop('secModel'); document.querySelector('#mGrid .mItem[data-i="15"]').click(); $('mBuy').click(); } },
+  { name: 'hb-ket-qua', pre: save0(ST), post: async () => { giveModel(5); startBuild(5); commitAll(); await wait(1500); $('skipBtn').click(); await wait(2000); } },
   { name: 'hb-home-moi', post: async () => {} },
   { name: 'hb-home', pre: save0(ST), post: async () => {} },
   { name: 'hb-unbox', pre: save0(ST), post: async () => { openUnbox(7, true, true); ubGo(3); ubGo(4); ubGo(5); } },
@@ -16,8 +18,6 @@ module.exports = [
   { name: 'hb-thua', pre: save0(ST), post: async () => { startBuild(1, true); wrong(); wrong(); wrong(); await wait(900); } },
   { name: 'hb-iap', pre: save0(ST), post: async () => { openShop(); } },
   { name: 'hb-iap-duoi', pre: save0(ST), post: async () => { openIap(); } },
-  { name: 'hb-trung', pre: save0(ST), post: async () => { openUnbox(13, false, true, ALL_IDX, shopPrice(13)); ubT.forEach(clearTimeout); ubSpin = null; ubGo(3); ubGo(5); } },
-  { name: 'hb-kho', pre: save0({ ...ST, dup: { 'Cây nấm': 2, 'Dưa hấu': 1, 'Cầu Vàng': 1, 'Đền Artemis': 1 } }), post: async () => { $('hKhoBtn').click(); } },
   { name: 'hb-ad', pre: save0(ST), post: async () => { show('adView', true); } },
   { name: 'hb-gacha', pre: save0(ST), post: async () => { openGacha(); } },
   { name: 'hb-home-het', pre: save0({ coins: 260, best: { 'Cây nấm': 3 }, tut: 6 }), post: async () => {} },

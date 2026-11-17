@@ -2,52 +2,45 @@
 const fs = require('fs'), assert = require('assert');
 const html = fs.readFileSync(process.argv[2] || __dirname + '/../mobile.html', 'utf8');
 const a = html.indexOf('// ====================== DỮ LIỆU'), b = html.indexOf('// ====================== HÌNH HỌC');
-const E = new Function(html.slice(a, b) + ';return {LEVELS,SERIES,seriesOf,rarOf,RAR,shopPrice,boxPrice,rewardFor,seriesBonus,seriesIdx,boxOdds,rollBox,SPECIAL_P,REBUILD_REWARD,COLORS,COLOR_VI,bomOf,partPrice};')();
+const E = new Function(html.slice(a, b) + ';return {LEVELS,SERIES,seriesOf,rarOf,RAR,shopPrice,boxPrice,rewardFor,seriesBonus,seriesIdx,boxOdds,rollBox,SPECIAL_P,REBUILD_REWARD,ROAD,COLORS,COLOR_VI,bomOf,partPrice};')();
 const idx = n => { const i = E.LEVELS.findIndex(l => l.name === n); assert(i >= 0, n); return i; };
 const eq = (x, y, m) => assert.strictEqual(x, y, m);
+const ALL = E.LEVELS.map((_, i) => i);
 
-// giá: một hộp chung cho cả game (đổi 17/11/2026: hộp toàn game, ra trùng được)
+// kinh tế bản 2 (17/11/2026): đường lắp tự dẫn + mua trước mô hình mơ ước; xem docs/superpowers/specs/2026-11-17-kinh-te-vong-choi-design.md
 eq(E.boxPrice(), 100);
-eq(E.shopPrice(idx('Ngôi nhà')), 40); eq(E.shopPrice(idx('Lâu đài')), 70);
-eq(E.shopPrice(idx('Tượng Rhodes')), 150); eq(E.shopPrice(idx('Kim tự tháp Giza')), 200); eq(E.shopPrice(idx('Đền Artemis')), 270);
-eq(E.shopPrice(idx('Cầu Vàng')), 200); eq(E.shopPrice(idx('Chùa Một Cột')), 260); eq(E.shopPrice(idx('Khuê Văn Các')), 360);
-// độ hiếm (spec mục 4.2)
+eq(E.shopPrice(idx('Ngôi nhà')), 150); eq(E.shopPrice(idx('Chùa Một Cột')), 250); eq(E.shopPrice(idx('Lâu đài')), 400);
+eq(E.rewardFor(idx('Ngôi nhà'), 1), 60); eq(E.rewardFor(idx('Ngôi nhà'), 2), 75); eq(E.rewardFor(idx('Ngôi nhà'), 3), 90);
+eq(E.rewardFor(idx('Chùa Một Cột'), 3), 120); eq(E.rewardFor(idx('Đền Artemis'), 3), 180); eq(E.rewardFor(idx('Tượng Rhodes'), 3, true), 110);
+eq(E.REBUILD_REWARD, 0); eq(E.seriesBonus(0), 200); eq(E.seriesBonus(2), 300);
+// lắp xong luôn hơi thiếu so với mua đúng: mua trước phải tốn ≥ 2 level
+ALL.forEach(i => assert(E.shopPrice(i) >= 1.6 * E.rewardFor(i, 3), 'mua đúng quá rẻ: ' + E.LEVELS[i].name));
+// độ hiếm
 const cnt = s => [0, 1, 2].map(r => E.seriesIdx(s).filter(i => E.rarOf(i) === r).length).join(',');
 eq(cnt(0), '3,0,1'); eq(cnt(1), '3,3,1'); eq(cnt(2), '2,2,1');
-eq(E.rarOf(idx('Đền Artemis')), 2); eq(E.rarOf(idx('Cây nấm')), 0);
-// thưởng: lắp mô hình mới dù 1★ luôn đủ mở 1 hộp
-eq(E.rewardFor(0, 1), 100); eq(E.rewardFor(idx('Đền Artemis'), 3), 320); eq(E.rewardFor(idx('Tượng Rhodes'), 1, true), 180);
-eq(E.REBUILD_REWARD, 15);
-E.LEVELS.forEach((l, i) => assert(E.rewardFor(i, 1) >= E.boxPrice(), '1★ không đủ mua hộp: ' + l.name));
-// tỉ lệ cố định trên cả 16 mô hình, không đổi theo thứ đã có
-const ALL = E.LEVELS.map((_, i) => i), odds = E.boxOdds(ALL);
+// đường lắp: đủ 16, bắt đầu dễ, mô hình huyền thoại không ở 5 level đầu
+eq(E.ROAD.length, 16); eq(new Set(E.ROAD).size, 16); eq(E.ROAD[0], idx('Cây nấm'));
+E.ROAD.slice(0, 5).forEach(i => assert(E.rarOf(i) === 0, 'đầu đường phải dễ: ' + E.LEVELS[i].name));
+// tỉ lệ theo pool (người gọi chỉ đưa mô hình chưa có)
+const odds = E.boxOdds(ALL);
 assert(Math.abs(odds.find(o => o.i === idx('Đền Artemis')).p - 1 / 66) < 1e-9, 'Artemis 1/66');
-assert(Math.abs(odds.find(o => o.i === 0).p - 6 / 66) < 1e-9, 'Cây nấm 6/66');
 assert(Math.abs(odds.reduce((s, o) => s + o.p, 0) - 1) < 1e-9, 'tổng tỉ lệ = 1');
-// trùng đổi ra xu bằng giá cửa hàng. Trung bình ~150 xu/hộp > giá hộp: chấp nhận (đủ bộ rồi thì xu ít chỗ tiêu);
-// giá hộp 150 thì không lời nhưng phải lắp lại trung bình ~37 lần mới đủ 16 mô hình — quá cày
-// rút
 const seq = xs => { let k = 0; return () => xs[k++ % xs.length]; };
 let r = E.rollBox(ALL, seq([0, 0.5])); eq(r.i, 0); eq(r.sp, false);
 r = E.rollBox(ALL, seq([0.9999, 0.01])); eq(r.i, 15); eq(r.sp, true);
-let nArt = 0, nSp = 0; const N = 60000;
-for (let k = 0; k < N; k++) { const x = E.rollBox(ALL); assert(ALL.includes(x.i)); nArt += x.i === idx('Đền Artemis'); nSp += x.sp; }
-assert(Math.abs(nArt / N - 1 / 66) < 0.004, 'tần suất Artemis ' + nArt / N);
-assert(Math.abs(nSp / N - E.SPECIAL_P) < 0.008, 'tần suất đặc biệt ' + nSp / N);
-// mô phỏng: chỉ mở hộp, lắp toàn 1★, trùng đổi xu → không bao giờ kẹt, đủ 16 mô hình
-let totRb = 0, maxRb = 0, totSp = 0;
+// mô phỏng người không xem QC, không mua: chỉ đi đường lắp (1–3★) → không bao giờ kẹt (level luôn miễn phí),
+// xu cuối đường chỉ đủ "mua trước" một số lần, không đủ mua hết
+let tot = 0, maxC = 0, minC = 1e9;
 for (let run = 0; run < 1000; run++) {
-  const own = new Set([0]); let coins = E.rewardFor(0, 1), spins = 0, rebuilds = 0; // hộp đầu tặng Cây nấm, lắp xong
-  while (own.size < ALL.length) {
-    while (coins < E.boxPrice()) { coins += E.REBUILD_REWARD; rebuilds++; } // thiếu xu: lắp lại mô hình cũ (+15) — không bao giờ kẹt hẳn
-    coins -= E.boxPrice(); spins++;
-    const x = E.rollBox(ALL);
-    if (own.has(x.i)) coins += E.shopPrice(x.i); else { own.add(x.i); coins += E.rewardFor(x.i, 1); }
-  }
-  assert(spins < 2000, 'quá nhiều lượt: ' + spins); totRb += rebuilds; totSp += spins; maxRb = Math.max(maxRb, rebuilds);
+  let coins = 0; const done = new Set();
+  for (const i of E.ROAD) { coins += E.rewardFor(i, 1 + Math.floor(Math.random() * 3)); done.add(i);
+    E.SERIES.forEach((sr, s) => { if (E.seriesIdx(s).every(j => done.has(j)) && !sr._b) { sr._b = 1; coins += E.seriesBonus(s); } }); }
+  E.SERIES.forEach(sr => delete sr._b); tot += coins; maxC = Math.max(maxC, coins); minC = Math.min(minC, coins);
 }
-assert(totRb / 1000 < 3 && maxRb < 60, 'phải lắp lại quá nhiều vì thiếu xu: ' + totRb / 1000 + ' / ' + maxRb);
-console.log('đủ 16 mô hình: trung bình', totSp / 1000, 'hộp; lắp lại vì thiếu xu: trung bình', totRb / 1000, 'tối đa', maxRb);
+const all = ALL.reduce((s, i) => s + E.shopPrice(i), 0);
+assert(maxC < all * 0.8, 'đi hết đường không được đủ tiền mua gần hết: ' + maxC + ' / ' + all);
+assert(minC > 4 * E.boxPrice(), 'đi hết đường phải đủ vài hộp: ' + minC);
+console.log('đi hết đường (không QC): trung bình', Math.round(tot / 1000), 'xu (', minC, '–', maxC, '); mua cả 16 ở cửa hàng:', all);
 // sách: mọi màu có tên tiếng Việt; bom gom đúng số mảnh
 Object.keys(E.COLORS).forEach(c => assert(E.COLOR_VI[c], 'thiếu tên màu ' + c));
 eq(E.bomOf(0).reduce((s, m) => s + m.n, 0), E.LEVELS[0].steps.flat().length);

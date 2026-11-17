@@ -1,4 +1,4 @@
-// Lắp: chỉ lắp mô hình đã có, thưởng theo độ hiếm/sao/bản đặc biệt, đủ bộ thưởng thêm, lắp lại +15, ghi thứ tự lắp
+// Lắp: chỉ lắp mô hình đã có, thưởng theo độ hiếm/sao/bản đặc biệt, đủ bộ thưởng thêm, lắp lại không có xu, ghi thứ tự lắp
 // pre được chèn nguyên văn vào trang (mất closure) nên dựng hàm từ chuỗi
 const save0 = o => new Function("localStorage.setItem('xepgach.v2'," + JSON.stringify(JSON.stringify(o)) + ')');
 module.exports = [
@@ -28,9 +28,8 @@ module.exports = [
       commitAll(); ok(S.coins === rewardFor(0, 3, true), 'thưởng bản đặc biệt ' + S.coins);
   } },
   { name: 'du-bo-thuong-them', pre: save0({ coins: 0, best: { 'Cây nấm': 1, 'Ngôi nhà': 1, 'Dưa hấu': 1 }, own: { 'Lâu đài': true } }), post: async () => {
-      ok(!seriesOpen(1), 'bộ 2 chưa mở'); startBuild(3); commitAll();
+      startBuild(3); commitAll();
       ok(S.coins === rewardFor(3, 3) + seriesBonus(0), 'coins ' + S.coins);
-      ok(seriesOpen(1), 'đủ bộ phải mở bộ sau');
   } },
   { name: 'tiep-tuc-mo-sach-cho-lap', post: async () => {
       giveModel(0); giveModel(2); startBuild(0); commitAll(); $('rNext').click();
@@ -87,9 +86,9 @@ module.exports = [
       $('lRetry').click(); ok(!$('loseModal').classList.contains('show') && on() === 3 && !done, 'chơi lại đủ 3 mạng');
       wrong(); commitAll(); ok(S.best['Cây nấm'] === 2, 'sao = số mạng còn: ' + S.best['Cây nấm']);
   } },
-  { name: 'tiep-tuc-ve-home', post: async () => {
+  { name: 'tiep-tuc-level-ke', post: async () => {
       giveModel(0); startBuild(0); commitAll(); $('rNext').click();
-      ok($('home').classList.contains('show'), 'hết mô hình chờ lắp → về home mở hộp');
+      ok($('bpView').classList.contains('show') && bpI === ROAD[1], 'hết mô hình chờ lắp → sang level kế');
   } },
   { name: 'roi-man-truoc-phat-lai', post: async () => {
       giveModel(0); startBuild(0); commitAll(); toMenu();

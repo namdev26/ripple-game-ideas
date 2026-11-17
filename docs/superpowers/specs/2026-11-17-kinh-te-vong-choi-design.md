@@ -1,6 +1,6 @@
 # Thiết kế lại kinh tế và vòng chơi (game xếp gạch), bản 2
 
-- Ngày: 17/11/2026 · Trạng thái: **đề xuất, chờ duyệt** (chưa sửa code)
+- Ngày: 17/11/2026 · Trạng thái: **đã duyệt 17/11 ("ok làm đi"), đã làm**. Chốt: hộp chỉ ra mô hình chưa có, bỏ trùng + kho; đường lắp xen kẽ các bộ; giá như mục 3. Giới hạn QC khi làm: hộp 1/ngày, +30 xu 3/ngày, ×2 mỗi level mới, hồi mạng 1 lần/màn
 - Áp dụng cho: `001-game-xep-gach/mobile.html`
 - Bản 2 sửa theo góp ý: game vẫn đi theo level như game giải đố (tự sang mô hình tiếp, độ khó tăng dần), nhưng cho người chơi tự mua bộ mình thích. Kinh tế được căn để khéo léo đẩy người chơi về level tiếp theo: "chưa đủ xu → chơi xong cái này đã".
 

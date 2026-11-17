@@ -1,12 +1,9 @@
-// Hướng dẫn lần đầu: mở hộp quà → mở sách → lật trang → lắp → (sau khi lắp xong) chỉ cửa hàng một lần
+// Hướng dẫn lần đầu: LEVEL 1 miễn phí → lật trang → lắp → (sau khi lắp xong) chỉ cửa hàng một lần
 const tipOn = () => tipEl.classList.contains('show') && document.contains(tipEl);
 module.exports = [
   { name: 'huong-dan-day-du', post: async () => {
-      ok(tipOn() && tipAt === $('gachaBtn'), 'bước 1: chỉ tab hộp bí ẩn');
-      $('gachaBtn').click(); ok(tipOn() && tipAt === $('playBtn'), 'bước 1b: chỉ nút mở hộp');
-      $('playBtn').click(); await wait(5600);
-      ok(tipOn() && tipAt === $('ubBook'), 'bước 2: chỉ Mở sách');
-      $('ubBook').click();
+      ok(tipOn() && tipAt === $('hNextBtn'), 'bước 1: chỉ nút LEVEL 1');
+      $('hNextBtn').click();
       ok(tipOn() && tipAt === $('bpNext'), 'bước 3: chỉ lật trang');
       $('bpNext').click();
       ok(tipOn() && tipAt === $('bpBuild'), 'bước 4: chỉ Lắp');
@@ -19,7 +16,7 @@ module.exports = [
       ok(JSON.parse(localStorage.getItem('xepgach.v2')).tut === 6, 'phải lưu tut');
   } },
   { name: 'co-roi-chi-the-cho-lap', pre: () => localStorage.setItem('xepgach.v2', JSON.stringify({ coins: 0, own: { 'Cây nấm': true } })),
-    post: async () => { ok(tipOn() && tipAt === $('hLevels').firstElementChild, 'có Cây nấm chưa lắp: chỉ thẻ chờ lắp'); } },
+    post: async () => { ok(tipOn() && tipAt === $('hNextBtn'), 'có Cây nấm chưa lắp: chỉ nút LEVEL 1'); } },
   { name: 'da-xong-khong-hien', pre: () => localStorage.setItem('xepgach.v2', JSON.stringify({ coins: 200, best: {}, tut: 6 })),
     post: async () => { ok(!tipOn(), 'không được hiện hướng dẫn'); } },
   { name: 'nguoi-cu-khong-hien', pre: () => localStorage.setItem('xepgach.v2', JSON.stringify({ coins: 50, best: { 'Cây nấm': 3 } })),

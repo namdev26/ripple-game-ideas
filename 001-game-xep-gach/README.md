@@ -27,16 +27,18 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
   - Khởi động: Cây nấm, Ngôi nhà, Dưa hấu, Lâu đài
   - Kỳ quan cổ đại: Kim tự tháp Giza, Vườn treo Babylon, Tượng Zeus, Đền Artemis, Lăng Halicarnassus, Tượng Rhodes, Hải đăng Alexandria
   - Việt Nam: Chùa Một Cột, Cột cờ Hà Nội, Cầu Vàng, Chùa Cầu Hội An, Khuê Văn Các
-  **Vòng chơi:** có bộ mô hình (🎁 hộp bí ẩn hoặc 🛒 cửa hàng) → mở hộp → sách hướng dẫn kiểu LEGO → lắp → xem phát lại → lên kệ trưng bày.
-  - 🎁 Hộp bí ẩn (màn riêng, mở từ thanh dưới — thanh dưới: Cửa hàng · Hộp bí ẩn · Trang chủ · Kho · Kệ; giữa màn chính là mô hình chờ lắp kế tiếp + LẮP TIẾP; ngăn kéo dưới có 2 tab Chờ lắp / Đã xong, hộp cuộn ngang, nút ▼/▲ thu gọn): **một hộp chung cho cả 16 mô hình**, 100 xu, tỉ lệ cố định theo độ hiếm (Thường 6 · Hiếm 3 · Huyền thoại 1 → 9,1% / 4,5% / 1,5% mỗi mô hình). **Ra trùng được**: trùng thì chọn bán ngay hoặc cất vào 📦 Kho, bán lúc nào cũng được với giá bằng giá cửa hàng. Ra được cả mô hình của bộ chưa mở. Mở bằng 2 nút: **AD 🎬** (xem quảng cáo giả lập 3 giây → mở miễn phí) hoặc **🪙 100**. Kết quả tung trước và lưu lại; chạm hộp để lắc thử. Nút 🎲 xem tỉ lệ.
-  - ✨ Bản đặc biệt (vàng kim, chỉ có trong hộp): 12% mỗi hộp; đang có bản thường mà ra vàng kim thì được nâng cấp (không tính trùng).
-  - 🛒 Cửa hàng (một màn cuộn, 3 mục có băng tiêu đề + tab dưới để nhảy: 🔥 Ưu đãi · 🧱 Mô hình · 🪙 Xu): mô hình chọn đúng cái, giá theo độ hiếm (giá gốc ×1 / ×1,3 / ×1,8).
+  **Vòng chơi (kinh tế bản 2, 17/11):** game đi theo **đường lắp** như game giải đố: LEVEL 1 → 2 → 3… (thứ tự sẵn, độ khó tăng dần kiểu răng cưa, xen kẽ các bộ). Level luôn **miễn phí** nên không bao giờ đứng game. Có xu thì **nhảy cóc**: mua trước mô hình mình thích ở cửa hàng để lắp ngay; tới lượt nó trên đường thì tự bỏ qua, các level khác vẫn phải chơi.
+  - Thưởng lắp xong: Thường 60 · Hiếm 80 · Huyền thoại 120, × sao (1★ ×1 · 2★ ×1,25 · 3★ ×1,5), vàng kim ×1,2. Lắp lại không có xu. Đủ bộ +200 / +300 / +300.
+  - 🛒 Cửa hàng: mua đúng mô hình 150 / 250 / 400 (≈ 2–4 level xu). Level kế hiện "miễn phí". Chạm ⭐ để ghim **mục tiêu**: màn chính hiện thanh xu + "Lắp LEVEL n (tới +x) là đủ!", màn kết quả hiện "còn x xu".
+  - Thiếu xu khi bấm mua → bảng THIẾU XU: ▶ lắp level kế · 🎁 hộp bí ẩn · 🎬 QC +30 (tự ghim mục tiêu).
+  - 🎁 Hộp bí ẩn (màn riêng, thanh dưới: Cửa hàng · Hộp bí ẩn · Trang chủ · Kệ): 100 xu, **chỉ ra mô hình chưa có** (trừ level kế vì đã miễn phí), tỉ lệ Thường 6 · Hiếm 3 · Huyền thoại 1; ✨ vàng kim 12%. Có đủ 16 thì hộp ra bản vàng kim. Không còn ra trùng / kho. Mở bằng 🪙 100 hoặc AD 🎬 (1 lần/ngày). Kết quả tung trước và lưu; chạm hộp để lắc thử; 🎲 xem tỉ lệ.
+  - QC giả lập: ×2 thưởng ở màn kết quả (1 lần mỗi level mới) · +30 xu (3 lần/ngày) · mở hộp (1 lần/ngày) · hồi 1 mạng khi thua (1 lần mỗi màn, hoặc trả 50 xu).
+  - Màn chính: giữa là LEVEL kế (+ thẻ mục tiêu nếu có); ngăn kéo dưới 2 tab Chờ lắp / Đã xong (mô hình đã mua/hộp mà chưa lắp), nút ▼/▲ thu gọn.
   - Sách: bìa → mỗi bước một trang có khung mảnh "2x + tên màu" → trang danh sách mảnh. Vuốt hoặc ◀ ▶ để lật.
-  - Thưởng = giá gốc bộ × độ hiếm (1 / 1,2 / 1,5) × sao (1 / 1,2 / 1,4), bản đặc biệt ×1,2; giá gốc tối thiểu bằng giá hộp nên lắp xong mô hình mới dù 1★ luôn đủ mở 1 hộp. Đủ bộ thưởng thêm + mở bộ sau. Lắp lại từ kệ +15.
-  - Hộp đầu tiên tặng, luôn ra Cây nấm, có bong bóng hướng dẫn. Bắt đầu 0 xu. Save cũ: bản thiết kế đã mua → chờ lắp, kho mảnh hoàn 100% ra xu.
+  - Hướng dẫn lần đầu: LEVEL 1 miễn phí → sách → lắp → chỉ cửa hàng. Save cũ: bản thiết kế đã mua → chờ lắp, kho mảnh hoàn ra xu, mô hình trùng trong kho bán 25/40/80.
   - Mục Ưu đãi và Xu là nạp **giả lập**, chỉ có giao diện — thẻ nổi bật Bộ Khủng Long (hộp LEGO sản phẩm, T-Rex + khủng long cổ dài dựng bằng gạch thật bằng bộ vẽ 3D của game, 3 mô hình + 2.000 xu + 5 hộp + T-Rex vàng kim, đếm ngược tới nửa đêm, chỉ là hình), gói khởi đầu, bỏ quảng cáo, mua bộ LEGO mới, 6 gói xu. Bấm mua chỉ báo bản thử. Chạm ô xu ở đâu cũng mở cửa hàng tại mục Xu.
   Thêm `?all` vào cuối link để mở hết + 99999 xu ảo khi test (không lưu gì).
-  Thiết kế: `docs/superpowers/specs/2026-11-16-hop-bi-an-design.md`. Test: `sh tests/run-all.sh` (cần node + Chrome); ảnh xem bằng mắt: `SHOT=1 node tests/run-headless.js tests/shots-hb.js`.
+  Thiết kế: `docs/superpowers/specs/2026-11-17-kinh-te-vong-choi-design.md` (kinh tế hiện tại), `docs/superpowers/specs/2026-11-16-hop-bi-an-design.md` (hộp bí ẩn cũ). Test: `sh tests/run-all.sh` (cần node + Chrome); ảnh xem bằng mắt: `SHOT=1 node tests/run-headless.js tests/shots-hb.js`.
   Mảnh trên chỉ lắp được khi mảnh dưới đã có.
   Loại gạch: brick/plate các cỡ, tile (trơn, không núm), dốc 2x2/1x2/2x4, dốc cheese, gạch tròn 1x1/2x2,
   nón vuông/tròn, mái vòm 2x2/4x4, vòm cửa 1x4/1x6, dốc nghiêng + góc chéo (mặt kim tự tháp).
