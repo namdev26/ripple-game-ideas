@@ -30,11 +30,11 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
   **Vòng chơi:** có bộ mô hình (🎁 hộp bí ẩn hoặc 🛒 cửa hàng) → mở hộp → sách hướng dẫn kiểu LEGO → lắp → xem phát lại → lên kệ trưng bày.
   - 🎁 Hộp bí ẩn (màn riêng, mở từ thanh dưới — thanh dưới: Cửa hàng · Hộp bí ẩn · Trang chủ · Kho · Kệ; giữa màn chính là mô hình chờ lắp kế tiếp + LẮP TIẾP; ngăn kéo dưới có 2 tab Chờ lắp / Đã xong, hộp cuộn ngang, nút ▼/▲ thu gọn): **một hộp chung cho cả 16 mô hình**, 100 xu, tỉ lệ cố định theo độ hiếm (Thường 6 · Hiếm 3 · Huyền thoại 1 → 9,1% / 4,5% / 1,5% mỗi mô hình). **Ra trùng được**: trùng thì chọn bán ngay hoặc cất vào 📦 Kho, bán lúc nào cũng được với giá bằng giá cửa hàng. Ra được cả mô hình của bộ chưa mở. Mở bằng 2 nút: **AD 🎬** (xem quảng cáo giả lập 3 giây → mở miễn phí) hoặc **🪙 100**. Kết quả tung trước và lưu lại; chạm hộp để lắc thử. Nút 🎲 xem tỉ lệ.
   - ✨ Bản đặc biệt (vàng kim, chỉ có trong hộp): 12% mỗi hộp; đang có bản thường mà ra vàng kim thì được nâng cấp (không tính trùng).
-  - 🛒 Cửa hàng: chọn đúng mô hình, giá theo độ hiếm (giá gốc ×1 / ×1,3 / ×1,8).
+  - 🛒 Cửa hàng (một màn cuộn, 3 mục có băng tiêu đề + tab dưới để nhảy: 🔥 Ưu đãi · 🧱 Mô hình · 🪙 Xu): mô hình chọn đúng cái, giá theo độ hiếm (giá gốc ×1 / ×1,3 / ×1,8).
   - Sách: bìa → mỗi bước một trang có khung mảnh "2x + tên màu" → trang danh sách mảnh. Vuốt hoặc ◀ ▶ để lật.
   - Thưởng = giá gốc bộ × độ hiếm (1 / 1,2 / 1,5) × sao (1 / 1,2 / 1,4), bản đặc biệt ×1,2; giá gốc tối thiểu bằng giá hộp nên lắp xong mô hình mới dù 1★ luôn đủ mở 1 hộp. Đủ bộ thưởng thêm + mở bộ sau. Lắp lại từ kệ +15.
   - Hộp đầu tiên tặng, luôn ra Cây nấm, có bong bóng hướng dẫn. Bắt đầu 0 xu. Save cũ: bản thiết kế đã mua → chờ lắp, kho mảnh hoàn 100% ra xu.
-  - 🛍️ Ưu đãi (chạm ô xu hoặc nút Ưu đãi ở màn chính): shop nạp **giả lập**, chỉ có giao diện — gói khởi đầu, bỏ quảng cáo, mua bộ LEGO mới, 6 gói xu. Bấm mua chỉ báo bản thử.
+  - Mục Ưu đãi và Xu là nạp **giả lập**, chỉ có giao diện — gói khởi đầu, bỏ quảng cáo, mua bộ LEGO mới, 6 gói xu. Bấm mua chỉ báo bản thử. Chạm ô xu ở đâu cũng mở cửa hàng tại mục Xu.
   Thêm `?all` vào cuối link để mở hết + 99999 xu ảo khi test (không lưu gì).
   Thiết kế: `docs/superpowers/specs/2026-11-16-hop-bi-an-design.md`. Test: `sh tests/run-all.sh` (cần node + Chrome); ảnh xem bằng mắt: `SHOT=1 node tests/run-headless.js tests/shots-hb.js`.
   Mảnh trên chỉ lắp được khi mảnh dưới đã có.

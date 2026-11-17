@@ -140,20 +140,26 @@ module.exports = [
       await wait(5600); $('ubLater').click(); ok($('gacha').classList.contains('show'), 'xong quay về màn hộp bí ẩn để quay tiếp');
       $('gachaClose').click(); ok($('home').classList.contains('show') && !$('gacha').classList.contains('show'), 'đóng về màn chính');
   } },
-  { name: 'shop-xu-gia-lap', pre: save0({ coins: 120, best: { 'Cây nấm': 3 }, tut: 6 }), post: async () => {
+  { name: 'shop-gop', pre: save0({ coins: 120, best: { 'Cây nấm': 3 }, tut: 6 }), post: async () => {
+      const B = $('shopBody'), top = id => $(id).offsetTop - B.offsetTop, near = id => Math.abs(B.scrollTop - Math.min(top(id), B.scrollHeight - B.clientHeight)) < 3;
+      ok(!$('iap') && !$('hIapBtn'), 'không còn màn Ưu đãi riêng');
       document.querySelector('#home .coins').click();
-      ok($('iap').classList.contains('show'), 'chạm ô xu → mở shop xu');
-      const packs = document.querySelectorAll('#iap .coinPack'), sets = document.querySelectorAll('#iap .setPack');
-      ok(packs.length >= 6 && [...packs].every(p => /\d/.test(p.textContent) && p.querySelector('.price')), 'có các gói xu kèm giá: ' + packs.length);
-      ok(sets.length >= 2 && [...sets].every(p => p.querySelector('img') && p.querySelector('.price')), 'có gói bộ LEGO mới có ảnh');
-      ok($('iap').textContent.includes('quảng cáo') && document.querySelector('#iap .starter .price'), 'có gói bỏ quảng cáo + gói khởi đầu');
+      ok($('shop').classList.contains('show') && near('secCoin'), 'chạm ô xu → cửa hàng, cuộn tới mục xu');
+      const packs = B.querySelectorAll('#secCoin .coinPack'), sets = B.querySelectorAll('#secOffer .setPack');
+      ok(packs.length >= 6 && [...packs].every(p => /\d/.test(p.textContent) && p.querySelector('.price')), 'gói xu kèm giá: ' + packs.length);
+      ok(sets.length >= 2 && [...sets].every(p => p.querySelector('img') && p.querySelector('.price')), 'gói bộ LEGO mới có ảnh');
+      ok($('secOffer').textContent.includes('quảng cáo') && B.querySelector('#secOffer .starter .price'), 'gói khởi đầu + bỏ quảng cáo');
+      ok(B.querySelectorAll('#secModel #mGrid .mItem').length === 4, 'mô hình nằm chung một màn cuộn');
+      const tabs = [...document.querySelectorAll('#shopTabs button')];
+      ok(tabs.length === 3 && tabs.map(t => t.dataset.s).join() === 'secOffer,secModel,secCoin', 'tab dưới: ưu đãi, mô hình, xu');
+      tabs[1].click(); ok(near('secModel') && tabs[1].classList.contains('cur'), 'tab mô hình cuộn tới mục mô hình');
+      tabs[0].click(); ok(B.scrollTop === 0 && tabs[0].classList.contains('cur'), 'tab ưu đãi về đầu');
       packs[0].querySelector('.price').click();
-      ok(S.coins === 120 && $('toast').classList.contains('show'), 'chỉ giả lập: không cộng xu, báo bản thử');
-      $('iapClose').click(); ok(!$('iap').classList.contains('show') && $('home').classList.contains('show'), 'đóng về màn chính');
-      $('hIapBtn').click(); ok($('iap').classList.contains('show'), 'nút Ưu đãi ở màn chính mở shop xu');
-      $('iapClose').click(); $('shopBtn').click(); document.querySelector('#shop .coins').click();
-      ok($('iap').classList.contains('show') && getComputedStyle($('iap')).zIndex > getComputedStyle($('shop')).zIndex, 'mở được từ cửa hàng mô hình, nằm trên');
-      $('iapClose').click(); ok($('shop').classList.contains('show'), 'đóng thì quay lại cửa hàng mô hình');
+      ok(S.coins === 120 && $('toast').classList.contains('show'), 'nạp chỉ giả lập: không cộng xu, báo bản thử');
+      $('shopClose').click(); ok(!$('shop').classList.contains('show') && $('home').classList.contains('show'), 'đóng về màn chính');
+      $('gachaBtn').click(); document.querySelector('#gacha .coins').click();
+      ok($('shop').classList.contains('show') && +getComputedStyle($('shop')).zIndex > +getComputedStyle($('gacha')).zIndex, 'mở từ màn hộp bí ẩn, nằm trên');
+      $('shopClose').click(); ok($('gacha').classList.contains('show') && !$('shop').classList.contains('show'), 'đóng thì quay lại màn hộp bí ẩn');
   } },
 ];
 module.exports.lib = require('./t4-build.js').lib;
