@@ -4,7 +4,7 @@ Trạng thái: **đã duyệt, đã làm MVP** (kết hợp cửa hàng mô hìn
 
 > **Cập nhật 17/11/2026 (người dùng yêu cầu): hộp chung toàn game, ra trùng được.** Thay cho luật "hộp theo bộ, không trùng, bảo hiểm mô hình cuối" ở mục 4.1, 4.3, 6:
 > - Một hộp duy nhất cho cả 16 mô hình, giá 100 xu (hộp đầu vẫn tặng, ra Cây nấm). Tỉ lệ cố định theo độ hiếm (6/3/1 trên tổng 66), không đổi theo thứ đã có.
-> - Ra mô hình đã có → đổi thành xu bằng giá cửa hàng của mô hình đó. Có bản thường mà ra vàng kim → nâng cấp, không tính trùng. Bỏ bảo hiểm vàng kim.
+> - Ra mô hình đã có → cất vào Kho (`S.dup`), bán ngay hoặc bán lúc khác, mỗi cái bằng giá cửa hàng của mô hình đó. Có bản thường mà ra vàng kim → nâng cấp, không tính trùng. Bỏ bảo hiểm vàng kim.
 > - Thưởng lắp tính theo giá gốc tối thiểu = giá hộp (lắp mô hình mới 1★ luôn đủ 1 hộp). Mô phỏng: trung bình ~125 hộp để đủ 16, lắp lại vì thiếu xu trung bình <1 lần. Giá 150 thì không lời khi quay trùng nhưng trung bình phải lắp lại ~37 lần → chọn 100; đổi lại, đủ bộ rồi quay tiếp thì lời nhẹ (~150 xu/hộp), chấp nhận vì lúc đó xu ít chỗ tiêu.
 > - Vòng quay giữ nguyên, dải quay lấy từ cả 16 mô hình. Màn chính ghi "Đã có X/16"; ô chờ lắp gồm mọi bộ.
 

@@ -28,7 +28,7 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
   - Kỳ quan cổ đại: Kim tự tháp Giza, Vườn treo Babylon, Tượng Zeus, Đền Artemis, Lăng Halicarnassus, Tượng Rhodes, Hải đăng Alexandria
   - Việt Nam: Chùa Một Cột, Cột cờ Hà Nội, Cầu Vàng, Chùa Cầu Hội An, Khuê Văn Các
   **Vòng chơi:** có bộ mô hình (🎁 hộp bí ẩn hoặc 🛒 cửa hàng) → mở hộp → sách hướng dẫn kiểu LEGO → lắp → xem phát lại → lên kệ trưng bày.
-  - 🎁 Hộp bí ẩn: **một hộp chung cho cả 16 mô hình**, 100 xu, tỉ lệ cố định theo độ hiếm (Thường 6 · Hiếm 3 · Huyền thoại 1 → 9,1% / 4,5% / 1,5% mỗi mô hình). **Ra trùng được**: trùng thì đổi thành xu bằng giá mô hình đó ở cửa hàng. Ra được cả mô hình của bộ chưa mở. Kết quả tung trước và lưu lại; chạm hộp để lắc thử. Nút 🎲 xem tỉ lệ.
+  - 🎁 Hộp bí ẩn: **một hộp chung cho cả 16 mô hình**, 100 xu, tỉ lệ cố định theo độ hiếm (Thường 6 · Hiếm 3 · Huyền thoại 1 → 9,1% / 4,5% / 1,5% mỗi mô hình). **Ra trùng được**: trùng thì chọn bán ngay hoặc cất vào 📦 Kho (nút ở cột trái màn chính), bán lúc nào cũng được với giá bằng giá cửa hàng. Ra được cả mô hình của bộ chưa mở. Kết quả tung trước và lưu lại; chạm hộp để lắc thử. Nút 🎲 xem tỉ lệ.
   - ✨ Bản đặc biệt (vàng kim, chỉ có trong hộp): 12% mỗi hộp; đang có bản thường mà ra vàng kim thì được nâng cấp (không tính trùng).
   - 🛒 Cửa hàng: chọn đúng mô hình, giá theo độ hiếm (giá gốc ×1 / ×1,3 / ×1,8).
   - Sách: bìa → mỗi bước một trang có khung mảnh "2x + tên màu" → trang danh sách mảnh. Vuốt hoặc ◀ ▶ để lật.

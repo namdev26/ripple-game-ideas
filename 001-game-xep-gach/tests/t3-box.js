@@ -19,11 +19,25 @@ module.exports = [
       ok(owned(5) && !special(5) && S.coins === 500 - boxPrice(), 'ra đúng mô hình đã tung trước, trừ ' + boxPrice() + ': ' + S.coins);
       ok(S.next.g && S.next.g.i >= 0 && S.next.g.i < LEVELS.length, 'tung trước hộp kế (cả game)');
   } },
-  { name: 'ra-trung-doi-xu', pre: save0({ coins: 500, best: { 'Cây nấm': 3 }, next: { g: { i: 0, sp: false } } }), post: async () => {
+  { name: 'ra-trung-vao-kho', pre: save0({ coins: 500, best: { 'Cây nấm': 3 }, next: { g: { i: 0, sp: false } } }), post: async () => {
       $('playBtn').click(); await wait(5600);
-      ok(S.coins === 500 - boxPrice() + shopPrice(0), 'trùng → đổi ra xu bằng giá cửa hàng: ' + S.coins);
-      ok($('ubDup').offsetWidth > 0 && $('ubDup').textContent.includes('+' + shopPrice(0)), 'báo trùng + số xu: ' + $('ubDup').textContent);
-      ok($('ubBook').offsetWidth === 0 && $('ubBtns').classList.contains('on'), 'trùng thì không có nút mở sách');
+      ok(S.coins === 500 - boxPrice() && S.dup['Cây nấm'] === 1, 'trùng → cất vào kho, chưa bán: ' + S.coins + ' ' + JSON.stringify(S.dup));
+      ok($('ubDup').offsetWidth > 0 && $('ubDup').textContent.includes('kho'), 'báo trùng, cất kho: ' + $('ubDup').textContent);
+      ok($('ubBook').offsetWidth === 0 && $('ubSell').offsetWidth > 0 && $('ubSell').textContent.includes('+' + shopPrice(0)), 'trùng: không mở sách, có nút bán ngay');
+      $('ubSell').click();
+      ok(S.coins === 500 - boxPrice() + shopPrice(0) && !S.dup['Cây nấm'] && $('ubSell').offsetWidth === 0, 'bán ngay → +giá cửa hàng, khỏi kho');
+      ok(JSON.parse(localStorage.getItem('xepgach.v2')).coins === S.coins, 'đã lưu');
+  } },
+  { name: 'kho-ban', pre: save0({ coins: 10, best: { 'Cây nấm': 3, 'Cầu Vàng': 1 }, dup: { 'Cây nấm': 2, 'Cầu Vàng': 1 }, tut: 6 }), post: async () => {
+      ok($('hKhoBtn').textContent.includes('3'), 'nút kho có số đếm: ' + $('hKhoBtn').textContent);
+      $('hKhoBtn').click(); ok($('kho').classList.contains('show'), 'mở kho');
+      const items = () => [...document.querySelectorAll('#khoList .khoItem')];
+      ok(items().length === 2 && items()[0].textContent.includes('×2'), 'kho liệt kê mô hình trùng + số lượng');
+      items().find(e => e.textContent.includes('Cây nấm')).querySelector('.price').click();
+      ok(S.coins === 10 + shopPrice(0) && S.dup['Cây nấm'] === 1, 'bán 1 cái: ' + S.coins);
+      $('khoAll').click();
+      ok(S.coins === 10 + 2 * shopPrice(0) + shopPrice(13) && !Object.keys(S.dup).length && items().length === 0 && $('kho').textContent.includes('trống'), 'bán hết: ' + S.coins);
+      $('khoClose').click(); ok(!$('kho').classList.contains('show') && $('hKhoBtn').textContent.includes('Kho'), 'đóng kho');
   } },
   { name: 'nang-cap-vang-kim', pre: save0({ coins: 500, best: { 'Cây nấm': 3 }, next: { g: { i: 0, sp: true } } }), post: async () => {
       $('playBtn').click(); await wait(5600);
