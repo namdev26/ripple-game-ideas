@@ -190,6 +190,17 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #app.replaying #panel,#app.replaying #hintBtn,#app.replaying #zoom,#app.replaying #setBtn,#app.replaying #infoBtn,#app.replaying #dragImg{display:none}
 #replayTag{display:none;position:absolute;left:50%;bottom:12cqw;transform:translateX(-50%);font-size:6cqw;font-weight:800;z-index:6;white-space:nowrap}
 #app.replaying #replayTag{display:block}
+/* sổ bước nhỏ giữa trên: mảnh cần lắp + đã lắp, hình bước (mảnh mới viền đỏ), số bước; chạm để phóng to */
+#stepBook{position:absolute;top:24cqw;left:50%;transform:translateX(-50%);transform-origin:50% 0;width:30cqw;padding:1.4cqw 1.4cqw .8cqw;background:#fff6d6;border:.8cqw solid #f2b84b;
+  border-radius:3cqw;display:flex;flex-direction:column;align-items:center;cursor:pointer;box-shadow:0 .8cqw 1.6cqw #0002}
+#stepBook.big{transform:translateX(-50%) scale(1.8);z-index:5}
+#sbParts{display:flex;gap:2cqw;justify-content:center;flex-wrap:wrap}
+#sbParts div{display:flex;flex-direction:column;align-items:center}
+#sbParts img{width:7cqw;height:7cqw}
+#sbParts b{font-size:3.2cqw;font-weight:800;color:#c47a00;line-height:1}
+#sbImg{width:26cqw;height:26cqw}
+#sbNo{width:100%;text-align:center;border-top:.4cqw solid #e8d6a8;padding-top:.6cqw;font-size:3.4cqw;font-weight:800;color:#555a70}
+#app.replaying #stepBook{display:none}
 .shItem{position:relative;background:#fff;border-radius:4cqw;cursor:pointer;box-shadow:inset 0 -1cqw 0 #dfe4f2;padding:1cqw 1cqw 4.5cqw;display:flex;flex-direction:column;align-items:center}
 .shItem img{width:100%;aspect-ratio:1}
 .shItem .st{position:absolute;bottom:.6cqw;font-size:3.8cqw;color:#ffc21a;text-shadow:0 .3cqw 0 #c98a00;letter-spacing:-.2cqw}
@@ -378,6 +389,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   </div>
   <button id="setBtn" aria-label="Cài đặt">⚙️</button>
   <button id="infoBtn" aria-label="Cách chơi">i</button>
+  <div id="stepBook"><div id="sbParts"></div><img id="sbImg" alt=""><div id="sbNo"></div></div>
 
   <div id="zoom"><span id="zIn">+</span><div id="ztrack"><div id="zthumb">🔍</div></div><span id="zOut">−</span></div>
   <button id="hintBtn" aria-label="Gợi ý">💡<span class="gbadge" id="hintN">3</span></button>
@@ -1073,7 +1085,7 @@ function getMat(color,mode){
     polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1});
 }
 const LINE={ solid:new THREE.LineBasicMaterial({color:0x22202c,transparent:true,opacity:0.5}),
-  dark:new THREE.LineBasicMaterial({color:0x8a90a0}), ghost:new THREE.LineBasicMaterial({color:0xc4bcd8}) };
+  dark:new THREE.LineBasicMaterial({color:0x8a90a0}), ghost:new THREE.LineBasicMaterial({color:0xc4bcd8}), hl:new THREE.LineBasicMaterial({color:0xff2a2a}) };
 function makeBrick(key,color,mode='solid'){
   const g=partGeos(key), grp=new THREE.Group(), inner=new THREE.Group(); grp.add(inner);
   const mat=getMat(color,mode);
@@ -1219,6 +1231,15 @@ function updateCount(){
   const n=targets.filter(t=>t.placed).length, p=Math.round(100*n/targets.length);
   $('cDone').textContent=n; $('cAll').textContent=targets.length;
   $('pfill').style.width=p+'%'; $('ptext').textContent=p+'%';
+  renderBook();
+}
+function renderBook(){
+  if (!L.steps[step]) return; // loadLevel gọi updateCount trước showStep(0), step còn của màn cũ
+  const m=new Map();
+  targets.forEach(t=>{ if(t.step!==step) return; const k=t.key+'|'+t.color; if(!m.has(k)) m.set(k,{key:t.key,color:t.color,n:0,d:0}); const e=m.get(k); e.n++; if(t.placed) e.d++; });
+  $('sbParts').innerHTML=[...m.values()].map(e=>`<div><img src="${thumb(e.key,e.color)}" alt=""><b>${e.d}/${e.n}</b></div>`).join('');
+  $('sbImg').src=thumbStep(levelIdx,step,special(levelIdx),true);
+  $('sbNo').textContent=`${step+1}/${L.steps.length}`;
 }
 function updateHint(){ $('hintN').textContent=hintsLeft>0?hintsLeft:'+'; }
 const supported=t=>t.deps.every(u=>u.placed);
@@ -1297,6 +1318,7 @@ function showStep(s){
   refreshTrayRot();
   const st=$('stepText'); st.textContent=`Bước ${s+1}/${L.steps.length}`;
   st.classList.remove('pop'); void st.offsetWidth; st.classList.add('pop');
+  renderBook();
 }
 function validateLevel(){
   const hm=new Map();
@@ -1765,14 +1787,15 @@ $('mBuy').onclick=()=>{
   $('shop').classList.remove('show'); openUnbox(i,false,false);
 };
 $('shopBtn').onclick=()=>{ sfx.pick(); openShop(); };
+$('stepBook').onclick=()=>$('stepBook').classList.toggle('big');
 $('shopClose').onclick=()=>{ sfx.back(); showHome(curSeries); };
 
 // ---- sách hướng dẫn kiểu LEGO: bìa → mỗi bước một trang (khung mảnh "2x + tên màu") → danh sách mảnh ----
-// ảnh mô hình lắp tới hết bước n
-function thumbStep(i,n,sp){
-  const k='st'+i+':'+n+(sp?'s':''); if (thumbCache[k]) return thumbCache[k];
+// ảnh mô hình lắp tới hết bước n; hl: mảnh của bước n viền đỏ
+function thumbStep(i,n,sp,hl){
+  const k='st'+i+':'+n+(sp?'s':'')+(hl?'h':''); if (thumbCache[k]) return thumbCache[k];
   const info=modelInfo(LEVELS[i]), g=new THREE.Group();
-  info.ts.forEach(t=>{ if(t.step>n) return; const o=makeBrick(t.key,kitColor(sp,t.color)); placeObj(o,t.key,t.x,t.y,t.z,t.rot); g.add(o); });
+  info.ts.forEach(t=>{ if(t.step>n) return; const o=makeBrick(t.key,kitColor(sp,t.color)); if(hl&&t.step===n) o.userData.lines.material=LINE.hl; placeObj(o,t.key,t.x,t.y,t.z,t.rot); g.add(o); });
   return thumbCache[k]=renderThumb(g,info.center,info.radius,new THREE.Vector3(0.55,0.65,1));
 }
 function kitOf(i,steps){

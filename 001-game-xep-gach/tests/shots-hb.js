@@ -11,6 +11,7 @@ module.exports = [
   { name: 'hb-bia', pre: save0(ST), post: async () => { openBlueprint(6); } },
   { name: 'hb-trang', pre: save0(ST), post: async () => { openBlueprint(6); bpPage = 3; renderBp(); } },
   { name: 'hb-trang-cuoi', pre: save0(ST), post: async () => { openBlueprint(6); bpPage = 13; renderBp(); } },
+  { name: 'hb-lap', pre: save0(ST), post: async () => { startBuild(1, true); targets.filter(t => t.step === 0).forEach(t => commit(t)); await wait(400); commit(targets.find(t => t.step === 1)); } },
   { name: 'hb-ke', pre: save0(ST), post: async () => { openShelf(); } },
   { name: 'hb-tile', pre: save0(ST), post: async () => { showHome(1); $('oddsBtn').click(); } },
 ];

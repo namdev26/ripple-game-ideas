@@ -36,6 +36,18 @@ module.exports = [
       giveModel(0); giveModel(2); startBuild(0); commitAll(); $('rNext').click();
       ok($('bpView').classList.contains('show') && bpI === 2, 'còn mô hình chờ lắp → mở sách của nó');
   } },
+  { name: 'so-tay-buoc', post: async () => {
+      giveModel(0); startBuild(0); const N = L.steps.length, s0 = targets.filter(t => t.step === 0);
+      const B = $('stepBook').getBoundingClientRect(), H = $('hud').getBoundingClientRect(), W = $('app').getBoundingClientRect();
+      ok(B.width > 0 && B.top >= H.bottom && Math.abs(B.left + B.width / 2 - (W.left + W.width / 2)) < 2, 'sổ bước ở giữa, dưới HUD');
+      ok($('sbNo').textContent === '1/' + N, 'số bước: ' + $('sbNo').textContent);
+      ok($('sbImg').src.startsWith('data:image'), 'có hình bước');
+      const cnt = () => [...document.querySelectorAll('#sbParts b')].map(b => b.textContent);
+      ok(cnt().every(c => c.startsWith('0/')) && cnt().reduce((a, c) => a + +c.split('/')[1], 0) === s0.length, 'đếm mảnh bước 1: ' + cnt());
+      commit(s0[0]); ok(cnt().reduce((a, c) => a + +c.split('/')[0], 0) === 1, 'lắp 1 mảnh → tăng: ' + cnt());
+      s0.slice(1).forEach(t => commit(t)); await wait(400);
+      ok($('sbNo').textContent === '2/' + N, 'xong bước → sang bước 2: ' + $('sbNo').textContent);
+  } },
   { name: 'tiep-tuc-ve-home', post: async () => {
       giveModel(0); startBuild(0); commitAll(); $('rNext').click();
       ok($('home').classList.contains('show'), 'hết mô hình chờ lắp → về home mở hộp');
