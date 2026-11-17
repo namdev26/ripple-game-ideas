@@ -420,7 +420,27 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .iapFoot{display:flex;justify-content:space-between;align-items:center;font-size:3.2cqw;font-weight:700;color:#2b3150aa;padding:0 1cqw}
 .iapFoot button{border:none;background:none;font:inherit;color:#2b3150;text-decoration:underline;cursor:pointer;padding:0}
 #shopNote{font-size:3.8cqw;font-weight:800;color:#2b3150;background:#fff6c8;border-radius:3cqw;padding:1.5cqw 3cqw;text-align:center}
-#mGrid{grid-template-columns:repeat(2,1fr);gap:3.5cqw}
+#mGrid{display:flex;flex-direction:column;gap:3cqw}
+.shH{display:flex;justify-content:space-between;align-items:center;color:#fff;font-weight:800;font-size:4.8cqw;text-shadow:0 .4cqw 0 #2b2f6380}
+.shH span{font-size:3.6cqw;background:#2b3150aa;border-radius:2cqw;padding:.6cqw 2cqw}
+#mShelf{display:grid;grid-template-columns:repeat(3,1fr);gap:2cqw}
+#mShelfAd{align-self:center;height:10cqw;padding:0 5cqw;font-size:4.2cqw}
+.shEmpty{color:#fff;font-weight:800;text-align:center}
+#mGrid .mItem{padding:1.4cqw 1cqw 2cqw}
+#mGrid .mItem .pbox{font-size:2.1cqw;margin:1.4cqw 2.4em .6cqw 0}
+#mGrid .mItem .mp{font-size:3.6cqw;white-space:nowrap}
+.mItem .mp s{color:#9aa0bd;font-size:.8em}
+.mItem.sale{box-shadow:inset 0 -1cqw 0 #dfe4f2,0 0 0 .8cqw #ff5a4f}
+.mSale{position:absolute;top:-1.6cqw;right:-1cqw;z-index:1;background:#e0303f;color:#fff;font-style:normal;font-size:3.2cqw;font-weight:800;padding:.3cqw 1.6cqw;border-radius:1.6cqw;transform:rotate(6deg)}
+.sRow{background:#ffffff40;border-radius:4cqw;padding:2cqw;border-left:1.4cqw solid var(--sc)}
+.sRowH{display:flex;align-items:center;gap:2cqw;margin-bottom:1.6cqw;color:#2b3150;font-weight:800}
+.sRowH b{font-size:4.4cqw}.sRowH small{font-size:3.4cqw;color:#4d557a}
+.sMore{margin-left:auto;border:none;background:#2b3150;color:#fff;font:800 3.4cqw/1 'Baloo 2',system-ui;padding:1.2cqw 2.6cqw;border-radius:2cqw;cursor:pointer}
+.sRowL{display:flex;gap:2cqw;overflow-x:auto;scrollbar-width:none;touch-action:pan-x;padding:1.6cqw .4cqw 1cqw}
+.sRowL::-webkit-scrollbar{display:none}
+.sRowL .mItem{flex:none;width:27cqw}
+.sRow.full .sRowL{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;touch-action:auto}
+.sRow.full .sRowL .mItem{width:auto}
 .mItem{position:relative;background:#fff;border-radius:4cqw;cursor:pointer;box-shadow:inset 0 -1cqw 0 #dfe4f2;padding:2cqw 2cqw 3cqw;display:flex;flex-direction:column;align-items:center;
   border-top:1.4cqw solid var(--rc);font-weight:800;color:#2b3150;text-align:center}
 .mItem .pbox{font-size:2.9cqw;margin:2cqw 2.4em 1cqw 0} /* hộp sản phẩm thay ảnh mô hình */
@@ -434,7 +454,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #mInfo small{display:block;font-size:3.6cqw;color:#6a7195}
 #mBuy{width:100%}
 #mGoal{width:11cqw;height:11cqw;flex:none;font-size:5.4cqw;filter:grayscale(1);opacity:.6}#mGoal.on{filter:none;opacity:1}
-.mItem .mStar{position:absolute;top:1cqw;left:1.4cqw;font-style:normal;font-size:5cqw;z-index:1}
+.mItem .mStar{position:absolute;top:-2cqw;left:-1cqw;font-style:normal;font-size:5cqw;z-index:1}
 #needModal{z-index:14}
 #needModal .stack .btn{height:13cqw;font-size:4.4cqw}
 /* ---------- sách hướng dẫn kiểu LEGO ---------- */
@@ -590,7 +610,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <button class="btn blue close" id="shopClose" aria-label="Đóng">✕</button>
     <div id="shopBody">
       <div class="shopSec" id="secOffer"><div class="iapH">🔥 ƯU ĐÃI</div><div id="offerBody"></div></div>
-      <div class="shopSec" id="secModel"><div class="iapH">🧱 MÔ HÌNH</div><div id="shopNote">⏩ Mua trước mô hình mình thích để lắp ngay, khỏi đợi tới level · ⭐ ghim làm mục tiêu</div><div class="grid" id="mGrid"></div></div>
+      <div class="shopSec" id="secModel"><div class="iapH">🧱 MÔ HÌNH</div><div id="shopNote">⏩ Mua trước mô hình mình thích để lắp ngay · ⭐ ghim làm mục tiêu</div><div class="grid" id="mGrid"></div></div>
       <div class="shopSec" id="secCoin"><div class="iapH">🪙 XU</div><div id="coinBody"></div></div>
     </div>
     <div class="pick" id="mPick"><div class="row2"><div id="mImg"></div><div id="mInfo"></div><button class="btn blue" id="mGoal" aria-label="Ghim mục tiêu">⭐</button></div><button class="btn green" id="mBuy"></button></div>
@@ -1810,7 +1830,7 @@ function playRoad(){ const i=roadNext(); if(i==null) return; if(!owned(i)){ gran
 // mục tiêu ghim: thứ người chơi muốn mua + con đường ngắn nhất tới nó (luôn là level kế)
 function goalInfo(){
   const g=S.goal?LEVELS.findIndex(l=>l.name===S.goal):-1; if (g<0||owned(g)) return null;
-  const price=shopPrice(g), need=Math.max(0,price-S.coins), rn=roadNext(), gain=rn==null?0:rewardFor(rn,3);
+  const price=buyPrice(g), need=Math.max(0,price-S.coins), rn=roadNext(), gain=rn==null?0:rewardFor(rn,3);
   return {g,price,need,rn,gain};
 }
 const roadTip=o=>o.rn==null?'Mở hộp hoặc xem QC để thêm xu':o.need<=o.gain?`Lắp LEVEL ${roadNo(o.rn)} (tới +${o.gain}) là đủ!`:`Lắp LEVEL ${roadNo(o.rn)} để kiếm thêm tới +${o.gain}`;
@@ -1884,8 +1904,8 @@ function openBox(viaAd){
   openUnbox(nx.i,nx.sp,true,pool);
 }
 // quảng cáo giả lập: đếm ngược 3 giây rồi trao thưởng; mỗi loại có giới hạn theo ngày
-const AD_MAX={box:1,coin:3};
-const adLeft=k=>{ const d=new Date().toDateString(); if(!S.ad||S.ad.d!==d) S.ad={d,box:0,coin:0}; return AD_MAX[k]-S.ad[k]; };
+const AD_MAX={box:1,coin:3,shelf:1};
+const adLeft=k=>{ const d=new Date().toDateString(); if(!S.ad||S.ad.d!==d) S.ad={d,box:0,coin:0,shelf:0}; return AD_MAX[k]-(S.ad[k]||0); };
 function watchAd(cb){
   sfx.pick(); let n=3; $('adSec').textContent=n; show('adView',true);
   const t=setInterval(()=>{ n--; $('adSec').textContent=n; if(n>0) return; clearInterval(t); show('adView',false); cb(); },1000);
@@ -1988,25 +2008,49 @@ function shopTabCur(){ const B=$('shopBody'), y=B.scrollTop+B.clientHeight/3, en
   document.querySelectorAll('#shopTabs button').forEach(b=>b.classList.toggle('cur',b.dataset.s===cur)); }
 $('shopBody').onscroll=shopTabCur;
 $('shopTabs').onclick=e=>{ const b=e.target.closest('button'); if(b){ sfx.pick(); shopGo(b.dataset.s); } };
+// kệ hàng hôm nay: shop chỉ bày vài món đáng mua, đổi mỗi ngày → shop ngắn dù có bao nhiêu hộp
+const SHELF_N=6, SALE=0.8, today=()=>new Date().toDateString();
+const buyPrice=i=>S.daily&&S.daily.d===today()&&S.daily.sale===i?r5(shopPrice(i)*SALE):shopPrice(i);
+function rollShelf(){
+  const free=roadNext(), un=ALL_IDX.filter(i=>!owned(i)&&i!==free), ids=[];
+  const add=i=>{ if(i!=null&&i>=0&&un.includes(i)&&!ids.includes(i)&&ids.length<SHELF_N) ids.push(i); };
+  add(S.goal?LEVELS.findIndex(l=>l.name===S.goal):-1); // mục tiêu đang ghim
+  ROAD.filter(i=>un.includes(i)).slice(0,2).forEach(add); // 2 mô hình sắp tới trên đường: để nhảy cóc
+  const rare=un.filter(i=>rarOf(i)>0&&!ids.includes(i)), sale=rare.length?rare[Math.floor(Math.random()*rare.length)]:null; add(sale); // 1 ô hiếm giảm giá
+  un.filter(i=>!ids.includes(i)).sort(()=>Math.random()-.5).forEach(add); // còn lại ngẫu nhiên
+  S.daily={d:today(),ids,sale}; save();
+}
+const shelf=()=>{ if(!S.daily||S.daily.d!==today()) rollShelf(); return S.daily; };
+let mFull=null; // bộ đang "Xem hết"
 function renderShopM(){
-  const rn=roadNext();
-  $('mGrid').innerHTML=SERIES.map((r,s)=>`<h4>${r.name}</h4>`+seriesIdx(s).map(i=>{ const h=owned(i), free=i===rn&&!h;
-    return `<div class="mItem${h?' have':''}${i===mSel?' sel':''}" data-i="${i}" style="--rc:${RAR[rarOf(i)].c}">${S.goal===LEVELS[i].name?'<i class="mStar">⭐</i>':''}${pboxHtml(i,false)}<span class="mp">${h?'✓ Đã có':free?`▶ Level ${roadNo(i)} · miễn phí`:shopPrice(i)+'🪙'}</span></div>`; }).join('')).join('');
+  const rn=roadNext(), d=shelf();
+  const item=i=>{ const h=owned(i), free=i===rn&&!h, sale=!h&&buyPrice(i)<shopPrice(i);
+    return `<div class="mItem${h?' have':''}${i===mSel?' sel':''}${sale?' sale':''}" data-i="${i}" style="--rc:${RAR[rarOf(i)].c}">${S.goal===LEVELS[i].name?'<i class="mStar">⭐</i>':''}${sale?`<i class="mSale">-${Math.round((1-SALE)*100)}%</i>`:''}${pboxHtml(i,false)}`
+      +`<span class="mp">${h?'✓ Đã có':free?`▶ Lv ${roadNo(i)} miễn phí`:sale?`<s>${shopPrice(i)}</s> ${buyPrice(i)}🪙`:shopPrice(i)+'🪙'}</span></div>`; };
+  $('mGrid').innerHTML=`<div class="shH"><b>🛒 Kệ hàng hôm nay</b><span>⏳ <span class="shT">${dinoLeft()}</span></span></div>`
+    +(d.ids.length?`<div id="mShelf">${d.ids.map(item).join('')}</div>`:'<p class="shEmpty">Đã có đủ mô hình 🎉</p>')
+    +(adLeft('shelf')>0&&d.ids.length?'<button class="btn blue" id="mShelfAd"><span class="outline">🎬 Đổi kệ mới</span></button>':'')
+    +'<div class="shH"><b>📚 Tất cả mô hình</b></div>'
+    +SERIES.map((r,s)=>{ const ids=seriesIdx(s), have=ids.filter(owned).length;
+      return `<div class="sRow${mFull===s?' full':''}" style="--sc:${r.c}"><div class="sRowH"><b>${r.name}</b><small>${have}/${ids.length} ✓</small><button class="sMore" data-s="${s}">${mFull===s?'Thu gọn ‹':'Xem hết ›'}</button></div><div class="sRowL">${ids.map(item).join('')}</div></div>`; }).join('');
   const p=$('mPick'); p.style.display=mSel==null?'none':'';
   if (mSel==null) return;
   const i=mSel;
   $('mImg').innerHTML=pboxHtml(i,false); $('mInfo').innerHTML=`${LEVELS[i].name}<small>${RAR[rarOf(i)].n} · ${LEVELS[i].steps.length} bước · ${levelTargets(LEVELS[i]).length} mảnh</small>`;
-  $('mBuy').innerHTML=`<span class="outline g">Mua · ${shopPrice(i)}🪙</span>`; $('mBuy').classList.toggle('dis',S.coins<shopPrice(i));
+  $('mBuy').innerHTML=`<span class="outline g">Mua · ${buyPrice(i)}🪙</span>`; $('mBuy').classList.toggle('dis',S.coins<buyPrice(i));
   $('mGoal').classList.toggle('on',S.goal===LEVELS[i].name);
 }
 $('mGoal').onclick=()=>{ const n=LEVELS[mSel].name; if(S.goal===n) delete S.goal; else S.goal=n; save(); sfx.pick(); renderShopM(); toast(S.goal?'⭐ Đã ghim mục tiêu ở màn chính':'Bỏ mục tiêu'); };
-$('mGrid').onclick=e=>{ const it=e.target.closest('.mItem'); if(!it) return; const i=+it.dataset.i;
+$('mGrid').onclick=e=>{
+  const mo=e.target.closest('.sMore'); if (mo){ sfx.pick(); mFull=mFull===+mo.dataset.s?null:+mo.dataset.s; renderShopM(); return; }
+  if (e.target.closest('#mShelfAd')){ if(adLeft('shelf')>0) watchAd(()=>{ S.ad.shelf=(S.ad.shelf||0)+1; rollShelf(); renderShopM(); toast('🛒 Kệ hàng mới!'); }); return; }
+  const it=e.target.closest('.mItem'); if(!it) return; const i=+it.dataset.i;
   if (owned(i)){ toast(built(i)?'Đã lắp, xem ở kệ trưng bày 🏛':'Đã có, đang chờ lắp'); sfx.back(); return; }
   if (i===roadNext()){ sfx.pick(); show('shop',false); return playRoad(); } // level kế: miễn phí, khỏi mua
   mSel=i; renderShopM(); sfx.pick(); };
 $('mBuy').onclick=()=>{
   const i=mSel; if (i==null||owned(i)) return;
-  const c=shopPrice(i);
+  const c=buyPrice(i);
   if (S.coins<c){ S.goal=LEVELS[i].name; save(); sfx.wrong(); renderShopM(); renderNeed(); show('needModal',true); return; } // thiếu xu: tự ghim mục tiêu + chỉ đường
   S.coins-=c; grant(i,false); save(); updateCoins(true); sfx.coin();
   $('shop').classList.remove('show'); openUnbox(i,false,false);
@@ -2030,7 +2074,7 @@ $('shopClose').onclick=()=>{ sfx.back(); show('shop',false); renderHome(); updat
 
 // ---- shop nạp giả lập: chỉ để xem giao diện, bấm mua chỉ báo bản thử ----
 const dinoLeft=()=>{ const n=new Date(), t=Math.floor((new Date(n).setHours(24,0,0,0)-n)/1000); return [t/3600,t/60%60,t%60].map(v=>String(Math.floor(v)).padStart(2,'0')).join(':'); }; // ưu đãi hết lúc nửa đêm
-setInterval(()=>{ const e=$('dinoT'); if(e&&$('shop').classList.contains('show')) e.textContent=dinoLeft(); },1000);
+setInterval(()=>{ if($('shop').classList.contains('show')) document.querySelectorAll('#dinoT,.shT').forEach(e=>e.textContent=dinoLeft()); },1000);
 const COIN_PACKS=[[120,'25.000đ'],[650,'99.000đ','+8%'],[1400,'199.000đ','Phổ biến'],[3000,'399.000đ','+25%'],[8000,'999.000đ','+33%'],[17000,'1.999.000đ','Lợi nhất']];
 function renderIap(){
   const pile=n=>`<div class="pile">${'<span class="coin"></span>'.repeat(n)}</div>`;

@@ -66,8 +66,8 @@ module.exports = [
   { name: 'cua-hang', pre: save0({ coins: 200, best: { 'Cây nấm': 3 }, next: { g: { i: 5, sp: false } } }), post: async () => {
       $('shopBtn').click();
       ok($('shop').classList.contains('show'), 'phải mở cửa hàng');
-      const items = document.querySelectorAll('#mGrid .mItem');
-      ok(items.length === 16 && document.querySelectorAll('#mGrid h4').length === 3, 'cả 16 mô hình, chia theo bộ: ' + items.length);
+      const items = document.querySelectorAll('#mGrid .sRowL .mItem');
+      ok(items.length === 16 && document.querySelectorAll('#mGrid .sRow').length === 3, 'cả 16 mô hình, mỗi bộ 1 hàng: ' + items.length);
       ok(items[0].textContent.includes('Đã có') && items[1].textContent.includes('miễn phí'), 'Cây nấm đã có, Ngôi nhà là level kế miễn phí');
       ok([...items].every(e => e.querySelector('.pbox') && !e.querySelector(':scope > img')), 'cửa hàng hiển thị hộp sản phẩm, không phải ảnh mô hình trần');
       items[6].click(); ok($('mImg').querySelector('.pbox'), 'ô chọn cũng hiện hộp');
@@ -78,7 +78,7 @@ module.exports = [
       await wait(4200); ok($('ubBtns').classList.contains('on') && $('ubPrize').textContent.includes('Tượng Zeus'), 'hiệu ứng ngắn phải xong, hiện hộp Tượng Zeus');
   } },
   { name: 'cua-hang-thieu-xu', pre: save0({ coins: 50, best: { 'Cây nấm': 3 } }), post: async () => {
-      $('shopBtn').click(); document.querySelectorAll('#mGrid .mItem')[3].click(); $('mBuy').click();
+      $('shopBtn').click(); document.querySelectorAll('#mGrid .sRowL .mItem')[3].click(); $('mBuy').click();
       ok(S.coins === 50 && !owned(3) && !$('unbox').classList.contains('show') && $('needModal').classList.contains('show'), 'thiếu xu không mua được Lâu đài, hiện bảng thiếu xu');
   } },
   { name: 'home-bo-cuc', pre: save0({ coins: 100, best: { 'Cây nấm': 3 }, own: { 'Ngôi nhà': true, 'Dưa hấu': true }, sp: { 'Dưa hấu': true }, tut: 6 }), post: async () => {
@@ -117,7 +117,7 @@ module.exports = [
       const dino = $('offerBody').firstElementChild;
       ok(dino && dino.classList.contains('dinoPack') && dino.querySelector('.dHero .pbox .pf img') && !/🦖|🦕/.test(dino.querySelector('.dHero').textContent) && dino.querySelectorAll('.dIt img').length >= 2 && /Khủng long/i.test(dino.textContent) && dino.querySelector('.price') && dino.querySelectorAll('.dIt').length >= 3 && /\d+:\d\d:\d\d/.test(dino.textContent), 'thẻ bộ khủng long: hộp LEGO có ảnh khủng long dựng bằng gạch, quà kèm, giá, đếm ngược');
       ok($('secOffer').textContent.includes('quảng cáo') && B.querySelector('#secOffer .starter .price'), 'gói khởi đầu + bỏ quảng cáo');
-      ok(B.querySelectorAll('#secModel #mGrid .mItem').length === 16, 'mô hình nằm chung một màn cuộn');
+      ok(B.querySelectorAll('#secModel #mGrid .sRowL .mItem').length === 16, 'mô hình nằm chung một màn cuộn');
       const tabs = [...document.querySelectorAll('#shopTabs button')];
       ok(tabs.length === 3 && tabs.map(t => t.dataset.s).join() === 'secOffer,secModel,secCoin', 'tab dưới: ưu đãi, mô hình, xu');
       tabs[1].click(); ok(near('secModel') && tabs[1].classList.contains('cur'), 'tab mô hình cuộn tới mục mô hình');

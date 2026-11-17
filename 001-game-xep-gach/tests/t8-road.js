@@ -66,5 +66,24 @@ module.exports = [
       for (let k = 0; k < 4; k++) { adCoins(); await wait(3500); }
       ok(S.coins === 90, 'QC +30 tối đa 3 lần/ngày: ' + S.coins);
   } },
+  { name: 'ke-hom-nay', budget: 30000, pre: save0({ tut: 6, coins: 500, best: { 'Cây nấm': 3 }, goal: 'Khuê Văn Các' }), post: async () => {
+      openShop('secModel');
+      const ids = () => [...document.querySelectorAll('#mShelf .mItem')].map(e => +e.dataset.i), kv = LEVELS.findIndex(l => l.name === 'Khuê Văn Các');
+      const a = ids();
+      ok(a.length === 6 && new Set(a).size === 6 && a.every(i => !owned(i) && i !== roadNext()), 'kệ 6 ô, chưa có, không gồm level kế (miễn phí): ' + a);
+      ok(a.includes(kv) && a.includes(ROAD[2]) && a.includes(ROAD[3]), 'kệ có mục tiêu + 2 mô hình sắp tới trên đường');
+      const sale = document.querySelectorAll('#mShelf .mItem.sale');
+      ok(sale.length === 1 && rarOf(+sale[0].dataset.i) > 0 && buyPrice(+sale[0].dataset.i) === Math.round(shopPrice(+sale[0].dataset.i) * 0.8 / 5) * 5, '1 ô hiếm/huyền thoại giảm 20%');
+      ok(/\d+:\d\d:\d\d/.test($('secModel').textContent) && S.daily.d === new Date().toDateString(), 'đếm ngược tới lúc đổi kệ, lưu theo ngày');
+      renderShopM(); ok(JSON.stringify(ids()) === JSON.stringify(a), 'trong ngày kệ giữ nguyên');
+      const rows = document.querySelectorAll('#mGrid .sRow');
+      ok(rows.length === 3 && [...rows].every((r, s) => r.querySelectorAll('.sRowL .mItem').length === SERIES[s].n && r.textContent.includes('Xem hết')), 'tất cả mô hình: mỗi bộ 1 hàng ngang');
+      ok(rows[0].textContent.includes('1/4'), 'hàng có số đã có / tổng');
+      rows[1].querySelector('.sMore').click(); ok(document.querySelectorAll('#mGrid .sRow')[1].classList.contains('full'), 'Xem hết → mở lưới cả bộ');
+      const si = +sale[0].dataset.i; document.querySelector(`#mShelf .mItem[data-i="${si}"]`).click(); $('mBuy').click();
+      ok(owned(si) && S.coins === 500 - buyPrice(si), 'mua giá giảm: ' + S.coins);
+      openShop('secModel'); $('mShelfAd').click(); await wait(3500);
+      ok(S.daily.d === new Date().toDateString() && !$('mShelfAd'), 'xem QC đổi kệ mới, 1 lần/ngày');
+  } },
 ];
 module.exports.lib = require('./t4-build.js').lib;
