@@ -14,6 +14,8 @@ module.exports = [
   { name: 'hb-lap', pre: save0(ST), post: async () => { startBuild(1, true); targets.filter(t => t.step === 0).forEach(t => commit(t)); await wait(400); commit(targets.find(t => t.step === 1)); wrong(); $('toast').style.display = 'none'; } },
   { name: 'hb-lap-cao', query: '?all', post: async () => { startBuild(LEVELS.findIndex(l => l.name === 'Hải đăng Alexandria')); targets.filter(t => t.step < 13).forEach(t => commit(t)); await wait(400); showStep(13); } },
   { name: 'hb-thua', pre: save0(ST), post: async () => { startBuild(1, true); wrong(); wrong(); wrong(); await wait(900); } },
+  { name: 'hb-iap', pre: save0(ST), post: async () => { openIap(); } },
+  { name: 'hb-iap-duoi', pre: save0(ST), post: async () => { openIap(); $('iapBody').scrollTop = 9999; } },
   { name: 'hb-ke', pre: save0(ST), post: async () => { openShelf(); } },
   { name: 'hb-tile', pre: save0(ST), post: async () => { showHome(1); $('oddsBtn').click(); } },
 ];

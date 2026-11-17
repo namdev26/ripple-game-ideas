@@ -95,5 +95,20 @@ module.exports = [
       ok([...document.querySelectorAll('#home *')].every(e => { const r = e.getBoundingClientRect(); return !r.width || (r.left >= A.left - 1 && r.right <= A.right + 1); }), 'không tràn ngang');
       $('hSetBtn').click(); ok($('setModal').classList.contains('show'), 'nút cài đặt mở bảng cài đặt');
   } },
+  { name: 'shop-xu-gia-lap', pre: save0({ coins: 120, best: { 'Cây nấm': 3 }, tut: 6 }), post: async () => {
+      document.querySelector('#home .coins').click();
+      ok($('iap').classList.contains('show'), 'chạm ô xu → mở shop xu');
+      const packs = document.querySelectorAll('#iap .coinPack'), sets = document.querySelectorAll('#iap .setPack');
+      ok(packs.length >= 6 && [...packs].every(p => /\d/.test(p.textContent) && p.querySelector('.price')), 'có các gói xu kèm giá: ' + packs.length);
+      ok(sets.length >= 2 && [...sets].every(p => p.querySelector('img') && p.querySelector('.price')), 'có gói bộ LEGO mới có ảnh');
+      ok($('iap').textContent.includes('quảng cáo') && document.querySelector('#iap .starter .price'), 'có gói bỏ quảng cáo + gói khởi đầu');
+      packs[0].querySelector('.price').click();
+      ok(S.coins === 120 && $('toast').classList.contains('show'), 'chỉ giả lập: không cộng xu, báo bản thử');
+      $('iapClose').click(); ok(!$('iap').classList.contains('show') && $('home').classList.contains('show'), 'đóng về màn chính');
+      $('hIapBtn').click(); ok($('iap').classList.contains('show'), 'nút Ưu đãi ở màn chính mở shop xu');
+      $('iapClose').click(); $('shopBtn').click(); document.querySelector('#shop .coins').click();
+      ok($('iap').classList.contains('show') && getComputedStyle($('iap')).zIndex > getComputedStyle($('shop')).zIndex, 'mở được từ cửa hàng mô hình, nằm trên');
+      $('iapClose').click(); ok($('shop').classList.contains('show'), 'đóng thì quay lại cửa hàng mô hình');
+  } },
 ];
 module.exports.lib = require('./t4-build.js').lib;
