@@ -34,7 +34,7 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
   - Sách: bìa → mỗi bước một trang có khung mảnh "2x + tên màu" → trang danh sách mảnh. Vuốt hoặc ◀ ▶ để lật.
   - Thưởng = giá gốc bộ × độ hiếm (1 / 1,2 / 1,5) × sao (1 / 1,2 / 1,4), bản đặc biệt ×1,2; giá gốc tối thiểu bằng giá hộp nên lắp xong mô hình mới dù 1★ luôn đủ mở 1 hộp. Đủ bộ thưởng thêm + mở bộ sau. Lắp lại từ kệ +15.
   - Hộp đầu tiên tặng, luôn ra Cây nấm, có bong bóng hướng dẫn. Bắt đầu 0 xu. Save cũ: bản thiết kế đã mua → chờ lắp, kho mảnh hoàn 100% ra xu.
-  - Mục Ưu đãi và Xu là nạp **giả lập**, chỉ có giao diện — thẻ nổi bật Bộ Khủng Long (3 mô hình + 2.000 xu + 5 hộp + T-Rex vàng kim, đếm ngược tới nửa đêm, chỉ là hình), gói khởi đầu, bỏ quảng cáo, mua bộ LEGO mới, 6 gói xu. Bấm mua chỉ báo bản thử. Chạm ô xu ở đâu cũng mở cửa hàng tại mục Xu.
+  - Mục Ưu đãi và Xu là nạp **giả lập**, chỉ có giao diện — thẻ nổi bật Bộ Khủng Long (hộp LEGO sản phẩm, 3 mô hình + 2.000 xu + 5 hộp + T-Rex vàng kim, đếm ngược tới nửa đêm, chỉ là hình), gói khởi đầu, bỏ quảng cáo, mua bộ LEGO mới, 6 gói xu. Bấm mua chỉ báo bản thử. Chạm ô xu ở đâu cũng mở cửa hàng tại mục Xu.
   Thêm `?all` vào cuối link để mở hết + 99999 xu ảo khi test (không lưu gì).
   Thiết kế: `docs/superpowers/specs/2026-11-16-hop-bi-an-design.md`. Test: `sh tests/run-all.sh` (cần node + Chrome); ảnh xem bằng mắt: `SHOT=1 node tests/run-headless.js tests/shots-hb.js`.
   Mảnh trên chỉ lắp được khi mảnh dưới đã có.

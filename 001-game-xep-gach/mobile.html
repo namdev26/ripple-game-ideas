@@ -368,12 +368,16 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .dTop{display:flex;align-items:center;justify-content:space-between;gap:2cqw}
 .dinoPack .ttl{font-size:6.2cqw;white-space:nowrap;line-height:1;color:#ffe14d;letter-spacing:.2cqw}
 .dTime{font-size:3.4cqw;font-weight:800;background:#0006;border-radius:2cqw;padding:.8cqw 2cqw;white-space:nowrap}
-.dHero{position:relative;height:34cqw;border-radius:3cqw;background:linear-gradient(#ffcf6e,#ff8a3d 45%,#5b8f3a 46%,#2f6b2a);overflow:hidden;box-shadow:inset 0 0 0 .6cqw #ffffff55}
-.dHero i{position:absolute;font-style:normal;line-height:1;filter:drop-shadow(0 1cqw 0 #0005)}
-.dHero .d3{font-size:20cqw;left:30cqw;top:1cqw;opacity:.85}
-.dHero .d1{font-size:21cqw;left:2cqw;bottom:1cqw;transform:scaleX(-1)}
-.dHero .d2{font-size:27cqw;right:2cqw;bottom:0}
-.dHero .dPalm{font-size:11cqw;left:28cqw;bottom:0}
+.dHero{position:relative;height:42cqw;border-radius:3cqw;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:inset 0 0 0 .6cqw #ffffff55;
+  background:radial-gradient(circle,#fff6b0 0,#ffd34d00 45%),repeating-conic-gradient(from 0deg,#ffffff1c 0 10deg,#0000 10deg 20deg),linear-gradient(#1f9a5c,#0e5a45)}
+.dinoBox{font-size:4.6cqw;margin-right:2.4em;--bc:#ff8a3d;--rc:#ffd34d}
+.dinoBox .pf{background:linear-gradient(#ffcf6e,#ff8a3d 58%,#5b8f3a 59%,#2f6b2a)}
+.dinoBox .ps{background:linear-gradient(160deg,#2fa04f,#0e5a45)}
+.dinoBox i.e{position:absolute;font-style:normal;line-height:1;filter:drop-shadow(0 .15em 0 #0005)}
+.dinoBox .v{font-size:2.4em;left:38%;top:28%;opacity:.9}
+.dinoBox .b{font-size:2.6em;left:4%;bottom:6%;transform:scaleX(-1)}
+.dinoBox .t{font-size:3.4em;right:2%;bottom:2%}
+.dinoBox .ps .e{font-size:1.6em;left:5%;top:30%}
 .dNew{position:absolute;left:2cqw;top:2cqw;background:#e0303f;font-size:3.6cqw;font-weight:800;padding:.6cqw 2cqw;border-radius:2cqw;transform:rotate(-6deg)}
 .dinoPack .dSub{color:#d8ffe6;text-align:center;margin:0}
 .dIts{display:grid;grid-template-columns:repeat(4,1fr);gap:1.6cqw}
@@ -1979,7 +1983,7 @@ function renderIap(){
   $('offerBody').innerHTML=`
     <div class="iapCard dinoPack">
       <div class="dTop"><b class="ttl outline">BỘ KHỦNG LONG</b><span class="dTime">⏳ <span id="dinoT">${dinoLeft()}</span></span></div>
-      <div class="dHero"><i class="d3">🌋</i><i class="dPalm">🌴</i><i class="d1">🦕</i><i class="d2">🦖</i><span class="dNew">MỚI</span><span class="iapTag">-75%</span></div>
+      <div class="dHero"><div class="pbox dinoBox"><div class="pf"><i class="e v">🌋</i><i class="e b">🦕</i><i class="e t">🦖</i><b class="pn">Khủng long</b><small class="pc">3 mô hình · 420 mảnh</small><i class="pr">Mới</i></div><div class="ps"><i class="e">🦖</i><b>Khủng long</b></div></div><span class="iapTag">-75%</span></div>
       <small class="dSub">Khủng long bạo chúa · Tam giác long · Khủng long cổ dài</small>
       <div class="dIts"><div class="dIt"><i>🦖</i>3 mô hình</div><div class="dIt"><i>🪙</i>2.000 xu</div><div class="dIt"><i>🎁</i>5 hộp bí ẩn</div><div class="dIt gold"><i>✨</i>T-Rex vàng kim</div></div>
       <div class="buy"><span class="old">499.000đ</span><button class="price">119.000đ</button></div></div>
