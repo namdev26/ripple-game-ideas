@@ -55,7 +55,11 @@ module.exports = [
       commit(s0[0]); ok(cnt().reduce((a, c) => a + +c.split('/')[0], 0) === 1, 'lắp 1 mảnh → tăng: ' + cnt());
       s0.slice(1).forEach(t => commit(t)); await wait(400);
       ok($('sbNo').textContent === 'Bước 2/' + N, 'xong bước → sang bước 2: ' + $('sbNo').textContent);
-      show('infoModal', false); $('backBtn').click(); ok($('home').classList.contains('show'), 'back về màn chính');
+      show('infoModal', false);
+      const w0 = $('sbImg').getBoundingClientRect().width; $('stepBook').click();
+      ok($('stepBook').classList.contains('big') && $('sbImg').getBoundingClientRect().width > w0 * 1.6, 'chạm sổ → phóng to hình bước: ' + w0 + ' → ' + $('sbImg').getBoundingClientRect().width);
+      canvas.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })); ok(!$('stepBook').classList.contains('big'), 'chạm ra ngoài → thu nhỏ');
+      $('backBtn').click(); ok($('home').classList.contains('show'), 'back về màn chính');
   } },
   { name: 'khong-hien-hinh-trang', post: async () => {
       giveModel(0); startBuild(0); await wait(500);

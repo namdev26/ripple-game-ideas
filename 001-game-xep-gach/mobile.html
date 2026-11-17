@@ -183,8 +183,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #app.replaying #replayTag{display:block}
 /* sổ bước góc trên trái: tên mô hình, hình bước (mảnh mới viền đỏ), mảnh cần lắp + đã lắp, số bước; chạm để phóng to */
 #stepBook{position:absolute;top:15cqw;left:50%;transform:translateX(-50%);max-width:56cqw;transform-origin:50% 0;padding:.8cqw 1.6cqw .8cqw .8cqw;background:#fff6d6;border:.6cqw solid #f2b84b;
-  border-radius:2.6cqw;display:grid;grid-template-columns:auto auto;align-items:center;gap:1cqw;cursor:pointer;box-shadow:0 .6cqw 1.2cqw #0002;overflow:hidden}
-#stepBook.big{transform:translateX(-50%) scale(1.7);z-index:5}
+  border-radius:2.6cqw;display:grid;grid-template-columns:auto auto;align-items:center;gap:1cqw;cursor:pointer;box-shadow:0 .6cqw 1.2cqw #0002;overflow:hidden;transition:transform .15s}
+#stepBook.big{transform:translateX(-50%) scale(1.2);z-index:5;box-shadow:0 2cqw 6cqw #0005}
+#stepBook.big #sbImg{width:46cqw;height:46cqw;margin:-4.5cqw} /* phóng to chủ yếu hình bước */
 #lvName{grid-column:1/-1;padding:.6cqw 0 0 .8cqw;font-size:4.6cqw;font-weight:800;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #sbImg{width:24cqw;height:24cqw;margin:-2.5cqw} /* ảnh chừa lề rộng → cắt bớt lề */
 #sbSide{display:flex;flex-direction:column;align-items:center;gap:.8cqw}
@@ -1767,6 +1768,7 @@ $('mBuy').onclick=()=>{
 };
 $('shopBtn').onclick=()=>{ sfx.pick(); openShop(); };
 $('stepBook').onclick=()=>$('stepBook').classList.toggle('big');
+addEventListener('pointerdown',e=>{ if(!$('stepBook').contains(e.target)) $('stepBook').classList.remove('big'); },true); // chạm ra ngoài → thu nhỏ
 $('shopClose').onclick=()=>{ sfx.back(); showHome(curSeries); };
 
 // ---- sách hướng dẫn kiểu LEGO: bìa → mỗi bước một trang (khung mảnh "2x + tên màu") → danh sách mảnh ----
@@ -1775,7 +1777,10 @@ function thumbStep(i,n,sp,hl){
   const k='st'+i+':'+n+(sp?'s':'')+(hl?'h':''); if (thumbCache[k]) return thumbCache[k];
   const info=modelInfo(LEVELS[i]), g=new THREE.Group();
   info.ts.forEach(t=>{ if(t.step>n) return; const o=makeBrick(t.key,kitColor(sp,t.color)); if(hl&&t.step===n) o.userData.lines.material=LINE.hl; placeObj(o,t.key,t.x,t.y,t.z,t.rot); g.add(o); });
-  return thumbCache[k]=renderThumb(g,info.center,info.radius,new THREE.Vector3(0.55,0.65,1));
+  if (hl) thumbR.setSize(512,512); // sổ bước phóng to được → ảnh nét hơn
+  thumbCache[k]=renderThumb(g,info.center,info.radius,new THREE.Vector3(0.55,0.65,1));
+  if (hl) thumbR.setSize(256,256);
+  return thumbCache[k];
 }
 function kitOf(i,steps){
   const sp=special(i), m=new Map();
