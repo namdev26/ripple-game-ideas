@@ -39,8 +39,11 @@ module.exports = [
   { name: 'so-tay-buoc', post: async () => {
       giveModel(0); startBuild(0); const N = L.steps.length, s0 = targets.filter(t => t.step === 0);
       const B = $('stepBook').getBoundingClientRect(), W = $('app').getBoundingClientRect(), C = $('coinPill').getBoundingClientRect(), G = $('setBtn').getBoundingClientRect();
-      ok(B.width > 0 && B.top - W.top < W.width * 0.08 && B.left - W.left < W.width * 0.08, 'sổ bước ở góc trên trái: ' + Math.round((B.top - W.top) / W.width * 100));
-      ok(B.right < C.left - W.width * 0.03 && G.top >= C.bottom && G.left > B.right, 'không đè xu; ⚙ dưới xu');
+      const K = $('backBtn').getBoundingClientRect();
+      ok(B.width > 0 && Math.abs(B.left + B.width / 2 - (W.left + W.width / 2)) < 2, 'sổ bước ở giữa');
+      ok(K.width > 0 && K.left - W.left < W.width * 0.08 && K.top - W.top < W.width * 0.08, 'nút back góc trên trái');
+      const hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+      ok(![K, C, G].some(r => hit(r, B)) && !hit(K, C) && G.top >= C.bottom, 'sổ không đè back/xu/⚙; ⚙ dưới xu');
       ok($('stepBook').textContent.includes('Cây nấm'), 'tên mô hình nằm trong sổ bước');
       ok(['lvText', 'stepText', 'pbar', 'infoBtn'].every(id => !$(id)), 'bỏ MÀN, nhãn bước, thanh %, nút i');
       $('setBtn').click(); $('sHelp').click(); ok($('infoModal').classList.contains('show'), 'cách chơi mở từ cài đặt');
@@ -52,6 +55,7 @@ module.exports = [
       commit(s0[0]); ok(cnt().reduce((a, c) => a + +c.split('/')[0], 0) === 1, 'lắp 1 mảnh → tăng: ' + cnt());
       s0.slice(1).forEach(t => commit(t)); await wait(400);
       ok($('sbNo').textContent === 'Bước 2/' + N, 'xong bước → sang bước 2: ' + $('sbNo').textContent);
+      show('infoModal', false); $('backBtn').click(); ok($('home').classList.contains('show'), 'back về màn chính');
   } },
   { name: 'khong-hien-hinh-trang', post: async () => {
       giveModel(0); startBuild(0); await wait(500);
