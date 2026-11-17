@@ -28,11 +28,11 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
   - Kỳ quan cổ đại: Kim tự tháp Giza, Vườn treo Babylon, Tượng Zeus, Đền Artemis, Lăng Halicarnassus, Tượng Rhodes, Hải đăng Alexandria
   - Việt Nam: Chùa Một Cột, Cột cờ Hà Nội, Cầu Vàng, Chùa Cầu Hội An, Khuê Văn Các
   **Vòng chơi:** có bộ mô hình (🎁 hộp bí ẩn hoặc 🛒 cửa hàng) → mở hộp → sách hướng dẫn kiểu LEGO → lắp → xem phát lại → lên kệ trưng bày.
-  - 🎁 Hộp bí ẩn: đồng giá (Khởi động 30 · Kỳ quan 120 · Việt Nam 160), ra ngẫu nhiên mô hình **chưa có** (không trùng), mô hình dễ hay ra trước (Thường 6 · Hiếm 3 · Huyền thoại 1). Kết quả tung trước và lưu lại; chạm hộp để lắc thử. Nút ⓘ xem tỉ lệ.
-  - ✨ Bản đặc biệt (vàng kim, chỉ có trong hộp): 12% mỗi hộp; hộp ra mô hình cuối của bộ mà bộ chưa có bản đặc biệt thì chắc chắn ra.
-  - 🛒 Cửa hàng: chọn đúng mô hình, giá theo độ hiếm (giá gốc ×1 / ×1,3 / ×1,8), đắt hơn hộp.
+  - 🎁 Hộp bí ẩn: **một hộp chung cho cả 16 mô hình**, 100 xu, tỉ lệ cố định theo độ hiếm (Thường 6 · Hiếm 3 · Huyền thoại 1 → 9,1% / 4,5% / 1,5% mỗi mô hình). **Ra trùng được**: trùng thì đổi thành xu bằng giá mô hình đó ở cửa hàng. Ra được cả mô hình của bộ chưa mở. Kết quả tung trước và lưu lại; chạm hộp để lắc thử. Nút 🎲 xem tỉ lệ.
+  - ✨ Bản đặc biệt (vàng kim, chỉ có trong hộp): 12% mỗi hộp; đang có bản thường mà ra vàng kim thì được nâng cấp (không tính trùng).
+  - 🛒 Cửa hàng: chọn đúng mô hình, giá theo độ hiếm (giá gốc ×1 / ×1,3 / ×1,8).
   - Sách: bìa → mỗi bước một trang có khung mảnh "2x + tên màu" → trang danh sách mảnh. Vuốt hoặc ◀ ▶ để lật.
-  - Thưởng = giá gốc bộ × độ hiếm (1 / 1,2 / 1,5) × sao (1 / 1,2 / 1,4), bản đặc biệt ×1,2; lắp xong dù 1★ luôn đủ mở 1 hộp. Đủ bộ thưởng thêm + mở bộ sau. Lắp lại từ kệ +15.
+  - Thưởng = giá gốc bộ × độ hiếm (1 / 1,2 / 1,5) × sao (1 / 1,2 / 1,4), bản đặc biệt ×1,2; giá gốc tối thiểu bằng giá hộp nên lắp xong mô hình mới dù 1★ luôn đủ mở 1 hộp. Đủ bộ thưởng thêm + mở bộ sau. Lắp lại từ kệ +15.
   - Hộp đầu tiên tặng, luôn ra Cây nấm, có bong bóng hướng dẫn. Bắt đầu 0 xu. Save cũ: bản thiết kế đã mua → chờ lắp, kho mảnh hoàn 100% ra xu.
   - 🛍️ Ưu đãi (chạm ô xu hoặc nút Ưu đãi ở màn chính): shop nạp **giả lập**, chỉ có giao diện — gói khởi đầu, bỏ quảng cáo, mua bộ LEGO mới, 6 gói xu. Bấm mua chỉ báo bản thử.
   Thêm `?all` vào cuối link để mở hết + 99999 xu ảo khi test (không lưu gì).

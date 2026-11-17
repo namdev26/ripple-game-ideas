@@ -16,6 +16,7 @@ module.exports = [
   { name: 'hb-thua', pre: save0(ST), post: async () => { startBuild(1, true); wrong(); wrong(); wrong(); await wait(900); } },
   { name: 'hb-iap', pre: save0(ST), post: async () => { openIap(); } },
   { name: 'hb-iap-duoi', pre: save0(ST), post: async () => { openIap(); $('iapBody').scrollTop = 9999; } },
+  { name: 'hb-trung', pre: save0(ST), post: async () => { openUnbox(13, false, true, ALL_IDX, shopPrice(13)); ubT.forEach(clearTimeout); ubSpin = null; ubGo(3); ubGo(5); } },
   { name: 'hb-ke', pre: save0(ST), post: async () => { openShelf(); } },
   { name: 'hb-tile', pre: save0(ST), post: async () => { showHome(1); $('oddsBtn').click(); } },
 ];

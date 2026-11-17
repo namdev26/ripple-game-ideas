@@ -287,6 +287,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .pbox.sp .pf::after{content:"✨";position:absolute;left:.35em;bottom:1.1em;font-size:.8em}
 #ubRar,#ubName,#ubSp{opacity:0;transform:scale(.5);transition:opacity .3s,transform .35s cubic-bezier(.3,1.6,.5,1);text-align:center}
 #unbox.reveal #ubRar,#unbox.reveal #ubName,#unbox.spc #ubSp{opacity:1;transform:none}
+#ubDup{display:none;margin-top:2cqw;font-size:4.6cqw;font-weight:800;color:#2b3150;background:#fff6c8;padding:.6cqw 3.4cqw;border-radius:3cqw}
+#unbox.dup.reveal #ubDup{display:block}
+#unbox.dup #ubBook{display:none}
 #ubRar{font-size:5cqw;color:#2b3150;background:var(--rc);padding:0 3cqw;border-radius:2cqw;margin-top:1cqw;-webkit-text-stroke:0}
 #ubName{font-size:9cqw;line-height:1.05;max-width:90cqw}
 #ubSp{font-size:6cqw;color:#ffd84a;margin-top:1cqw}
@@ -309,6 +312,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   background:linear-gradient(#7b8196,#40465a);box-shadow:inset 0 -1.8cqw 0 var(--rc),inset 0 0 0 .4cqw #ffffff22;transition:transform .25s,box-shadow .25s}
 .rc .pbox{font-size:2.2cqw;margin-right:2.4cqw}
 .rc.win{transform:scale(1.1);box-shadow:inset 0 -1.8cqw 0 var(--rc),0 0 5cqw 1.5cqw var(--rc)}
+#oddsList{max-height:110cqw;overflow-y:auto;padding-right:1cqw} /* 16 dòng: cuộn trong bảng */
 #oddsList p{display:flex;justify-content:space-between;gap:3cqw}
 #oddsList p.note{display:block;font-size:4cqw}
 /* ---------- cửa hàng mô hình ---------- */
@@ -505,6 +509,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   <div id="unbox" class="screen">
     <div id="ubTitle" class="sHead outline">HỘP BÍ ẨN</div>
     <div id="ubName" class="outline"></div>
+    <div id="ubDup"></div>
     <div id="ubRar"></div>
     <div id="ubStage"><div id="ubRays"></div><div id="ubArrow"></div><div id="ubReel"><div id="ubStrip"></div></div><div id="ubPrize"></div></div>
     <div id="ubSp" class="outline">✨ BẢN ĐẶC BIỆT ✨</div>
@@ -978,19 +983,19 @@ const r10=x=>Math.round(x/10)*10, c10=x=>Math.ceil(x/10-1e-9)*10;
 const baseOf=i=>SERIES[seriesOf(i)].base;
 const seriesIdx=s=>[...Array(SERIES[s].n).keys()].map(k=>SERIES[s].from+k);
 const shopPrice=i=>r10(baseOf(i)*RAR[rarOf(i)].shop);
-const boxPrice=s=>r10(SERIES[s].base*0.8);
-const rewardFor=(i,stars,sp)=>c10(baseOf(i)*RAR[rarOf(i)].rew*STAR_REW[stars]*(sp?SPECIAL_REW:1));
+const BOX_PRICE=100, boxPrice=()=>BOX_PRICE; // một hộp chung cho cả game
+// lắp mô hình mới dù 1★ luôn đủ mở 1 hộp (bộ rẻ cũng tính theo giá hộp)
+const rewardFor=(i,stars,sp)=>c10(Math.max(baseOf(i),BOX_PRICE)*RAR[rarOf(i)].rew*STAR_REW[stars]*(sp?SPECIAL_REW:1));
 const seriesBonus=s=>(SERIES[s+1]||SERIES[s]).base;
-// tỉ lệ ra từng mô hình trong pool (các mô hình chưa có của bộ)
+// tỉ lệ ra từng mô hình trong pool (cả game, cố định theo độ hiếm, không đổi theo thứ đã có)
 function boxOdds(pool){ const W=pool.reduce((a,i)=>a+RAR[rarOf(i)].w,0); return pool.map(i=>({i,p:RAR[rarOf(i)].w/W})); }
-// rút 1 hộp: không trùng (chỉ trong pool); hộp ra mô hình cuối của bộ mà bộ chưa có bản đặc biệt → chắc chắn đặc biệt
-function rollBox(pool,hasSp,rnd=Math.random){
-  if (!pool.length) return null;
+// rút 1 hộp: có thể trùng (trùng thì đổi ra xu bằng giá cửa hàng); bản đặc biệt SPECIAL_P mỗi hộp
+function rollBox(pool,rnd=Math.random){
   let x=rnd(), i=pool[pool.length-1];
   for (const o of boxOdds(pool)){ if (x<o.p){ i=o.i; break; } x-=o.p; }
-  return {i, sp:(pool.length===1&&!hasSp)||rnd()<SPECIAL_P};
+  return {i, sp:rnd()<SPECIAL_P};
 }
-LEVELS.forEach((l,i)=>console.assert(rewardFor(i,1)>=boxPrice(seriesOf(i)),'thưởng 1★ không đủ mua hộp: '+l.name));
+LEVELS.forEach((l,i)=>console.assert(rewardFor(i,1)>=boxPrice(),'thưởng 1★ không đủ mua hộp: '+l.name));
 Object.keys(COLORS).forEach(c=>console.assert(COLOR_VI[c],'thiếu tên màu '+c));
 
 // ---- phát lại: thứ tự người chơi đã lắp (sai/thiếu thì dùng thứ tự gốc), nhịp chậm rồi nhanh dần, tổng ≤ ~9s ----
@@ -1665,15 +1670,14 @@ function showHome(s){
   $('home').classList.add('show'); tutStep();
 }
 const toMenu=()=>showHome(seriesOf(levelIdx));
-const pendingList=s=>seriesIdx(s).filter(i=>owned(i)&&!built(i)); // đã có, chưa lắp
+const pendingList=()=>ALL_IDX.filter(i=>owned(i)&&!built(i)); // đã có, chưa lắp (cả game: hộp chung ra được mọi bộ)
 function renderHome(){
-  const s=curSeries, r=SERIES[s], nx=peekBox(s), c=boxCost(s), pend=pendingList(s);
-  $('serName').textContent=r.name;
-  $('hBox').style.setProperty('--bc',r.c); $('hBox').classList.toggle('empty',!nx);
-  $('hName').textContent=nx?`Còn ${poolOf(s).length}/${r.n} mô hình`:'Đã đủ bộ ✓';
-  $('playBtn').querySelector('.t').textContent=nx?'MỞ HỘP':'ĐỦ BỘ ✓';
-  $('playSub').textContent=nx?(c?`Hộp bí ẩn · ${c}🪙`:'Miễn phí'):'Xem bộ khác ở 📚';
-  $('playBtn').classList.toggle('dis',!nx);
+  const s=curSeries, r=SERIES[s], c=boxCost(), pend=pendingList();
+  peekBox(); $('serName').textContent=r.name;
+  $('hBox').style.setProperty('--bc',r.c);
+  $('hName').textContent=`Đã có ${ALL_IDX.filter(owned).length}/${LEVELS.length} mô hình`;
+  $('playBtn').querySelector('.t').textContent='MỞ HỘP';
+  $('playSub').textContent=c?`Hộp bí ẩn · ${c}🪙`:'Miễn phí';
   $('hWait').style.display=pend.length?'':'none';
   $('hLevels').classList.toggle('few',pend.length<=3); // ≤3 ô không cần cuộn → để bong bóng hướng dẫn tràn ra ngoài được
   $('hLevels').innerHTML=pend.map(i=>`<button class="sideB pend${special(i)?' sp':''}" data-i="${i}" aria-label="${LEVELS[i].name}"><i><img src="${thumbLevel(i,special(i))}" alt=""></i><span>LẮP</span><b class="badge">!</b></button>`).join('');
@@ -1696,40 +1700,35 @@ function showSeries(){
 }
 
 // ====================== HỘP BÍ ẨN / CỬA HÀNG / SÁCH HƯỚNG DẪN ======================
-const poolOf=s=>seriesIdx(s).filter(i=>!owned(i));
-const hasSp=s=>seriesIdx(s).some(special);
-const boxCost=s=>s===0&&!owned(0)?0:boxPrice(s); // hộp đầu tiên tặng
+// một hộp chung cho cả game, tỉ lệ cố định; ra trùng thì đổi xu bằng giá cửa hàng
+const ALL_IDX=LEVELS.map((_,i)=>i);
+const boxCost=()=>owned(0)?boxPrice():0; // hộp đầu tiên tặng
+const isDup=nx=>owned(nx.i)&&(!nx.sp||special(nx.i)); // có bản thường mà ra vàng kim = nâng cấp, không tính trùng
 const grant=(i,sp)=>{ S.own[LEVELS[i].name]=true; if(sp) S.sp[LEVELS[i].name]=true; };
 // kết quả hộp kế được tung trước và lưu: tải lại trang không đổi được, lắc thử khớp với thứ sẽ ra
-function peekBox(s){
-  const pool=poolOf(s); if (!pool.length) return null;
-  let nx=S.next[s], ch=false;
-  if (!nx||!pool.includes(nx.i)){ nx=S.next[s]=s===0&&!owned(0)?{i:0,sp:false}:rollBox(pool,hasSp(s)); ch=true; } // hộp đầu luôn ra Cây nấm
-  if (pool.length===1&&!hasSp(s)&&!nx.sp){ nx.sp=true; ch=true; } // bảo hiểm (pool co lại do mua ở cửa hàng)
-  if (ch) save();
-  return nx;
+function peekBox(){
+  if (!S.next.g){ S.next.g=owned(0)?rollBox(ALL_IDX):{i:0,sp:false}; save(); } // hộp đầu luôn ra Cây nấm
+  return S.next.g;
 }
 function openBox(){
-  const s=curSeries, nx=peekBox(s);
-  if (!nx){ toast('Bộ này đã đủ mô hình!'); sfx.back(); return; }
-  const c=boxCost(s);
+  const nx=peekBox(), c=boxCost();
   if (S.coins<c){ toast(`Không đủ xu (cần ${c}🪙)`); sfx.wrong(); return; }
-  const pool=poolOf(s); S.coins-=c; grant(nx.i,nx.sp); delete S.next[s]; if(S.tut===5) S.tut=6;
-  peekBox(s); save(); updateCoins(true);
-  openUnbox(nx.i,nx.sp,true,pool);
+  const dup=isDup(nx)?shopPrice(nx.i):0;
+  S.coins+=dup-c; if(!dup) grant(nx.i,nx.sp); delete S.next.g; if(S.tut===5) S.tut=6;
+  peekBox(); save(); updateCoins(true);
+  openUnbox(nx.i,nx.sp,true,ALL_IDX,dup);
 }
 const rattle=r=>{ for(let k=0;k<3+r;k++) tone(420-r*110+Math.random()*90,0.045,'square',0.03+r*0.02,k*0.07); vib([12,25,12,25].slice(0,2+r).map(v=>v*(r+1))); };
 $('hBox').onclick=()=>{
-  const b=$('hBox'), nx=peekBox(curSeries); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
-  if (!nx){ sfx.back(); return; }
+  const b=$('hBox'), nx=peekBox(); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake');
   rattle(rarOf(nx.i)); if (nx.sp) tone(2637,0.14,'sine',0.07,0.3);
 };
 $('playBtn').onclick=()=>{ sfx.pick(); openBox(); };
 $('oddsBtn').onclick=()=>{
-  const s=curSeries, pool=poolOf(s), pct=p=>(Math.round(p*1000)/10).toString().replace('.',',')+'%';
-  const rows=!pool.length?'<p>Bộ này đã đủ mô hình.</p>':s===0&&!owned(0)?'<p>Hộp đầu tiên luôn ra <b>Cây nấm</b>.</p>'
-    :boxOdds(pool).sort((a,b)=>b.p-a.p).map(o=>`<p><span><b style="color:${RAR[rarOf(o.i)].c};-webkit-text-stroke:.3cqw #2b3150">●</b> ${LEVELS[o.i].name}</span><b>${pct(o.p)}</b></p>`).join('');
-  $('oddsList').innerHTML=rows+`<p class="note">✨ <b>Bản đặc biệt</b> (vàng kim): ${Math.round(SPECIAL_P*100)}% mỗi hộp. Hộp ra mô hình cuối cùng của bộ mà bộ chưa có bản đặc biệt thì chắc chắn là bản đặc biệt.</p><p class="note">Hộp chỉ ra mô hình bạn chưa có, không bao giờ trùng.</p>`;
+  const pct=p=>(Math.round(p*1000)/10).toString().replace('.',',')+'%';
+  const rows=!owned(0)?'<p>Hộp đầu tiên luôn ra <b>Cây nấm</b>.</p>':''
+    +boxOdds(ALL_IDX).sort((a,b)=>b.p-a.p).map(o=>`<p><span><b style="color:${RAR[rarOf(o.i)].c};-webkit-text-stroke:.3cqw #2b3150">●</b> ${LEVELS[o.i].name}</span><b>${pct(o.p)}</b></p>`).join('');
+  $('oddsList').innerHTML=`<p class="note">🎁 Một hộp chung cho cả ${LEVELS.length} mô hình, tỉ lệ <b>cố định</b>.</p><p class="note">🔁 Ra mô hình đã có (trùng) thì đổi thành xu bằng giá mô hình đó ở cửa hàng.</p><p class="note">✨ <b>Bản đặc biệt</b> (vàng kim): ${Math.round(SPECIAL_P*100)}% mỗi hộp. Đang có bản thường mà ra vàng kim thì được nâng cấp.</p>`+rows; // luật ở trên cùng, danh sách cuộn bên dưới
   show('oddsModal',true); sfx.pick();
 };
 $('oddsClose').onclick=()=>show('oddsModal',false);
@@ -1745,7 +1744,7 @@ let ubI=0, ubSp=false, ubT=[], ubStage=0, ubFull=false, ubSpin=null;
 const reelAt=off=>`translateX(${50-REEL_WIN*REEL_PITCH-14-off}cqw)`;
 // thẻ lấp chỗ rút theo đúng tỉ lệ của hộp, nên dải quay chỉ có mô hình thật sự có thể ra
 function buildReel(i,pool){
-  const ids=Array.from({length:REEL_N},(_,k)=>k===REEL_WIN?i:rollBox(pool,true).i);
+  const ids=Array.from({length:REEL_N},(_,k)=>k===REEL_WIN?i:rollBox(pool).i);
   $('ubStrip').innerHTML=ids.map(j=>`<div class="rc" data-i="${j}" style="--rc:${RAR[rarOf(j)].c}">${pboxHtml(j,false)}</div>`).join('');
 }
 function reelTick(){
@@ -1761,17 +1760,18 @@ function reelStop(){
   st.children[REEL_WIN].classList.add('win');
   tone(880+r*220,0.35,'sine',0.08); vib(r===2?[60,40,60]:20*(r+1));
 }
-function openUnbox(i,sp,full,pool){
+function openUnbox(i,sp,full,pool,dup=0){
   ubI=i; ubSp=sp; ubFull=full; ubT.forEach(clearTimeout); ubT=[]; ubStage=0; ubSpin=null;
   const r=rarOf(i), u=$('unbox');
-  u.className='screen show'+(full?' reel':''); u.style.setProperty('--rc',RAR[r].c);
+  u.className='screen show'+(full?' reel':'')+(dup?' dup':''); u.style.setProperty('--rc',RAR[r].c);
+  $('ubDup').textContent=`🔁 Đã có · đổi thành +${dup}🪙`; $('ubLater').querySelector('span').textContent=dup?'Nhận xu':'Để sau';
   $('ubTitle').textContent=full?'HỘP BÍ ẨN':'CỬA HÀNG';
   $('ubPrize').innerHTML=pboxHtml(i,false); $('ubName').textContent=LEVELS[i].name;
   $('ubRar').textContent=RAR[r].n+(r===2?'!':'');
   $('ubBtns').classList.remove('on');
   const at=(ms,f)=>ubT.push(setTimeout(f,ms));
   if (full){
-    buildReel(i,pool||[...new Set([i,...poolOf(seriesOf(i))])]);
+    buildReel(i,pool||ALL_IDX);
     const st=$('ubStrip'), off=(Math.random()*2-1)*12; // dừng lệch trong ô cho hồi hộp, rồi trượt vào giữa
     st.style.transition='none'; st.style.transform='translateX(0)'; void st.offsetWidth;
     st.style.transition=`transform ${REEL_MS}ms cubic-bezier(.06,.55,.12,1)`; st.style.transform=reelAt(off);
@@ -1820,8 +1820,8 @@ $('mGrid').onclick=e=>{ const it=e.target.closest('.mItem'); if(!it) return; con
 $('mBuy').onclick=()=>{
   const i=mSel; if (i==null||owned(i)) return;
   const c=shopPrice(i);
-  if (S.coins<c){ toast(`Không đủ xu (cần ${c}🪙) · thử 🎁 hộp bí ẩn ${boxCost(seriesOf(i))}🪙`); sfx.wrong(); return; }
-  S.coins-=c; grant(i,false); peekBox(seriesOf(i)); save(); updateCoins(true); sfx.coin();
+  if (S.coins<c){ toast(`Không đủ xu (cần ${c}🪙) · thử 🎁 hộp bí ẩn ${boxCost()}🪙`); sfx.wrong(); return; }
+  S.coins-=c; grant(i,false); save(); updateCoins(true); sfx.coin();
   $('shop').classList.remove('show'); openUnbox(i,false,false);
 };
 $('shopBtn').onclick=()=>{ sfx.pick(); openShop(); };
@@ -1918,7 +1918,7 @@ $('infoModal').onclick=e=>{ if(e.target.id==='infoModal') show('infoModal',false
 $('rMenu').onclick=toMenu;
 $('rAgain').onclick=()=>loadLevel(levelIdx);
 $('rNext').onclick=()=>{
-  const pend=pendingList(seriesOf(levelIdx));
+  const pend=pendingList();
   if (pend.length){ sfx.pick(); $('result').classList.remove('show'); return openBlueprint(pend[0]); } // còn mô hình chờ lắp: mở sách luôn
   showHome();
 };

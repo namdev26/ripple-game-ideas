@@ -5,8 +5,8 @@ module.exports = [
       ok(!owned(0) && !built(0), 'chưa có mô hình nào');
       ok(seriesOpen(0) && !seriesOpen(1), 'chỉ mở bộ 1');
       ok(S.own && S.sp && S.next && S.tut === 0, 'thiếu trường mới');
-      ok(boxCost(0) === 0, 'hộp đầu miễn phí: ' + boxCost(0));
-      ok(S.next[0] && S.next[0].i === 0 && !S.next[0].sp, 'hộp đầu luôn ra Cây nấm: ' + JSON.stringify(S.next[0]));
+      ok(boxCost() === 0, 'hộp đầu miễn phí: ' + boxCost());
+      ok(S.next.g && S.next.g.i === 0 && !S.next.g.sp, 'hộp đầu luôn ra Cây nấm: ' + JSON.stringify(S.next.g));
   } },
   { name: 'du-lieu-cu', pre: () => localStorage.setItem('xepgach.v2', JSON.stringify({ coins: 77, best: { 0: 3, 1: 2, 2: 1, 3: 3 },
       bp: { 'Kim tự tháp Giza': true }, inv: { 'base_12x12|green': 2, 'plate_1x1|red': 3 }, tut: 4 })),
