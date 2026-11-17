@@ -21,7 +21,7 @@ Mở thẳng bằng trình duyệt (cần internet để tải three.js).
 - `mobile.html`: bản điện thoại (khung 9:16), bố cục kiểu game "lấp tượng":
   sổ bước nhỏ ở giữa phía trên (mảnh của bước + đã lắp, hình bước có mảnh mới viền đỏ, số bước; chạm để phóng to),
   trên bàn không hiện hình xem trước, kéo mảnh màu từ khay thả đúng chỗ là tự khớp (💡 gợi ý mới hiện chỗ cần lắp).
-  Mảnh trong khay xoay theo góc nhìn của bàn chính. Góc trên: sổ bước (kèm tên mô hình) bên trái, xu + ⚙ bên phải (cách chơi nằm trong ⚙). Thả sai hình bị tính lỗi (trừ sao),
+  Mảnh trong khay xoay theo góc nhìn của bàn chính. Góc trên: sổ bước (kèm tên mô hình) bên trái, hàng trên: ◀ về menu · ❤ mạng · xu · ⚙ (cách chơi nằm trong ⚙). Có 3 mạng (❤ giữa hàng trên): thả sai mất 1, hết mạng phải chơi lại; sao = số mạng còn,
   xu (thưởng khi thắng, dùng mua gợi ý), gợi ý phát sáng, cài đặt âm thanh/rung,
   16 màn chia 3 bộ (nút 📚 góc trái trên để chọn bộ):
   - Khởi động: Cây nấm, Ngôi nhà, Dưa hấu, Lâu đài

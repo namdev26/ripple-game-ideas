@@ -43,7 +43,7 @@ module.exports = [
       ok(B.width > 0 && Math.abs(B.left + B.width / 2 - (W.left + W.width / 2)) < 2, 'sổ bước ở giữa');
       ok(K.width > 0 && K.left - W.left < W.width * 0.08 && K.top - W.top < W.width * 0.08, 'nút back góc trên trái');
       const hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
-      ok(![K, C, G].some(r => hit(r, B)) && !hit(K, C) && G.top >= C.bottom, 'sổ không đè back/xu/⚙; ⚙ dưới xu');
+      ok(![K, C, G].some(r => hit(r, B)) && !hit(K, C), 'sổ không đè back/xu/⚙');
       ok($('stepBook').textContent.includes('Cây nấm'), 'tên mô hình nằm trong sổ bước');
       ok(['lvText', 'stepText', 'pbar', 'infoBtn'].every(id => !$(id)), 'bỏ MÀN, nhãn bước, thanh %, nút i');
       $('setBtn').click(); $('sHelp').click(); ok($('infoModal').classList.contains('show'), 'cách chơi mở từ cài đặt');
@@ -70,6 +70,21 @@ module.exports = [
       const res = findGhost(r.left + (p.x + 1) / 2 * r.width, r.top + (1 - p.y) / 2 * r.height, { key: t.key, color: t.color });
       ok(res.ok && res.ok.key === t.key, 'thả đúng chỗ vẫn khớp dù không hiện hình: ' + JSON.stringify(Object.keys(res)));
       $('hintBtn').click(); ok(hintT && hintT.ghost.visible, 'gợi ý thì hiện hình chỗ cần lắp');
+  } },
+  { name: 'mang-song', post: async () => {
+      giveModel(0); S.coins = 99999; startBuild(0); // xu nhiều nhất vẫn không đè mạng
+      const on = () => document.querySelectorAll('#lives .on').length, W = $('app').getBoundingClientRect(), V = $('lives').getBoundingClientRect();
+      ok(on() === 3 && Math.abs(V.left + V.width / 2 - (W.left + W.width / 2)) < 2, '3 mạng ở giữa: ' + on());
+      const R = ['backBtn', 'lives', 'coinPill', 'setBtn'].map(id => $(id).getBoundingClientRect());
+      ok(R.every(r => Math.abs((r.top + r.bottom) / 2 - (R[0].top + R[0].bottom) / 2) < W.width * 0.03), 'back, mạng, xu, ⚙ cùng một hàng');
+      ok(R.every((r, i) => i === 0 || r.left >= R[i - 1].right), 'không đè nhau, đúng thứ tự');
+      ok(R[2].width < W.width * 0.25, 'ô xu nhỏ lại: ' + Math.round(R[2].width / W.width * 100) + 'cqw');
+      ok($('stepBook').getBoundingClientRect().top >= Math.max(...R.map(r => r.bottom)), 'sổ bước dưới hàng HUD');
+      wrong(); ok(on() === 2 && !done, 'sai → mất 1 mạng');
+      wrong(); wrong(); await wait(900);
+      ok(done && $('loseModal').classList.contains('show'), 'hết mạng → thua');
+      $('lRetry').click(); ok(!$('loseModal').classList.contains('show') && on() === 3 && !done, 'chơi lại đủ 3 mạng');
+      wrong(); commitAll(); ok(S.best['Cây nấm'] === 2, 'sao = số mạng còn: ' + S.best['Cây nấm']);
   } },
   { name: 'tiep-tuc-ve-home', post: async () => {
       giveModel(0); startBuild(0); commitAll(); $('rNext').click();

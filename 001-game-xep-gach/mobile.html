@@ -43,10 +43,19 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .coins.bump{animation:bump .4s}
 @keyframes bump{40%{transform:scale(1.15)}}
 
-#setBtn{top:17cqw;right:6cqw}
 #setBtn,#backBtn{position:absolute;width:11.5cqw;height:11.5cqw;border:none;border-radius:3.4cqw;background:#5560bf99;color:#fff;font-size:7cqw;cursor:pointer;
   display:flex;align-items:center;justify-content:center;padding:0;box-shadow:inset 0 -.7cqw 0 #3d47a066}
-#backBtn{position:static;font-size:6.4cqw;font-weight:800}
+#hud #setBtn,#backBtn{position:static}
+#backBtn{font-size:6.4cqw;font-weight:800}
+#hud{align-items:center}
+#hud .coins{margin-left:auto;margin-right:1.5cqw;min-width:0;height:7cqw;padding:0 2cqw 0 1cqw;gap:1cqw;justify-content:flex-start;font-size:3.8cqw;border-radius:2.4cqw}
+#hud .coin{position:relative;left:0;top:0;transform:none;flex:none;width:5.6cqw;height:5.6cqw}
+#hud .coin::after{inset:1.6cqw}
+#hud .plus{display:none}
+#lives{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:.8cqw;font-size:6.5cqw;line-height:1}
+#lives i{font-style:normal;color:#ff4d5e;text-shadow:0 .5cqw 0 #a1182a}
+#lives i:not(.on){color:#ffffff40;text-shadow:none}
+#lives i.lose{animation:bump .4s}
 
 /* ---------- zoom + gợi ý ---------- */
 #zoom{position:absolute;left:5.5cqw;bottom:41cqw;width:6.6cqw;height:38cqw;border-radius:4cqw;background:#ffffff38;border:.4cqw solid #ffffff60;
@@ -103,6 +112,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .ribbon.red{background:linear-gradient(#ff7b86,#e0303f);box-shadow:inset 0 -1.3cqw 0 #a1182a,inset 0 .7cqw 0 #ffc1c7,0 1.2cqw 2cqw #0003}
 .ribbon.blue{background:linear-gradient(#7d8cf0,#4c58cf);box-shadow:inset 0 -1.3cqw 0 #333ea3,inset 0 .7cqw 0 #bcc4ff,0 1.2cqw 2cqw #0003}
 .stack{display:flex;flex-direction:column;gap:4cqw}
+.loseP{text-align:center;font-size:5cqw;font-weight:800;margin:4cqw 0 5cqw}
 .row{display:flex;gap:4cqw;justify-content:center;margin-top:4cqw}
 .close{position:absolute;top:-3cqw;right:-3cqw;width:10cqw;height:10cqw;font-size:5.6cqw}
 #rStars{display:flex;justify-content:center;gap:1.5cqw;margin-top:-2cqw}
@@ -182,7 +192,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #replayTag{display:none;position:absolute;left:50%;bottom:12cqw;transform:translateX(-50%);font-size:6cqw;font-weight:800;z-index:6;white-space:nowrap}
 #app.replaying #replayTag{display:block}
 /* sổ bước góc trên trái: tên mô hình, hình bước (mảnh mới viền đỏ), mảnh cần lắp + đã lắp, số bước; chạm để phóng to */
-#stepBook{position:absolute;top:15cqw;left:50%;transform:translateX(-50%);max-width:56cqw;transform-origin:50% 0;padding:.8cqw 1.6cqw .8cqw .8cqw;background:#fff6d6;border:.6cqw solid #f2b84b;
+#stepBook{position:absolute;top:19cqw;left:50%;transform:translateX(-50%);max-width:56cqw;transform-origin:50% 0;padding:.8cqw 1.6cqw .8cqw .8cqw;background:#fff6d6;border:.6cqw solid #f2b84b;
   border-radius:2.6cqw;display:grid;grid-template-columns:auto auto;align-items:center;gap:1cqw;cursor:pointer;box-shadow:0 .6cqw 1.2cqw #0002;overflow:hidden;transition:transform .15s}
 #stepBook.big{transform:translateX(-50%) scale(1.2);z-index:5;box-shadow:0 2cqw 6cqw #0005}
 #stepBook.big #sbImg{width:46cqw;height:46cqw;margin:-4.5cqw} /* phóng to chủ yếu hình bước */
@@ -378,9 +388,10 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 
   <div id="hud">
     <button id="backBtn" aria-label="Về màn chính">◀</button>
+    <div id="lives" aria-label="Mạng"></div>
     <div class="coins" id="coinPill"><span class="coin"></span><span class="plus">+</span><span class="cn">100</span></div>
+    <button id="setBtn" aria-label="Cài đặt">⚙️</button>
   </div>
-  <button id="setBtn" aria-label="Cài đặt">⚙️</button>
   <div id="stepBook"><b id="lvName" class="outline"></b><img id="sbImg" alt=""><div id="sbSide"><div id="sbParts"></div><div id="sbNo"></div></div></div>
 
   <div id="zoom"><span id="zIn">+</span><div id="ztrack"><div id="zthumb">🔍</div></div><span id="zOut">−</span></div>
@@ -408,10 +419,19 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   <div id="infoModal" class="screen modal"><div class="panelM info">
     <div class="ribbon blue outline">CÁCH CHƠI</div>
     <button class="btn blue close" id="infoClose" aria-label="Đóng">✕</button>
-    <p>🧱 <b>Kéo mảnh</b> từ khay lên mô hình. Chạm đúng hình trắng của nó là <b>tự khớp</b>.</p>
-    <p>🪜 Lắp <b>từng bước</b>: xong bước này thì hình của bước sau mới hiện ra.</p>
-    <p>⭐ Thả vào <b>sai hình</b> bị tính lỗi. Càng ít lỗi càng nhiều sao.</p>
+    <p>🧱 <b>Kéo mảnh</b> từ khay lên mô hình, thả đúng chỗ là <b>tự khớp</b>.</p>
+    <p>📖 <b>Sổ bước</b> ở trên cho biết bước này cần mảnh gì, lắp vào đâu (viền đỏ). Chạm để phóng to.</p>
+    <p>❤️ Có <b>3 mạng</b>: thả sai mất 1, hết mạng phải chơi lại. Còn bao nhiêu mạng được bấy nhiêu sao.</p>
     <p>💡 Bí thì dùng <b>gợi ý</b>. Kéo nền để xoay, chụm 2 ngón để zoom.</p>
+  </div></div>
+
+  <div id="loseModal" class="screen modal"><div class="panelM">
+    <div class="ribbon red outline r">HẾT MẠNG</div>
+    <p class="loseP">Sai 3 lần rồi, thử lại nhé!</p>
+    <div class="stack">
+      <button class="btn green big" id="lRetry"><span class="outline g">CHƠI LẠI</span></button>
+      <button class="btn blue big" id="lMenu"><span class="outline">VỀ MENU</span></button>
+    </div>
   </div></div>
 
   <div id="result" class="screen modal"><div class="panelM">
@@ -1205,12 +1225,12 @@ const sfx={
 };
 
 // ====================== TRẠNG THÁI ======================
-const OVERLAYS=['result','setModal','infoModal','series','bpView','shop','shelf','unbox','oddsModal'];
+const OVERLAYS=['result','loseModal','setModal','infoModal','series','bpView','shop','shelf','unbox','oddsModal'];
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
 let rebuild=false, placedOrder=[], replaying=false, replayTok=0, replayDone=null; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
 const HINT_COST=30;
-const starsNow=()=>mistakes===0?3:mistakes<=2?2:1;
+const LIVES=3, starsNow=()=>Math.max(1,LIVES-mistakes); // sao = số mạng còn
 
 function toast(msg,ms=1700){
   const t=$('toast'); t.textContent=msg; t.classList.add('show');
@@ -1288,7 +1308,7 @@ function loadLevel(i){
     el.addEventListener('pointerdown',e=>trayDown(e,idx));
     it.el=el; box.appendChild(el);
   });
-  $('lvName').textContent=L.name; updateCoins(); updateCount(); updateHint(); updateTray();
+  $('lvName').textContent=L.name; updateCoins(); updateCount(); updateHint(); updateTray(); updateLives();
   buildTrayObjs();
   showStep(0);
   if (i===0&&!rebuild) setTimeout(()=>{ if(L===LEVELS[0]&&!done&&!$('home').classList.contains('show')) toast('Kéo mảnh vào đúng hình trên mô hình',2800); },500);
@@ -1456,9 +1476,14 @@ function commit(t,from){
   }
 }
 function wrong(){
-  mistakes++; sfx.wrong();
+  mistakes++; sfx.wrong(); updateLives(true);
   app.classList.remove('shake'); void app.offsetWidth; app.classList.add('shake');
-  toast('Sai hình rồi!');
+  if (mistakes<LIVES) return toast('Sai chỗ rồi! Mất 1 mạng');
+  done=true; endDrag(true); // hết mạng: thua
+  setTimeout(()=>{ if(done&&mistakes>=LIVES) show('loseModal',true); },700);
+}
+function updateLives(lose){
+  $('lives').innerHTML=Array.from({length:LIVES},(_,k)=>`<i class="${k<LIVES-mistakes?'on':''}${lose&&k===LIVES-mistakes?' lose':''}">♥</i>`).join('');
 }
 
 // ====================== GỢI Ý ======================
@@ -1824,8 +1849,8 @@ $('setBtn').onclick=$('hSetBtn').onclick=()=>{ $('sndSw').classList.toggle('on',
 $('setClose').onclick=()=>show('setModal',false);
 $('sndSw').onclick=()=>{ S.snd=!S.snd; save(); $('sndSw').classList.toggle('on',S.snd); sfx.pick(); };
 $('vibSw').onclick=()=>{ S.vib=!S.vib; save(); $('vibSw').classList.toggle('on',S.vib); vib(30); };
-$('sRestart').onclick=()=>loadLevel(levelIdx);
-$('sMenu').onclick=$('backBtn').onclick=toMenu;
+$('sRestart').onclick=$('lRetry').onclick=()=>loadLevel(levelIdx);
+$('sMenu').onclick=$('backBtn').onclick=$('lMenu').onclick=toMenu;
 $('serBtn').onclick=$('hColBtn').onclick=()=>{ sfx.pick(); showSeries(); };
 $('hHomeTab').onclick=()=>sfx.pick();
 $('serClose').onclick=()=>show('series',false);
