@@ -28,7 +28,8 @@ document.title=r;const d=document.createElement('pre');d.id='__res';d.textConten
   if (process.env.SHOT) { // SHOT=1: chụp ảnh tests/.tmp/<case>.png thay vì kiểm kết quả
     const png = f.replace(/\.html$/, '.png');
     try { execFileSync(CHROME, ['--headless=new', '--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--disable-audio-output', '--mute-audio', `--user-data-dir=${ud}`, '--hide-scrollbars',
-      '--window-size=432,768', `--virtual-time-budget=${c.budget || 15000}`, `--screenshot=${png}`, 'file:///' + f.split(path.sep).join('/') + (c.query || '')],
+      // headless=new không cho cửa sổ hẹp hơn ~500px nên 432 bị lệch/cắt; 600x900 chụp trọn khung
+      '--window-size=600,900', `--virtual-time-budget=${c.budget || 15000}`, `--screenshot=${png}`, 'file:///' + f.split(path.sep).join('/') + (c.query || '')],
       { stdio: 'ignore', timeout: 90000 }); } catch (e) {}
     fs.rmSync(ud, { recursive: true, force: true });
     console.log('📷 ' + png); continue;
