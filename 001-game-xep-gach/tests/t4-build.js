@@ -38,16 +38,20 @@ module.exports = [
   } },
   { name: 'so-tay-buoc', post: async () => {
       giveModel(0); startBuild(0); const N = L.steps.length, s0 = targets.filter(t => t.step === 0);
-      const B = $('stepBook').getBoundingClientRect(), H = $('hud').getBoundingClientRect(), W = $('app').getBoundingClientRect();
-      ok(B.width > 0 && B.top >= H.bottom && Math.abs(B.left + B.width / 2 - (W.left + W.width / 2)) < 2, 'sổ bước ở giữa, dưới HUD');
+      const B = $('stepBook').getBoundingClientRect(), W = $('app').getBoundingClientRect(), C = $('coinPill').getBoundingClientRect(), G = $('setBtn').getBoundingClientRect();
+      ok(B.width > 0 && B.top - W.top < W.width * 0.08 && B.left - W.left < W.width * 0.08, 'sổ bước ở góc trên trái: ' + Math.round((B.top - W.top) / W.width * 100));
+      ok(B.right < C.left - W.width * 0.03 && G.top >= C.bottom && G.left > B.right, 'không đè xu; ⚙ dưới xu');
+      ok($('stepBook').textContent.includes('Cây nấm'), 'tên mô hình nằm trong sổ bước');
+      ok(['lvText', 'stepText', 'pbar', 'infoBtn'].every(id => !$(id)), 'bỏ MÀN, nhãn bước, thanh %, nút i');
+      $('setBtn').click(); $('sHelp').click(); ok($('infoModal').classList.contains('show'), 'cách chơi mở từ cài đặt');
       ok(B.bottom - W.top < W.width * 0.5, 'sổ bước gọn, không che nhiều bàn lắp: đáy ở ' + Math.round((B.bottom - W.top) / W.width * 100) + 'cqw');
-      ok($('sbNo').textContent === '1/' + N, 'số bước: ' + $('sbNo').textContent);
+      ok($('sbNo').textContent === 'Bước 1/' + N, 'số bước: ' + $('sbNo').textContent);
       ok($('sbImg').src.startsWith('data:image'), 'có hình bước');
       const cnt = () => [...document.querySelectorAll('#sbParts b')].map(b => b.textContent);
       ok(cnt().every(c => c.startsWith('0/')) && cnt().reduce((a, c) => a + +c.split('/')[1], 0) === s0.length, 'đếm mảnh bước 1: ' + cnt());
       commit(s0[0]); ok(cnt().reduce((a, c) => a + +c.split('/')[0], 0) === 1, 'lắp 1 mảnh → tăng: ' + cnt());
       s0.slice(1).forEach(t => commit(t)); await wait(400);
-      ok($('sbNo').textContent === '2/' + N, 'xong bước → sang bước 2: ' + $('sbNo').textContent);
+      ok($('sbNo').textContent === 'Bước 2/' + N, 'xong bước → sang bước 2: ' + $('sbNo').textContent);
   } },
   { name: 'khong-hien-hinh-trang', post: async () => {
       giveModel(0); startBuild(0); await wait(500);

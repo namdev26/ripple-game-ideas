@@ -30,17 +30,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .outline.r{text-shadow:0 .5cqw 0 #8c0f1d,.32cqw 0 0 #8c0f1d,-.32cqw 0 0 #8c0f1d,0 -.32cqw 0 #8c0f1d,.32cqw .32cqw 0 #8c0f1d,-.32cqw .32cqw 0 #8c0f1d,.32cqw -.32cqw 0 #8c0f1d,-.32cqw -.32cqw 0 #8c0f1d}
 
 /* ---------- HUD ---------- */
-#hud{position:absolute;top:7cqw;left:5cqw;right:5cqw;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+#hud{position:absolute;top:5cqw;left:5cqw;right:5cqw;display:flex;align-items:flex-start;justify-content:space-between;gap:4cqw;pointer-events:none}
 #hud>*{pointer-events:auto}
-#lvBox{min-width:25cqw}
-#lvText{font-size:7cqw;font-weight:800;line-height:1;white-space:nowrap}
-#stepText{display:inline-block;margin-top:1.4cqw;background:#2b2f6355;color:#fff;font-size:3.6cqw;font-weight:800;line-height:1;padding:1cqw 2.6cqw;border-radius:3cqw;white-space:nowrap}
-#stepText.pop{animation:bump .45s}
-#lvMid{display:flex;flex-direction:column;align-items:center;gap:1.4cqw;flex:1;margin:0 2cqw;min-width:0}
-#lvName{font-size:6.4cqw;font-weight:800;line-height:1;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
-#pbar{width:34cqw;height:5.2cqw;background:#2b2f6380;border:.6cqw solid #fff;border-radius:3cqw;position:relative;overflow:hidden;box-shadow:0 .6cqw 1.2cqw #0002}
-#pfill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(#97f26f,#3cbf4c);border-radius:3cqw;transition:width .4s cubic-bezier(.3,1.4,.6,1)}
-#ptext{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3.5cqw;font-weight:800;line-height:1}
 @keyframes hpop{30%{transform:scale(1.35) rotate(-10deg)}}
 .coins{position:relative;display:flex;align-items:center;justify-content:flex-end;min-width:23cqw;height:8.6cqw;padding:0 3.4cqw 0 9cqw;background:#fff;border-radius:3cqw;
   box-shadow:inset 0 -.9cqw 0 #d3d9ec,0 .8cqw 1.6cqw #0002;font-size:5.2cqw;font-weight:800;line-height:1;color:#2b3150}
@@ -52,10 +43,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .coins.bump{animation:bump .4s}
 @keyframes bump{40%{transform:scale(1.15)}}
 
-#setBtn{position:absolute;top:25cqw;left:5cqw;width:11.5cqw;height:11.5cqw;border:none;border-radius:3.4cqw;background:#5560bf99;color:#fff;font-size:7cqw;cursor:pointer;
+#setBtn{position:absolute;top:17cqw;right:6cqw;width:11.5cqw;height:11.5cqw;border:none;border-radius:3.4cqw;background:#5560bf99;color:#fff;font-size:7cqw;cursor:pointer;
   display:flex;align-items:center;justify-content:center;padding:0;box-shadow:inset 0 -.7cqw 0 #3d47a066}
-#infoBtn{position:absolute;top:25.5cqw;right:7cqw;width:10.5cqw;height:10.5cqw;border:.75cqw solid #ffffffd0;border-radius:50%;background:transparent;color:#fff;
-  font:italic 800 6.2cqw/1 Georgia,serif;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
 
 /* ---------- zoom + gợi ý ---------- */
 #zoom{position:absolute;left:5.5cqw;bottom:41cqw;width:6.6cqw;height:38cqw;border-radius:4cqw;background:#ffffff38;border:.4cqw solid #ffffff60;
@@ -187,13 +176,14 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 /* ---------- phát lại + kệ trưng bày ---------- */
 #skipBtn{display:none;position:absolute;right:5cqw;bottom:10cqw;height:12cqw;padding:0 5cqw;font-size:5cqw;z-index:6;flex-direction:row}
 #app.replaying #skipBtn{display:flex}
-#app.replaying #panel,#app.replaying #hintBtn,#app.replaying #zoom,#app.replaying #setBtn,#app.replaying #infoBtn,#app.replaying #dragImg{display:none}
+#app.replaying #panel,#app.replaying #hintBtn,#app.replaying #zoom,#app.replaying #setBtn,#app.replaying #dragImg{display:none}
 #replayTag{display:none;position:absolute;left:50%;bottom:12cqw;transform:translateX(-50%);font-size:6cqw;font-weight:800;z-index:6;white-space:nowrap}
 #app.replaying #replayTag{display:block}
-/* sổ bước nhỏ giữa trên: mảnh cần lắp + đã lắp, hình bước (mảnh mới viền đỏ), số bước; chạm để phóng to */
-#stepBook{position:absolute;top:22cqw;left:50%;transform:translateX(-50%);transform-origin:50% 0;padding:.8cqw 1.6cqw .8cqw .8cqw;background:#fff6d6;border:.6cqw solid #f2b84b;
-  border-radius:2.6cqw;display:flex;align-items:center;gap:1cqw;cursor:pointer;box-shadow:0 .6cqw 1.2cqw #0002;overflow:hidden}
-#stepBook.big{transform:translateX(-50%) scale(2);z-index:5}
+/* sổ bước góc trên trái: tên mô hình, hình bước (mảnh mới viền đỏ), mảnh cần lắp + đã lắp, số bước; chạm để phóng to */
+#stepBook{position:relative;min-width:0;max-width:56cqw;transform-origin:0 0;padding:.8cqw 1.6cqw .8cqw .8cqw;background:#fff6d6;border:.6cqw solid #f2b84b;
+  border-radius:2.6cqw;display:grid;grid-template-columns:auto auto;align-items:center;gap:1cqw;cursor:pointer;box-shadow:0 .6cqw 1.2cqw #0002;overflow:hidden}
+#stepBook.big{transform:scale(1.7);z-index:5}
+#lvName{grid-column:1/-1;padding:.6cqw 0 0 .8cqw;font-size:4.6cqw;font-weight:800;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #sbImg{width:24cqw;height:24cqw;margin:-2.5cqw} /* ảnh chừa lề rộng → cắt bớt lề */
 #sbSide{display:flex;flex-direction:column;align-items:center;gap:.8cqw}
 #sbParts{display:flex;flex-direction:column;gap:.4cqw}
@@ -384,13 +374,10 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   <canvas id="c"></canvas>
 
   <div id="hud">
-    <div id="lvBox"><div id="lvText" class="outline">MÀN 1</div><div id="stepText">Bước 1/5</div></div>
-    <div id="lvMid"><div id="lvName" class="outline">Cây nấm</div><div id="pbar"><div id="pfill"></div><span id="ptext" class="outline">0%</span></div></div>
+    <div id="stepBook"><b id="lvName" class="outline"></b><img id="sbImg" alt=""><div id="sbSide"><div id="sbParts"></div><div id="sbNo"></div></div></div>
     <div class="coins" id="coinPill"><span class="coin"></span><span class="plus">+</span><span class="cn">100</span></div>
   </div>
   <button id="setBtn" aria-label="Cài đặt">⚙️</button>
-  <button id="infoBtn" aria-label="Cách chơi">i</button>
-  <div id="stepBook"><img id="sbImg" alt=""><div id="sbSide"><div id="sbParts"></div><div id="sbNo"></div></div></div>
 
   <div id="zoom"><span id="zIn">+</span><div id="ztrack"><div id="zthumb">🔍</div></div><span id="zOut">−</span></div>
   <button id="hintBtn" aria-label="Gợi ý">💡<span class="gbadge" id="hintN">3</span></button>
@@ -410,6 +397,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div class="stack">
       <button class="btn blue big" id="sRestart"><span class="outline">CHƠI LẠI</span></button>
       <button class="btn blue big" id="sMenu"><span class="outline">VỀ MENU</span></button>
+      <button class="btn blue big" id="sHelp"><span class="outline">CÁCH CHƠI</span></button>
     </div>
   </div></div>
 
@@ -1229,9 +1217,7 @@ function updateCoins(bump){
   if (bump){ const p=$('coinPill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump'); }
 }
 function updateCount(){
-  const n=targets.filter(t=>t.placed).length, p=Math.round(100*n/targets.length);
-  $('cDone').textContent=n; $('cAll').textContent=targets.length;
-  $('pfill').style.width=p+'%'; $('ptext').textContent=p+'%';
+  $('cDone').textContent=targets.filter(t=>t.placed).length; $('cAll').textContent=targets.length;
   renderBook();
 }
 function renderBook(){
@@ -1240,7 +1226,7 @@ function renderBook(){
   targets.forEach(t=>{ if(t.step!==step) return; const k=t.key+'|'+t.color; if(!m.has(k)) m.set(k,{key:t.key,color:t.color,n:0,d:0}); const e=m.get(k); e.n++; if(t.placed) e.d++; });
   $('sbParts').innerHTML=[...m.values()].map(e=>`<div><img src="${thumb(e.key,e.color)}" alt=""><b>${e.d}/${e.n}</b></div>`).join('');
   $('sbImg').src=thumbStep(levelIdx,step,special(levelIdx),true);
-  $('sbNo').textContent=`${step+1}/${L.steps.length}`;
+  $('sbNo').textContent=`Bước ${step+1}/${L.steps.length}`;
 }
 function updateHint(){ $('hintN').textContent=hintsLeft>0?hintsLeft:'+'; }
 const supported=t=>t.deps.every(u=>u.placed);
@@ -1298,7 +1284,6 @@ function loadLevel(i){
     el.addEventListener('pointerdown',e=>trayDown(e,idx));
     it.el=el; box.appendChild(el);
   });
-  $('lvText').textContent=`MÀN ${i-SERIES[seriesOf(i)].from+1}`;
   $('lvName').textContent=L.name; updateCoins(); updateCount(); updateHint(); updateTray();
   buildTrayObjs();
   showStep(0);
@@ -1309,8 +1294,6 @@ function showStep(s){
   step=s;
   targets.forEach(t=>{ if (t.ghost) t.ghost.visible=false; });
   refreshTrayRot();
-  const st=$('stepText'); st.textContent=`Bước ${s+1}/${L.steps.length}`;
-  st.classList.remove('pop'); void st.offsetWidth; st.classList.add('pop');
   renderBook();
 }
 function validateLevel(){
@@ -1838,7 +1821,7 @@ $('sMenu').onclick=toMenu;
 $('serBtn').onclick=$('hColBtn').onclick=()=>{ sfx.pick(); showSeries(); };
 $('hHomeTab').onclick=()=>sfx.pick();
 $('serClose').onclick=()=>show('series',false);
-$('infoBtn').onclick=()=>{ show('infoModal',true); sfx.pick(); };
+$('sHelp').onclick=()=>{ show('setModal',false); show('infoModal',true); sfx.pick(); };
 $('infoClose').onclick=()=>show('infoModal',false);
 $('infoModal').onclick=e=>{ if(e.target.id==='infoModal') show('infoModal',false); };
 $('rMenu').onclick=toMenu;
@@ -1917,7 +1900,7 @@ function resize(){
   const w=app.clientWidth, h=app.clientHeight;
   renderer.setSize(w,h,false);
   trayR.setSize($('panel').clientWidth,$('panel').clientHeight,false);
-  camera.aspect=w/h; camera.setViewOffset(w,h,0,-h*0.015,w,h); // hạ mô hình xuống, chừa chỗ cho sổ bước camera.updateProjectionMatrix();
+  camera.aspect=w/h; camera.setViewOffset(w,h,0,h*0.015,w,h); camera.updateProjectionMatrix();
 }
 new ResizeObserver(resize).observe(app); resize();
 function frame(){
