@@ -73,7 +73,7 @@ module.exports = [
       $('ubBook').click(); ok($('bpView').classList.contains('show') && bpI === 15, 'mở sách lắp được luôn');
   } },
   { name: 'mo-bang-quang-cao', pre: save0({ coins: 0, best: { 'Cây nấm': 3 }, next: { g: { i: 5, sp: false } }, tut: 6 }), post: async () => {
-      ok($('adBtn').offsetWidth > 0 && $('adBtn').textContent.includes('AD') && $('playBtn').textContent.includes('100'), '2 nút: AD + xu');
+      $('gachaBtn').click(); ok($('adBtn').offsetWidth > 0 && $('adBtn').textContent.includes('AD') && $('playBtn').textContent.includes('100'), '2 nút: AD + xu');
       $('playBtn').click(); ok(!$('unbox').classList.contains('show'), 'không đủ xu thì nút xu không mở');
       $('adBtn').click(); ok($('adView').classList.contains('show') && !$('unbox').classList.contains('show'), 'xem quảng cáo giả lập trước');
       await wait(3600);
@@ -118,13 +118,22 @@ module.exports = [
   } },
   { name: 'home-bo-cuc', pre: save0({ coins: 100, best: { 'Cây nấm': 3 }, own: { 'Ngôi nhà': true, 'Dưa hấu': true }, sp: { 'Dưa hấu': true }, tut: 6 }), post: async () => {
       const R = e => $(e).getBoundingClientRect(), A = R('app'), hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
-      ok(['shopBtn', 'shelfBtn'].every(id => $(id).closest('#hNav')) && Math.abs(R('hNav').bottom - A.bottom) < 2, 'thanh dưới: cửa hàng + kệ, sát đáy');
-      ok($('oddsBtn').closest('#hLeft') && $('hLevels').closest('#hRight') && $('hSetBtn'), 'cột trái: nút chức năng, cột phải: chờ lắp, có nút cài đặt');
+      ok(['shopBtn', 'gachaBtn', 'hHomeTab', 'hKhoBtn', 'shelfBtn'].every(id => $(id).closest('#hNav')) && Math.abs(R('hNav').bottom - A.bottom) < 2, 'thanh dưới: cửa hàng, hộp bí ẩn, trang chủ, kho, kệ');
+      ok(!$('playBtn').closest('#home') && $('playBtn').closest('#gacha') && !$('hBox').closest('#home'), 'gacha không còn ở màn chính');
+      ok($('hColBtn').closest('#hLeft') && $('hLevels').closest('#hRight') && $('hSetBtn'), 'cột trái: nút chức năng, cột phải: chờ lắp, có nút cài đặt');
       const pend = [...$('hLevels').children];
       ok(pend.length === 2 && pend[1].classList.contains('sp') && pend.every(e => e.textContent.includes('LẮP')), 'ô chờ lắp có nhãn LẮP, bản đặc biệt vàng');
-      ok(R('playBtn').bottom < R('hNav').top && !hit(R('playBtn'), R('hLeft')) && !hit(R('playBtn'), R('hRight')) && !hit(R('adBtn'), R('hLeft')) && !hit(R('adBtn'), R('playBtn')) && Math.abs(R('adBtn').top - R('playBtn').top) < 2 && !hit(R('hBox'), R('hLeft')) && !hit(R('hBox'), R('hRight')), 'giữa không đè lên cột hai bên / thanh dưới');
+      ok($('hNext').querySelector('.pbox') && !hit(R('hNext'), R('hLeft')) && !hit(R('hNext'), R('hRight')) && R('hNext').bottom < R('hNav').top, 'giữa: hộp lắp tiếp, không đè cột hai bên / thanh dưới');
       ok([...document.querySelectorAll('#home *')].every(e => { const r = e.getBoundingClientRect(); return !r.width || (r.left >= A.left - 1 && r.right <= A.right + 1); }), 'không tràn ngang');
-      $('hSetBtn').click(); ok($('setModal').classList.contains('show'), 'nút cài đặt mở bảng cài đặt');
+      $('hNextBtn').click(); ok($('bpView').classList.contains('show') && bpI === 1, 'LẮP TIẾP mở sách mô hình chờ lắp đầu tiên');
+      showHome(); $('hSetBtn').click(); ok($('setModal').classList.contains('show'), 'nút cài đặt mở bảng cài đặt');
+  } },
+  { name: 'gacha-rieng', pre: save0({ coins: 500, best: { 'Cây nấm': 3 }, next: { g: { i: 5, sp: false } }, tut: 6 }), post: async () => {
+      ok($('hNext').textContent.includes('MỞ HỘP'), 'không còn mô hình chờ lắp → giữa màn chính mời mở hộp');
+      $('gachaBtn').click(); ok($('gacha').classList.contains('show') && $('hBox').offsetWidth > 0 && $('playBtn').offsetWidth > 0 && $('adBtn').offsetWidth > 0 && $('oddsBtn').closest('#gacha'), 'màn hộp bí ẩn riêng');
+      $('playBtn').click(); ok($('unbox').classList.contains('show') && !$('gacha').classList.contains('show'), 'mở hộp → màn vòng quay');
+      await wait(5600); $('ubLater').click(); ok($('gacha').classList.contains('show'), 'xong quay về màn hộp bí ẩn để quay tiếp');
+      $('gachaClose').click(); ok($('home').classList.contains('show') && !$('gacha').classList.contains('show'), 'đóng về màn chính');
   } },
   { name: 'shop-xu-gia-lap', pre: save0({ coins: 120, best: { 'Cây nấm': 3 }, tut: 6 }), post: async () => {
       document.querySelector('#home .coins').click();

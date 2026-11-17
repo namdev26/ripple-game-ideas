@@ -2,7 +2,8 @@
 const tipOn = () => tipEl.classList.contains('show') && document.contains(tipEl);
 module.exports = [
   { name: 'huong-dan-day-du', post: async () => {
-      ok(tipOn() && tipAt === $('playBtn'), 'bước 1: chỉ nút mở hộp');
+      ok(tipOn() && tipAt === $('gachaBtn'), 'bước 1: chỉ tab hộp bí ẩn');
+      $('gachaBtn').click(); ok(tipOn() && tipAt === $('playBtn'), 'bước 1b: chỉ nút mở hộp');
       $('playBtn').click(); await wait(5600);
       ok(tipOn() && tipAt === $('ubBook'), 'bước 2: chỉ Mở sách');
       $('ubBook').click();

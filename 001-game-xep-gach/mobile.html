@@ -257,10 +257,22 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .btn.yellow{background:linear-gradient(#ffe45c,#ffb800);box-shadow:inset 0 -1.4cqw 0 #c98a00,inset 0 .7cqw 0 #fff3b0,0 1.6cqw 0 #8a5a2b,0 2.6cqw 2cqw #0004}
 #hNav{position:absolute;left:0;right:0;bottom:0;height:20cqw;display:flex;align-items:flex-end;justify-content:space-around;
   background:repeating-linear-gradient(90deg,#0000 0 2.6cqw,#0000000f 2.6cqw 3cqw),linear-gradient(#7a3f17,#55290c);box-shadow:0 -1.2cqw 0 #d79a5a,0 -1.8cqw 0 #5a2d0e}
-.navB{border:none;background:none;font-family:inherit;color:#fff;cursor:pointer;width:30cqw;height:20cqw;padding:0 0 2cqw;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.5cqw}
+.navB{position:relative;border:none;background:none;font-family:inherit;color:#fff;cursor:pointer;width:19cqw;height:20cqw;padding:0 0 2cqw;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.5cqw}
 .navB i{font-style:normal;font-size:8.5cqw;line-height:1}
-.navB span{font-size:3.8cqw;font-weight:800}
-.navB.cur{height:27cqw;border-radius:9cqw 9cqw 0 0;background:linear-gradient(#ffb547,#e07a12);box-shadow:inset 0 1cqw 0 #ffe1a1}
+.navB span{font-size:3.2cqw;font-weight:800;white-space:nowrap}
+.navB .badge{position:absolute;top:2cqw;right:3cqw;min-width:5cqw;height:5cqw;border-radius:2.5cqw;background:#ff3b30;color:#fff;font-size:3.4cqw;font-weight:800;display:flex;align-items:center;justify-content:center;border:.5cqw solid #fff}
+/* màn hộp bí ẩn riêng (gacha) */
+#gacha{background:linear-gradient(#5b3fa8,#8a5cd6 55%,#c79bf0)}
+#gacha #oddsBtn{position:absolute;top:24cqw;left:5cqw}
+#gacha #hBoxWrap{margin-top:14cqw}
+/* giữa màn chính: mô hình chờ lắp kế tiếp, hoặc mời mở hộp */
+#hNext{display:flex;flex-direction:column;align-items:center;gap:6cqw;margin-top:12cqw}
+#hNext .pbox{font-size:3.6cqw;margin-right:2.4em}
+#hNextBtn{width:56cqw;height:19cqw}
+#hNextBtn .t{font-size:8.5cqw;line-height:.95}
+#hNextBtn small{font-size:3.8cqw;font-weight:700;max-width:50cqw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#hNext .gift{font-size:30cqw;line-height:1}
+.navB.cur{width:22cqw;height:27cqw;border-radius:9cqw 9cqw 0 0;background:linear-gradient(#ffb547,#e07a12);box-shadow:inset 0 1cqw 0 #ffe1a1}
 .navB.cur i{font-size:12cqw}
 #unbox{background:radial-gradient(circle at 50% 40%,#5a5fb8,#1b1f4a 72%);z-index:13;justify-content:flex-start;padding-top:12cqw;--rc:#fff}
 #ubStage{position:relative;width:90cqw;height:80cqw;display:flex;align-items:flex-end;justify-content:center;flex:none}
@@ -518,6 +530,16 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div class="pick" id="mPick"><div class="row2"><div id="mImg"></div><div id="mInfo"></div></div><button class="btn green" id="mBuy"></button></div>
   </div>
 
+  <div id="gacha" class="screen ov">
+    <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">0</span></div>
+    <div class="sHead outline" style="margin-top:10cqw">HỘP BÍ ẨN</div>
+    <button class="btn blue close" id="gachaClose" aria-label="Đóng">✕</button>
+    <button class="sideB" id="oddsBtn"><i>🎲</i><span>Tỉ lệ</span></button>
+    <div id="hBoxWrap"><div id="hBox" class="mbox" role="button" aria-label="Lắc thử hộp"><i class="lid"></i><i class="body"><b>?</b></i></div></div>
+    <div id="hName" class="outline"></div>
+    <div id="hBtns"><button class="btn yellow" id="adBtn"><span class="t outline o">AD 🎬</span><small>Xem quảng cáo</small></button><button class="btn yellow" id="playBtn"><span class="t outline o">MỞ HỘP</span><small id="playSub"></small></button></div>
+  </div>
+
   <div id="kho" class="screen ov">
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">0</span></div>
     <div class="sHead outline" style="margin-top:10cqw">KHO</div>
@@ -567,21 +589,19 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <button class="btn blue" id="hSetBtn" aria-label="Cài đặt">⚙</button>
     <div id="hLeft" class="hSide">
       <button class="sideB" id="hColBtn"><i>📚</i><span>Bộ sưu tập</span></button>
-      <button class="sideB" id="oddsBtn"><i>🎲</i><span>Tỉ lệ</span></button>
       <button class="sideB" id="hIapBtn"><i>🛍️</i><span>Ưu đãi</span></button>
-      <button class="sideB" id="hKhoBtn"><i>📦</i><span>Kho</span><b class="badge" id="khoN"></b></button>
     </div>
     <div id="hRight" class="hSide"><div id="hWait" class="outline">Chờ lắp</div><div id="hLevels"></div></div>
     <div class="logo">
       <div class="r"><b style="--c:#e2342a">X</b><b style="--c:#f5b700">Ế</b><b style="--c:#2fa04f">P</b></div>
       <div class="r"><b style="--c:#2f7fd6">G</b><b style="--c:#ef7d1a">Ạ</b><b style="--c:#9b59d0">C</b><b style="--c:#e2342a">H</b></div>
     </div>
-    <div id="hBoxWrap"><div id="hBox" class="mbox" role="button" aria-label="Lắc thử hộp"><i class="lid"></i><i class="body"><b>?</b></i></div></div>
-    <div id="hName" class="outline"></div>
-    <div id="hBtns"><button class="btn yellow" id="adBtn"><span class="t outline o">AD 🎬</span><small>Xem quảng cáo</small></button><button class="btn yellow" id="playBtn"><span class="t outline o">MỞ HỘP</span><small id="playSub"></small></button></div>
+    <div id="hNext"></div>
     <div id="hNav">
       <button class="navB" id="shopBtn"><i>🛒</i><span class="outline">Cửa hàng</span></button>
-      <button class="navB cur" id="hHomeTab"><i>🎁</i><span class="outline">Hộp bí ẩn</span></button>
+      <button class="navB" id="gachaBtn"><i>🎁</i><span class="outline">Hộp bí ẩn</span></button>
+      <button class="navB cur" id="hHomeTab"><i>🏠</i><span class="outline">Trang chủ</span></button>
+      <button class="navB" id="hKhoBtn"><i>📦</i><span class="outline">Kho</span><b class="badge" id="khoN"></b></button>
       <button class="navB" id="shelfBtn"><i>🏛</i><span class="outline">Kệ</span></button>
     </div>
   </div>
@@ -1294,7 +1314,7 @@ const sfx={
 };
 
 // ====================== TRẠNG THÁI ======================
-const OVERLAYS=['result','loseModal','iap','kho','setModal','infoModal','series','bpView','shop','shelf','unbox','oddsModal'];
+const OVERLAYS=['result','loseModal','iap','kho','gacha','setModal','infoModal','series','bpView','shop','shelf','unbox','oddsModal'];
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
 let rebuild=false, placedOrder=[], replaying=false, replayTok=0, replayDone=null; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
@@ -1676,8 +1696,9 @@ function tutStep(){
   let el=null, txt='';
   if (vis('unbox')){ if(ubI===0&&!built(0)&&$('ubBtns').classList.contains('on')) [el,txt]=[$('ubBook'),'Mở sách hướng dẫn']; }
   else if (vis('bpView')){ if(bpI===0&&!built(0)) [el,txt]=bpPage===0?[$('bpNext'),'Lật trang xem từng bước']:[$('bpBuild'),'Bấm Lắp!']; }
-  else if (vis('home')&&!['series','shelf','shop','oddsModal','setModal'].some(vis)){
-    if (!owned(0)) [el,txt]=[$('playBtn'),'Mở hộp quà miễn phí!'];
+  else if (vis('gacha')){ if(!owned(0)&&!vis('oddsModal')) [el,txt]=[$('playBtn'),'Mở hộp quà miễn phí!']; }
+  else if (vis('home')&&!['series','shelf','shop','oddsModal','setModal','kho','iap'].some(vis)){
+    if (!owned(0)) [el,txt]=[$('gachaBtn'),'Mở hộp quà miễn phí!'];
     else if (!built(0)) [el,txt]=[$('hLevels').firstElementChild,'Chạm để lắp mô hình đầu tiên'];
     else if (S.tut===5) [el,txt]=[$('shopBtn'),'Muốn chọn đúng mô hình? Vào cửa hàng'];
   }
@@ -1702,15 +1723,22 @@ function showHome(s){
 }
 const toMenu=()=>showHome(seriesOf(levelIdx));
 const pendingList=()=>ALL_IDX.filter(i=>owned(i)&&!built(i)); // đã có, chưa lắp (cả game: hộp chung ra được mọi bộ)
-function renderHome(){
-  const s=curSeries, r=SERIES[s], c=boxCost(), pend=pendingList();
-  peekBox(); $('serName').textContent=r.name;
-  const dn=dupCount(); $('khoN').textContent=dn; $('khoN').style.display=dn?'':'none';
-  $('hBox').style.setProperty('--bc',r.c);
+function renderGacha(){
+  const c=boxCost(); peekBox();
+  $('hBox').style.setProperty('--bc',SERIES[curSeries].c);
   $('hName').textContent=`Đã có ${ALL_IDX.filter(owned).length}/${LEVELS.length} mô hình`;
   $('playBtn').querySelector('.t').textContent=c?`🪙 ${c}`:'MỞ HỘP';
   $('playSub').textContent=c?'Mở bằng xu':'Miễn phí';
   $('adBtn').style.display=c?'':'none'; $('hBtns').classList.toggle('one',!c); // hộp đầu tặng: chỉ 1 nút
+}
+const openGacha=()=>{ sfx.pick(); renderGacha(); updateCoins(); show('gacha',true); };
+function renderHome(){
+  const s=curSeries, r=SERIES[s], pend=pendingList(), nx=pend[0];
+  renderGacha(); $('serName').textContent=r.name;
+  $('hNext').innerHTML=nx!=null
+    ?`${pboxHtml(nx,special(nx))}<button class="btn yellow" id="hNextBtn"><span class="t outline o">LẮP TIẾP</span><small>${LEVELS[nx].name}</small></button>`
+    :`<div class="gift">🎁</div><button class="btn yellow" id="hNextBtn"><span class="t outline o">MỞ HỘP</span><small>Có thêm mô hình mới</small></button>`;
+  const dn=dupCount(); $('khoN').textContent=dn; $('khoN').style.display=dn?'':'none';
   $('hWait').style.display=pend.length?'':'none';
   $('hLevels').classList.toggle('few',pend.length<=3); // ≤3 ô không cần cuộn → để bong bóng hướng dẫn tràn ra ngoài được
   $('hLevels').innerHTML=pend.map(i=>`<button class="sideB pend${special(i)?' sp':''}" data-i="${i}" aria-label="${LEVELS[i].name}"><i><img src="${thumbLevel(i,special(i))}" alt=""></i><span>LẮP</span><b class="badge">!</b></button>`).join('');
@@ -1749,7 +1777,7 @@ function openBox(viaAd){
   const dup=isDup(nx)?shopPrice(nx.i):0, nm=LEVELS[nx.i].name;
   S.coins-=c; if(dup) S.dup[nm]=(S.dup[nm]||0)+1; else grant(nx.i,nx.sp); // trùng → cất kho, bán lúc nào cũng được
   delete S.next.g; if(S.tut===5) S.tut=6;
-  peekBox(); save(); updateCoins(true);
+  peekBox(); save(); updateCoins(true); $('gacha').classList.remove('show');
   openUnbox(nx.i,nx.sp,true,ALL_IDX,dup);
 }
 const rattle=r=>{ for(let k=0;k<3+r;k++) tone(420-r*110+Math.random()*90,0.045,'square',0.03+r*0.02,k*0.07); vib([12,25,12,25].slice(0,2+r).map(v=>v*(r+1))); };
@@ -1840,7 +1868,7 @@ $('unbox').onclick=e=>{
 };
 $('ubBook').onclick=()=>{ sfx.pick(); $('unbox').classList.remove('show'); openBlueprint(ubI); };
 $('ubSell').onclick=()=>{ sellDup(LEVELS[ubI].name); $('unbox').classList.add('sold'); $('ubDup').textContent=`✓ Đã bán +${shopPrice(ubI)}🪙`; $('ubLater').querySelector('span').textContent='Đóng'; };
-$('ubLater').onclick=()=>{ sfx.back(); showHome(seriesOf(ubI)); };
+$('ubLater').onclick=()=>{ sfx.back(); showHome(seriesOf(ubI)); if(ubFull) openGacha(); }; // từ hộp bí ẩn: quay lại để quay tiếp
 
 // ---- cửa hàng mô hình: chọn đúng mô hình, giá theo độ hiếm, không có bản đặc biệt ----
 let mSel=null;
@@ -1972,6 +2000,9 @@ $('sRestart').onclick=$('lRetry').onclick=()=>loadLevel(levelIdx);
 $('sMenu').onclick=$('backBtn').onclick=$('lMenu').onclick=toMenu;
 $('serBtn').onclick=$('hColBtn').onclick=()=>{ sfx.pick(); showSeries(); };
 $('hHomeTab').onclick=()=>sfx.pick();
+$('gachaBtn').onclick=openGacha;
+$('gachaClose').onclick=()=>{ sfx.back(); show('gacha',false); renderHome(); };
+$('hNext').onclick=e=>{ if(!e.target.closest('#hNextBtn')) return; const nx=pendingList()[0]; if(nx==null) return openGacha(); sfx.pick(); openBlueprint(nx); };
 $('serClose').onclick=()=>show('series',false);
 $('sHelp').onclick=()=>{ show('setModal',false); show('infoModal',true); sfx.pick(); };
 $('infoClose').onclick=()=>show('infoModal',false);
