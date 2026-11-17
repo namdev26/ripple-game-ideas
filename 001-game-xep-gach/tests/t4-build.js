@@ -48,6 +48,16 @@ module.exports = [
       s0.slice(1).forEach(t => commit(t)); await wait(400);
       ok($('sbNo').textContent === '2/' + N, 'xong bước → sang bước 2: ' + $('sbNo').textContent);
   } },
+  { name: 'khong-hien-hinh-trang', post: async () => {
+      giveModel(0); startBuild(0); await wait(500);
+      ok(targets.every(t => !t.ghost.visible), 'không hiện hình trắng xem trước trên bàn');
+      scene.updateMatrixWorld(); camera.updateMatrixWorld(); // headless gần như không chạy frame()
+      const t = targets.find(t => t.step === 0 && supported(t)), r = canvas.getBoundingClientRect();
+      const p = new THREE.Vector3(t.x + t.fx / 2, (t.y + PARTS[t.key].h) * PLATE, t.z + t.fz / 2).project(camera);
+      const res = findGhost(r.left + (p.x + 1) / 2 * r.width, r.top + (1 - p.y) / 2 * r.height, { key: t.key, color: t.color });
+      ok(res.ok && res.ok.key === t.key, 'thả đúng chỗ vẫn khớp dù không hiện hình: ' + JSON.stringify(Object.keys(res)));
+      $('hintBtn').click(); ok(hintT && hintT.ghost.visible, 'gợi ý thì hiện hình chỗ cần lắp');
+  } },
   { name: 'tiep-tuc-ve-home', post: async () => {
       giveModel(0); startBuild(0); commitAll(); $('rNext').click();
       ok($('home').classList.contains('show'), 'hết mô hình chờ lắp → về home mở hộp');

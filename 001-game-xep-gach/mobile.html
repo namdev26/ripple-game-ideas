@@ -1303,18 +1303,10 @@ function loadLevel(i){
   showStep(0);
   if (i===0&&!rebuild) setTimeout(()=>{ if(L===LEVELS[0]&&!done&&!$('home').classList.contains('show')) toast('Kéo mảnh vào đúng hình trên mô hình',2800); },500);
 }
-// Chỉ hiện hình trắng của bước hiện tại; hình mới nảy lên lần lượt
+// Hình trắng luôn ẩn (xem bước ở sổ bước); vẫn dùng để bắt chỗ thả vì raycast của three.js không xét visible. Chỉ hiện khi gợi ý
 function showStep(s){
   step=s;
-  const now=performance.now(); let k=0;
-  targets.forEach(t=>{
-    if (!t.ghost) return;
-    t.ghost.visible=t.step===s;
-    if (t.step===s){
-      const g=t.ghost, d=k++*70; g.scale.setScalar(0.001);
-      anims.push({t0:now+d,dur:320,fn:q=>{ const e=q<1?1+2.2*Math.pow(q-1,3)+1.2*Math.pow(q-1,2):1; g.scale.setScalar(Math.max(0.001,e)); }});
-    }
-  });
+  targets.forEach(t=>{ if (t.ghost) t.ghost.visible=false; });
   refreshTrayRot();
   const st=$('stepText'); st.textContent=`Bước ${s+1}/${L.steps.length}`;
   st.classList.remove('pop'); void st.offsetWidth; st.classList.add('pop');
@@ -1491,10 +1483,10 @@ function useHint(){
   // mảnh lắp được ngay, nằm thấp nhất
   const t=targets.filter(t=>!t.placed&&t.step===step&&supported(t)).sort((a,b)=>a.y-b.y)[0];
   if (!t) return;
-  if (hintT && hintT.ghost) hintT.ghost.userData.meshes.forEach(m=>m.material=getMat(hintT.color,'ghost'));
+  if (hintT && hintT.ghost){ hintT.ghost.userData.meshes.forEach(m=>m.material=getMat(hintT.color,'ghost')); hintT.ghost.visible=false; }
   hintsLeft--; updateHint(); sfx.magic();
   hintT=t;
-  const glow=getMat(t.color,'ghost').clone(); t.ghost.userData.meshes.forEach(m=>m.material=glow); t.glow=glow; t.glowT0=performance.now();
+  const glow=getMat(t.color,'ghost').clone(); t.ghost.userData.meshes.forEach(m=>m.material=glow); t.ghost.visible=true; t.glow=glow; t.glowT0=performance.now();
   const it=tray.find(i=>i.key===t.key&&i.color===t.color);
   it.el.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});
   it.el.classList.remove('hint'); void it.el.offsetWidth; it.el.classList.add('hint');
@@ -1935,7 +1927,7 @@ function frame(){
   if (hintT && hintT.glow && hintT.ghost){
     const age=now-hintT.glowT0, p=(Math.sin(age/160)+1)/2;
     hintT.glow.emissive.setRGB(0.55*p,0.38*p,0);
-    if (age>4500){ hintT.ghost.userData.meshes.forEach(m=>m.material=getMat(hintT.color,'ghost')); hintT=null; }
+    if (age>4500){ hintT.ghost.userData.meshes.forEach(m=>m.material=getMat(hintT.color,'ghost')); hintT.ghost.visible=false; hintT=null; }
   }
   if (L && controls.maxDistance>controls.minDistance)
     $('zthumb').style.top=clamp((camDist()-controls.minDistance)/(controls.maxDistance-controls.minDistance),0,1)*100+'%';

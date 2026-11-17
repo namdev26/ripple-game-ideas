@@ -19,7 +19,8 @@ Game puzzle lắp mô hình bằng gạch nhựa kiểu LEGO: người chơi nh�
 ## Prototype
 Mở thẳng bằng trình duyệt (cần internet để tải three.js).
 - `mobile.html`: bản điện thoại (khung 9:16), bố cục kiểu game "lấp tượng":
-  tượng đất sét trắng hiện theo từng bước, kéo mảnh màu từ khay vào đúng hình là tự khớp.
+  sổ bước nhỏ ở giữa phía trên (mảnh của bước + đã lắp, hình bước có mảnh mới viền đỏ, số bước; chạm để phóng to),
+  trên bàn không hiện hình xem trước, kéo mảnh màu từ khay thả đúng chỗ là tự khớp (💡 gợi ý mới hiện chỗ cần lắp).
   Mảnh trong khay xoay theo góc nhìn của bàn chính. HUD: tên màn + % hoàn thành. Thả sai hình bị tính lỗi (trừ sao),
   xu (thưởng khi thắng, dùng mua gợi ý), gợi ý phát sáng, cài đặt âm thanh/rung,
   16 màn chia 3 bộ (nút 📚 góc trái trên để chọn bộ):
