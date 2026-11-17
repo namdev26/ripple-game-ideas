@@ -13,7 +13,7 @@ module.exports = [
   { name: 'nhay-coc', pre: save0({ tut: 6, coins: 300, best: { 'Cây nấm': 3 } }), post: async () => {
       const cmc = LEVELS.findIndex(l => l.name === 'Chùa Một Cột'), k = ROAD.indexOf(cmc);
       ok(k > 2, 'Chùa Một Cột ở xa trên đường: ' + k);
-      const pr = buyPrice(cmc); openShop(cmc); $('mBuy').click();
+      shelf(); const pr = buyPrice(cmc); openShop(cmc); $('mBuy').click();
       ok(S.coins === 300 - pr && owned(cmc), 'mua trước: ' + S.coins);
       S.best['Chùa Một Cột'] = 2; save();
       ok(roadNext() === ROAD[1], 'nhảy cóc xong vẫn quay về Lv2');

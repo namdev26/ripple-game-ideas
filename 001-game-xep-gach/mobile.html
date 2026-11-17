@@ -50,8 +50,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #backBtn{font-size:6.4cqw;font-weight:800}
 #hud{align-items:center}
 #lives{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:.8cqw;font-size:6.5cqw;line-height:1}
-#lives i{font-style:normal;color:#ff4d5e;text-shadow:0 .5cqw 0 #a1182a}
-#lives i:not(.on){color:#ffffff40;text-shadow:none}
+#lives i{font-style:normal;color:#fff;text-shadow:0 .5cqw 0 #2b315099} /* còn lượt sai: trắng; đã sai: đỏ */
+#lives i:not(.on){color:#ff4d5e;text-shadow:0 .5cqw 0 #a1182a}
 #lives i.lose{animation:bump .4s}
 
 /* ---------- zoom + gợi ý ---------- */
@@ -278,11 +278,15 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #gacha #oddsBtn{position:absolute;top:24cqw;left:5cqw}
 #gacha #hBoxWrap{margin-top:14cqw}
 /* giữa màn chính: mô hình chờ lắp kế tiếp, hoặc mời mở hộp */
-/* thanh trên trái: tiến độ đường lắp (thay nút chọn bộ) */
-#hRoad{position:absolute;top:6.4cqw;left:5cqw;width:40cqw;height:11cqw;background:#2b3150cc;border-radius:5.5cqw;padding:1cqw 4cqw;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:.8cqw;box-shadow:inset 0 -.6cqw 0 #0003}
-#hRoad b{color:#fff;font-size:4cqw;line-height:1}
-#hRoad .rBar{height:2.2cqw;border-radius:1.1cqw;background:#ffffff33;overflow:hidden}
-#hRoad .rBar i{display:block;height:100%;background:linear-gradient(90deg,#7be05a,#2fbf4a)}
+/* thanh trên trái: ❤️ mạng (số + đồng hồ hồi), đang ∞ thì phát sáng */
+#hLife{position:absolute;top:7cqw;left:5cqw;height:8.6cqw;min-width:30cqw;padding:0 3cqw 0 10cqw;border:none;border-radius:3cqw;background:#fff;box-shadow:inset 0 -.8cqw 0 #d6dbea,0 .6cqw 1cqw #0002;display:flex;align-items:center;gap:1.6cqw;cursor:pointer;font-family:inherit;color:#2b3150}
+#hLife i{position:absolute;left:-2cqw;top:50%;transform:translateY(-50%);font-style:normal;font-size:11cqw;line-height:1;color:#ff3b4e;filter:drop-shadow(0 .6cqw 0 #a1182a)}
+#hLife b{font-size:5.6cqw;line-height:1}
+#hLife small{font-size:3.6cqw;font-weight:800;color:#6b7190}
+#hLife.inf{background:linear-gradient(#fff3b0,#ffd34d);box-shadow:inset 0 -.8cqw 0 #d9a21a,0 0 3cqw #ffd34d}
+#hLife.inf i{color:#7a4cff;filter:drop-shadow(0 .6cqw 0 #3d1fa0)}
+#lifeModal{z-index:14}
+#lifeModal .stack .btn{height:12cqw;font-size:4.2cqw}
 /* tiêu điểm: mô hình level kế trên bục sáng + tên, nút chơi to phía dưới */
 #hNext{display:flex;flex-direction:column;align-items:center;margin-top:auto;margin-bottom:34cqw;position:relative}
 #hNext::before{content:"";position:absolute;top:-6cqw;left:50%;width:78cqw;height:62cqw;margin-left:-39cqw;border-radius:50%;background:radial-gradient(closest-side,#fff3c4cc,#ffd98a55 55%,#0000);z-index:-1}
@@ -292,6 +296,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #hNext .nInfo small{font-size:3.6cqw;opacity:.9}
 #hNextBtn{width:64cqw;height:17cqw}
 #hNextBtn .t{font-size:9cqw;line-height:.95}
+#hNextBtn .lk{font-size:3.6cqw;font-weight:800}#hNextBtn .lk:empty{display:none}
 #hNext .gift{font-size:30cqw;line-height:1}
 #hGoal{width:88cqw;margin-top:1cqw;box-sizing:border-box;background:#fffbe9;border-radius:4cqw;padding:2cqw 3cqw;box-shadow:inset 0 -.8cqw 0 #e4d4a4,0 1cqw 2cqw #0002;color:#2b3150;font-weight:800;font-size:3.8cqw;display:flex;flex-direction:column;gap:1cqw}
 #hGoal:empty{display:none}
@@ -556,13 +561,25 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   </div></div>
 
   <div id="loseModal" class="screen modal"><div class="panelM">
-    <div class="ribbon red outline r">HẾT MẠNG</div>
-    <p class="loseP">Sai 3 lần rồi, thử lại nhé!</p>
+    <div class="ribbon red outline r">SAI 3 LẦN</div>
+    <p class="loseP">Hết lượt sai rồi, thử lại nhé!</p>
     <div class="stack">
-      <button class="btn yellow big" id="lAd"><span class="outline o">🎬 Hồi 1 mạng</span></button>
-      <button class="btn yellow big" id="lCoin"><span class="outline o">50🪙 Hồi 1 mạng</span></button>
+      <button class="btn yellow big" id="lAd"><span class="outline o">🎬 Thêm 1 lượt</span></button>
+      <button class="btn yellow big" id="lCoin"><span class="outline o">50🪙 Thêm 1 lượt</span></button>
       <button class="btn green big" id="lRetry"><span class="outline g">CHƠI LẠI</span></button>
       <button class="btn blue big" id="lMenu"><span class="outline">VỀ MENU</span></button>
+    </div>
+  </div></div>
+
+  <div id="lifeModal" class="screen modal"><div class="panelM">
+    <div class="ribbon red outline r" id="lifeH">HẾT MẠNG</div>
+    <button class="btn blue close" id="lifeClose" aria-label="Đóng">✕</button>
+    <p class="loseP" id="lifeT"></p>
+    <div class="stack">
+      <button class="btn yellow" id="lifeAd"><span class="outline o">🎬 Chơi ∞ 15 phút</span></button>
+      <button class="btn green" id="lifeCoin"><span class="outline g"></span></button>
+      <button class="btn blue" id="lifeShop"><span class="outline">🛍 Gói ∞ 3 giờ · Ưu Đãi</span></button>
+      <button class="btn blue" id="lifeOld"><span class="outline">🏛 Lắp lại mô hình cũ (không tốn ❤️)</span></button>
     </div>
   </div></div>
 
@@ -662,7 +679,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   </div>
 
   <div id="home" class="screen show">
-    <div id="hRoad"><b class="outline" id="hRoadT"></b><div class="rBar"><i id="hRoadBar"></i></div></div>
+    <button id="hLife" aria-label="Mạng"><i id="hLifeI">❤</i><b id="hLifeN"></b><small id="hLifeT"></small></button>
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">100</span></div>
     <button class="btn blue" id="hSetBtn" aria-label="Cài đặt">⚙</button>
     <div id="hRight" class="hSide"><button class="sideB" id="hIapBtn"><i>🎁</i><span>Ưu đãi</span><b class="tmr" id="hIapT"></b></button></div>
@@ -1385,7 +1402,26 @@ if (S.dup){ Object.entries(S.dup).forEach(([n,k])=>{ const i=LEVELS.findIndex(l=
 // ?all: xu ảo để test, không ghi đè xu thật đã lưu
 if (UNLOCK_ALL) S.coins=99999;
 // ?all chỉ để test: không lưu gì (kể cả kho/tiến độ), tránh lấy xu ảo đổi ra xu thật
-const save=()=>{ if(!UNLOCK_ALL) store.set(S); };
+const save=()=>{ if(!UNLOCK_ALL){ S.last=Date.now(); store.set(S); } };
+// ❤️ mạng ngoài (kiểu Candy Crush): tối đa 5, chỉ mất khi thua / thoát giữa chừng level mới, hồi 1 ❤️ mỗi 30 phút.
+// ∞ = chơi không tốn mạng tới mốc S.inf (đồng hồ chạy theo giờ thật, cộng dồn). Lắp lại mô hình cũ không bao giờ tốn ❤️.
+const HEART_MAX=5, HEART_MS=30*60e3, INF_STREAK=15*60e3, INF_SERIES=30*60e3, INF_BACK=30*60e3, INF_AD=15*60e3, HEART_FULL_COST=60;
+if (S.hearts==null) S.hearts=HEART_MAX;
+function heartsNow(){
+  const n=Date.now();
+  if (S.hearts>=HEART_MAX){ S.hearts=HEART_MAX; return S.hearts; }
+  const k=Math.floor((n-(S.hT||n))/HEART_MS);
+  if (k>0){ S.hearts=Math.min(HEART_MAX,S.hearts+k); S.hT=(S.hT||n)+k*HEART_MS; }
+  return S.hearts;
+}
+const infLeft=()=>Math.max(0,(S.inf||0)-Date.now());
+const canPlay=()=>infLeft()>0||heartsNow()>0;
+const nextHeartMs=()=>heartsNow()>=HEART_MAX?0:HEART_MS-(Date.now()-S.hT);
+function loseHeart(){ S.streak=0; if (!infLeft()){ if (heartsNow()>=HEART_MAX) S.hT=Date.now(); S.hearts=Math.max(0,S.hearts-1); } save(); } // thua: mất chuỗi thắng; đang ∞ thì giữ ❤️
+function giveInf(ms,why){ S.inf=Math.max(Date.now(),S.inf||0)+ms; save(); if(why) setTimeout(()=>toast(`${why}: ∞ chơi không tốn ❤️ ${Math.round(ms/60e3)} phút!`,3200),why.includes('trở lại')?0:1600); }
+const mmss=ms=>{ const t=Math.ceil(ms/1000), h=Math.floor(t/3600), m=Math.floor(t/60)%60, s=t%60; return (h?h+':'+String(m).padStart(2,'0'):m)+':'+String(s).padStart(2,'0'); };
+// quà quay lại: vắng hơn 24 giờ
+if (!UNLOCK_ALL&&S.last&&Date.now()-S.last>24*3600e3) giveInf(INF_BACK,'👋 Chào mừng trở lại');
 if (migrated) save();
 let actx=null;
 function tone(f,dur,type='triangle',vol=0.12,delay=0){
@@ -1411,7 +1447,7 @@ const sfx={
 };
 
 // ====================== TRẠNG THÁI ======================
-const OVERLAYS=['result','loseModal','needModal','iap','gacha','setModal','infoModal','series','bpView','shop','shelf','unbox','oddsModal'];
+const OVERLAYS=['result','loseModal','needModal','lifeModal','iap','gacha','setModal','infoModal','series','bpView','shop','shelf','unbox','oddsModal'];
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
 let rebuild=false, placedOrder=[], replaying=false, replayTok=0, replayDone=null; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
@@ -1443,6 +1479,7 @@ function updateHint(){ $('hintN').textContent=hintsLeft>0?hintsLeft:'+'; }
 const supported=t=>t.deps.every(u=>u.placed);
 
 function loadLevel(i){
+  if (!built(i)&&!canPlay()){ OVERLAYS.forEach(id=>$(id).classList.remove('show')); showHome(); return openLife(); } // hết ❤️: level mới bị chặn, lắp lại thì không
   levelIdx=i; L=LEVELS[i]; rebuild=built(i); placedOrder=[];
   cancelReplay();
   if (levelRoot) scene.remove(levelRoot);
@@ -1667,10 +1704,12 @@ function wrong(){
   app.classList.remove('shake'); void app.offsetWidth; app.classList.add('shake');
   if (mistakes<LIVES) return toast('Sai chỗ rồi! Mất 1 mạng');
   done=true; endDrag(true); // hết mạng: thua
-  setTimeout(()=>{ if(!done||mistakes<LIVES) return; $('lAd').style.display=$('lCoin').style.display=revived?'none':''; show('loseModal',true); },700);
+  setTimeout(()=>{ if(!done||mistakes<LIVES) return; $('lAd').style.display=$('lCoin').style.display=revived?'none':'';
+    const c=failCost(); $('lRetry').querySelector('span').textContent=c?'CHƠI LẠI (−1 ❤️)':'CHƠI LẠI'; $('lMenu').querySelector('span').textContent=c?'VỀ MENU (−1 ❤️)':'VỀ MENU';
+    show('loseModal',true); },700);
 }
 function updateLives(lose){
-  $('lives').innerHTML=Array.from({length:LIVES},(_,k)=>`<i class="${k<LIVES-mistakes?'on':''}${lose&&k===LIVES-mistakes?' lose':''}">♥</i>`).join('');
+  $('lives').innerHTML=Array.from({length:LIVES},(_,k)=>`<i class="${k<LIVES-mistakes?'on':''}${lose&&k===LIVES-mistakes?' lose':''}">✖</i>`).join('');
 }
 
 // ====================== GỢI Ý ======================
@@ -1701,6 +1740,8 @@ function win(){
   S.best[L.name]=Math.max(best(levelIdx),stars); S.order[L.name]=placedOrder.slice();
   const bonus=!wasDone&&seriesDone(s)?seriesBonus(s):0; // đủ bộ: thưởng thêm
   if (S.tut<5) S.tut=5; // lắp xong mô hình đầu: còn bước chỉ cửa hàng
+  if (!rebuild){ S.streak=(S.streak||0)+1; if(S.streak%3===0) giveInf(INF_STREAK,'🔥 Thắng 3 level liên tiếp'); }
+  if (bonus) giveInf(INF_SERIES,'🎉 Đủ bộ');
   S.coins+=reward+bonus; save();
   setTimeout(confetti,250);
   controls.autoRotate=true; controls.autoRotateSpeed=3;
@@ -1834,7 +1875,28 @@ const openGacha=()=>{ sfx.pick(); renderGacha(); updateCoins(); show('gacha',tru
 // level kế trên đường lắp: mô hình đầu tiên chưa lắp (đã mua trước rồi lắp xong thì tự bỏ qua)
 const roadNext=()=>{ const i=ROAD.find(i=>!built(i)); return i==null?null:i; };
 const roadNo=i=>ROAD.indexOf(i)+1;
-function playRoad(){ const i=roadNext(); if(i==null) return; if(!owned(i)){ grant(i,false); save(); } openBlueprint(i); } // level miễn phí
+function playRoad(){ const i=roadNext(); if(i==null) return; if(!canPlay()) return openLife(); if(!owned(i)){ grant(i,false); save(); } openBlueprint(i); } // level miễn phí (cần ❤️ hoặc ∞)
+function updateLife(){
+  const inf=infLeft(), h=heartsNow(), nx=nextHeartMs();
+  $('hLife').classList.toggle('inf',inf>0); $('hLifeI').textContent=inf?'∞':'❤';
+  $('hLifeN').textContent=inf?'∞':h; $('hLifeT').textContent=inf?mmss(inf):h>=HEART_MAX?'Đầy':mmss(nx);
+  const lk=document.querySelector('#hNextBtn .lk'); if (lk) lk.textContent=!inf&&!h?'❤️ hồi sau '+mmss(nx):'';
+  if ($('lifeModal').classList.contains('show')) renderLife();
+}
+function renderLife(){
+  const inf=infLeft(), h=heartsNow();
+  $('lifeH').textContent=inf||h?'MẠNG':'HẾT MẠNG';
+  $('lifeT').innerHTML=inf?`∞ Đang chơi không tốn ❤️ · còn ${mmss(inf)}`:`❤️ ${h}/${HEART_MAX}`+(h<HEART_MAX?` · hồi 1 ❤️ sau ${mmss(nextHeartMs())}`:' · đầy')+'<br><small>Chỉ mất ❤️ khi thua level mới</small>';
+  const al=adLeft('inf'); $('lifeAd').style.display=al>0?'':'none'; $('lifeAd').querySelector('span').textContent=`🎬 Chơi ∞ 15 phút (còn ${al}/${AD_MAX.inf})`;
+  $('lifeCoin').style.display=h<HEART_MAX?'':'none'; $('lifeCoin').querySelector('span').textContent=`${HEART_FULL_COST}🪙 Nạp đầy ❤️`;
+}
+function openLife(){ sfx.pick(); renderLife(); show('lifeModal',true); }
+$('hLife').onclick=openLife;
+$('lifeClose').onclick=()=>{ sfx.back(); show('lifeModal',false); };
+$('lifeAd').onclick=()=>{ if(adLeft('inf')<=0) return; watchAd(()=>{ S.ad.inf=(S.ad.inf||0)+1; giveInf(INF_AD); show('lifeModal',false); updateLife(); toast('∞ 15 phút chơi không tốn ❤️!'); }); };
+$('lifeCoin').onclick=()=>{ if(S.coins<HEART_FULL_COST){ toast(`Cần ${HEART_FULL_COST}🪙`); sfx.wrong(); return; } S.coins-=HEART_FULL_COST; S.hearts=HEART_MAX; save(); updateCoins(true); sfx.coin(); show('lifeModal',false); updateLife(); };
+$('lifeShop').onclick=()=>{ show('lifeModal',false); openIap(); };
+$('lifeOld').onclick=()=>{ show('lifeModal',false); hTab='done'; S.showWait=true; showHome(); };
 // mục tiêu ghim: thứ người chơi muốn mua + con đường ngắn nhất tới nó (luôn là level kế)
 function goalInfo(){
   const g=S.goal?LEVELS.findIndex(l=>l.name===S.goal):-1; if (g<0||owned(g)) return null;
@@ -1850,10 +1912,9 @@ function renderGoal(){
 function renderHome(){
   const s=curSeries, r=SERIES[s], pend=pendingList(), nx=pend[0], rn=roadNext();
   renderGacha(); renderGoal();
-  const nb=ALL_IDX.filter(built).length; $('hRoadT').textContent=rn!=null?`🛤 LEVEL ${roadNo(rn)}/${ROAD.length}`:`🏆 Xong ${ROAD.length}/${ROAD.length}`;
-  $('hRoadBar').style.width=100*nb/LEVELS.length+'%';
+  updateLife();
   $('hNext').innerHTML=rn!=null
-    ?`${pboxHtml(rn,special(rn))}<div class="nInfo outline"><b>${LEVELS[rn].name}</b><small>${levelTargets(LEVELS[rn]).length} mảnh · ${RAR[rarOf(rn)].n}</small></div><button class="btn yellow" id="hNextBtn"><span class="t outline o">▶ LEVEL ${roadNo(rn)}</span></button>`
+    ?`${pboxHtml(rn,special(rn))}<div class="nInfo outline"><b>${LEVELS[rn].name}</b><small>Level ${roadNo(rn)}/${ROAD.length} · ${levelTargets(LEVELS[rn]).length} mảnh · ${RAR[rarOf(rn)].n}</small></div><button class="btn yellow" id="hNextBtn"><span class="t outline o">▶ LEVEL ${roadNo(rn)}</span><small class="lk">${!infLeft()&&!heartsNow()?'❤️ hồi sau '+mmss(nextHeartMs()):''}</small></button>`
     :nx!=null?`${pboxHtml(nx,special(nx))}<button class="btn yellow" id="hNextBtn"><span class="t outline o">LẮP TIẾP</span><small>${LEVELS[nx].name}</small></button>`
     :`<div class="gift">🎁</div><button class="btn yellow" id="hNextBtn"><span class="t outline o">MỞ HỘP</span><small>Hết đường · hộp ra bản vàng kim</small></button>`;
   const list=hTab==='wait'?pend:ALL_IDX.filter(built), hide=!S.showWait; // mặc định thu gọn: màn chính chỉ 1 tiêu điểm
@@ -1913,7 +1974,7 @@ function openBox(viaAd){
   openUnbox(nx.i,nx.sp,true,pool);
 }
 // quảng cáo giả lập: đếm ngược 3 giây rồi trao thưởng; mỗi loại có giới hạn theo ngày
-const AD_MAX={box:1,coin:3,shelf:1};
+const AD_MAX={box:1,coin:3,shelf:1,inf:2};
 const adLeft=k=>{ const d=new Date().toDateString(); if(!S.ad||S.ad.d!==d) S.ad={d,box:0,coin:0,shelf:0}; return AD_MAX[k]-(S.ad[k]||0); };
 function watchAd(cb){
   sfx.pick(); let n=3; $('adSec').textContent=n; show('adView',true);
@@ -2078,7 +2139,7 @@ $('shopClose').onclick=()=>{ sfx.back(); show('shop',false); renderHome(); updat
 
 // ---- shop nạp giả lập: chỉ để xem giao diện, bấm mua chỉ báo bản thử ----
 const dinoLeft=()=>{ const n=new Date(), t=Math.floor((new Date(n).setHours(24,0,0,0)-n)/1000); return [t/3600,t/60%60,t%60].map(v=>String(Math.floor(v)).padStart(2,'0')).join(':'); }; // ưu đãi hết lúc nửa đêm
-setInterval(()=>document.querySelectorAll('#dinoT,.shT,#hIapT').forEach(e=>e.textContent=dinoLeft()),1000); // đếm ngược tới 0h: ưu đãi + kệ hàng
+setInterval(()=>{ document.querySelectorAll('#dinoT,.shT,#hIapT').forEach(e=>e.textContent=dinoLeft()); if($('home').classList.contains('show')||$('lifeModal').classList.contains('show')) updateLife(); },1000); // đếm ngược tới 0h: ưu đãi + kệ hàng
 $('hIapT').textContent=dinoLeft();
 const COIN_PACKS=[[120,'25.000đ'],[650,'99.000đ','+8%'],[1400,'199.000đ','Phổ biến'],[3000,'399.000đ','+25%'],[8000,'999.000đ','+33%'],[17000,'1.999.000đ','Lợi nhất']];
 function renderIap(){
@@ -2093,8 +2154,9 @@ function renderIap(){
       <div class="dIts"><div class="dIt"><img src="${dinoImg('trex',DINO_TREX)}" alt="">3 mô hình</div><div class="dIt"><i>🪙</i>2.000 xu</div><div class="dIt"><i>🎁</i>5 hộp bí ẩn</div><div class="dIt gold"><img src="${dinoImg('trexG',DINO_TREX,true)}" alt="">T-Rex vàng kim</div></div>
       <div class="buy"><span class="old">499.000đ</span><button class="price">119.000đ</button></div></div>
     <div class="iapCard starter"><span class="iapTag">-70%</span><b class="ttl outline o">GÓI KHỞI ĐẦU</b>
-      <div class="its"><div class="it"><i>🎁</i>3 hộp bí ẩn</div><div class="it"><i>🪙</i>+500 xu</div><div class="it"><i>🚫</i>Bỏ quảng cáo</div></div>
+      <div class="its"><div class="it"><i>🎁</i>3 hộp bí ẩn</div><div class="it"><i>🪙</i>+500 xu</div><div class="it"><i>🚫</i>Bỏ quảng cáo</div><div class="it"><i>∞</i>∞ 1 giờ</div></div>
       <div class="buy"><span class="old">129.000đ</span><button class="price">39.000đ</button></div><small style="text-align:center">Chỉ mua được 1 lần</small></div>
+    <div class="iapCard"><span class="big">∞</span><div class="grow"><b>Chơi không giới hạn 3 giờ</b><small>Thua không mất ❤️ trong 3 giờ</small></div><button class="price">29.000đ</button></div>
     <div class="iapCard"><span class="big">🚫</span><div class="grow"><b>Bỏ quảng cáo</b><small>Không còn quảng cáo giữa các màn, vĩnh viễn</small></div><button class="price">59.000đ</button></div>
     ${setCard(1)}${setCard(2)}
     <div class="iapCard soon"><span class="lock">🔒</span><div class="grow"><b>Bộ Nhật Bản</b><small>Sắp ra mắt: chùa vàng, núi Phú Sĩ, cổng Torii…</small></div></div>
@@ -2163,11 +2225,23 @@ $('setBtn').onclick=$('hSetBtn').onclick=()=>{ $('sndSw').classList.toggle('on',
 $('setClose').onclick=()=>show('setModal',false);
 $('sndSw').onclick=()=>{ S.snd=!S.snd; save(); $('sndSw').classList.toggle('on',S.snd); sfx.pick(); };
 $('vibSw').onclick=()=>{ S.vib=!S.vib; save(); $('vibSw').classList.toggle('on',S.vib); vib(30); };
-$('sRestart').onclick=$('lRetry').onclick=()=>loadLevel(levelIdx);
-const revive=()=>{ revived=true; mistakes=LIVES-1; done=false; updateLives(); show('loseModal',false); toast('❤ Hồi 1 mạng, cố lên!'); };
+const failCost=()=>!rebuild&&!infLeft(); // thua level mới thì mất ❤️ (đang ∞ thì không)
+$('lRetry').onclick=()=>{ if(!rebuild) loseHeart(); loadLevel(levelIdx); };
+let quitAsk=0;
+function quitLevel(then){ // thoát khi đang lắp dở level mới = thua: hỏi lại bằng cách bấm lần 2
+  if (!done&&!rebuild&&placedOrder.length&&!infLeft()){
+    if (Date.now()-quitAsk>3000){ quitAsk=Date.now(); toast('Thoát giữa chừng sẽ mất 1 ❤️ · bấm lần nữa để thoát',2800); return; }
+    loseHeart();
+  }
+  quitAsk=0; then();
+}
+$('sRestart').onclick=()=>{ show('setModal',false); quitLevel(()=>loadLevel(levelIdx)); };
+const revive=()=>{ revived=true; mistakes=LIVES-1; done=false; updateLives(); show('loseModal',false); toast('✖ Thêm 1 lượt sai, cố lên!'); };
 $('lAd').onclick=()=>watchAd(revive);
 $('lCoin').onclick=()=>{ if(S.coins<REVIVE_COST){ toast(`Cần ${REVIVE_COST}🪙`); sfx.wrong(); return; } S.coins-=REVIVE_COST; save(); revive(); };
-$('sMenu').onclick=$('backBtn').onclick=$('lMenu').onclick=toMenu;
+$('sMenu').onclick=()=>{ show('setModal',false); quitLevel(toMenu); };
+$('backBtn').onclick=()=>quitLevel(toMenu);
+$('lMenu').onclick=()=>{ if(!rebuild) loseHeart(); toMenu(); };
 $('hColBtn').onclick=()=>{ sfx.pick(); showSeries(); };
 $('hHomeTab').onclick=()=>sfx.pick();
 $('gachaBtn').onclick=openGacha;

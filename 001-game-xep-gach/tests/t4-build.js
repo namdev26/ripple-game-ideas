@@ -59,7 +59,7 @@ module.exports = [
       const w0 = $('sbImg').getBoundingClientRect().width; $('stepBook').click();
       ok($('stepBook').classList.contains('big') && $('sbImg').getBoundingClientRect().width > w0 * 1.6, 'chạm sổ → phóng to hình bước: ' + w0 + ' → ' + $('sbImg').getBoundingClientRect().width);
       canvas.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })); ok(!$('stepBook').classList.contains('big'), 'chạm ra ngoài → thu nhỏ');
-      $('backBtn').click(); ok($('home').classList.contains('show'), 'back về màn chính');
+      $('backBtn').click(); $('backBtn').click(); ok($('home').classList.contains('show'), 'back về màn chính (lắp dở level mới: bấm 2 lần)');
   } },
   { name: 'khong-hien-hinh-trang', post: async () => {
       giveModel(0); startBuild(0); await wait(500);

@@ -89,7 +89,7 @@ module.exports = [
       const pend = [...$('hLevels').children];
       ok(pend.length === 2 && pend[1].classList.contains('sp') && pend.every(e => e.querySelector('.pbox') && e.textContent.includes('NEW') && e.textContent.includes('0%')), 'thẻ chờ lắp: hộp sản phẩm, NEW, 0%, bản đặc biệt vàng');
       ok($('hDrawer').textContent.includes('2 bộ') && R('hDrawer').bottom <= R('hNav').top + 1 && R('hLevels').height === 0, 'ngăn kéo mặc định thu gọn thành 1 thanh trên thanh dưới, đếm số bộ');
-      ok(!$('serBtn') && !document.querySelector('#home .logo') && $('hRoadT').textContent.includes('LEVEL 2/16'), 'bỏ nút bộ + logo; thanh trên hiện tiến độ đường lắp');
+      ok(!$('serBtn') && !document.querySelector('#home .logo') && $('hNext').textContent.includes('Level 2/16') && $('hLife').textContent.includes('5'), 'bỏ nút bộ + logo; thanh trên hiện ❤; tiến độ đường lắp dưới tên mô hình');
       ok($('hNext').querySelector('.pbox') && $('hNext').textContent.includes('Ngôi nhà') && !hit(R('hNext'), R('hLeft')) && !hit(R('hNext'), R('hDrawer')) && !hit(R('hNextBtn'), R('hNav')), 'tiêu điểm: hộp level kế + tên + nút chơi, không đè cột trái / ngăn kéo / thanh dưới');
       $('hTabDone').click(); ok(R('hLevels').height > 0 && $('hLevels').children.length === 1 && $('hLevels').textContent.includes('100%') && $('hDrawer').textContent.includes('1 bộ'), 'chạm tab Đã xong: mở ngăn kéo, mô hình đã lắp');
       $('hTabWait').click(); $('hDrawerTog').click(); ok(R('hLevels').height === 0 && !S.showWait, 'thu gọn ngăn kéo');
