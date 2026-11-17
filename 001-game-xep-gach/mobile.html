@@ -151,8 +151,24 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #adView .adCard i{display:block;font-style:normal;font-size:20cqw;line-height:1.2}
 #adView .adTag{position:absolute;top:8cqw;left:6cqw;background:#fff3;color:#fff;font-size:3.6cqw;font-weight:800;padding:1cqw 3cqw;border-radius:2cqw}
 #adView .adSec{position:absolute;top:8cqw;right:6cqw;width:9cqw;height:9cqw;border-radius:50%;border:.6cqw solid #fff;color:#fff;font-size:4.6cqw;font-weight:800;display:flex;align-items:center;justify-content:center}
-#hLevels{display:flex;flex-direction:column;align-items:center;gap:3cqw;max-height:64cqw;padding:1.5cqw 1cqw;overflow-y:auto;scrollbar-width:none;touch-action:pan-y}
+/* ngăn kéo dưới màn chính: chờ lắp / đã xong, cuộn ngang, thu gọn được */
+#hDrawer{position:absolute;left:0;right:0;bottom:20cqw;display:flex;flex-direction:column}
+.dHead{display:flex;align-items:flex-end;gap:3cqw;padding:0 4cqw 1cqw}
+.dTab{border:none;background:none;font-family:inherit;color:#fff;display:flex;flex-direction:column;align-items:center;opacity:.55;cursor:pointer;padding:0;font-size:7cqw;line-height:1;position:relative}
+.dTab span{font-size:3.4cqw;font-weight:800;-webkit-text-stroke:.5cqw #2b3150;paint-order:stroke}
+.dTab.cur{opacity:1}.dTab.cur::after{content:"";position:absolute;bottom:-2.2cqw;left:50%;margin-left:-2cqw;border:2cqw solid transparent;border-bottom-color:#fdf3dc;border-top:0}
+#hDCount{margin-left:auto;color:#fff;font-size:4.6cqw;font-weight:800;-webkit-text-stroke:.5cqw #2b3150;paint-order:stroke}
+#hDrawerTog{width:9cqw;height:9cqw;border:none;border-radius:50%;background:#fff;color:#8a5a2b;font-size:4cqw;font-weight:800;cursor:pointer;box-shadow:inset 0 -.8cqw 0 #d9c39b}
+#hLevels{display:flex;gap:3cqw;height:40cqw;overflow-x:auto;padding:2cqw 4cqw;background:#fdf3dc;border-top:.8cqw solid #6b3d18;scrollbar-width:none;touch-action:pan-x}
 #hLevels::-webkit-scrollbar{display:none}
+#hDrawer.hide #hLevels{height:0;padding:0;border:0;overflow:hidden}
+.wCard{position:relative;flex:none;width:34cqw;display:flex;flex-direction:column;align-items:center;gap:1cqw;background:#f3dfb1;border:none;border-radius:2.4cqw;padding:1.4cqw 1cqw 7cqw;cursor:pointer;font-family:inherit;box-shadow:inset 0 0 0 .6cqw #e6c98d}
+.wCard.sp{background:linear-gradient(#fff6c8,#ffd75e)}
+.wCard .nm{font-size:3.8cqw;font-weight:800;line-height:1.1;max-width:32cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wCard .pbox{font-size:2.3cqw;margin-right:2.4em}
+.wCard .new{position:absolute;left:0;bottom:1.6cqw;background:#e0303f;color:#fff;font-style:normal;font-size:3.2cqw;font-weight:800;padding:.4cqw 2.4cqw .4cqw 3cqw;clip-path:polygon(1.4cqw 0,100% 0,100% 100%,1.4cqw 100%,0 50%)}
+.wCard .pct{position:absolute;right:2cqw;bottom:1.2cqw;font-style:normal;font-size:4.4cqw;font-weight:800}
+.dEmpty{margin:auto;color:#8a5a2b;font-size:4.2cqw;font-weight:800;text-align:center}
 .lvc{width:15cqw;height:15cqw;font-size:7cqw;flex:none}
 .lvc.cur{outline:1cqw solid #ffd43b;outline-offset:.6cqw}
 #serBtn{position:absolute;top:6.4cqw;left:5cqw;height:10cqw;max-width:38cqw;padding:0 3.5cqw;font-size:4.4cqw;flex-direction:row;gap:1.5cqw}
@@ -237,22 +253,17 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #home>*{flex-shrink:0}
 #oddsModal{z-index:14}
 #hName{font-size:6cqw;line-height:1;margin-top:2.5cqw}
-#hLevels.few{overflow:visible}
+#hLevels.few{overflow:visible} /* ít thẻ: để bong bóng hướng dẫn tràn ra ngoài */
 /* bố cục home: thanh trên · cột nút trái · cột chờ lắp phải · hộp + MỞ HỘP giữa · thanh 3 mục dưới */
 #hSetBtn{position:absolute;top:6.4cqw;right:5cqw;width:11cqw;height:11cqw;font-size:6.4cqw;padding:0 0 .8cqw}
 .hSide{position:absolute;top:24cqw;width:20cqw;display:flex;flex-direction:column;align-items:center;gap:3.5cqw}
-#hLeft{left:2cqw} #hRight{right:2cqw}
-#hWait{font-size:3.8cqw;margin-bottom:-2cqw}
+#hLeft{left:2cqw}
 .sideB{position:relative;border:none;background:none;padding:0;margin:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;font-family:inherit;flex:none}
 .sideB i{font-style:normal;width:14cqw;height:14cqw;border-radius:3.6cqw;display:flex;align-items:center;justify-content:center;font-size:8cqw;
   background:linear-gradient(#66c8ff,#2f8cf0);box-shadow:inset 0 -1.2cqw 0 #1c5fc2,inset 0 .6cqw 0 #a8e3ff,0 1cqw 1.6cqw #0003}
 .sideB span{position:relative;margin-top:-2.4cqw;background:#2b3150;color:#fff;font-size:3.3cqw;font-weight:800;line-height:1.3;padding:0 2cqw;border-radius:2cqw;white-space:nowrap;border:.5cqw solid #fff}
 .sideB .badge{position:absolute;top:-1.4cqw;right:1cqw;width:5.4cqw;height:5.4cqw;border-radius:50%;background:#ff3b30;color:#fff;font-size:3.6cqw;font-weight:800;
   display:flex;align-items:center;justify-content:center;border:.6cqw solid #fff;font-style:normal}
-.sideB.pend i{background:#fff;box-shadow:inset 0 -1.2cqw 0 #cfd6ec,0 1cqw 1.6cqw #0003}
-.sideB.pend.sp i{background:linear-gradient(#fff6c8,#ffe27a);box-shadow:inset 0 -1.2cqw 0 #d9a520,0 1cqw 1.6cqw #0003}
-.sideB.pend img{width:90%;height:90%;object-fit:contain}
-.sideB.pend span{background:#33b44a}
 #home .logo{transform:scale(.62);margin:-7cqw 0 -6cqw}
 .btn.yellow{background:linear-gradient(#ffe45c,#ffb800);box-shadow:inset 0 -1.4cqw 0 #c98a00,inset 0 .7cqw 0 #fff3b0,0 1.6cqw 0 #8a5a2b,0 2.6cqw 2cqw #0004}
 #hNav{position:absolute;left:0;right:0;bottom:0;height:20cqw;display:flex;align-items:flex-end;justify-content:space-around;
@@ -591,12 +602,15 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
       <button class="sideB" id="hColBtn"><i>📚</i><span>Bộ sưu tập</span></button>
       <button class="sideB" id="hIapBtn"><i>🛍️</i><span>Ưu đãi</span></button>
     </div>
-    <div id="hRight" class="hSide"><div id="hWait" class="outline">Chờ lắp</div><div id="hLevels"></div></div>
     <div class="logo">
       <div class="r"><b style="--c:#e2342a">X</b><b style="--c:#f5b700">Ế</b><b style="--c:#2fa04f">P</b></div>
       <div class="r"><b style="--c:#2f7fd6">G</b><b style="--c:#ef7d1a">Ạ</b><b style="--c:#9b59d0">C</b><b style="--c:#e2342a">H</b></div>
     </div>
     <div id="hNext"></div>
+    <div id="hDrawer">
+      <div class="dHead"><button class="dTab cur" id="hTabWait">🧱<span>Chờ lắp</span></button><button class="dTab" id="hTabDone">✅<span>Đã xong</span></button><b id="hDCount"></b><button id="hDrawerTog" aria-label="Thu gọn / mở">▼</button></div>
+      <div id="hLevels"></div>
+    </div>
     <div id="hNav">
       <button class="navB" id="shopBtn"><i>🛒</i><span class="outline">Cửa hàng</span></button>
       <button class="navB" id="gachaBtn"><i>🎁</i><span class="outline">Hộp bí ẩn</span></button>
@@ -1712,7 +1726,7 @@ function tutStep(){
 }
 
 // ====================== HOME ======================
-let curSeries=0;
+let curSeries=0, hTab='wait'; // hTab: tab ngăn kéo chờ lắp / đã xong
 function showHome(s){
   cancelReplay();
   if (typeof s!=='number'){ s=0; while(s<SERIES.length-1&&seriesOpen(s+1)) s++; } // mặc định: bộ mới nhất đã mở
@@ -1739,10 +1753,17 @@ function renderHome(){
     ?`${pboxHtml(nx,special(nx))}<button class="btn yellow" id="hNextBtn"><span class="t outline o">LẮP TIẾP</span><small>${LEVELS[nx].name}</small></button>`
     :`<div class="gift">🎁</div><button class="btn yellow" id="hNextBtn"><span class="t outline o">MỞ HỘP</span><small>Có thêm mô hình mới</small></button>`;
   const dn=dupCount(); $('khoN').textContent=dn; $('khoN').style.display=dn?'':'none';
-  $('hWait').style.display=pend.length?'':'none';
-  $('hLevels').classList.toggle('few',pend.length<=3); // ≤3 ô không cần cuộn → để bong bóng hướng dẫn tràn ra ngoài được
-  $('hLevels').innerHTML=pend.map(i=>`<button class="sideB pend${special(i)?' sp':''}" data-i="${i}" aria-label="${LEVELS[i].name}"><i><img src="${thumbLevel(i,special(i))}" alt=""></i><span>LẮP</span><b class="badge">!</b></button>`).join('');
+  const list=hTab==='wait'?pend:ALL_IDX.filter(built), hide=!!S.hideWait&&S.tut>=6; // đang hướng dẫn thì luôn mở
+  $('hTabWait').classList.toggle('cur',hTab==='wait'); $('hTabDone').classList.toggle('cur',hTab==='done');
+  $('hDCount').textContent=`${list.length} bộ`; $('hDrawer').classList.toggle('hide',hide); $('hDrawerTog').textContent=hide?'▲':'▼';
+  $('hLevels').classList.toggle('few',list.length<=2); // ≤2 thẻ không cần cuộn → để bong bóng hướng dẫn tràn ra ngoài được
+  $('hLevels').innerHTML=!list.length?`<p class="dEmpty">${hTab==='wait'?'Chưa có mô hình chờ lắp<br>Mở hộp bí ẩn để có thêm':'Chưa lắp xong mô hình nào'}</p>`
+    :list.map(i=>`<button class="wCard${special(i)?' sp':''}" data-i="${i}" aria-label="${LEVELS[i].name}"><b class="nm outline">${LEVELS[i].name}</b>${pboxHtml(i,special(i))}`
+      +(hTab==='wait'?'<i class="new">NEW</i><i class="pct outline">0%</i>':`<i class="pct outline">100% ${'★'.repeat(best(i))}</i>`)+'</button>').join('');
 }
+$('hTabWait').onclick=()=>{ sfx.pick(); hTab='wait'; renderHome(); };
+$('hTabDone').onclick=()=>{ sfx.pick(); hTab='done'; renderHome(); };
+$('hDrawerTog').onclick=()=>{ sfx.pick(); S.hideWait=!S.hideWait; save(); renderHome(); };
 $('hLevels').onclick=e=>{ const b=e.target.closest('[data-i]'); if(!b) return; sfx.pick(); openBlueprint(+b.dataset.i); };
 // ====================== BỘ SƯU TẬP ======================
 function showSeries(){
