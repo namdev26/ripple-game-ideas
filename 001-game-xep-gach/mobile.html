@@ -368,17 +368,13 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .dTop{display:flex;align-items:center;justify-content:space-between;gap:2cqw}
 .dinoPack .ttl{font-size:6.2cqw;white-space:nowrap;line-height:1;color:#ffe14d;letter-spacing:.2cqw}
 .dTime{font-size:3.4cqw;font-weight:800;background:#0006;border-radius:2cqw;padding:.8cqw 2cqw;white-space:nowrap}
-.dHero{position:relative;height:42cqw;border-radius:3cqw;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:inset 0 0 0 .6cqw #ffffff55;
+.dHero{position:relative;height:50cqw;border-radius:3cqw;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:inset 0 0 0 .6cqw #ffffff55;
   background:radial-gradient(circle,#fff6b0 0,#ffd34d00 45%),repeating-conic-gradient(from 0deg,#ffffff1c 0 10deg,#0000 10deg 20deg),linear-gradient(#1f9a5c,#0e5a45)}
-.dinoBox{font-size:4.6cqw;margin-right:2.4em;--bc:#ff8a3d;--rc:#ffd34d}
+.dinoBox{font-size:5.6cqw;margin-right:2.4em;--bc:#ff8a3d;--rc:#ffd34d}
 .dinoBox .pf{background:linear-gradient(#ffcf6e,#ff8a3d 58%,#5b8f3a 59%,#2f6b2a)}
 .dinoBox .ps{background:linear-gradient(160deg,#2fa04f,#0e5a45)}
-.dinoBox i.e{position:absolute;font-style:normal;line-height:1;filter:drop-shadow(0 .15em 0 #0005)}
-.dinoBox .v{font-size:2.4em;left:38%;top:28%;opacity:.9}
-.dinoBox .b{font-size:2.6em;left:4%;bottom:6%;transform:scaleX(-1)}
-.dinoBox .t{font-size:3.4em;right:2%;bottom:2%}
-.dinoBox .ps .e{font-size:1.6em;left:5%;top:30%}
-.dNew{position:absolute;left:2cqw;top:2cqw;background:#e0303f;font-size:3.6cqw;font-weight:800;padding:.6cqw 2cqw;border-radius:2cqw;transform:rotate(-6deg)}
+.dinoBox .pf img{width:10.4em;height:6em;right:-.4em;bottom:.3em;object-fit:cover} /* ảnh rộng: cắt bớt khoảng trống trên dưới */
+.dIt img{width:16cqw;height:9cqw;object-fit:cover}
 .dinoPack .dSub{color:#d8ffe6;text-align:center;margin:0}
 .dIts{display:grid;grid-template-columns:repeat(4,1fr);gap:1.6cqw}
 .dIt{display:flex;flex-direction:column;align-items:center;text-align:center;font-size:3cqw;font-weight:800;line-height:1.1;background:#ffffff26;border-radius:2.6cqw;padding:1.4cqw .6cqw}
@@ -1295,12 +1291,30 @@ function thumb(key,color){
   if (p.shape==='slope') o.userData.inner.rotation.y=Math.PI;
   return thumbCache[k]=renderThumb(o,new THREE.Vector3(0,H/2,0),Math.sqrt(p.w*p.w+p.d*p.d+H*H)/2+0.1,new THREE.Vector3(-0.8,0.9,1.2));
 }
-function thumbLevel(i,sp=false){
-  const k='lv'+i+(sp?'s':''); if (thumbCache[k]) return thumbCache[k];
-  const info=modelInfo(LEVELS[i]), g=new THREE.Group();
+function thumbLevel(i,sp=false){ return thumbModel('lv'+i+(sp?'s':''),LEVELS[i],sp); }
+function thumbModel(k,lv,sp=false,dir=new THREE.Vector3(0.55,0.65,1)){
+  if (thumbCache[k]) return thumbCache[k];
+  const info=modelInfo(lv), g=new THREE.Group();
   info.ts.forEach(t=>{ const o=makeBrick(t.key,kitColor(sp,t.color)); placeObj(o,t.key,t.x,t.y,t.z,t.rot); g.add(o); });
-  return thumbCache[k]=renderThumb(g,info.center,info.radius,new THREE.Vector3(0.55,0.65,1));
+  return thumbCache[k]=renderThumb(g,info.center,info.radius,dir);
 }
+// ---- khủng long gạch cho thẻ ưu đãi (chỉ để vẽ hộp, chưa phải màn lắp) ----
+// vẽ theo hình nghiêng: mỗi ký tự = 1 núm × 1 gạch, dày 2 núm; dòng đầu là trên cùng
+const DINO_C={G:'green',l:'lime',L:'lime',Y:'yellow',W:'white',D:'darkgreen',B:'azure',b:'darkazure',K:'black'};
+function voxDino(rows,x0,z0){ const o=[];
+  rows.forEach((r,ri)=>{ const y=1+(rows.length-1-ri)*3; let x=0;
+    while(x<r.length){ const ch=r[x]; if(ch==='.'){ x++; continue; }
+      let n=1; while(r[x+n]===ch) n++;
+      for(let k=0;k<n;){ const m=n-k>=4?4:n-k>=2?2:1;
+        o.push(m===4?['brick_2x4',DINO_C[ch],x0+x+k,y,z0,0]:m===2?['brick_2x2',DINO_C[ch],x0+x+k,y,z0,0]:['brick_1x2',DINO_C[ch],x0+x+k,y,z0,1]); k+=m; }
+      x+=n; } });
+  return o; }
+const TREX=['...........GGGGG.','..........GGYGGGG','..........GGGGGGG','..........GGWWWW.','......GGGGGGGGG..','...GGGGGGGlllL...','GGGGGGGGGlll.L...','.......GGGG......','.......GG.GG.....','.......DD.DD.....'];
+const BRONTO=['BBBB............','BKBB............','..BB............','..BB............','..BBB...........','...BBBBBBBB.....','...BBBBBBBBBB...','...BBBBBBBBBBBB.','...BB....BB...BB','...BB....BB.....','...bb....bb.....'];
+const DINO_SCENE={size:[36,6],steps:[[...[0,6,12,18,24,30].map(x=>['plate_6x6','darkgreen',x,0,0,0]),
+  ...voxDino(TREX,1,2),...voxDino(BRONTO,19,2),...palm(35,0),...tree(0,1,0)]]}; // T-Rex và khủng long cổ dài đối mặt
+const DINO_TREX={size:[17,2],steps:[voxDino(TREX,0,0)]};
+const dinoImg=(k,lv,sp)=>thumbModel(k,lv,sp,new THREE.Vector3(0.3,0.4,1));
 
 // ====================== LƯU / ÂM THANH ======================
 const store={
@@ -1983,9 +1997,9 @@ function renderIap(){
   $('offerBody').innerHTML=`
     <div class="iapCard dinoPack">
       <div class="dTop"><b class="ttl outline">BỘ KHỦNG LONG</b><span class="dTime">⏳ <span id="dinoT">${dinoLeft()}</span></span></div>
-      <div class="dHero"><div class="pbox dinoBox"><div class="pf"><i class="e v">🌋</i><i class="e b">🦕</i><i class="e t">🦖</i><b class="pn">Khủng long</b><small class="pc">3 mô hình · 420 mảnh</small><i class="pr">Mới</i></div><div class="ps"><i class="e">🦖</i><b>Khủng long</b></div></div><span class="iapTag">-75%</span></div>
+      <div class="dHero"><div class="pbox dinoBox"><div class="pf"><img src="${dinoImg('dino',DINO_SCENE)}" alt=""><b class="pn">Khủng long</b><small class="pc">3 mô hình · 420 mảnh</small><i class="pr">Mới</i></div><div class="ps"><img src="${dinoImg('trex',DINO_TREX)}" alt=""><b>Khủng long</b></div></div><span class="iapTag">-75%</span></div>
       <small class="dSub">Khủng long bạo chúa · Tam giác long · Khủng long cổ dài</small>
-      <div class="dIts"><div class="dIt"><i>🦖</i>3 mô hình</div><div class="dIt"><i>🪙</i>2.000 xu</div><div class="dIt"><i>🎁</i>5 hộp bí ẩn</div><div class="dIt gold"><i>✨</i>T-Rex vàng kim</div></div>
+      <div class="dIts"><div class="dIt"><img src="${dinoImg('trex',DINO_TREX)}" alt="">3 mô hình</div><div class="dIt"><i>🪙</i>2.000 xu</div><div class="dIt"><i>🎁</i>5 hộp bí ẩn</div><div class="dIt gold"><img src="${dinoImg('trexG',DINO_TREX,true)}" alt="">T-Rex vàng kim</div></div>
       <div class="buy"><span class="old">499.000đ</span><button class="price">119.000đ</button></div></div>
     <div class="iapCard starter"><span class="iapTag">-70%</span><b class="ttl outline o">GÓI KHỞI ĐẦU</b>
       <div class="its"><div class="it"><i>🎁</i>3 hộp bí ẩn</div><div class="it"><i>🪙</i>+500 xu</div><div class="it"><i>🚫</i>Bỏ quảng cáo</div></div>

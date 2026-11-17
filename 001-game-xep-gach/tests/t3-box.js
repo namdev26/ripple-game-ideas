@@ -149,7 +149,7 @@ module.exports = [
       ok(packs.length >= 6 && [...packs].every(p => /\d/.test(p.textContent) && p.querySelector('.price')), 'gói xu kèm giá: ' + packs.length);
       ok(sets.length >= 2 && [...sets].every(p => p.querySelector('img') && p.querySelector('.price')), 'gói bộ LEGO mới có ảnh');
       const dino = $('offerBody').firstElementChild;
-      ok(dino && dino.classList.contains('dinoPack') && dino.querySelector('.dHero .pbox') && /Khủng long/i.test(dino.textContent) && dino.querySelector('.price') && dino.querySelectorAll('.dIt').length >= 3 && /\d+:\d\d:\d\d/.test(dino.textContent), 'thẻ bộ khủng long nổi bật đầu mục ưu đãi: hộp LEGO, quà kèm, giá, đếm ngược');
+      ok(dino && dino.classList.contains('dinoPack') && dino.querySelector('.dHero .pbox .pf img') && !/🦖|🦕/.test(dino.querySelector('.dHero').textContent) && dino.querySelectorAll('.dIt img').length >= 2 && /Khủng long/i.test(dino.textContent) && dino.querySelector('.price') && dino.querySelectorAll('.dIt').length >= 3 && /\d+:\d\d:\d\d/.test(dino.textContent), 'thẻ bộ khủng long: hộp LEGO có ảnh khủng long dựng bằng gạch, quà kèm, giá, đếm ngược');
       ok($('secOffer').textContent.includes('quảng cáo') && B.querySelector('#secOffer .starter .price'), 'gói khởi đầu + bỏ quảng cáo');
       ok(B.querySelectorAll('#secModel #mGrid .mItem').length === 4, 'mô hình nằm chung một màn cuộn');
       const tabs = [...document.querySelectorAll('#shopTabs button')];
