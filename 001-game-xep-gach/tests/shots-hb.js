@@ -22,7 +22,7 @@ module.exports = [
   { name: 'hb-gacha', pre: save0(ST), post: async () => { openGacha(); } },
   { name: 'hb-home-het', pre: save0({ coins: 260, best: { 'Cây nấm': 3 }, tut: 6 }), post: async () => {} },
   { name: 'hb-home-xong', pre: save0({ ...ST, tut: 6 }), post: async () => { $('hTabDone').click(); } },
-  { name: 'hb-home-gon', pre: save0({ ...ST, tut: 6, hideWait: true }), post: async () => {} },
+  { name: 'hb-home-gon', pre: save0({ ...ST, tut: 6, showWait: true }), post: async () => {} },
   { name: 'hb-ke', pre: save0(ST), post: async () => { openShelf(); } },
   { name: 'hb-tile', pre: save0(ST), post: async () => { showHome(1); $('oddsBtn').click(); } },
 ];

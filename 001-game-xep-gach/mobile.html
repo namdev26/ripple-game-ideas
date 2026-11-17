@@ -132,7 +132,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 
 /* ---------- home ---------- */
 /* nền gỗ: vân ván dọc + quầng sáng giữa */
-#home{justify-content:flex-start;padding-top:16cqw;
+#home{justify-content:flex-start;padding-top:20cqw;
   background:repeating-linear-gradient(90deg,#0000 0 24.6cqw,#5a2d0e40 24.6cqw 25cqw),
   radial-gradient(ellipse at 50% 42%,#e9a865 0,#c97a3c 45%,#8f4f22 100%)}
 #home .coins{position:absolute;top:7cqw;right:18.5cqw}
@@ -155,12 +155,13 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #adView .adSec{position:absolute;top:8cqw;right:6cqw;width:9cqw;height:9cqw;border-radius:50%;border:.6cqw solid #fff;color:#fff;font-size:4.6cqw;font-weight:800;display:flex;align-items:center;justify-content:center}
 /* ngăn kéo dưới màn chính: chờ lắp / đã xong, cuộn ngang, thu gọn được */
 #hDrawer{position:absolute;left:0;right:0;bottom:20cqw;display:flex;flex-direction:column}
-.dHead{display:flex;align-items:flex-end;gap:3cqw;padding:0 4cqw 1cqw}
+.dHead{display:flex;align-items:center;gap:3cqw;padding:1.2cqw 4cqw;background:#2b3150cc;border-radius:4cqw 4cqw 0 0;margin:0 3cqw}
+.dTab{flex-direction:row!important;gap:1.2cqw;font-size:5cqw!important}
 .dTab{border:none;background:none;font-family:inherit;color:#fff;display:flex;flex-direction:column;align-items:center;opacity:.55;cursor:pointer;padding:0;font-size:7cqw;line-height:1;position:relative}
 .dTab span{font-size:3.4cqw;font-weight:800;-webkit-text-stroke:.5cqw #2b3150;paint-order:stroke}
-.dTab.cur{opacity:1}.dTab.cur::after{content:"";position:absolute;bottom:-2.2cqw;left:50%;margin-left:-2cqw;border:2cqw solid transparent;border-bottom-color:#fdf3dc;border-top:0}
+.dTab.cur{opacity:1}
 #hDCount{margin-left:auto;color:#fff;font-size:4.6cqw;font-weight:800;-webkit-text-stroke:.5cqw #2b3150;paint-order:stroke}
-#hDrawerTog{width:9cqw;height:9cqw;border:none;border-radius:50%;background:#fff;color:#8a5a2b;font-size:4cqw;font-weight:800;cursor:pointer;box-shadow:inset 0 -.8cqw 0 #d9c39b}
+#hDrawerTog{width:8cqw;height:8cqw;border:none;border-radius:50%;background:#fff;color:#8a5a2b;font-size:4cqw;font-weight:800;cursor:pointer;box-shadow:inset 0 -.8cqw 0 #d9c39b}
 #hLevels{display:flex;gap:3cqw;height:40cqw;overflow-x:auto;padding:2cqw 4cqw;background:#fdf3dc;border-top:.8cqw solid #6b3d18;scrollbar-width:none;touch-action:pan-x}
 #hLevels::-webkit-scrollbar{display:none}
 #hDrawer.hide #hLevels{height:0;padding:0;border:0;overflow:hidden}
@@ -173,8 +174,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .dEmpty{margin:auto;color:#8a5a2b;font-size:4.2cqw;font-weight:800;text-align:center}
 .lvc{width:15cqw;height:15cqw;font-size:7cqw;flex:none}
 .lvc.cur{outline:1cqw solid #ffd43b;outline-offset:.6cqw}
-#serBtn{position:absolute;top:6.4cqw;left:5cqw;height:10cqw;max-width:38cqw;padding:0 3.5cqw;font-size:4.4cqw;flex-direction:row;gap:1.5cqw}
-#serBtn .outline{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* ---------- bộ sưu tập ---------- */
 #series{background:linear-gradient(#6a72d6 0%,#7d8fe4 28%,#9cc0f2 60%,#c3e2fb 100%);justify-content:flex-start;padding-top:9cqw;z-index:11}
 #series .close{top:6cqw;right:5cqw}
@@ -258,7 +257,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #hLevels.few{overflow:visible} /* ít thẻ: để bong bóng hướng dẫn tràn ra ngoài */
 /* bố cục home: thanh trên · cột nút trái · cột chờ lắp phải · hộp + MỞ HỘP giữa · thanh 3 mục dưới */
 #hSetBtn{position:absolute;top:6.4cqw;right:5cqw;width:11cqw;height:11cqw;font-size:6.4cqw;padding:0 0 .8cqw}
-.hSide{position:absolute;top:24cqw;width:20cqw;display:flex;flex-direction:column;align-items:center;gap:3.5cqw}
+.hSide{position:absolute;top:47cqw;width:20cqw;display:flex;flex-direction:column;align-items:center;gap:3.5cqw}
 #hLeft{left:2cqw}
 .sideB{position:relative;border:none;background:none;padding:0;margin:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;font-family:inherit;flex:none}
 .sideB i{font-style:normal;width:14cqw;height:14cqw;border-radius:3.6cqw;display:flex;align-items:center;justify-content:center;font-size:8cqw;
@@ -266,7 +265,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .sideB span{position:relative;margin-top:-2.4cqw;background:#2b3150;color:#fff;font-size:3.3cqw;font-weight:800;line-height:1.3;padding:0 2cqw;border-radius:2cqw;white-space:nowrap;border:.5cqw solid #fff}
 .sideB .badge{position:absolute;top:-1.4cqw;right:1cqw;width:5.4cqw;height:5.4cqw;border-radius:50%;background:#ff3b30;color:#fff;font-size:3.6cqw;font-weight:800;
   display:flex;align-items:center;justify-content:center;border:.6cqw solid #fff;font-style:normal}
-#home .logo{transform:scale(.62);margin:-7cqw 0 -6cqw}
 .btn.yellow{background:linear-gradient(#ffe45c,#ffb800);box-shadow:inset 0 -1.4cqw 0 #c98a00,inset 0 .7cqw 0 #fff3b0,0 1.6cqw 0 #8a5a2b,0 2.6cqw 2cqw #0004}
 #hNav{position:absolute;left:0;right:0;bottom:0;height:20cqw;display:flex;align-items:flex-end;justify-content:space-around;
   background:repeating-linear-gradient(90deg,#0000 0 2.6cqw,#0000000f 2.6cqw 3cqw),linear-gradient(#7a3f17,#55290c);box-shadow:0 -1.2cqw 0 #d79a5a,0 -1.8cqw 0 #5a2d0e}
@@ -279,15 +277,23 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #gacha #oddsBtn{position:absolute;top:24cqw;left:5cqw}
 #gacha #hBoxWrap{margin-top:14cqw}
 /* giữa màn chính: mô hình chờ lắp kế tiếp, hoặc mời mở hộp */
-#hNext{display:flex;flex-direction:column;align-items:center;gap:6cqw;margin-top:12cqw}
-#hNext .pbox{font-size:3.6cqw;margin-right:2.4em}
-#hNextBtn{width:56cqw;height:19cqw}
-#hNextBtn .t{font-size:8.5cqw;line-height:.95}
-#hNextBtn small{font-size:3.8cqw;font-weight:700;max-width:50cqw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* thanh trên trái: tiến độ đường lắp (thay nút chọn bộ) */
+#hRoad{position:absolute;top:6.4cqw;left:5cqw;width:40cqw;height:11cqw;background:#2b3150cc;border-radius:5.5cqw;padding:1cqw 4cqw;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:.8cqw;box-shadow:inset 0 -.6cqw 0 #0003}
+#hRoad b{color:#fff;font-size:4cqw;line-height:1}
+#hRoad .rBar{height:2.2cqw;border-radius:1.1cqw;background:#ffffff33;overflow:hidden}
+#hRoad .rBar i{display:block;height:100%;background:linear-gradient(90deg,#7be05a,#2fbf4a)}
+/* tiêu điểm: mô hình level kế trên bục sáng + tên, nút chơi to phía dưới */
+#hNext{display:flex;flex-direction:column;align-items:center;margin-top:auto;margin-bottom:34cqw;position:relative}
+#hNext::before{content:"";position:absolute;top:-6cqw;left:50%;width:78cqw;height:62cqw;margin-left:-39cqw;border-radius:50%;background:radial-gradient(closest-side,#fff3c4cc,#ffd98a55 55%,#0000);z-index:-1}
+#hNext .pbox{font-size:4.6cqw;margin-right:2.4em}
+#hNext .nInfo{margin:3cqw 0 4cqw;text-align:center;color:#fff;font-weight:800;line-height:1.15}
+#hNext .nInfo b{display:block;font-size:6cqw}
+#hNext .nInfo small{font-size:3.6cqw;opacity:.9}
+#hNextBtn{width:64cqw;height:17cqw}
+#hNextBtn .t{font-size:9cqw;line-height:.95}
 #hNext .gift{font-size:30cqw;line-height:1}
-#hGoal{width:76cqw;margin-top:3cqw;background:#fffbe9;border-radius:4cqw;padding:2cqw 3cqw;box-shadow:inset 0 -.8cqw 0 #e4d4a4,0 1cqw 2cqw #0002;color:#2b3150;font-weight:800;font-size:3.8cqw;display:flex;flex-direction:column;gap:1cqw}
+#hGoal{width:88cqw;margin-top:1cqw;box-sizing:border-box;background:#fffbe9;border-radius:4cqw;padding:2cqw 3cqw;box-shadow:inset 0 -.8cqw 0 #e4d4a4,0 1cqw 2cqw #0002;color:#2b3150;font-weight:800;font-size:3.8cqw;display:flex;flex-direction:column;gap:1cqw}
 #hGoal:empty{display:none}
-#home.goal .logo{display:none} /* có mục tiêu: nhường chỗ logo trang trí cho thẻ mục tiêu */
 #hGoal .gBar{position:relative;height:5cqw;border-radius:3cqw;background:#e3ddc8;overflow:hidden}
 #hGoal .gBar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(#ffd34d,#f5a400)}
 #hGoal .gBar span{position:relative;display:block;text-align:center;font-size:3.4cqw;line-height:5cqw}
@@ -629,18 +635,14 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   </div>
 
   <div id="home" class="screen show">
-    <button class="btn orange" id="serBtn"><span>📚</span><span class="outline o" id="serName">Khởi động</span></button>
+    <div id="hRoad"><b class="outline" id="hRoadT"></b><div class="rBar"><i id="hRoadBar"></i></div></div>
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">100</span></div>
     <button class="btn blue" id="hSetBtn" aria-label="Cài đặt">⚙</button>
     <div id="hLeft" class="hSide">
       <button class="sideB" id="hColBtn"><i>📚</i><span>Bộ sưu tập</span></button>
     </div>
-    <div class="logo">
-      <div class="r"><b style="--c:#e2342a">X</b><b style="--c:#f5b700">Ế</b><b style="--c:#2fa04f">P</b></div>
-      <div class="r"><b style="--c:#2f7fd6">G</b><b style="--c:#ef7d1a">Ạ</b><b style="--c:#9b59d0">C</b><b style="--c:#e2342a">H</b></div>
-    </div>
-    <div id="hNext"></div>
     <div id="hGoal"></div>
+    <div id="hNext"></div>
     <div id="hDrawer">
       <div class="dHead"><button class="dTab cur" id="hTabWait">🧱<span>Chờ lắp</span></button><button class="dTab" id="hTabDone">✅<span>Đã xong</span></button><b id="hDCount"></b><button id="hDrawerTog" aria-label="Thu gọn / mở">▼</button></div>
       <div id="hLevels"></div>
@@ -1819,12 +1821,14 @@ function renderGoal(){
 }
 function renderHome(){
   const s=curSeries, r=SERIES[s], pend=pendingList(), nx=pend[0], rn=roadNext();
-  renderGacha(); renderGoal(); $('serName').textContent=r.name;
+  renderGacha(); renderGoal();
+  const nb=ALL_IDX.filter(built).length; $('hRoadT').textContent=rn!=null?`🛤 LEVEL ${roadNo(rn)}/${ROAD.length}`:`🏆 Xong ${ROAD.length}/${ROAD.length}`;
+  $('hRoadBar').style.width=100*nb/LEVELS.length+'%';
   $('hNext').innerHTML=rn!=null
-    ?`${pboxHtml(rn,special(rn))}<button class="btn yellow" id="hNextBtn"><span class="t outline o">▶ LEVEL ${roadNo(rn)}</span><small>${LEVELS[rn].name}</small></button>`
+    ?`${pboxHtml(rn,special(rn))}<div class="nInfo outline"><b>${LEVELS[rn].name}</b><small>${levelTargets(LEVELS[rn]).length} mảnh · ${RAR[rarOf(rn)].n}</small></div><button class="btn yellow" id="hNextBtn"><span class="t outline o">▶ LEVEL ${roadNo(rn)}</span></button>`
     :nx!=null?`${pboxHtml(nx,special(nx))}<button class="btn yellow" id="hNextBtn"><span class="t outline o">LẮP TIẾP</span><small>${LEVELS[nx].name}</small></button>`
     :`<div class="gift">🎁</div><button class="btn yellow" id="hNextBtn"><span class="t outline o">MỞ HỘP</span><small>Hết đường · hộp ra bản vàng kim</small></button>`;
-  const list=hTab==='wait'?pend:ALL_IDX.filter(built), hide=!!S.hideWait&&S.tut>=6; // đang hướng dẫn thì luôn mở
+  const list=hTab==='wait'?pend:ALL_IDX.filter(built), hide=!S.showWait; // mặc định thu gọn: màn chính chỉ 1 tiêu điểm
   $('hTabWait').classList.toggle('cur',hTab==='wait'); $('hTabDone').classList.toggle('cur',hTab==='done');
   $('hDCount').textContent=`${list.length} bộ`; $('hDrawer').classList.toggle('hide',hide); $('hDrawerTog').textContent=hide?'▲':'▼';
   $('hLevels').classList.toggle('few',list.length<=2); // ≤2 thẻ không cần cuộn → để bong bóng hướng dẫn tràn ra ngoài được
@@ -1832,9 +1836,10 @@ function renderHome(){
     :list.map(i=>`<button class="wCard${special(i)?' sp':''}" data-i="${i}" aria-label="${LEVELS[i].name}"><b class="nm outline">${LEVELS[i].name}</b>${pboxHtml(i,special(i))}`
       +(hTab==='wait'?'<i class="new">NEW</i><i class="pct outline">0%</i>':`<i class="pct outline">100% ${'★'.repeat(best(i))}</i>`)+'</button>').join('');
 }
-$('hTabWait').onclick=()=>{ sfx.pick(); hTab='wait'; renderHome(); };
-$('hTabDone').onclick=()=>{ sfx.pick(); hTab='done'; renderHome(); };
-$('hDrawerTog').onclick=()=>{ sfx.pick(); S.hideWait=!S.hideWait; save(); renderHome(); };
+$('hTabWait').onclick=()=>{ sfx.pick(); hTab='wait'; S.showWait=true; renderHome(); };
+$('hTabDone').onclick=()=>{ sfx.pick(); hTab='done'; S.showWait=true; renderHome(); };
+$('hDrawerTog').onclick=()=>{ sfx.pick(); S.showWait=!S.showWait; save(); renderHome(); };
+$('hDrawer').querySelector('.dHead').onclick=e=>{ if(!e.target.closest('button')) $('hDrawerTog').click(); };
 $('hLevels').onclick=e=>{ const b=e.target.closest('[data-i]'); if(!b) return; sfx.pick(); openBlueprint(+b.dataset.i); };
 // ====================== BỘ SƯU TẬP ======================
 function showSeries(){
@@ -2112,7 +2117,7 @@ const revive=()=>{ revived=true; mistakes=LIVES-1; done=false; updateLives(); sh
 $('lAd').onclick=()=>watchAd(revive);
 $('lCoin').onclick=()=>{ if(S.coins<REVIVE_COST){ toast(`Cần ${REVIVE_COST}🪙`); sfx.wrong(); return; } S.coins-=REVIVE_COST; save(); revive(); };
 $('sMenu').onclick=$('backBtn').onclick=$('lMenu').onclick=toMenu;
-$('serBtn').onclick=$('hColBtn').onclick=()=>{ sfx.pick(); showSeries(); };
+$('hColBtn').onclick=()=>{ sfx.pick(); showSeries(); };
 $('hHomeTab').onclick=()=>sfx.pick();
 $('gachaBtn').onclick=openGacha;
 $('gachaClose').onclick=()=>{ sfx.back(); show('gacha',false); renderHome(); };

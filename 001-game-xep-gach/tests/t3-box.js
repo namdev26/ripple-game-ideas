@@ -88,14 +88,15 @@ module.exports = [
       ok($('hColBtn').closest('#hLeft') && $('hLevels').closest('#hDrawer') && !$('hRight') && $('hSetBtn'), 'cột trái: nút chức năng; chờ lắp thành ngăn kéo dưới; có nút cài đặt');
       const pend = [...$('hLevels').children];
       ok(pend.length === 2 && pend[1].classList.contains('sp') && pend.every(e => e.querySelector('.pbox') && e.textContent.includes('NEW') && e.textContent.includes('0%')), 'thẻ chờ lắp: hộp sản phẩm, NEW, 0%, bản đặc biệt vàng');
-      ok($('hDrawer').textContent.includes('2 bộ') && R('hDrawer').bottom <= R('hNav').top + 1 && R('hLevels').height > 0, 'ngăn kéo trên thanh dưới, đếm số bộ');
-      ok($('hNext').querySelector('.pbox') && !hit(R('hNext'), R('hLeft')) && !hit(R('hNext'), R('hDrawer')), 'giữa: hộp lắp tiếp, không đè cột trái / ngăn kéo');
-      $('hTabDone').click(); ok($('hLevels').children.length === 1 && $('hLevels').textContent.includes('100%') && $('hDrawer').textContent.includes('1 bộ'), 'tab Đã xong: mô hình đã lắp');
-      $('hTabWait').click(); $('hDrawerTog').click(); ok(R('hLevels').height === 0 && S.hideWait, 'thu gọn ngăn kéo');
-      showHome(); ok(R('hLevels').height === 0, 'nhớ trạng thái thu gọn'); $('hDrawerTog').click(); ok(R('hLevels').height > 0 && !S.hideWait, 'mở lại');
+      ok($('hDrawer').textContent.includes('2 bộ') && R('hDrawer').bottom <= R('hNav').top + 1 && R('hLevels').height === 0, 'ngăn kéo mặc định thu gọn thành 1 thanh trên thanh dưới, đếm số bộ');
+      ok(!$('serBtn') && !document.querySelector('#home .logo') && $('hRoadT').textContent.includes('LEVEL 2/16'), 'bỏ nút bộ + logo; thanh trên hiện tiến độ đường lắp');
+      ok($('hNext').querySelector('.pbox') && $('hNext').textContent.includes('Ngôi nhà') && !hit(R('hNext'), R('hLeft')) && !hit(R('hNext'), R('hDrawer')) && !hit(R('hNextBtn'), R('hNav')), 'tiêu điểm: hộp level kế + tên + nút chơi, không đè cột trái / ngăn kéo / thanh dưới');
+      $('hTabDone').click(); ok(R('hLevels').height > 0 && $('hLevels').children.length === 1 && $('hLevels').textContent.includes('100%') && $('hDrawer').textContent.includes('1 bộ'), 'chạm tab Đã xong: mở ngăn kéo, mô hình đã lắp');
+      $('hTabWait').click(); $('hDrawerTog').click(); ok(R('hLevels').height === 0 && !S.showWait, 'thu gọn ngăn kéo');
+      $('hDrawerTog').click(); showHome(); ok(R('hLevels').height > 0 && S.showWait, 'nhớ trạng thái mở'); $('hDrawerTog').click();
       ok([...document.querySelectorAll('#home *')].every(e => { const r = e.getBoundingClientRect(); return !r.width || (r.left >= A.left - 1 && r.right <= A.right + 1); }), 'không tràn ngang');
       $('hNextBtn').click(); ok($('bpView').classList.contains('show') && bpI === 1, 'LEVEL 2 mở sách Ngôi nhà');
-      showHome(); $('hLevels').children[1].click(); ok($('bpView').classList.contains('show') && bpI === 2, 'chạm thẻ trong ngăn kéo mở sách');
+      showHome(); $('hDrawerTog').click(); $('hLevels').children[1].click(); ok($('bpView').classList.contains('show') && bpI === 2, 'chạm thẻ trong ngăn kéo mở sách');
       showHome(); $('hSetBtn').click(); ok($('setModal').classList.contains('show'), 'nút cài đặt mở bảng cài đặt');
   } },
   { name: 'gacha-rieng', pre: save0({ coins: 500, best: { 'Cây nấm': 3 }, next: { g: { i: 5, sp: false } }, tut: 6 }), post: async () => {
