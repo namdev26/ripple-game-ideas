@@ -18,6 +18,7 @@ module.exports = [
   { name: 'hb-iap-duoi', pre: save0(ST), post: async () => { openIap(); $('iapBody').scrollTop = 9999; } },
   { name: 'hb-trung', pre: save0(ST), post: async () => { openUnbox(13, false, true, ALL_IDX, shopPrice(13)); ubT.forEach(clearTimeout); ubSpin = null; ubGo(3); ubGo(5); } },
   { name: 'hb-kho', pre: save0({ ...ST, dup: { 'Cây nấm': 2, 'Dưa hấu': 1, 'Cầu Vàng': 1, 'Đền Artemis': 1 } }), post: async () => { $('hKhoBtn').click(); } },
+  { name: 'hb-ad', pre: save0(ST), post: async () => { show('adView', true); } },
   { name: 'hb-ke', pre: save0(ST), post: async () => { openShelf(); } },
   { name: 'hb-tile', pre: save0(ST), post: async () => { showHome(1); $('oddsBtn').click(); } },
 ];

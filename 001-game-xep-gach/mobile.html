@@ -140,9 +140,17 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .logo b::before{content:"";position:absolute;top:-2.3cqw;left:50%;transform:translateX(-50%);width:6.5cqw;height:2.7cqw;background:var(--c);border-radius:1cqw 1cqw 0 0;box-shadow:inset 0 -.8cqw 0 #0002}
 @keyframes bob{50%{transform:translateY(-2cqw)}}
 #hName{font-size:8cqw;line-height:1;margin-top:-1cqw}
-#playBtn{margin-top:7cqw;width:66cqw;height:21cqw}
-#playBtn .t{font-size:10.5cqw;line-height:.95}
-#playBtn small{font-size:4.2cqw;font-weight:700;opacity:.95}
+#hBtns{display:flex;gap:4cqw;margin-top:7cqw}
+#playBtn,#adBtn{width:31cqw;height:19cqw}
+#playBtn:only-child,#hBtns.one #playBtn{width:66cqw}
+#playBtn .t,#adBtn .t{font-size:8cqw;line-height:.95;white-space:nowrap}
+#playBtn small,#adBtn small{font-size:3.6cqw;font-weight:700;opacity:.95}
+/* quảng cáo giả lập: đếm ngược rồi mở hộp miễn phí */
+#adView{background:#000d;z-index:20}
+#adView .adCard{width:76cqw;padding:8cqw 5cqw;border-radius:5cqw;background:linear-gradient(135deg,#ffd84d,#ff8a1a);text-align:center;color:#2b3150;font-weight:800;font-size:5cqw}
+#adView .adCard i{display:block;font-style:normal;font-size:20cqw;line-height:1.2}
+#adView .adTag{position:absolute;top:8cqw;left:6cqw;background:#fff3;color:#fff;font-size:3.6cqw;font-weight:800;padding:1cqw 3cqw;border-radius:2cqw}
+#adView .adSec{position:absolute;top:8cqw;right:6cqw;width:9cqw;height:9cqw;border-radius:50%;border:.6cqw solid #fff;color:#fff;font-size:4.6cqw;font-weight:800;display:flex;align-items:center;justify-content:center}
 #hLevels{display:flex;flex-direction:column;align-items:center;gap:3cqw;max-height:64cqw;padding:1.5cqw 1cqw;overflow-y:auto;scrollbar-width:none;touch-action:pan-y}
 #hLevels::-webkit-scrollbar{display:none}
 .lvc{width:15cqw;height:15cqw;font-size:7cqw;flex:none}
@@ -519,6 +527,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <button class="btn green" id="khoAll"><span class="outline g"></span></button>
   </div>
 
+  <div id="adView" class="screen"><span class="adTag">Quảng cáo · giả lập</span><span class="adSec" id="adSec">3</span>
+    <div class="adCard"><i>🧱</i>Game hay khác đang chờ bạn!<br><small>Xem hết để mở hộp miễn phí</small></div></div>
+
   <div id="iap" class="screen ov">
     <div class="sHead outline" style="margin-top:10cqw">ƯU ĐÃI</div>
     <button class="btn blue close" id="iapClose" aria-label="Đóng">✕</button>
@@ -567,7 +578,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     </div>
     <div id="hBoxWrap"><div id="hBox" class="mbox" role="button" aria-label="Lắc thử hộp"><i class="lid"></i><i class="body"><b>?</b></i></div></div>
     <div id="hName" class="outline"></div>
-    <button class="btn yellow" id="playBtn"><span class="t outline o">MỞ HỘP</span><small id="playSub"></small></button>
+    <div id="hBtns"><button class="btn yellow" id="adBtn"><span class="t outline o">AD 🎬</span><small>Xem quảng cáo</small></button><button class="btn yellow" id="playBtn"><span class="t outline o">MỞ HỘP</span><small id="playSub"></small></button></div>
     <div id="hNav">
       <button class="navB" id="shopBtn"><i>🛒</i><span class="outline">Cửa hàng</span></button>
       <button class="navB cur" id="hHomeTab"><i>🎁</i><span class="outline">Hộp bí ẩn</span></button>
@@ -1697,8 +1708,9 @@ function renderHome(){
   const dn=dupCount(); $('khoN').textContent=dn; $('khoN').style.display=dn?'':'none';
   $('hBox').style.setProperty('--bc',r.c);
   $('hName').textContent=`Đã có ${ALL_IDX.filter(owned).length}/${LEVELS.length} mô hình`;
-  $('playBtn').querySelector('.t').textContent='MỞ HỘP';
-  $('playSub').textContent=c?`Hộp bí ẩn · ${c}🪙`:'Miễn phí';
+  $('playBtn').querySelector('.t').textContent=c?`🪙 ${c}`:'MỞ HỘP';
+  $('playSub').textContent=c?'Mở bằng xu':'Miễn phí';
+  $('adBtn').style.display=c?'':'none'; $('hBtns').classList.toggle('one',!c); // hộp đầu tặng: chỉ 1 nút
   $('hWait').style.display=pend.length?'':'none';
   $('hLevels').classList.toggle('few',pend.length<=3); // ≤3 ô không cần cuộn → để bong bóng hướng dẫn tràn ra ngoài được
   $('hLevels').innerHTML=pend.map(i=>`<button class="sideB pend${special(i)?' sp':''}" data-i="${i}" aria-label="${LEVELS[i].name}"><i><img src="${thumbLevel(i,special(i))}" alt=""></i><span>LẮP</span><b class="badge">!</b></button>`).join('');
@@ -1731,8 +1743,8 @@ function peekBox(){
   if (!S.next.g){ S.next.g=owned(0)?rollBox(ALL_IDX):{i:0,sp:false}; save(); } // hộp đầu luôn ra Cây nấm
   return S.next.g;
 }
-function openBox(){
-  const nx=peekBox(), c=boxCost();
+function openBox(viaAd){
+  const nx=peekBox(), c=viaAd?0:boxCost();
   if (S.coins<c){ toast(`Không đủ xu (cần ${c}🪙)`); sfx.wrong(); return; }
   const dup=isDup(nx)?shopPrice(nx.i):0, nm=LEVELS[nx.i].name;
   S.coins-=c; if(dup) S.dup[nm]=(S.dup[nm]||0)+1; else grant(nx.i,nx.sp); // trùng → cất kho, bán lúc nào cũng được
@@ -1746,6 +1758,11 @@ $('hBox').onclick=()=>{
   rattle(rarOf(nx.i)); if (nx.sp) tone(2637,0.14,'sine',0.07,0.3);
 };
 $('playBtn').onclick=()=>{ sfx.pick(); openBox(); };
+// xem quảng cáo (giả lập) để mở hộp: đếm ngược 3 giây rồi mở miễn phí
+$('adBtn').onclick=()=>{
+  sfx.pick(); let n=3; $('adSec').textContent=n; show('adView',true);
+  const t=setInterval(()=>{ n--; $('adSec').textContent=n; if(n>0) return; clearInterval(t); show('adView',false); openBox(true); },1000);
+};
 $('oddsBtn').onclick=()=>{
   const pct=p=>(Math.round(p*1000)/10).toString().replace('.',',')+'%';
   const rows=!owned(0)?'<p>Hộp đầu tiên luôn ra <b>Cây nấm</b>.</p>':''

@@ -4,7 +4,7 @@ const save0 = o => new Function("localStorage.setItem('xepgach.v2'," + JSON.stri
 
 module.exports = [
   { name: 'hop-dau-mien-phi', post: async () => {
-      ok($('playBtn').textContent.includes('Miễn phí'), 'nút mở hộp phải ghi Miễn phí: ' + $('playBtn').textContent);
+      ok($('playBtn').textContent.includes('Miễn phí') && $('adBtn').offsetWidth === 0, 'hộp đầu: chỉ 1 nút Miễn phí: ' + $('playBtn').textContent);
       $('playBtn').click();
       ok($('unbox').classList.contains('show'), 'phải mở màn mở hộp');
       await wait(5600);
@@ -72,13 +72,20 @@ module.exports = [
       ok(owned(15), 'hộp chung ra được mô hình của bộ chưa mở');
       $('ubBook').click(); ok($('bpView').classList.contains('show') && bpI === 15, 'mở sách lắp được luôn');
   } },
+  { name: 'mo-bang-quang-cao', pre: save0({ coins: 0, best: { 'Cây nấm': 3 }, next: { g: { i: 5, sp: false } }, tut: 6 }), post: async () => {
+      ok($('adBtn').offsetWidth > 0 && $('adBtn').textContent.includes('AD') && $('playBtn').textContent.includes('100'), '2 nút: AD + xu');
+      $('playBtn').click(); ok(!$('unbox').classList.contains('show'), 'không đủ xu thì nút xu không mở');
+      $('adBtn').click(); ok($('adView').classList.contains('show') && !$('unbox').classList.contains('show'), 'xem quảng cáo giả lập trước');
+      await wait(3600);
+      ok(!$('adView').classList.contains('show') && $('unbox').classList.contains('show') && owned(5) && S.coins === 0, 'xem xong → mở hộp miễn phí: ' + S.coins);
+  } },
   { name: 'khong-du-xu', pre: save0({ coins: 10, best: { 'Cây nấm': 3 } }), post: async () => {
       $('playBtn').click();
       ok(!$('unbox').classList.contains('show') && S.coins === 10, 'không đủ xu thì không mở');
   } },
   { name: 'du-bo-van-mo', pre: save0({ coins: 200, best: { 'Cây nấm': 1, 'Ngôi nhà': 1, 'Dưa hấu': 1 }, own: { 'Lâu đài': true } }), post: async () => {
       showHome(0);
-      ok(!$('playBtn').classList.contains('dis') && $('playBtn').textContent.includes('MỞ HỘP') && $('hName').textContent.includes('4/16'), 'đủ bộ vẫn mở hộp chung: ' + $('hName').textContent);
+      ok(!$('playBtn').classList.contains('dis') && $('playBtn').textContent.includes('100') && $('hName').textContent.includes('4/16'), 'đủ bộ vẫn mở hộp chung: ' + $('hName').textContent);
       $('playBtn').click(); ok($('unbox').classList.contains('show') && S.coins < 200, 'mở được');
   } },
   { name: 'lac-thu', pre: save0({ coins: 100, best: { 'Cây nấm': 3 } }), post: async () => {
@@ -115,7 +122,7 @@ module.exports = [
       ok($('oddsBtn').closest('#hLeft') && $('hLevels').closest('#hRight') && $('hSetBtn'), 'cột trái: nút chức năng, cột phải: chờ lắp, có nút cài đặt');
       const pend = [...$('hLevels').children];
       ok(pend.length === 2 && pend[1].classList.contains('sp') && pend.every(e => e.textContent.includes('LẮP')), 'ô chờ lắp có nhãn LẮP, bản đặc biệt vàng');
-      ok(R('playBtn').bottom < R('hNav').top && !hit(R('playBtn'), R('hLeft')) && !hit(R('playBtn'), R('hRight')) && !hit(R('hBox'), R('hLeft')) && !hit(R('hBox'), R('hRight')), 'giữa không đè lên cột hai bên / thanh dưới');
+      ok(R('playBtn').bottom < R('hNav').top && !hit(R('playBtn'), R('hLeft')) && !hit(R('playBtn'), R('hRight')) && !hit(R('adBtn'), R('hLeft')) && !hit(R('adBtn'), R('playBtn')) && Math.abs(R('adBtn').top - R('playBtn').top) < 2 && !hit(R('hBox'), R('hLeft')) && !hit(R('hBox'), R('hRight')), 'giữa không đè lên cột hai bên / thanh dưới');
       ok([...document.querySelectorAll('#home *')].every(e => { const r = e.getBoundingClientRect(); return !r.width || (r.left >= A.left - 1 && r.right <= A.right + 1); }), 'không tràn ngang');
       $('hSetBtn').click(); ok($('setModal').classList.contains('show'), 'nút cài đặt mở bảng cài đặt');
   } },
