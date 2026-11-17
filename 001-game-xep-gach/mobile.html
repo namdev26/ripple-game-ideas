@@ -46,12 +46,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #setBtn,#backBtn{position:absolute;width:11.5cqw;height:11.5cqw;border:none;border-radius:3.4cqw;background:#5560bf99;color:#fff;font-size:7cqw;cursor:pointer;
   display:flex;align-items:center;justify-content:center;padding:0;box-shadow:inset 0 -.7cqw 0 #3d47a066}
 #hud #setBtn,#backBtn{position:static}
+#hud #setBtn{margin-left:auto}
 #backBtn{font-size:6.4cqw;font-weight:800}
 #hud{align-items:center}
-#hud .coins{margin-left:auto;margin-right:1.5cqw;min-width:0;height:7cqw;padding:0 2cqw 0 1cqw;gap:1cqw;justify-content:flex-start;font-size:3.8cqw;border-radius:2.4cqw}
-#hud .coin{position:relative;left:0;top:0;transform:none;flex:none;width:5.6cqw;height:5.6cqw}
-#hud .coin::after{inset:1.6cqw}
-#hud .plus{display:none}
 #lives{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:.8cqw;font-size:6.5cqw;line-height:1}
 #lives i{font-style:normal;color:#ff4d5e;text-shadow:0 .5cqw 0 #a1182a}
 #lives i:not(.on){color:#ffffff40;text-shadow:none}
@@ -389,7 +386,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   <div id="hud">
     <button id="backBtn" aria-label="Về màn chính">◀</button>
     <div id="lives" aria-label="Mạng"></div>
-    <div class="coins" id="coinPill"><span class="coin"></span><span class="plus">+</span><span class="cn">100</span></div>
     <button id="setBtn" aria-label="Cài đặt">⚙️</button>
   </div>
   <div id="stepBook"><b id="lvName" class="outline"></b><img id="sbImg" alt=""><div id="sbSide"><div id="sbParts"></div><div id="sbNo"></div></div></div>
@@ -1238,7 +1234,7 @@ function toast(msg,ms=1700){
 }
 function updateCoins(bump){
   document.querySelectorAll('.coins .cn').forEach(e=>e.textContent=S.coins);
-  if (bump){ const p=$('coinPill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump'); }
+  if (bump) document.querySelectorAll('.coins').forEach(p=>{ p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump'); });
 }
 function updateCount(){
   $('cDone').textContent=targets.filter(t=>t.placed).length; $('cAll').textContent=targets.length;
@@ -1491,7 +1487,7 @@ function useHint(){
   if (done) return;
   if (hintsLeft<=0){
     if (S.coins<HINT_COST) return toast(`Cần ${HINT_COST} xu để mua gợi ý`);
-    S.coins-=HINT_COST; save(); updateCoins(true); hintsLeft++;
+    S.coins-=HINT_COST; save(); updateCoins(true); hintsLeft++; toast(`Mua gợi ý −${HINT_COST} xu (còn ${S.coins})`); // màn lắp không hiện xu
   }
   // mảnh lắp được ngay, nằm thấp nhất
   const t=targets.filter(t=>!t.placed&&t.step===step&&supported(t)).sort((a,b)=>a.y-b.y)[0];
@@ -1864,7 +1860,6 @@ $('rNext').onclick=()=>{
   if (pend.length){ sfx.pick(); $('result').classList.remove('show'); return openBlueprint(pend[0]); } // còn mô hình chờ lắp: mở sách luôn
   showHome();
 };
-$('coinPill').onclick=()=>toast('Lắp xong mô hình để nhận thêm xu');
 
 // zoom
 const camDist=()=>camera.position.distanceTo(controls.target);
