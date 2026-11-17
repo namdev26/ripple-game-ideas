@@ -64,13 +64,13 @@ module.exports = [
       ok($('oddsModal').classList.contains('show') && boxPool().every(i => t.includes(LEVELS[i].name)) && !t.includes('Cây nấm') && !t.includes('Ngôi nhà') && ['12%', 'chưa có'].every(s => t.includes(s)), 'bảng tỉ lệ: chỉ mô hình chưa có, trừ level kế: ' + t);
   } },
   { name: 'cua-hang', pre: save0({ coins: 200, best: { 'Cây nấm': 3 }, next: { g: { i: 5, sp: false } } }), post: async () => {
-      $('shopBtn').click();
-      ok($('shop').classList.contains('show'), 'phải mở cửa hàng');
-      const items = document.querySelectorAll('#mGrid .sRowL .mItem');
-      ok(items.length === 16 && document.querySelectorAll('#mGrid .sRow').length === 3, 'cả 16 mô hình, mỗi bộ 1 hàng: ' + items.length);
+      $('hColBtn').click();
+      ok($('series').classList.contains('show'), 'phải mở bộ sưu tập');
+      const items = document.querySelectorAll('#sList .sRowL .mItem');
+      ok(items.length === 16 && document.querySelectorAll('#sList .sRow').length === 3, 'bộ sưu tập: cả 16 mô hình, mỗi bộ 1 hàng: ' + items.length);
       ok(items[0].textContent.includes('Đã có') && items[1].textContent.includes('miễn phí'), 'Cây nấm đã có, Ngôi nhà là level kế miễn phí');
       ok([...items].every(e => e.querySelector('.pbox') && !e.querySelector(':scope > img')), 'cửa hàng hiển thị hộp sản phẩm, không phải ảnh mô hình trần');
-      items[6].click(); ok($('mImg').querySelector('.pbox'), 'ô chọn cũng hiện hộp');
+      items[6].click(); ok($('shop').classList.contains('show') && mSel === 6 && $('mImg').querySelector('.pbox'), 'chạm mô hình chưa có → khung mua của tiệm gạch');
       $('mBuy').click();
       ok(S.coins === 50 && owned(6) && !special(6), 'mua Tượng Zeus 150: ' + S.coins);
       ok($('unbox').classList.contains('show') && $('ubReel').offsetWidth === 0, 'mua xong có mở hộp, không quay');
@@ -78,14 +78,14 @@ module.exports = [
       await wait(4200); ok($('ubBtns').classList.contains('on') && $('ubPrize').textContent.includes('Tượng Zeus'), 'hiệu ứng ngắn phải xong, hiện hộp Tượng Zeus');
   } },
   { name: 'cua-hang-thieu-xu', pre: save0({ coins: 50, best: { 'Cây nấm': 3 } }), post: async () => {
-      $('shopBtn').click(); document.querySelectorAll('#mGrid .sRowL .mItem')[3].click(); $('mBuy').click();
+      $('hColBtn').click(); document.querySelectorAll('#sList .sRowL .mItem')[3].click(); $('mBuy').click();
       ok(S.coins === 50 && !owned(3) && !$('unbox').classList.contains('show') && $('needModal').classList.contains('show'), 'thiếu xu không mua được Lâu đài, hiện bảng thiếu xu');
   } },
   { name: 'home-bo-cuc', pre: save0({ coins: 100, best: { 'Cây nấm': 3 }, own: { 'Ngôi nhà': true, 'Dưa hấu': true }, sp: { 'Dưa hấu': true }, tut: 6 }), post: async () => {
       const R = e => $(e).getBoundingClientRect(), A = R('app'), hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
       ok(['shopBtn', 'gachaBtn', 'hHomeTab', 'shelfBtn'].every(id => $(id).closest('#hNav')) && $('hNav').children.length === 4 && Math.abs(R('hNav').bottom - A.bottom) < 2, 'thanh dưới: cửa hàng, hộp bí ẩn, trang chủ, kệ');
       ok(!$('playBtn').closest('#home') && $('playBtn').closest('#gacha') && !$('hBox').closest('#home'), 'gacha không còn ở màn chính');
-      ok($('hColBtn').closest('#hLeft') && $('hLevels').closest('#hDrawer') && !$('hRight') && $('hSetBtn'), 'cột trái: nút chức năng; chờ lắp thành ngăn kéo dưới; có nút cài đặt');
+      ok($('hColBtn').closest('#hLeft') && $('hLevels').closest('#hDrawer') && $('hIapBtn').closest('#hRight') && /\d+:\d\d/.test($('hIapT').textContent) && $('hSetBtn'), 'cột trái: bộ sưu tập; phải: Ưu đãi có đồng hồ; chờ lắp thành ngăn kéo dưới; có nút cài đặt');
       const pend = [...$('hLevels').children];
       ok(pend.length === 2 && pend[1].classList.contains('sp') && pend.every(e => e.querySelector('.pbox') && e.textContent.includes('NEW') && e.textContent.includes('0%')), 'thẻ chờ lắp: hộp sản phẩm, NEW, 0%, bản đặc biệt vàng');
       ok($('hDrawer').textContent.includes('2 bộ') && R('hDrawer').bottom <= R('hNav').top + 1 && R('hLevels').height === 0, 'ngăn kéo mặc định thu gọn thành 1 thanh trên thanh dưới, đếm số bộ');
@@ -106,28 +106,27 @@ module.exports = [
       await wait(5600); $('ubLater').click(); ok($('gacha').classList.contains('show'), 'xong quay về màn hộp bí ẩn để quay tiếp');
       $('gachaClose').click(); ok($('home').classList.contains('show') && !$('gacha').classList.contains('show'), 'đóng về màn chính');
   } },
-  { name: 'shop-gop', pre: save0({ coins: 120, best: { 'Cây nấm': 3 }, tut: 6 }), post: async () => {
-      const B = $('shopBody'), top = id => $(id).offsetTop - B.offsetTop, near = id => Math.abs(B.scrollTop - Math.min(top(id), B.scrollHeight - B.clientHeight)) < 3;
-      ok(!$('iap') && !$('hIapBtn'), 'không còn màn Ưu đãi riêng');
+  { name: 'shop-tach', pre: save0({ coins: 120, best: { 'Cây nấm': 3 }, tut: 6 }), post: async () => {
+      $('shopBtn').click();
+      ok($('shop').classList.contains('show') && $('shop').textContent.includes('TIỆM GẠCH') && document.querySelectorAll('#mShelf .mItem').length === 6, 'Tiệm Gạch: chỉ kệ hàng hôm nay');
+      ok(!$('shop').querySelector('.coinPack, .setPack, .dinoPack, .sRow, #shopTabs'), 'tiệm gạch không có nạp tiền / toàn bộ mô hình');
+      $('shopAll').click(); ok($('series').classList.contains('show'), 'Xem tất cả → bộ sưu tập');
+      $('serClose').click(); $('shopClose').click();
       document.querySelector('#home .coins').click();
-      ok($('shop').classList.contains('show') && near('secCoin'), 'chạm ô xu → cửa hàng, cuộn tới mục xu');
-      const packs = B.querySelectorAll('#secCoin .coinPack'), sets = B.querySelectorAll('#secOffer .setPack');
+      const B = $('iapBody'); ok($('iap').classList.contains('show') && Math.abs(B.scrollTop - Math.min($('secCoin').offsetTop - B.offsetTop, B.scrollHeight - B.clientHeight)) < 3, 'chạm ô xu → Ưu Đãi, cuộn tới gói xu');
+      const packs = B.querySelectorAll('.coinPack'), sets = B.querySelectorAll('.setPack');
       ok(packs.length >= 6 && [...packs].every(p => /\d/.test(p.textContent) && p.querySelector('.price')), 'gói xu kèm giá: ' + packs.length);
       ok(sets.length >= 2 && [...sets].every(p => p.querySelector('img') && p.querySelector('.price')), 'gói bộ LEGO mới có ảnh');
       const dino = $('offerBody').firstElementChild;
       ok(dino && dino.classList.contains('dinoPack') && dino.querySelector('.dHero .pbox .pf img') && !/🦖|🦕/.test(dino.querySelector('.dHero').textContent) && dino.querySelectorAll('.dIt img').length >= 2 && /Khủng long/i.test(dino.textContent) && dino.querySelector('.price') && dino.querySelectorAll('.dIt').length >= 3 && /\d+:\d\d:\d\d/.test(dino.textContent), 'thẻ bộ khủng long: hộp LEGO có ảnh khủng long dựng bằng gạch, quà kèm, giá, đếm ngược');
-      ok($('secOffer').textContent.includes('quảng cáo') && B.querySelector('#secOffer .starter .price'), 'gói khởi đầu + bỏ quảng cáo');
-      ok(B.querySelectorAll('#secModel #mGrid .sRowL .mItem').length === 16, 'mô hình nằm chung một màn cuộn');
-      const tabs = [...document.querySelectorAll('#shopTabs button')];
-      ok(tabs.length === 3 && tabs.map(t => t.dataset.s).join() === 'secOffer,secModel,secCoin', 'tab dưới: ưu đãi, mô hình, xu');
-      tabs[1].click(); ok(near('secModel') && tabs[1].classList.contains('cur'), 'tab mô hình cuộn tới mục mô hình');
-      tabs[0].click(); ok(B.scrollTop === 0 && tabs[0].classList.contains('cur'), 'tab ưu đãi về đầu');
+      ok($('offerBody').textContent.includes('quảng cáo') && B.querySelector('.starter .price') && !B.querySelector('.mItem'), 'gói khởi đầu + bỏ quảng cáo, không bày mô hình');
       packs[0].querySelector('.price').click();
       ok(S.coins === 120 && $('toast').classList.contains('show'), 'nạp chỉ giả lập: không cộng xu, báo bản thử');
-      $('shopClose').click(); ok(!$('shop').classList.contains('show') && $('home').classList.contains('show'), 'đóng về màn chính');
+      $('iapClose').click(); ok(!$('iap').classList.contains('show') && $('home').classList.contains('show'), 'đóng về màn chính');
+      $('hIapBtn').click(); ok($('iap').classList.contains('show') && $('iapBody').scrollTop === 0, 'nút Ưu đãi ở màn chính mở từ đầu'); $('iapClose').click();
       $('gachaBtn').click(); document.querySelector('#gacha .coins').click();
-      ok($('shop').classList.contains('show') && +getComputedStyle($('shop')).zIndex > +getComputedStyle($('gacha')).zIndex, 'mở từ màn hộp bí ẩn, nằm trên');
-      $('shopClose').click(); ok($('gacha').classList.contains('show') && !$('shop').classList.contains('show'), 'đóng thì quay lại màn hộp bí ẩn');
+      ok($('iap').classList.contains('show') && +getComputedStyle($('iap')).zIndex > +getComputedStyle($('gacha')).zIndex, 'mở từ màn hộp bí ẩn, nằm trên');
+      $('iapClose').click(); ok($('gacha').classList.contains('show'), 'đóng thì quay lại màn hộp bí ẩn');
   } },
 ];
 module.exports.lib = require('./t4-build.js').lib;

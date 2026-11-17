@@ -13,8 +13,8 @@ module.exports = [
   { name: 'nhay-coc', pre: save0({ tut: 6, coins: 300, best: { 'Cây nấm': 3 } }), post: async () => {
       const cmc = LEVELS.findIndex(l => l.name === 'Chùa Một Cột'), k = ROAD.indexOf(cmc);
       ok(k > 2, 'Chùa Một Cột ở xa trên đường: ' + k);
-      openShop('secModel'); document.querySelector(`#mGrid .mItem[data-i="${cmc}"]`).click(); $('mBuy').click();
-      ok(S.coins === 300 - shopPrice(cmc) && owned(cmc), 'mua trước: ' + S.coins);
+      const pr = buyPrice(cmc); openShop(cmc); $('mBuy').click();
+      ok(S.coins === 300 - pr && owned(cmc), 'mua trước: ' + S.coins);
       S.best['Chùa Một Cột'] = 2; save();
       ok(roadNext() === ROAD[1], 'nhảy cóc xong vẫn quay về Lv2');
       ROAD.slice(1, k).forEach(i => S.best[LEVELS[i].name] = 1); save(); showHome();
@@ -31,7 +31,7 @@ module.exports = [
   } },
   { name: 'thieu-xu', pre: save0({ tut: 6, coins: 100, best: { 'Cây nấm': 3 } }), post: async () => {
       const ld = LEVELS.findIndex(l => l.name === 'Lâu đài');
-      openShop('secModel'); document.querySelector(`#mGrid .mItem[data-i="${ld}"]`).click(); $('mBuy').click();
+      openShop(ld); $('mBuy').click();
       ok($('needModal').classList.contains('show') && $('needModal').textContent.includes('Thiếu ' + (shopPrice(ld) - 100)), 'bảng thiếu xu');
       ok(S.goal === 'Lâu đài' && !owned(ld) && S.coins === 100, 'tự ghim mục tiêu, chưa trừ xu');
       ok($('needPlay').textContent.includes('LEVEL 2') && $('needBox').textContent.includes('100') && $('needAd').textContent.includes('30'), '3 lối: lắp level kế, hộp, QC');
@@ -67,22 +67,22 @@ module.exports = [
       ok(S.coins === 90, 'QC +30 tối đa 3 lần/ngày: ' + S.coins);
   } },
   { name: 'ke-hom-nay', budget: 30000, pre: save0({ tut: 6, coins: 500, best: { 'Cây nấm': 3 }, goal: 'Khuê Văn Các' }), post: async () => {
-      openShop('secModel');
+      openShop();
       const ids = () => [...document.querySelectorAll('#mShelf .mItem')].map(e => +e.dataset.i), kv = LEVELS.findIndex(l => l.name === 'Khuê Văn Các');
       const a = ids();
       ok(a.length === 6 && new Set(a).size === 6 && a.every(i => !owned(i) && i !== roadNext()), 'kệ 6 ô, chưa có, không gồm level kế (miễn phí): ' + a);
       ok(a.includes(kv) && a.includes(ROAD[2]) && a.includes(ROAD[3]), 'kệ có mục tiêu + 2 mô hình sắp tới trên đường');
       const sale = document.querySelectorAll('#mShelf .mItem.sale');
       ok(sale.length === 1 && rarOf(+sale[0].dataset.i) > 0 && buyPrice(+sale[0].dataset.i) === Math.round(shopPrice(+sale[0].dataset.i) * 0.8 / 5) * 5, '1 ô hiếm/huyền thoại giảm 20%');
-      ok(/\d+:\d\d:\d\d/.test($('secModel').textContent) && S.daily.d === new Date().toDateString(), 'đếm ngược tới lúc đổi kệ, lưu theo ngày');
+      ok(/\d+:\d\d:\d\d/.test($('shop').textContent) && S.daily.d === new Date().toDateString(), 'đếm ngược tới lúc đổi kệ, lưu theo ngày');
       renderShopM(); ok(JSON.stringify(ids()) === JSON.stringify(a), 'trong ngày kệ giữ nguyên');
-      const rows = document.querySelectorAll('#mGrid .sRow');
+      showSeries(); const rows = document.querySelectorAll('#sList .sRow');
       ok(rows.length === 3 && [...rows].every((r, s) => r.querySelectorAll('.sRowL .mItem').length === SERIES[s].n && r.textContent.includes('Xem hết')), 'tất cả mô hình: mỗi bộ 1 hàng ngang');
       ok(rows[0].textContent.includes('1/4'), 'hàng có số đã có / tổng');
-      rows[1].querySelector('.sMore').click(); ok(document.querySelectorAll('#mGrid .sRow')[1].classList.contains('full'), 'Xem hết → mở lưới cả bộ');
-      const si = +sale[0].dataset.i; document.querySelector(`#mShelf .mItem[data-i="${si}"]`).click(); $('mBuy').click();
+      rows[1].querySelector('.sMore').click(); ok(document.querySelectorAll('#sList .sRow')[1].classList.contains('full'), 'Xem hết → mở lưới cả bộ');
+      $('serClose').click(); const si = +sale[0].dataset.i; document.querySelector(`#mShelf .mItem[data-i="${si}"]`).click(); $('mBuy').click();
       ok(owned(si) && S.coins === 500 - buyPrice(si), 'mua giá giảm: ' + S.coins);
-      openShop('secModel'); $('mShelfAd').click(); await wait(3500);
+      openShop(); $('mShelfAd').click(); await wait(3500);
       ok(S.daily.d === new Date().toDateString() && !$('mShelfAd'), 'xem QC đổi kệ mới, 1 lần/ngày');
   } },
 ];

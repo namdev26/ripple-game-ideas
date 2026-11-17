@@ -178,7 +178,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #series{background:linear-gradient(#6a72d6 0%,#7d8fe4 28%,#9cc0f2 60%,#c3e2fb 100%);justify-content:flex-start;padding-top:9cqw;z-index:11}
 #series .close{top:6cqw;right:5cqw}
 .sHead{font-size:9cqw;font-weight:800;color:#fff;margin-bottom:3cqw}
-#sList{width:100%;flex:1;overflow-y:auto;padding:3cqw 7cqw 10cqw;box-sizing:border-box;display:flex;flex-direction:column;gap:5cqw;touch-action:pan-y;scrollbar-width:none}
+#sList{width:100%;flex:1;overflow-y:auto;padding:1cqw 5cqw 10cqw;box-sizing:border-box;display:flex;flex-direction:column;gap:3cqw;touch-action:pan-y;scrollbar-width:none}
 .scard{position:relative;display:flex;align-items:center;gap:4cqw;background:#fff;border:1cqw solid var(--c);border-radius:5cqw;padding:3cqw;flex:none;cursor:pointer;
   box-shadow:inset 0 -1.4cqw 0 #cfd6ec,0 1.5cqw 3cqw #0003}
 .scard.cur{outline:1cqw solid #ffd43b;outline-offset:.8cqw}
@@ -258,7 +258,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 /* bố cục home: thanh trên · cột nút trái · cột chờ lắp phải · hộp + MỞ HỘP giữa · thanh 3 mục dưới */
 #hSetBtn{position:absolute;top:6.4cqw;right:5cqw;width:11cqw;height:11cqw;font-size:6.4cqw;padding:0 0 .8cqw}
 .hSide{position:absolute;top:47cqw;width:20cqw;display:flex;flex-direction:column;align-items:center;gap:3.5cqw}
-#hLeft{left:2cqw}
+#hLeft{left:2cqw}#hRight{right:2cqw}
+.sideB .tmr{position:absolute;top:-2cqw;left:50%;transform:translateX(-50%);background:#e0303f;color:#fff;font-size:2.8cqw;font-weight:800;padding:.2cqw 1.4cqw;border-radius:1.6cqw;white-space:nowrap}
 .sideB{position:relative;border:none;background:none;padding:0;margin:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;font-family:inherit;flex:none}
 .sideB i{font-style:normal;width:14cqw;height:14cqw;border-radius:3.6cqw;display:flex;align-items:center;justify-content:center;font-size:8cqw;
   background:linear-gradient(#66c8ff,#2f8cf0);box-shadow:inset 0 -1.2cqw 0 #1c5fc2,inset 0 .6cqw 0 #a8e3ff,0 1cqw 1.6cqw #0003}
@@ -362,16 +363,16 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #oddsList p.note{display:block;font-size:4cqw}
 /* ---------- cửa hàng mô hình ---------- */
 /* shop nạp giả lập (chỉ hình, chưa thanh toán thật) */
-#shop{z-index:12} /* mở được từ màn hộp bí ẩn (chạm ô xu) */
-#shopBody{width:90cqw;flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:0 0 4cqw}
+#shop{z-index:12} /* mở được từ bộ sưu tập / màn chính */
+#iap{z-index:13} /* tiền thật: mở từ ô xu ở mọi màn */
+#iapBody{width:90cqw;flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;gap:3cqw;padding:0 0 6cqw}
+#shopAll{align-self:center;height:11cqw;padding:0 5cqw;font-size:4.4cqw;margin-top:4cqw}
+#sNote{font-size:3.8cqw;font-weight:800;color:#2b3150;background:#fff6c8;border-radius:3cqw;padding:1.2cqw 4cqw;margin-bottom:2cqw}
+#shopBody{width:90cqw;flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:0 0 4cqw;display:flex;flex-direction:column;gap:3cqw}
 .shopSec{display:flex;flex-direction:column;gap:3cqw;padding-bottom:4cqw}
 #offerBody,#coinBody{display:flex;flex-direction:column;gap:3cqw}
 .iapH{font-size:5cqw;font-weight:800;color:#fff;text-align:center;padding:1.4cqw 0;border-radius:3cqw;background:linear-gradient(#ff6b5a,#d9363f);box-shadow:inset 0 -1cqw 0 #a8222c,0 .8cqw 1.4cqw #0003;text-shadow:0 .4cqw 0 #0004}
 #mGrid{width:auto;overflow:visible;flex:none;padding:0}
-#shopTabs{flex:none;width:100%;display:flex;background:#2b3150;padding:1.4cqw 2cqw 2.4cqw;gap:2cqw;box-sizing:border-box}
-#shopTabs button{flex:1;border:none;border-radius:3cqw;background:#454d78;color:#fff;font:800 5cqw/1 'Baloo 2',system-ui;padding:1.6cqw 0;display:flex;flex-direction:column;align-items:center;gap:.6cqw;cursor:pointer}
-#shopTabs button span{font-size:3.4cqw}
-#shopTabs button.cur{background:linear-gradient(#ffd34d,#f5a400);color:#5a3a00}
 .iapCard{position:relative;flex:none;background:#fff;border-radius:4cqw;padding:3cqw;box-shadow:inset 0 -1cqw 0 #d3d9ec,0 1cqw 2cqw #0002;display:flex;align-items:center;gap:3cqw;color:#2b3150}
 .iapCard b{font-size:4.6cqw;line-height:1.1}.iapCard small{display:block;font-size:3.4cqw;color:#6b7190;font-weight:700;margin-top:.6cqw}
 .iapCard .grow{flex:1;min-width:0}
@@ -432,6 +433,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .mItem .mp s{color:#9aa0bd;font-size:.8em}
 .mItem.sale{box-shadow:inset 0 -1cqw 0 #dfe4f2,0 0 0 .8cqw #ff5a4f}
 .mSale{position:absolute;top:-1.6cqw;right:-1cqw;z-index:1;background:#e0303f;color:#fff;font-style:normal;font-size:3.2cqw;font-weight:800;padding:.3cqw 1.6cqw;border-radius:1.6cqw;transform:rotate(6deg)}
+.sBonus{display:block;text-align:right;font-size:3.2cqw;font-weight:800;color:#4d557a;margin-top:.6cqw}
 .sRow{background:#ffffff40;border-radius:4cqw;padding:2cqw;border-left:1.4cqw solid var(--sc)}
 .sRowH{display:flex;align-items:center;gap:2cqw;margin-bottom:1.6cqw;color:#2b3150;font-weight:800}
 .sRowH b{font-size:4.4cqw}.sRowH small{font-size:3.4cqw;color:#4d557a}
@@ -593,6 +595,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   <div id="series" class="screen">
     <div class="sHead outline">BỘ SƯU TẬP</div>
     <button class="btn blue close" id="serClose" aria-label="Đóng">✕</button>
+    <div id="sNote">Chạm mô hình chưa có để mua · đủ bộ có thưởng</div>
     <div id="sList"></div>
   </div>
 
@@ -606,15 +609,19 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 
   <div id="shop" class="screen ov">
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">0</span></div>
-    <div class="sHead outline" style="margin-top:10cqw">CỬA HÀNG</div>
+    <div class="sHead outline" style="margin-top:10cqw">TIỆM GẠCH</div>
     <button class="btn blue close" id="shopClose" aria-label="Đóng">✕</button>
     <div id="shopBody">
-      <div class="shopSec" id="secOffer"><div class="iapH">🔥 ƯU ĐÃI</div><div id="offerBody"></div></div>
-      <div class="shopSec" id="secModel"><div class="iapH">🧱 MÔ HÌNH</div><div id="shopNote">⏩ Mua trước mô hình mình thích để lắp ngay · ⭐ ghim làm mục tiêu</div><div class="grid" id="mGrid"></div></div>
-      <div class="shopSec" id="secCoin"><div class="iapH">🪙 XU</div><div id="coinBody"></div></div>
+      <div id="shopNote">⏩ Mua trước mô hình mình thích để lắp ngay · ⭐ ghim làm mục tiêu</div><div class="grid" id="mGrid"></div>
+      <button class="btn blue" id="shopAll"><span class="outline">📚 Xem tất cả mô hình</span></button>
     </div>
     <div class="pick" id="mPick"><div class="row2"><div id="mImg"></div><div id="mInfo"></div><button class="btn blue" id="mGoal" aria-label="Ghim mục tiêu">⭐</button></div><button class="btn green" id="mBuy"></button></div>
-    <div id="shopTabs"><button data-s="secOffer">🔥<span>Ưu đãi</span></button><button data-s="secModel">🧱<span>Mô hình</span></button><button data-s="secCoin">🪙<span>Xu</span></button></div>
+  </div>
+
+  <div id="iap" class="screen ov">
+    <div class="sHead outline" style="margin-top:10cqw">ƯU ĐÃI</div>
+    <button class="btn blue close" id="iapClose" aria-label="Đóng">✕</button>
+    <div id="iapBody"><div id="offerBody"></div><div class="iapH" id="secCoin">🪙 GÓI XU</div><div id="coinBody"></div></div>
   </div>
 
   <div id="gacha" class="screen ov">
@@ -658,6 +665,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div id="hRoad"><b class="outline" id="hRoadT"></b><div class="rBar"><i id="hRoadBar"></i></div></div>
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">100</span></div>
     <button class="btn blue" id="hSetBtn" aria-label="Cài đặt">⚙</button>
+    <div id="hRight" class="hSide"><button class="sideB" id="hIapBtn"><i>🎁</i><span>Ưu đãi</span><b class="tmr" id="hIapT"></b></button></div>
     <div id="hLeft" class="hSide">
       <button class="sideB" id="hColBtn"><i>📚</i><span>Bộ sưu tập</span></button>
     </div>
@@ -668,7 +676,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
       <div id="hLevels"></div>
     </div>
     <div id="hNav">
-      <button class="navB" id="shopBtn"><i>🛒</i><span class="outline">Cửa hàng</span></button>
+      <button class="navB" id="shopBtn"><i>🧱</i><span class="outline">Tiệm Gạch</span></button>
       <button class="navB" id="gachaBtn"><i>🎁</i><span class="outline">Hộp bí ẩn</span></button>
       <button class="navB cur" id="hHomeTab"><i>🏠</i><span class="outline">Trang chủ</span></button>
       <button class="navB" id="shelfBtn"><i>🏛</i><span class="outline">Kệ</span></button>
@@ -1403,7 +1411,7 @@ const sfx={
 };
 
 // ====================== TRẠNG THÁI ======================
-const OVERLAYS=['result','loseModal','needModal','gacha','setModal','infoModal','series','bpView','shop','shelf','unbox','oddsModal'];
+const OVERLAYS=['result','loseModal','needModal','iap','gacha','setModal','infoModal','series','bpView','shop','shelf','unbox','oddsModal'];
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
 let rebuild=false, placedOrder=[], replaying=false, replayTok=0, replayDone=null; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
@@ -1791,7 +1799,7 @@ function tutStep(){
   if (vis('bpView')){ if(bpI===0&&!built(0)) [el,txt]=bpPage===0?[$('bpNext'),'Lật trang xem từng bước']:[$('bpBuild'),'Bấm Lắp!']; }
   else if (vis('home')&&!['series','shelf','shop','oddsModal','setModal','needModal'].some(vis)){
     if (!built(0)) [el,txt]=[$('hNextBtn'),'Lắp Level 1 miễn phí!'];
-    else if (S.tut===5) [el,txt]=[$('shopBtn'),'Thích mô hình nào? Mua trước để lắp ngay'];
+    else if (S.tut===5) [el,txt]=[$('shopBtn'),'Thích mô hình nào? Mua trước ở Tiệm Gạch'];
   }
   if (!el) return;
 // gắn bong bóng vào chính nút để luôn bám theo dù bố cục đổi (font tải xong...)
@@ -1863,18 +1871,19 @@ $('hDrawer').querySelector('.dHead').onclick=e=>{ if(!e.target.closest('button')
 $('hLevels').onclick=e=>{ const b=e.target.closest('[data-i]'); if(!b) return; sfx.pick(); openBlueprint(+b.dataset.i); };
 // ====================== BỘ SƯU TẬP ======================
 function showSeries(){
-  $('sList').innerHTML='';
-  SERIES.forEach((r,s)=>{
-    let done=0, stars=0; for(let i=r.from;i<r.from+r.n;i++){ done+=best(i)?1:0; stars+=best(i); }
-    const c=document.createElement('div');
-    c.className='scard'+(s===curSeries?' cur':''); c.style.setProperty('--c',r.c);
-    c.innerHTML=`<img src="${thumbLevel(r.from+r.n-1)}" alt=""><div class="sInfo"><b>${r.name}</b>
-      <div class="sbar"><i style="width:${100*done/r.n}%"></i></div><small>${done}/${r.n} màn · ★ ${stars}/${r.n*3} · đủ bộ +${seriesBonus(s)}🪙</small></div>`;
-    c.onclick=()=>{ sfx.pick(); showHome(s); };
-    $('sList').appendChild(c);
-  });
+  $('sList').innerHTML=SERIES.map((r,s)=>{ const ids=seriesIdx(s), have=ids.filter(owned).length, stars=ids.reduce((a,i)=>a+best(i),0);
+    return `<div class="sRow${mFull===s?' full':''}" style="--sc:${r.c}"><div class="sRowH"><b>${r.name}</b><small>${have}/${ids.length} ✓ · ★${stars}/${ids.length*3}</small><button class="sMore" data-s="${s}">${mFull===s?'Thu gọn ‹':'Xem hết ›'}</button></div>`
+      +`<div class="sRowL">${ids.map(mItemHtml).join('')}</div><small class="sBonus">${ids.every(built)?'✓ Đủ bộ':'Đủ bộ +'+seriesBonus(s)+'🪙'}</small></div>`; }).join('');
   show('series',true);
 }
+$('sList').onclick=e=>{
+  const mo=e.target.closest('.sMore'); if (mo){ sfx.pick(); mFull=mFull===+mo.dataset.s?null:+mo.dataset.s; showSeries(); return; }
+  const it=e.target.closest('.mItem'); if(!it) return; const i=+it.dataset.i; sfx.pick();
+  if (built(i)) return toast('Đã lắp, xem ở kệ trưng bày 🏛');
+  if (owned(i)){ show('series',false); return openBlueprint(i); } // chờ lắp: mở sách
+  if (i===roadNext()){ show('series',false); return playRoad(); } // level kế: miễn phí
+  openShop(i); // chưa có: khung mua của tiệm gạch
+};
 
 // ====================== HỘP BÍ ẨN / CỬA HÀNG / SÁCH HƯỚNG DẪN ======================
 // một hộp chung cho cả game, tỉ lệ cố định; ra trùng thì đổi xu bằng giá cửa hàng
@@ -2001,13 +2010,9 @@ $('ubLater').onclick=()=>{ sfx.back(); showHome(seriesOf(ubI)); if(ubFull) openG
 
 // ---- cửa hàng mô hình: chọn đúng mô hình, giá theo độ hiếm, không có bản đặc biệt ----
 let mSel=null;
-function openShop(sec='secOffer'){ mSel=null; if(S.tut===5){ S.tut=6; save(); } renderIap(); renderShopM(); updateCoins(); show('shop',true); shopGo(sec); }
-const shopGo=sec=>{ const B=$('shopBody'); B.scrollTop=sec==='secOffer'?0:$(sec).offsetTop-B.offsetTop; shopTabCur(); };
-function shopTabCur(){ const B=$('shopBody'), y=B.scrollTop+B.clientHeight/3, end=B.scrollTop+B.clientHeight>=B.scrollHeight-2;
-  const cur=end?'secCoin':['secOffer','secModel','secCoin'].filter(id=>$(id).offsetTop-B.offsetTop<=y).pop();
-  document.querySelectorAll('#shopTabs button').forEach(b=>b.classList.toggle('cur',b.dataset.s===cur)); }
-$('shopBody').onscroll=shopTabCur;
-$('shopTabs').onclick=e=>{ const b=e.target.closest('button'); if(b){ sfx.pick(); shopGo(b.dataset.s); } };
+// sel: số = mở sẵn khung mua của mô hình đó (từ bộ sưu tập / mục tiêu)
+function openShop(sel){ mSel=typeof sel==='number'&&!owned(sel)?sel:null; if(S.tut===5){ S.tut=6; save(); } renderShopM(); updateCoins(); show('shop',true); $('shopBody').scrollTop=0; }
+$('shopAll').onclick=()=>{ sfx.pick(); showSeries(); };
 // kệ hàng hôm nay: shop chỉ bày vài món đáng mua, đổi mỗi ngày → shop ngắn dù có bao nhiêu hộp
 const SHELF_N=6, SALE=0.8, today=()=>new Date().toDateString();
 const buyPrice=i=>S.daily&&S.daily.d===today()&&S.daily.sale===i?r5(shopPrice(i)*SALE):shopPrice(i);
@@ -2021,18 +2026,18 @@ function rollShelf(){
   S.daily={d:today(),ids,sale}; save();
 }
 const shelf=()=>{ if(!S.daily||S.daily.d!==today()) rollShelf(); return S.daily; };
-let mFull=null; // bộ đang "Xem hết"
+let mFull=null; // bộ đang "Xem hết" trong bộ sưu tập
 function renderShopM(){
-  const rn=roadNext(), d=shelf();
-  const item=i=>{ const h=owned(i), free=i===rn&&!h, sale=!h&&buyPrice(i)<shopPrice(i);
-    return `<div class="mItem${h?' have':''}${i===mSel?' sel':''}${sale?' sale':''}" data-i="${i}" style="--rc:${RAR[rarOf(i)].c}">${S.goal===LEVELS[i].name?'<i class="mStar">⭐</i>':''}${sale?`<i class="mSale">-${Math.round((1-SALE)*100)}%</i>`:''}${pboxHtml(i,false)}`
-      +`<span class="mp">${h?'✓ Đã có':free?`▶ Lv ${roadNo(i)} miễn phí`:sale?`<s>${shopPrice(i)}</s> ${buyPrice(i)}🪙`:shopPrice(i)+'🪙'}</span></div>`; };
+  const d=shelf();
   $('mGrid').innerHTML=`<div class="shH"><b>🛒 Kệ hàng hôm nay</b><span>⏳ <span class="shT">${dinoLeft()}</span></span></div>`
-    +(d.ids.length?`<div id="mShelf">${d.ids.map(item).join('')}</div>`:'<p class="shEmpty">Đã có đủ mô hình 🎉</p>')
-    +(adLeft('shelf')>0&&d.ids.length?'<button class="btn blue" id="mShelfAd"><span class="outline">🎬 Đổi kệ mới</span></button>':'')
-    +'<div class="shH"><b>📚 Tất cả mô hình</b></div>'
-    +SERIES.map((r,s)=>{ const ids=seriesIdx(s), have=ids.filter(owned).length;
-      return `<div class="sRow${mFull===s?' full':''}" style="--sc:${r.c}"><div class="sRowH"><b>${r.name}</b><small>${have}/${ids.length} ✓</small><button class="sMore" data-s="${s}">${mFull===s?'Thu gọn ‹':'Xem hết ›'}</button></div><div class="sRowL">${ids.map(item).join('')}</div></div>`; }).join('');
+    +(d.ids.length?`<div id="mShelf">${d.ids.map(mItemHtml).join('')}</div>`:'<p class="shEmpty">Đã có đủ mô hình 🎉</p>')
+    +(adLeft('shelf')>0&&d.ids.length?'<button class="btn blue" id="mShelfAd"><span class="outline">🎬 Đổi kệ mới</span></button>':'');
+  renderPick();
+}
+function mItemHtml(i){ const rn=roadNext(); { const h=owned(i), free=i===rn&&!h, sale=!h&&buyPrice(i)<shopPrice(i);
+    return `<div class="mItem${h?' have':''}${i===mSel?' sel':''}${sale?' sale':''}" data-i="${i}" style="--rc:${RAR[rarOf(i)].c}">${S.goal===LEVELS[i].name?'<i class="mStar">⭐</i>':''}${sale?`<i class="mSale">-${Math.round((1-SALE)*100)}%</i>`:''}${pboxHtml(i,false)}`
+      +`<span class="mp">${h?'✓ Đã có':free?`▶ Lv ${roadNo(i)} miễn phí`:sale?`<s>${shopPrice(i)}</s> ${buyPrice(i)}🪙`:shopPrice(i)+'🪙'}</span></div>`; } }
+function renderPick(){
   const p=$('mPick'); p.style.display=mSel==null?'none':'';
   if (mSel==null) return;
   const i=mSel;
@@ -2042,7 +2047,6 @@ function renderShopM(){
 }
 $('mGoal').onclick=()=>{ const n=LEVELS[mSel].name; if(S.goal===n) delete S.goal; else S.goal=n; save(); sfx.pick(); renderShopM(); toast(S.goal?'⭐ Đã ghim mục tiêu ở màn chính':'Bỏ mục tiêu'); };
 $('mGrid').onclick=e=>{
-  const mo=e.target.closest('.sMore'); if (mo){ sfx.pick(); mFull=mFull===+mo.dataset.s?null:+mo.dataset.s; renderShopM(); return; }
   if (e.target.closest('#mShelfAd')){ if(adLeft('shelf')>0) watchAd(()=>{ S.ad.shelf=(S.ad.shelf||0)+1; rollShelf(); renderShopM(); toast('🛒 Kệ hàng mới!'); }); return; }
   const it=e.target.closest('.mItem'); if(!it) return; const i=+it.dataset.i;
   if (owned(i)){ toast(built(i)?'Đã lắp, xem ở kệ trưng bày 🏛':'Đã có, đang chờ lắp'); sfx.back(); return; }
@@ -2066,7 +2070,7 @@ $('needPlay').onclick=()=>{ sfx.pick(); OVERLAYS.forEach(id=>$(id).classList.rem
 $('needBox').onclick=()=>{ show('needModal',false); show('shop',false); openGacha(); };
 $('needAd').onclick=adCoins;
 $('needClose').onclick=()=>{ sfx.back(); show('needModal',false); };
-$('shopBtn').onclick=()=>{ sfx.pick(); openShop(S.tut===5?'secModel':'secOffer'); };
+$('shopBtn').onclick=()=>{ sfx.pick(); openShop(); };
 $('stepBook').onclick=()=>$('stepBook').classList.toggle('big');
 addEventListener('pointerdown',e=>{ if(!$('stepBook').contains(e.target)) $('stepBook').classList.remove('big'); },true); // chạm ra ngoài → thu nhỏ
 $('shopClose').onclick=()=>{ sfx.back(); show('shop',false); renderHome(); updateCoins(); }; // về màn đã mở cửa hàng (chính / hộp bí ẩn)
@@ -2074,7 +2078,8 @@ $('shopClose').onclick=()=>{ sfx.back(); show('shop',false); renderHome(); updat
 
 // ---- shop nạp giả lập: chỉ để xem giao diện, bấm mua chỉ báo bản thử ----
 const dinoLeft=()=>{ const n=new Date(), t=Math.floor((new Date(n).setHours(24,0,0,0)-n)/1000); return [t/3600,t/60%60,t%60].map(v=>String(Math.floor(v)).padStart(2,'0')).join(':'); }; // ưu đãi hết lúc nửa đêm
-setInterval(()=>{ if($('shop').classList.contains('show')) document.querySelectorAll('#dinoT,.shT').forEach(e=>e.textContent=dinoLeft()); },1000);
+setInterval(()=>document.querySelectorAll('#dinoT,.shT,#hIapT').forEach(e=>e.textContent=dinoLeft()),1000); // đếm ngược tới 0h: ưu đãi + kệ hàng
+$('hIapT').textContent=dinoLeft();
 const COIN_PACKS=[[120,'25.000đ'],[650,'99.000đ','+8%'],[1400,'199.000đ','Phổ biến'],[3000,'399.000đ','+25%'],[8000,'999.000đ','+33%'],[17000,'1.999.000đ','Lợi nhất']];
 function renderIap(){
   const pile=n=>`<div class="pile">${'<span class="coin"></span>'.repeat(n)}</div>`;
@@ -2097,9 +2102,11 @@ function renderIap(){
   $('coinBody').innerHTML=`<div class="coinGrid">${COIN_PACKS.map(([n,p,t],k)=>`<div class="coinPack">${t?`<span class="iapTag">${t}</span>`:''}${pile(k+1)}<b>${n.toLocaleString('vi-VN')}</b><button class="price">${p}</button></div>`).join('')}</div>
     <div class="iapFoot"><button>Khôi phục giao dịch</button><span>Bản thử · chưa thanh toán thật</span></div>`;
 }
-const openIap=()=>{ sfx.pick(); openShop('secCoin'); };
-document.querySelectorAll('.coins').forEach(c=>c.onclick=openIap);
-$('shopBody').onclick=e=>{ if (e.target.closest('.price, .iapFoot button')){ sfx.pick(); toast('🧪 Bản thử: chưa mua thật được'); } };
+function openIap(sec){ sfx.pick(); renderIap(); updateCoins(); show('iap',true); const B=$('iapBody'); B.scrollTop=sec?$(sec).offsetTop-B.offsetTop:0; }
+$('iapClose').onclick=()=>{ sfx.back(); show('iap',false); };
+$('hIapBtn').onclick=()=>openIap();
+document.querySelectorAll('.coins').forEach(c=>c.onclick=()=>openIap('secCoin')); // ô xu: nhảy tới gói xu
+$('iapBody').onclick=e=>{ if (e.target.closest('.price, .iapFoot button')){ sfx.pick(); toast('🧪 Bản thử: chưa mua thật được'); } };
 
 // ---- sách hướng dẫn kiểu LEGO: bìa → mỗi bước một trang (khung mảnh "2x + tên màu") → danh sách mảnh ----
 // sổ bước: mảnh các bước trước xám nhạt đồng màu để mảnh của bước hiện tại nổi bật
@@ -2166,7 +2173,7 @@ $('hHomeTab').onclick=()=>sfx.pick();
 $('gachaBtn').onclick=openGacha;
 $('gachaClose').onclick=()=>{ sfx.back(); show('gacha',false); renderHome(); };
 $('hNext').onclick=e=>{ if(!e.target.closest('#hNextBtn')) return; sfx.pick(); if(roadNext()!=null) return playRoad(); const nx=pendingList()[0]; if(nx==null) return openGacha(); openBlueprint(nx); };
-$('hGoal').onclick=e=>{ if(!e.target.closest('#hGoalBuy')) return; const o=goalInfo(); if(!o) return; sfx.pick(); openShop('secModel'); mSel=o.g; renderShopM(); };
+$('hGoal').onclick=e=>{ if(!e.target.closest('#hGoalBuy')) return; const o=goalInfo(); if(!o) return; sfx.pick(); openShop(o.g); };
 $('serClose').onclick=()=>show('series',false);
 $('sHelp').onclick=()=>{ show('setModal',false); show('infoModal',true); sfx.pick(); };
 $('infoClose').onclick=()=>show('infoModal',false);
