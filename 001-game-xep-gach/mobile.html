@@ -346,8 +346,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #gacha #playBtn,#gacha #adBtn{width:40cqw;height:20cqw}
 #gPrev{margin-top:3cqw;width:90cqw;background:#2b1f5a80;border-radius:4cqw;padding:2cqw 2cqw 2.6cqw;box-shadow:inset 0 0 0 .6cqw #ffffff26}
 .gpH{position:relative;color:#fff;font-weight:800;font-size:4.2cqw;text-align:center;margin-bottom:1.8cqw}
-/* nút i: xem tỉ lệ (góc phải dải phần thưởng) */
-#oddsBtn{position:absolute;right:0;top:50%;transform:translateY(-50%);width:7.6cqw;height:7.6cqw;border-radius:50%;border:.6cqw solid #fff;cursor:pointer;padding:0;
+/* nút i: xem tỉ lệ (ngay dưới nút ✕) */
+#oddsBtn{position:absolute;right:6.2cqw;top:19cqw;width:9cqw;height:9cqw;border-radius:50%;border:.6cqw solid #fff;cursor:pointer;padding:0;
   background:linear-gradient(#66c8ff,#2f8cf0);color:#fff;font:italic 800 4.6cqw/1 Georgia,serif;box-shadow:0 .6cqw 0 #1c5fc2,0 .8cqw 1.2cqw #0004;text-shadow:none}
 .gpL{display:flex;gap:2.2cqw;justify-content:center}
 .gpI{position:relative;width:15.4cqw;border-radius:2.6cqw;background:linear-gradient(#fff,#eef1fb);box-shadow:0 0 0 .7cqw var(--rc),0 .8cqw 1.4cqw #0004;padding:.6cqw .4cqw 1cqw;display:flex;flex-direction:column;align-items:center}
@@ -802,9 +802,10 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">0</span></div>
     <div class="sHead outline" style="margin-top:10cqw">HỘP BÍ ẨN</div>
     <button class="btn blue close" id="gachaClose" aria-label="Đóng">✕</button>
+    <button id="oddsBtn" aria-label="Xem tỉ lệ">i</button>
     <div id="hBoxWrap"><div id="gDeco" aria-hidden="true"></div><div id="hBox" class="mbox" role="button" aria-label="Lắc thử hộp"><i class="lid"></i><i class="body"><b>?</b></i></div></div>
     <div id="hName" class="outline"></div>
-    <div id="gPrev"><div class="gpH outline">🎁 CÓ THỂ NHẬN<button id="oddsBtn" aria-label="Xem tỉ lệ">i</button></div><div class="gpL" id="gPrevL"></div></div>
+    <div id="gPrev"><div class="gpH outline">🎁 CÓ THỂ NHẬN</div><div class="gpL" id="gPrevL"></div></div>
     <div id="hBtns"><button class="btn yellow" id="adBtn"><span class="t outline o">AD 🎬</span><small>Xem quảng cáo</small></button><button class="btn yellow" id="playBtn"><span class="t outline o">MỞ HỘP</span><small id="playSub"></small></button></div>
   </div>
 
