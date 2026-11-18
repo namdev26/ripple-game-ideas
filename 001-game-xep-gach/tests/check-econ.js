@@ -17,17 +17,18 @@ eq(E.REBUILD_REWARD, 0); eq(E.seriesBonus(0), 200); eq(E.seriesBonus(2), 300);
 ALL.forEach(i => assert(E.shopPrice(i) >= 1.6 * E.rewardFor(i, 3), 'mua đúng quá rẻ: ' + E.LEVELS[i].name));
 // độ hiếm
 const cnt = s => [0, 1, 2].map(r => E.seriesIdx(s).filter(i => E.rarOf(i) === r).length).join(',');
-eq(cnt(0), '3,0,1'); eq(cnt(1), '3,3,1'); eq(cnt(2), '2,2,1');
-// đường lắp: đủ 16, bắt đầu dễ, mô hình huyền thoại không ở 5 level đầu
-eq(E.ROAD.length, 16); eq(new Set(E.ROAD).size, 16); eq(E.ROAD[0], idx('Cây nấm'));
+eq(cnt(0), '3,0,1'); eq(cnt(1), '3,3,1'); eq(cnt(2), '2,2,1'); eq(cnt(3), '7,4,1'); eq(E.seriesBonus(3), 400);
+// đường lắp: đủ mọi mô hình (28 = 16 + 12 con giáp), bắt đầu dễ, mô hình huyền thoại không ở 5 level đầu
+eq(E.ROAD.length, 28); eq(E.LEVELS.length, 28); eq(new Set(E.ROAD).size, 28); eq(E.ROAD[0], idx('Cây nấm'));
 E.ROAD.slice(0, 5).forEach(i => assert(E.rarOf(i) === 0, 'đầu đường phải dễ: ' + E.LEVELS[i].name));
 // tỉ lệ theo pool (người gọi chỉ đưa mô hình chưa có)
 const odds = E.boxOdds(ALL);
-assert(Math.abs(odds.find(o => o.i === idx('Đền Artemis')).p - 1 / 66) < 1e-9, 'Artemis 1/66');
+const Wsum = ALL.reduce((s, i) => s + E.RAR[E.rarOf(i)].w, 0);
+assert(Math.abs(odds.find(o => o.i === idx('Đền Artemis')).p - 1 / Wsum) < 1e-9, 'huyền thoại = 1/tổng trọng số');
 assert(Math.abs(odds.reduce((s, o) => s + o.p, 0) - 1) < 1e-9, 'tổng tỉ lệ = 1');
 const seq = xs => { let k = 0; return () => xs[k++ % xs.length]; };
 let r = E.rollBox(ALL, seq([0, 0.5])); eq(r.i, 0); eq(r.sp, false);
-r = E.rollBox(ALL, seq([0.9999, 0.01])); eq(r.i, 15); eq(r.sp, true);
+r = E.rollBox(ALL, seq([0.9999, 0.01])); eq(r.i, ALL.length - 1); eq(r.sp, true);
 // mô phỏng người không xem QC, không mua: chỉ đi đường lắp (1–3★) → không bao giờ kẹt (level luôn miễn phí),
 // xu cuối đường chỉ đủ "mua trước" một số lần, không đủ mua hết
 let tot = 0, maxC = 0, minC = 1e9;
@@ -40,9 +41,11 @@ for (let run = 0; run < 1000; run++) {
 const all = ALL.reduce((s, i) => s + E.shopPrice(i), 0);
 assert(maxC < all * 0.8, 'đi hết đường không được đủ tiền mua gần hết: ' + maxC + ' / ' + all);
 assert(minC > 4 * E.boxPrice(), 'đi hết đường phải đủ vài hộp: ' + minC);
-console.log('đi hết đường (không QC): trung bình', Math.round(tot / 1000), 'xu (', minC, '–', maxC, '); mua cả 16 ở cửa hàng:', all);
+console.log('đi hết đường (không QC): trung bình', Math.round(tot / 1000), 'xu (', minC, '–', maxC, '); mua cả ' + ALL.length + ' ở cửa hàng:', all);
 // sách: mọi màu có tên tiếng Việt; bom gom đúng số mảnh
 Object.keys(E.COLORS).forEach(c => assert(E.COLOR_VI[c], 'thiếu tên màu ' + c));
 eq(E.bomOf(0).reduce((s, m) => s + m.n, 0), E.LEVELS[0].steps.flat().length);
 eq(E.partPrice('base_12x12'), 12);
+// 12 con giáp dựng từ voxel: mọi ô phải tự có chỗ tựa, không phải thêm cột đỡ
+E.LEVELS.forEach(l => assert(!(l.fix || []).length, 'cần thêm cột đỡ: ' + l.name + ' ' + (l.fix || []).join(' | ')));
 console.log('check-econ OK');

@@ -1229,11 +1229,280 @@ const LEVELS=[
      ['flower_1x1','red',2,1,11,0],['flower_1x1','pink',9,1,11,0]],
   ]},
 ];
+// ---- 12 CON GIÁP ----
+// ---- 12 con giáp: vẽ bằng khối voxel [x,z,tầng,dài x,rộng z,cao tầng,màu] (tầng = 1 viên gạch = 3 plate; màu '' = khoét)
+// → tự chia thành gạch to nhất có chỗ tựa; chi tiết [mảnh,màu,x,z,xoay] tự đặt lên mặt cao nhất. Mặt con vật hướng +X, sườn trái quay về người xem (+Z)
+const VOX_BRICKS=['brick_2x6','brick_2x4','brick_1x6','brick_1x4','brick_2x2','brick_1x2','brick_1x1'];
+function voxLevel(name,base,boxes,det){
+  const V=new Map(), K=(x,y,z)=>x+","+y+","+z;
+  boxes.forEach(([x,z,y,w,d,h,c])=>{ for(let i=0;i<w;i++) for(let j=0;j<d;j++) for(let k=0;k<h;k++){ const q=K(x+i,y+k,z+j); if(c) V.set(q,c); else V.delete(q); } });
+  let L, bad, fix=[];
+  // chia gạch; ô nào không tựa được thì thêm 1 khối cùng màu ngay dưới rồi chia lại (thành chân/đế đỡ)
+  for(let it=0;it<50;it++){ bad=null; [L,bad]=voxSplit(V,K); if(!bad.length) break; if(!bad) break; bad.forEach(([x,y,z,c])=>{ fix.push(x+","+y+","+z+" "+c); V.set(K(x,y-1,z),c); }); }
+  const steps=[[[base[0],base[1],0,0,0,0]]], hm=new Map(), bh=PARTS[base[0]];
+  for(let i=0;i<bh.w;i++) for(let j=0;j<bh.d;j++) hm.set(i+","+j,bh.h);
+  L.forEach(layer=>{ layer.forEach(([p,c,x,y,z,r])=>{ const fw=r?PARTS[p].d:PARTS[p].w, fd=r?PARTS[p].w:PARTS[p].d;
+      for(let i=0;i<fw;i++) for(let j=0;j<fd;j++) hm.set((x+i)+","+(z+j),y+3); });
+    const n=Math.ceil(layer.length/10); // bước ≤ 10 mảnh
+    for(let k=0;k<n;k++) steps.push(layer.slice(Math.round(k*layer.length/n),Math.round((k+1)*layer.length/n))); });
+  let st=[];
+  [...det,'|',...(VOX_SCENE[name]||[])].forEach(d=>{ if(d==="|"){ if(st.length) steps.push(st); st=[]; return; }
+    const [p,c,x,z,r=0]=d, fw=r%2?PARTS[p].d:PARTS[p].w, fd=r%2?PARTS[p].w:PARTS[p].d;
+    let y=0; for(let i=0;i<fw;i++) for(let j=0;j<fd;j++) y=Math.max(y,hm.get((x+i)+","+(z+j))||0);
+    for(let i=0;i<fw;i++) for(let j=0;j<fd;j++) hm.set((x+i)+","+(z+j),y+PARTS[p].h);
+    st.push([p,c,x,y,z,r]); });
+  if (st.length) steps.push(st);
+  return {name,size:[bh.w,bh.d],steps,fix};
+}
+// chia voxel từng tầng thành gạch: ô treo (không có gì bên dưới) phải nằm chung viên gạch với ô có chỗ tựa.
+// Tìm có quay lui (ô treo ít cách xếp nhất làm trước, gạch to trước), còn lại lấp gạch to nhất. Trả [các tầng, các ô không tựa được]
+function voxSplit(V,K){
+  const cells=[...V.entries()].map(([q,c])=>{ const [x,y,z]=q.split(",").map(Number); return {x,y,z,c}; }), H=Math.max(...cells.map(o=>o.y))+1, out=[], fails=[];
+  for(let y=0;y<H;y++){
+    const lc=cells.filter(o=>o.y===y).sort((a,b)=>a.z-b.z||a.x-b.x), used=new Set(), layer=[], sup=(x,z)=>y===0||V.has(K(x,y-1,z));
+    const opts=(x,z,c)=>{ const o=[];
+      for(const p of VOX_BRICKS) for(const r of (PARTS[p].w===PARTS[p].d?[0]:[0,1])){
+        const fw=r?PARTS[p].d:PARTS[p].w, fd=r?PARTS[p].w:PARTS[p].d;
+        for(let ox=0;ox<fw;ox++) for(let oz=0;oz<fd;oz++){
+          const x0=x-ox, z0=z-oz; let ok=true, s=false;
+          for(let i=0;i<fw&&ok;i++) for(let j=0;j<fd&&ok;j++){ if(V.get(K(x0+i,y,z0+j))!==c||used.has((x0+i)+","+(z0+j))) ok=false; else if(sup(x0+i,z0+j)) s=true; }
+          if (ok&&s) o.push([p,x0,z0,r,fw,fd,c]);
+        } }
+      return o; };
+    const put=(o,on)=>{ for(let i=0;i<o[4];i++) for(let j=0;j<o[5];j++){ const q=(o[1]+i)+","+(o[2]+j); on?used.add(q):used.delete(q); } };
+    let nodes=0;
+    const dfs=()=>{ if (++nodes>30000) return false;
+      let bc=null, bo=null;
+      for(const o of lc){ if(used.has(o.x+","+o.z)||sup(o.x,o.z)) continue; const op=opts(o.x,o.z,o.c); if(!op.length) return false; if(!bo||op.length<bo.length){ bc=o; bo=op; if(op.length===1) break; } }
+      if (!bc) return true;
+      for(const o of bo){ put(o,true); layer.push(o); if(dfs()) return true; layer.pop(); put(o,false); }
+      return false; };
+    if (!dfs()){ used.clear(); layer.length=0; } // không xếp được: xếp tham lam, ô hỏng báo ra để thêm khối đỡ
+    for(const {x,z,c} of [...lc].sort((a,b)=>sup(a.x,a.z)-sup(b.x,b.z)||a.z-b.z||a.x-b.x)){
+      if (used.has(x+","+z)) continue;
+      let o=opts(x,z,c)[0];
+      if (!o){ fails.push([x,y,z,c]); o=["brick_1x1",x,z,0,1,1,c]; }
+      put(o,true); layer.push(o);
+    }
+    out.push(layer.map(([p,x0,z0,r,,,c])=>[p,c,x0,1+3*y,z0,r]));
+  }
+  return [out,fails];
+}
+// hình chiếu cạnh: rows = các tầng từ trên xuống, mỗi ký tự = 1 cột x; leg[ký tự] = [[z từ, z đến, màu],...] (bề ngang theo z)
+const side=(rows,leg,x0=0)=>{ const o=[]; rows.forEach((r,ri)=>[...r].forEach((ch,x)=>(leg[ch]||[]).forEach(([a,b,c])=>o.push([x0+x,a,rows.length-1-ri,1,b-a+1,1,c])))); return o; };
+const W=(a,b,c)=>[[a,b,c]], EYE=(a,b,c,e)=>[[a,a,e],[a+1,b-1,c],[b,b,e]], MID=(a,b,c,m)=>[[a,a,c],[a+1,b-1,m],[b,b,c]], LEG=(a,b,c)=>[[a,a,c],[b,b,c]];
+const flowers=(pts)=>pts.map(([x,z,c])=>['flower_1x1',c,x,z]);
+// cảnh + chi tiết thêm quanh mỗi con (đặt sau thân, tự rơi lên mặt cao nhất)
+const fence=(x,z0,n)=>[...Array(n)].map((_,k)=>['column_1x1','brown',x,z0+k*3]).concat([...Array(n-1)].map((_,k)=>['tile_1x4','tan',x,z0+k*3,1]));
+const VOX_SCENE={
+  'Chuột':[['round_tile_1x1','gray',4,4],['round_tile_1x1','gray',6,7],['tile_1x1','white',10,4],'|',['brick_1x2','darktan',0,0],['arch_1x4','darktan',0,1,1],['brick_1x2','darktan',0,3],['tile_1x4','brown',0,0,1],['cheese_1x1','yellow',4,10],['cheese_1x1','yellow',5,11],['round_tile_1x1','gold',8,11]],
+  'Trâu':[['round_tile_1x1','gold',11,5],['tile_1x2','black',5,4],['tile_1x2','black',5,7],'|',...fence(11,0,1),['brick_2x2','yellow',6,0],['tile_2x2','gold',6,0],['brick_1x2','yellow',8,0],['cheese_1x2','gold',8,0,0],['flower_1x1','red',4,1],['bush_2x2','lime',1,0]],
+  'Hổ':[['tile_1x2','black',3,5,1],['tile_1x2','black',5,5,1],['tile_1x2','black',7,5,1],['round_tile_1x1','white',11,4],['round_tile_1x1','white',11,7],'|',
+    ['cyl_1x1','lime',3,1],['cyl_1x1','lime',3,1],['cyl_1x1','lime',3,1],['flower_1x1','green',3,1],['cyl_1x1','lime',5,0],['cyl_1x1','lime',5,0],['flower_1x1','green',5,0],['cyl_1x1','lime',7,1],['flower_1x1','green',7,1],['round_1x1','gray',7,10],['round_1x1','gray',8,10]],
+  'Mèo':[['round_tile_1x1','darktan',4,4],['round_tile_1x1','darktan',4,7],['tile_1x1','white',8,4],['tile_1x1','white',8,7],'|',
+    ['ball_2x2','pink',10,5],['round_tile_1x1','pink',9,7],['tile_1x2','pink',9,8],['tile_2x4','darkazure',0,3,1],['cheese_1x1','darkazure',0,7],['round_tile_1x1','white',1,3],['round_1x1','black',1,4]],
+  'Rồng':[['round_tile_1x1','lime',1,5],['round_tile_1x1','lime',3,6],['round_tile_1x1','lime',5,5],['round_tile_1x1','lime',7,6],['round_tile_1x1','lime',9,5],'|',
+    ['tile_2x2','white',0,0],['round_1x1','white',1,0],['round_1x1','white',0,1],['tile_2x2','white',8,0],['round_1x1','white',9,1],['round_tile_1x1','white',10,1],['flame_1x1','orange',4,11],['flame_1x1','yellow',5,11]],
+  'Rắn':[['round_tile_1x1','yellow',4,3],['round_tile_1x1','yellow',7,4],['round_tile_1x1','lime',1,3],['round_tile_1x1','lime',8,6],'|',
+    ['ball_1x1','white',9,9],['ball_1x1','white',8,10],['ball_1x1','white',9,10],['brick_2x2','darktan',0,8],['slope_2x2','tan',0,8,2],['round_1x1','darktan',2,11],['flower_1x1','green',10,4],['flower_1x1','green',11,5]],
+  'Ngựa':[['round_tile_1x1','black',8,4],['round_tile_1x1','black',8,6],['tile_1x2','brown',1,4],'|',
+    ...fence(0,0,3).map(d=>d[0]==='tile_1x4'?[d[0],d[1],d[2],d[3],1]:d),['brick_2x2','yellow',3,0],['tile_2x2','gold',3,0],['brick_2x2','yellow',5,0],['cheese_1x2','gold',5,0,0],['cheese_1x2','gold',5,1,2]],
+  'Dê':[['round_1x1','white',3,5],['round_1x1','white',5,4],['round_1x1','white',7,6],['round_1x1','white',8,5],'|',
+    ['flower_1x1','green',6,0],['flower_1x1','green',7,1],['flower_1x1','lime',5,1],['flower_1x1','yellow',3,0],['cyl_2x2','gray',10,1],['round_tile_1x1','water',10,1],['round_tile_1x1','water',11,2]],
+  'Khỉ':[['tile_1x2','tan',7,5,1],['round_tile_1x1','black',7,5],'|',
+    ['cheese_1x1','yellow',9,10],['cheese_1x1','yellow',8,10],['cheese_1x1','yellow',8,11],['round_tile_1x1','brown',9,11],['trunk_1x1','brown',0,9],['trunk_1x1','brown',0,9],['bush_2x2','green',0,8],['ball_1x1','red',1,8]],
+  'Gà':[['round_tile_1x1','white',4,4],['round_tile_1x1','white',6,7],'|',
+    ['ball_1x1','yellow',7,9],['round_1x1','orange',7,9],['ball_1x1','yellow',6,10],['round_1x1','orange',6,10],['ball_1x1','yellow',11,6],['round_1x1','orange',11,6],...fence(11,0,2)],
+  'Chó':[['round_tile_1x1','brown',2,4],['round_tile_1x1','brown',5,7],['round_tile_1x1','black',11,5],'|',
+    ['brick_1x4','red',0,0,1],['brick_1x4','red',3,0,1],['brick_1x2','red',1,0],['brick_1x2','red',1,3],'|',['brick_1x4','red',0,0,1],['brick_1x4','red',3,0,1],['brick_1x2','red',1,0],['brick_1x2','red',1,3],'|',['slope_2x4','blue',0,0,1],['slope_2x4','blue',2,0,3],['tile_1x4','white',0,4]],
+  'Lợn':[['round_tile_1x1','darkred',4,4],['round_tile_1x1','darkred',6,7],['round_tile_1x1','pink',7,5],'|',
+    ['brick_1x4','brown',7,10],['brick_1x4','brown',7,11],['tile_1x4','yellow',7,10],['round_tile_1x1','lime',8,11],['round_tile_1x1','orange',9,11],['tile_1x2','brown',2,10],['round_tile_1x1','brown',3,11]],
+};
+const ZODIAC=[
+  // Tý: chuột xám tai hồng to, mũi hồng, đuôi dài cong, bên miếng phô mai
+  voxLevel('Chuột',['base_12x12','lime'],side([
+    '....hhh.....',
+    '...ggggg.HE.',
+    '..GGGGGGGGGn',
+    '...f.ccc.fcc',
+  ],{h:W(5,6,'gray'),g:W(4,7,'gray'),H:W(4,7,'gray'),E:EYE(4,7,'gray','black'),n:W(5,6,'pink'),G:MID(4,7,'gray','gray'),c:W(5,6,'gray'),f:LEG(4,7,'pink')}),[
+    ['dome_2x2','pink',9,3],['dome_2x2','pink',9,7],['round_1x1','black',11,5],['round_1x1','black',11,6],['round_1x1','white',10,5],'|',
+    ['tile_1x2','gray',4,5],['tile_1x2','gray',5,6],['round_tile_1x1','gray',3,5],['round_tile_1x1','gray',3,6],'|',
+    ['tile_1x2','pink',0,6],['tile_1x1','pink',0,7],['tile_1x1','pink',0,8],['round_tile_1x1','pink',1,9],['round_tile_1x1','pink',2,9],'|',
+    ['brick_1x2','yellow',7,9],['brick_1x2','yellow',7,10],['cheese_1x2','yellow',7,9,0],['cheese_1x2','yellow',7,10,2],['round_tile_1x1','gold',9,10],'|',
+    ...flowers([[1,1,'white'],[2,1,'pink'],[10,1,'yellow'],[11,2,'white'],[11,10,'pink']]),
+  ]),
+  // Sửu: trâu đen thân to, sừng cong trắng, mõm be lỗ mũi đen, vũng nước
+  voxLevel('Trâu',['base_12x12','green'],side([
+    '.........HHH',
+    '.bbbbbbbbHEM',
+    'tbbbbbbbbNNN',
+    '.BBBBBBBBNN.',
+    '..LL....LL..',
+    '..KK....KK..',
+  ],{H:W(4,7,'darkgray'),b:W(3,8,'darkgray'),E:W(4,7,'darkgray'),e:EYE(4,7,'darkgray','black'),t:W(5,6,'darkgray'),N:W(4,7,'darkgray'),
+     M:MID(4,7,'tan','black'),B:MID(3,8,'darkgray','darkgray'),L:[[3,4,'darkgray'],[7,8,'darkgray']],U:W(4,7,'darkgray'),K:[[3,4,'black'],[7,8,'black']]}),[
+    ['plate_1x4','tan',10,1,1],['plate_1x4','tan',10,7,1],['round_1x1','darkgray',9,5],['round_1x1','darkgray',9,6],'|',
+    ['cone_1x1','white',10,1],['cone_1x1','white',10,10],['round_1x1','tan',10,2],['round_1x1','tan',10,9],'|',
+    ['tile_2x4','black',3,4],['tile_2x4','black',3,6],['tile_1x2','gray',6,3],['tile_1x2','gray',6,8],['cone_1x1','black',0,5],'|',
+    ['tile_2x4','water',3,10],['tile_1x4','water',2,9],['tile_1x2','water',7,10],['bush_2x2','darkgreen',0,9],['flower_1x1','yellow',10,10],['flower_1x1','white',0,0],['flower_1x1','pink',9,0],['flower_1x1','white',11,1],
+  ]),
+  // Dần: hổ cam vằn đen quấn quanh lưng, má trắng mũi hồng, mắt đen, đuôi cong vằn
+  voxLevel('Hổ',['base_12x12','darkgreen'],side([
+    '.k........e.',
+    '.t.......SHE',
+    '.toSoSoSooNM',
+    '..oooooooooo',
+    '...L....L...',
+    '...P....P...',
+  ],{k:W(7,7,'black'),t:W(7,7,'orange'),o:W(4,7,'orange'),S:W(4,7,'black'),H:W(4,7,'orange'),E:EYE(4,7,'orange','black'),e:W(5,6,'orange'),
+     N:W(4,7,'orange'),M:MID(4,7,'white','pink'),L:LEG(4,7,'orange'),P:LEG(4,7,'white')}),[
+    ['cheese_1x1','orange',10,4,1],['cheese_1x1','orange',10,7,1],['round_1x1','black',9,5],['round_1x1','black',9,6],['tile_1x2','orange',10,5],'|',
+    ['tile_1x2','orange',2,4],['tile_1x2','orange',2,7],['tile_1x2','orange',4,5],['tile_1x2','orange',6,6],['round_tile_1x1','orange',8,4],['round_tile_1x1','orange',8,7],'|',
+    ['pine_2x2','darkgreen',0,0],['bush_2x2','lime',10,0],['bush_2x2','green',0,9],['flower_1x1','yellow',10,10],['flower_1x1','orange',9,10],['flower_1x1','white',4,10],['flower_1x1','red',11,9],
+  ]),
+  // Mão: mèo cam ngồi thẳng, ngực + chân trắng, mắt xanh, mũi hồng, tai nhọn, vòng cổ đỏ chuông vàng, đuôi quấn chân
+  voxLevel('Mèo',['base_12x12','azure'],side([
+    '.....hhh....',
+    '....HHHHE...',
+    '....HHHHM...',
+    '.....rrrc...',
+    '...oowwwP...',
+    '...ooowwP...',
+    '...oooo.P...',
+  ],{h:W(4,7,'orange'),H:W(3,8,'orange'),E:[[3,3,'orange'],[4,4,'lime'],[5,6,'orange'],[7,7,'lime'],[8,8,'orange']],
+     M:[[3,3,'orange'],[4,4,'white'],[5,6,'pink'],[7,7,'white'],[8,8,'orange']],r:W(3,8,'red'),c:W(3,8,'red'),
+     o:W(3,8,'orange'),w:MID(3,8,'orange','white'),P:LEG(4,7,'white')}),[
+    ['pyr_2x2','orange',5,3],['pyr_2x2','orange',5,7],['round_tile_1x1','pink',7,3],['round_tile_1x1','pink',7,8],'|',
+    ['tile_1x2','darktan',5,5],['tile_1x2','darktan',6,6],['round_tile_1x1','white',8,5],['round_tile_1x1','white',8,6],'|',
+    ['tile_1x2','orange',1,8],['tile_1x2','orange',2,9],['tile_1x2','orange',4,9],['tile_1x2','orange',6,9],['round_tile_1x1','darktan',8,9],'|',
+    ['cyl_2x2','blue',9,0],['round_tile_1x1','white',9,0],['ball_1x1','red',1,1],['ball_1x1','yellow',10,9],['flower_1x1','pink',0,11],['flower_1x1','white',11,11],
+  ]),
+  // Thìn: rồng xanh thân uốn 3 khúc nhô lên khỏi mặt nước, đầu ngẩng có sừng vàng, bờm đỏ, râu vàng, gai lưng vàng, ngọc đỏ
+  voxLevel('Rồng',['base_12x12','darkazure'],side([
+    '.........HH.',
+    '.........HEJ',
+    '..g...g..NNN',
+    '.ggg.ggg.NN.',
+    'gg.ggg.gggg.',
+  ],{H:W(4,7,'green'),E:EYE(4,7,'green','gold'),J:[[4,4,'white'],[5,6,'yellow'],[7,7,'white']],N:W(4,7,'green'),
+     g:W(5,6,'green')}),[
+    ['cone_1x1','gold',9,4],['cone_1x1','gold',9,7],['slope_1x2','red',9,5,1],['cheese_1x1','red',10,5,1],['cheese_1x1','red',10,6,1],'|',
+    ['plate_1x4','gold',11,3,1],['plate_1x4','gold',11,6,1],['round_1x1','gold',11,3],['round_1x1','gold',11,8],'|',
+    ['cheese_1x1','gold',2,5,1],['cheese_1x1','gold',2,6,1],['cheese_1x1','gold',6,5,1],['cheese_1x1','gold',6,6,1],['cheese_1x1','red',1,5,1],['cheese_1x1','red',5,6,1],['cheese_1x1','red',7,5,1],['cone_1x1','lime',0,5],'|',
+    ['round_1x1','gold',3,4],['round_1x1','gold',7,7],['round_1x1','gold',9,4],'|',
+    ['ball_2x2','red',1,9],['flame_1x1','orange',3,9],['flame_1x1','red',0,8],['tile_2x4','azure',6,9],['tile_1x4','white',7,11],['round_1x1','white',2,1],['round_1x1','white',6,1],
+  ]),
+  // Tỵ: rắn xanh cuộn 3 vòng vằn vàng, đầu ngẩng lưỡi đỏ thè, giữa sa mạc có cây dừa
+  voxLevel('Rắn',['base_12x12','sand'],[
+    [1,1,0,8,8,1,'green'], [3,3,0,4,4,1,''], [2,2,1,6,6,1,'green'], [4,4,1,2,2,1,''], [3,3,2,4,4,1,'green'],
+    [1,1,0,1,1,1,'yellow'], [5,1,0,1,1,1,'yellow'], [8,4,0,1,1,1,'yellow'], [8,8,0,1,1,1,'yellow'], [4,8,0,1,1,1,'yellow'], [1,5,0,1,1,1,'yellow'],
+    [2,4,1,1,1,1,'yellow'], [5,2,1,1,1,1,'yellow'], [7,6,1,1,1,1,'yellow'], [4,7,1,1,1,1,'yellow'],
+    [4,5,3,2,2,1,'green'], [4,5,4,5,2,1,'green'], [5,5,5,3,2,1,'green'], [7,5,5,1,2,1,'black'],
+  ],[
+    ['tile_1x2','red',8,5],['tile_1x1','red',9,6],['round_1x1','lime',5,5],['round_1x1','lime',5,6],['tile_1x2','lime',6,5],'|',
+    ['round_tile_1x1','yellow',2,2],['round_tile_1x1','yellow',6,2],['round_tile_1x1','yellow',7,7],['round_tile_1x1','yellow',3,6],'|',
+    ['palm_1x1','green',10,10],['trunk_1x1','brown',10,1],['palm_1x1','green',10,1],['flower_1x1','red',0,10],['flower_1x1','yellow',11,8],['round_1x1','tan',0,0],['round_1x1','tan',11,0],
+  ]),
+  // Ngọ: ngựa nâu chân cao, cổ vươn, bờm + đuôi đen, mõm be, yên đỏ viền vàng
+  voxLevel('Ngựa',['base_12x12','lime'],side([
+    '........mhh.',
+    '........mHEe',
+    '........NNNN',
+    '.bbbbbbbbN..',
+    'Tbbbbbbbb...',
+    'T.L....L....',
+    'T.L....L....',
+    'T.K....K....',
+  ],{h:W(5,5,'brown'),m:W(5,5,'black'),H:W(4,6,'brown'),E:EYE(4,6,'brown','black'),e:MID(4,6,'tan','black'),N:W(4,6,'brown'),b:W(4,6,'brown'),
+     t:W(5,5,'black'),T:W(5,5,'black'),L:LEG(4,6,'brown'),K:LEG(4,6,'black')}),[
+    ['cheese_1x1','brown',9,4,1],['cheese_1x1','brown',9,6,1],['round_1x1','black',10,4],['round_1x1','black',10,6],'|',
+    ['plate_2x4','red',3,4,1],['plate_1x2','gold',3,6,1],['plate_1x2','gold',4,6,1],['tile_1x2','darkred',4,5],['tile_1x2','gold',3,4,1],'|',
+    ['tile_1x2','black',8,5,1],['tile_1x2','brown',1,5],['tile_1x4','brown',6,4],'|',
+    ['bush_2x2','green',0,0],['flower_1x1','yellow',10,10],['flower_1x1','white',0,10],['flower_1x1','red',11,0],['brick_1x2','tan',9,9],['tile_1x2','lime',9,9],['round_tile_1x1','orange',10,9],
+  ]),
+  // Mùi: dê trắng lông xù, sừng cong be, râu dưới cằm, đứng cạnh mỏm đá xám
+  voxLevel('Dê',['base_12x12','green'],side([
+    '.........hh.',
+    '.........HEM',
+    '..wwwwwwwHHH',
+    '.WWWWWWWWWW.',
+    '..L....L....',
+    '..K....K....',
+  ],{h:W(4,6,'white'),H:W(4,6,'white'),E:EYE(4,6,'white','black'),M:MID(4,6,'tan','pink'),d:W(5,5,'white'),w:W(4,6,'white'),W:W(4,6,'white'),
+     L:LEG(4,6,'white'),K:LEG(4,6,'black')}),[
+    ['round_1x1','darktan',9,4],['round_1x1','darktan',9,6],['cone_1x1','darktan',9,4],['cone_1x1','darktan',9,6],['cheese_1x1','darktan',10,4,1],['cheese_1x1','darktan',10,6,1],'|',
+    ['round_1x1','white',2,4],['round_1x1','white',4,4],['round_1x1','white',6,4],['round_1x1','white',3,5],['round_1x1','white',5,5],['round_1x1','white',7,5],['round_1x1','white',2,6],['round_1x1','white',4,6],['round_1x1','white',6,6],'|',
+    ['round_1x1','white',3,4],['round_1x1','white',5,6],['round_1x1','white',7,4],['round_1x1','white',7,6],['cone_1x1','white',1,5],['round_1x1','pink',11,5],'|',
+    ['brick_2x2','gray',0,9],['brick_1x2','gray',2,10],['slope_2x2','darkgray',0,9,0],['cheese_1x1','gray',2,10],['bush_2x2','lime',9,9],['flower_1x1','yellow',11,0],['flower_1x1','white',4,10],['flower_1x1','pink',8,0],
+  ]),
+  // Thân: khỉ nâu ngồi ôm quả đào hồng, mặt + bụng be, tai tròn, đuôi dài cong lên
+  voxLevel('Khỉ',['base_12x12','darkgreen'],side([
+    '.....hhh....',
+    '....HHHHE...',
+    '....HHHHF...',
+    '.t...bbbAA..',
+    '.t..bbbbaa..',
+    '.t.bbbbB.ff.',
+    '.ttbbbbB.ff.',
+  ],{h:W(4,7,'brown'),H:W(3,8,'brown'),E:[[3,3,'brown'],[4,4,'tan'],[5,5,'black'],[6,6,'black'],[7,7,'tan'],[8,8,'brown']],
+     F:[[3,3,'brown'],[4,7,'tan'],[8,8,'brown']],t:W(5,5,'brown'),b:W(3,8,'brown'),B:MID(3,8,'brown','tan'),a:LEG(3,8,'brown'),A:W(3,8,'brown'),f:LEG(3,8,'tan')}),[
+    ['round_1x1','tan',5,2],['round_1x1','tan',5,9],['round_1x1','brown',6,2],['round_1x1','brown',6,9],'|',
+    ['ball_2x2','peach',9,5],['round_1x1','green',9,4],['round_tile_1x1','green',9,7],'|',
+    ['round_1x1','brown',1,5],['cone_1x1','brown',2,5],['tile_1x4','brown',5,4,1],['tile_1x4','brown',6,4,1],'|',
+    ['pine_2x2','darkgreen',0,0],['trunk_1x1','brown',10,0],['palm_1x1','green',10,0],['ball_1x1','yellow',10,10],['ball_1x1','yellow',11,10],['flower_1x1','pink',0,11],['flower_1x1','white',2,10],
+  ]),
+  // Dậu: gà trống trắng ức căng, mào + yếm đỏ, mỏ vàng, cánh nâu đỏ, đuôi lông xanh cao vút, chân vàng, rơm + thóc
+  voxLevel('Gà',['base_12x12','tan'],side([
+    '.......hh...',
+    '.......hEb..',
+    '.ff...nnRr..',
+    '.fWWWWWccc..',
+    '..BBBBBBBB..',
+    '...L..L.....',
+    '...L..L.....',
+  ],{h:W(4,7,'white'),E:EYE(4,7,'white','black'),b:W(5,6,'yellow'),R:MID(4,7,'white','red'),r:W(5,6,'red'),n:W(4,7,'white'),
+     f:W(5,6,'white'),W:MID(4,7,'darkred','white'),c:W(4,7,'white'),B:W(4,7,'white'),L:W(5,6,'yellow')}),[
+    ['cheese_1x2','red',7,5,1],['cheese_1x1','red',8,5,1],['cheese_1x1','red',8,6,1],['round_1x1','red',7,6],'|',
+    ['sail_1x2','darkgreen',1,5],['sail_1x2','blue',2,5],['flame_1x1','green',1,4],['flame_1x1','darkazure',2,7],['flame_1x1','green',1,7],'|',
+    ['tile_1x4','darkred',2,4],['tile_1x4','darkred',2,7],['round_1x1','orange',4,5],['round_1x1','orange',4,6],['tile_1x2','white',5,5],'|',
+    ['round_tile_1x1','yellow',9,9],['round_tile_1x1','yellow',10,8],['round_tile_1x1','yellow',8,10],['round_tile_1x1','yellow',10,10],['plate_2x4','brown',0,9],['ball_1x1','white',1,9],['ball_1x1','white',2,10],['flower_1x1','red',10,1],['flower_1x1','yellow',11,2],
+  ]),
+  // Tuất: chó vàng tai cụp nâu, mõm trắng mũi đen, ngực trắng, vòng cổ đỏ thẻ vàng, đuôi vẫy, khúc xương + bát cơm
+  voxLevel('Chó',['base_12x12','lime'],side([
+    '.........HH.',
+    '.k......cHEN',
+    '.tbbbbbbCHHM',
+    '..bbbbbbbHHH',
+    '..L.....L...',
+    '..P.....P...',
+  ],{H:W(4,7,'tan'),E:EYE(4,7,'tan','black'),N:MID(4,7,'tan','black'),M:MID(4,7,'tan','white'),k:W(5,6,'tan'),t:W(5,6,'tan'),
+     b:W(4,7,'tan'),c:W(4,7,'red'),C:MID(4,7,'tan','white'),L:LEG(4,7,'tan'),P:LEG(4,7,'white')}),[
+    ['round_1x1','gold',8,5],['tile_1x2','brown',3,5],['tile_1x2','brown',4,6],['tile_1x1','brown',6,5],'|',
+    ['plate_1x2','brown',9,3,1],['plate_1x2','brown',9,7,1],['cheese_1x1','brown',9,3,1],['cheese_1x1','brown',9,8,1],['round_1x1','tan',1,5],'|',
+    ['tile_1x2','white',3,10],['round_tile_1x1','white',2,10],['round_tile_1x1','white',5,10],'|',
+    ['cyl_2x2','red',9,9],['round_tile_1x1','white',9,9],['round_tile_1x1','white',10,10],['flower_1x1','yellow',0,0],['flower_1x1','white',11,0],['bush_2x2','green',0,8],
+  ]),
+  // Hợi: lợn hồng tròn trịa, mõm hồng đậm 2 lỗ mũi, tai cụp, đuôi xoắn, lăn bên vũng bùn
+  voxLevel('Lợn',['base_12x12','green'],side([
+    '...pppppp...',
+    '..PPPPPPPHES',
+    '..BBBBBBBBBB',
+    '...L...L....',
+  ],{p:W(4,7,'pink'),H:W(4,7,'pink'),E:EYE(4,7,'pink','black'),S:MID(4,7,'pink','darkred'),P:W(3,8,'pink'),B:W(4,7,'pink'),L:LEG(4,7,'pink')}),[
+    ['cheese_1x1','pink',9,4,1],['cheese_1x1','pink',9,7,1],['round_tile_1x1','pink',10,5],['round_tile_1x1','pink',10,6],'|',
+    ['round_1x1','pink',1,5],['round_tile_1x1','pink',0,5],['tile_1x4','pink',4,5],['round_tile_1x1','pink',3,4],['round_tile_1x1','pink',7,7],'|',
+    ['tile_2x4','brown',0,9],['tile_1x2','brown',4,10],['tile_1x2','darktan',0,8],['round_tile_1x1','darktan',5,10],['flower_1x1','yellow',10,0],['flower_1x1','pink',11,10],['bush_2x2','lime',0,0],['ball_1x1','red',9,10],
+  ]),
+];
+LEVELS.push(...ZODIAC);
+// ---- HẾT 12 CON GIÁP ----
 // bộ màn = các màn liền nhau trong LEVELS (thêm màn mới: chèn vào LEVELS rồi tăng n của bộ)
 const SERIES=[
   {name:'Khởi động', n:4, c:'#3fa9f5', base:40},
   {name:'Kỳ quan cổ đại', n:7, c:'#e3a923', base:150},
   {name:'Việt Nam', n:5, c:'#e8463a', base:200},
+  {name:'12 con giáp', n:ZODIAC.length, c:'#9b5de5', base:250},
 ];
 SERIES.reduce((a,s)=>(s.from=a)+s.n,0);
 console.assert(SERIES.reduce((a,s)=>a+s.n,0)===LEVELS.length,'SERIES.n không khớp số màn');
@@ -1253,7 +1522,7 @@ function bomOf(i){
   return bomCache[i]=[...m.values()];
 }
 // độ hiếm = độ khó trong bộ (nhiều mảnh hơn = hiếm hơn); không có tên = Thường
-const RARITY={'Lâu đài':2,'Vườn treo Babylon':1,'Lăng Halicarnassus':1,'Kim tự tháp Giza':1,'Đền Artemis':2,'Chùa Cầu Hội An':1,'Chùa Một Cột':1,'Khuê Văn Các':2};
+const RARITY={'Rồng':2,'Hổ':1,'Rắn':1,'Ngựa':1,'Mèo':1,'Lâu đài':2,'Vườn treo Babylon':1,'Lăng Halicarnassus':1,'Kim tự tháp Giza':1,'Đền Artemis':2,'Chùa Cầu Hội An':1,'Chùa Một Cột':1,'Khuê Văn Các':2};
 // shop = giá mua đúng (khoảng 2–4 level xu), rew = thưởng lắp xong 1★ (thiếu một chút so với hộp 100)
 const RAR=[{n:'Thường',w:6,shop:150,rew:60,c:'#dfe6f3'},{n:'Hiếm',w:3,shop:250,rew:80,c:'#4aa8ff'},{n:'Huyền thoại',w:1,shop:400,rew:120,c:'#ffc21a'}];
 const STAR_REW=[0,1,1.25,1.5], SPECIAL_P=0.12, SPECIAL_REW=1.2, REBUILD_REWARD=0; // lắp lại không có xu: hết cày
@@ -1263,10 +1532,10 @@ const seriesIdx=s=>[...Array(SERIES[s].n).keys()].map(k=>SERIES[s].from+k);
 const shopPrice=i=>RAR[rarOf(i)].shop;
 const BOX_PRICE=100, boxPrice=()=>BOX_PRICE; // một hộp chung cho cả game, chỉ ra mô hình chưa có
 const rewardFor=(i,stars,sp)=>r5(RAR[rarOf(i)].rew*STAR_REW[stars]*(sp?SPECIAL_REW:1));
-const SERIES_BONUS=[200,300,300], seriesBonus=s=>SERIES_BONUS[s]; // đủ bộ ≈ đủ mua 1 mô hình mơ ước
+const SERIES_BONUS=[200,300,300,400], seriesBonus=s=>SERIES_BONUS[s]; // đủ bộ ≈ đủ mua 1 mô hình mơ ước
 // đường lắp: thứ tự level tự dẫn, độ khó răng cưa (xen kẽ các bộ). Mua trước mô hình nào thì tới lượt nó tự bỏ qua
-const ROAD=['Cây nấm','Ngôi nhà','Dưa hấu','Tượng Rhodes','Cột cờ Hà Nội','Cầu Vàng','Vườn treo Babylon','Tượng Zeus','Chùa Cầu Hội An','Lâu đài',
-  'Hải đăng Alexandria','Chùa Một Cột','Kim tự tháp Giza','Lăng Halicarnassus','Khuê Văn Các','Đền Artemis'].map(n=>LEVELS.findIndex(l=>l.name===n));
+const ROAD=['Cây nấm','Ngôi nhà','Dưa hấu','Tượng Rhodes','Chuột','Cột cờ Hà Nội','Cầu Vàng','Lợn','Vườn treo Babylon','Tượng Zeus','Gà','Chùa Cầu Hội An','Lâu đài','Chó',
+  'Hải đăng Alexandria','Dê','Chùa Một Cột','Trâu','Kim tự tháp Giza','Mèo','Khỉ','Lăng Halicarnassus','Hổ','Khuê Văn Các','Ngựa','Rắn','Đền Artemis','Rồng'].map(n=>LEVELS.findIndex(l=>l.name===n));
 console.assert(ROAD.length===LEVELS.length&&new Set(ROAD).size===LEVELS.length&&!ROAD.includes(-1),'đường lắp phải có đủ mọi mô hình');
 // tỉ lệ ra từng mô hình trong pool (cả game, cố định theo độ hiếm, không đổi theo thứ đã có)
 function boxOdds(pool){ const W=pool.reduce((a,i)=>a+RAR[rarOf(i)].w,0); return pool.map(i=>({i,p:RAR[rarOf(i)].w/W})); }

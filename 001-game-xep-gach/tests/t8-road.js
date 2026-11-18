@@ -2,7 +2,7 @@
 const save0 = o => new Function("localStorage.setItem('xepgach.v2'," + JSON.stringify(JSON.stringify(o)) + ')');
 module.exports = [
   { name: 'duong-lap', pre: save0({ tut: 6 }), post: async () => {
-      ok(ROAD.length === 16 && new Set(ROAD).size === 16 && LEVELS[ROAD[0]].name === 'Cây nấm', 'đường lắp đủ 16 mô hình, bắt đầu Cây nấm');
+      ok(ROAD.length === LEVELS.length && new Set(ROAD).size === LEVELS.length && LEVELS[ROAD[0]].name === 'Cây nấm', 'đường lắp đủ mọi mô hình, bắt đầu Cây nấm');
       ok(roadNext() === ROAD[0] && $('hNextBtn').textContent.includes('LEVEL 1') && $('hNext').textContent.includes('Cây nấm'), 'màn chính: LẮP LEVEL 1');
       $('hNextBtn').click();
       ok($('bpView').classList.contains('show') && bpI === ROAD[0] && owned(ROAD[0]), 'level miễn phí: có mô hình, mở sách');
@@ -21,12 +21,12 @@ module.exports = [
       ok(roadNext() === ROAD[k + 1] && $('hNextBtn').textContent.includes('LEVEL ' + (k + 2)), 'tới lượt mô hình đã mua thì tự bỏ qua');
   } },
   { name: 'hop-khong-trung', pre: save0({ tut: 6, coins: 99999, best: { 'Cây nấm': 3 } }), post: async () => {
-      for (let n = 0; n < 15; n++) {
+      for (let n = 0; n < LEVELS.length - 1; n++) {
         const g = peekBox(); ok(!owned(g.i) && (g.i !== roadNext() || ALL_IDX.filter(i => !owned(i)).length === 1), 'hộp ra cái chưa có, không trùng level kế: ' + g.i);
         const c = ALL_IDX.filter(owned).length; openBox(); ok(ALL_IDX.filter(owned).length === c + 1, 'mỗi hộp thêm 1 mô hình');
       }
       ok(!$('hKhoBtn') && !$('kho'), 'không còn kho');
-      const sp = Object.keys(S.sp).length, g = peekBox(); ok(g.sp && !special(g.i), 'đủ 16 rồi: hộp ra bản vàng kim');
+      const sp = Object.keys(S.sp).length, g = peekBox(); ok(g.sp && !special(g.i), 'có đủ rồi: hộp ra bản vàng kim');
       openBox(); ok(Object.keys(S.sp).length === sp + 1, 'nâng vàng kim');
   } },
   { name: 'thieu-xu', pre: save0({ tut: 6, coins: 100, best: { 'Cây nấm': 3 } }), post: async () => {
@@ -77,7 +77,7 @@ module.exports = [
       ok(/\d+:\d\d:\d\d/.test($('shop').textContent) && S.daily.d === new Date().toDateString(), 'đếm ngược tới lúc đổi kệ, lưu theo ngày');
       renderShopM(); ok(JSON.stringify(ids()) === JSON.stringify(a), 'trong ngày kệ giữ nguyên');
       showSeries(); const rows = document.querySelectorAll('#sList .sRow');
-      ok(rows.length === 3 && [...rows].every((r, s) => r.querySelectorAll('.sRowL .mItem').length === SERIES[s].n && !r.querySelector('.sMore')), 'tất cả mô hình: mỗi bộ 1 hàng cuộn ngang, không mở rộng xuống');
+      ok(rows.length === SERIES.length && [...rows].every((r, s) => r.querySelectorAll('.sRowL .mItem').length === SERIES[s].n && !r.querySelector('.sMore')), 'tất cả mô hình: mỗi bộ 1 hàng cuộn ngang, không mở rộng xuống');
       ok(rows[0].textContent.includes('1/4'), 'hàng có số đã có / tổng');
       const L1 = rows[1].querySelector('.sRowL'); ok(L1.scrollWidth > L1.clientWidth && getComputedStyle(L1).overflowX === 'auto', 'hàng dài hơn khung: cuộn ngang');
       $('serClose').click(); const si = +sale[0].dataset.i; document.querySelector(`#mShelf .mItem[data-i="${si}"]`).click(); $('mBuy').click();

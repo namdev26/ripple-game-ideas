@@ -50,7 +50,7 @@ module.exports = [
   } },
   { name: 'du-bo-van-mo', pre: save0({ coins: 200, best: { 'Cây nấm': 1, 'Ngôi nhà': 1, 'Dưa hấu': 1 }, own: { 'Lâu đài': true } }), post: async () => {
       showHome(0);
-      ok(!$('playBtn').classList.contains('dis') && $('playBtn').textContent.includes('100') && $('hName').textContent.includes('4/16'), 'đủ bộ vẫn mở hộp chung: ' + $('hName').textContent);
+      ok(!$('playBtn').classList.contains('dis') && $('playBtn').textContent.includes('100') && $('hName').textContent.includes('4/' + LEVELS.length), 'đủ bộ vẫn mở hộp chung: ' + $('hName').textContent);
       $('playBtn').click(); ok($('unbox').classList.contains('show') && S.coins < 200, 'mở được');
   } },
   { name: 'lac-thu', pre: save0({ coins: 100, best: { 'Cây nấm': 3 } }), post: async () => {
@@ -67,7 +67,7 @@ module.exports = [
       $('hColBtn').click();
       ok($('series').classList.contains('show'), 'phải mở bộ sưu tập');
       const items = document.querySelectorAll('#sList .sRowL .mItem');
-      ok(items.length === 16 && document.querySelectorAll('#sList .sRow').length === 3, 'bộ sưu tập: cả 16 mô hình, mỗi bộ 1 hàng: ' + items.length);
+      ok(items.length === LEVELS.length && document.querySelectorAll('#sList .sRow').length === SERIES.length, 'bộ sưu tập: đủ mọi mô hình, mỗi bộ 1 hàng: ' + items.length);
       ok(items[0].textContent.includes('Đã có') && items[1].textContent.includes('miễn phí'), 'Cây nấm đã có, Ngôi nhà là level kế miễn phí');
       ok([...items].every(e => e.querySelector('.pbox') && !e.querySelector(':scope > img')), 'cửa hàng hiển thị hộp sản phẩm, không phải ảnh mô hình trần');
       items[6].click(); ok($('shop').classList.contains('show') && mSel === 6 && $('mImg').querySelector('.pbox'), 'chạm mô hình chưa có → khung mua của tiệm gạch');
@@ -89,7 +89,7 @@ module.exports = [
       const pend = [...$('hLevels').children];
       ok(pend.length === 2 && pend[1].classList.contains('sp') && pend.every(e => e.querySelector('.pbox') && e.textContent.includes('NEW') && e.textContent.includes('0%')), 'thẻ chờ lắp: hộp sản phẩm, NEW, 0%, bản đặc biệt vàng');
       ok($('hDrawer').textContent.includes('2 bộ') && R('hDrawer').bottom <= R('hNav').top + 1 && R('hLevels').height === 0, 'ngăn kéo mặc định thu gọn thành 1 thanh trên thanh dưới, đếm số bộ');
-      ok(!$('serBtn') && !document.querySelector('#home .logo') && $('hNext').textContent.includes('Level 2/16') && $('hLife').textContent.includes('5'), 'bỏ nút bộ + logo; thanh trên hiện ❤; tiến độ đường lắp dưới tên mô hình');
+      ok(!$('serBtn') && !document.querySelector('#home .logo') && $('hNext').textContent.includes('Level 2/' + LEVELS.length) && $('hLife').textContent.includes('5'), 'bỏ nút bộ + logo; thanh trên hiện ❤; tiến độ đường lắp dưới tên mô hình');
       ok($('hNext').querySelector('.pbox') && $('hNext').textContent.includes('Ngôi nhà') && !hit(R('hNext'), R('hLeft')) && !hit(R('hNext'), R('hDrawer')) && !hit(R('hNextBtn'), R('hNav')), 'tiêu điểm: hộp level kế + tên + nút chơi, không đè cột trái / ngăn kéo / thanh dưới');
       $('hTabDone').click(); ok(R('hLevels').height > 0 && $('hLevels').children.length === 1 && $('hLevels').textContent.includes('100%') && $('hDrawer').textContent.includes('1 bộ'), 'chạm tab Đã xong: mở ngăn kéo, mô hình đã lắp');
       $('hTabWait').click(); $('hDrawerTog').click(); ok(R('hLevels').height === 0 && !S.showWait, 'thu gọn ngăn kéo');
