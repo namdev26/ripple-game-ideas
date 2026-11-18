@@ -28,5 +28,12 @@ module.exports = [
       it[2].click(); ok($('shPick').style.display === 'none', 'chọn bóng đen không làm gì');
       it[1].click(); ok($('bpView').classList.contains('show') && bpI === 1, 'chờ lắp → mở sách');
   } },
+  { name: 'buoc-khong-bi-che', query: '?all', post: async () => {
+      const i = LEVELS.findIndex(l => l.name === 'Chuột'), ts = modelInfo(LEVELS[i]).ts, n = ts.find(t => t.key === 'arch_1x4').step, v = stepView(ts, n);
+      ok(v.sc > 0.8 && v.dir.z < 0, 'hang chuột sau lưng con chuột: sổ bước xoay ra sau để thấy rõ, điểm ' + v.sc);
+      ok(stepView(ts, 1).dir.equals(new THREE.Vector3(0.55, 0.65, 1)), 'bước không bị che giữ góc quen thuộc');
+      ok(ts.filter(t => t.step === n).every(t => t.x < 4 && t.z < 4), 'bước chỉ lắp 1 cụm ở 1 chỗ (không gom phô mai ở góc kia)');
+      ok(thumbStep(i, n, false, true).startsWith('data:image'), 'vẽ được ảnh bước');
+  } },
 ];
 module.exports.lib = require('./t4-build.js').lib;

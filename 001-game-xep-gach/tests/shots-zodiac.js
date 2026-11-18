@@ -2,6 +2,9 @@
 // zd-all: cả bộ ở góc mặc định · zd-<k>: 1 con, 4 góc (mặc định, trước mặt, sau, trên)
 module.exports = [{ name: 'zd-lap', query: '?all', post: async () => { const i = LEVELS.findIndex(l => l.name === 'Rồng'); startBuild(i); targets.filter(t => t.step < 6).forEach(t => commit(t)); await wait(500); showStep(6); } },
   { name: 'zd-sach', query: '?all', post: async () => { openBlueprint(LEVELS.findIndex(l => l.name === 'Mèo')); bpPage = 5; renderBp(); } },
+  { name: 'zd-buoc', query: '?all', post: async () => { const i = LEVELS.findIndex(l => l.name === 'Chuột'), N = LEVELS[i].steps.length, d = document.createElement('div');
+      d.style.cssText = 'position:fixed;inset:0;z-index:99;background:#222;display:grid;grid-template-columns:repeat(3,1fr);gap:2px;color:#fff;font:12px sans-serif';
+      for (let n = N - 9; n < N; n++) d.innerHTML += `<div><img style="width:100%" src="${thumbStep(i, n, false, true)}">Bước ${n + 1}/${N}</div>`; document.body.appendChild(d); } },
   { name: 'zd-all', post: async () => zgrid([...Array(ZODIAC.length).keys()]) }]
   .concat([...Array(12).keys()].map(k => ({ name: 'zd-' + k, post: new Function(`zgrid([${k}], [[0.55, 0.65, 1], [1, 0.4, 0.15], [-1, 0.5, -0.6], [0.2, 1.5, 0.6]])`) })));
 const zlib = () => {

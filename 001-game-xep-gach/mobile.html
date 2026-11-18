@@ -1245,13 +1245,16 @@ function voxLevel(name,base,boxes,det){
       for(let i=0;i<fw;i++) for(let j=0;j<fd;j++) hm.set((x+i)+","+(z+j),y+3); });
     const n=Math.ceil(layer.length/10); // bước ≤ 10 mảnh
     for(let k=0;k<n;k++) steps.push(layer.slice(Math.round(k*layer.length/n),Math.round((k+1)*layer.length/n))); });
+  // chi tiết: mỗi nhóm (ngăn bởi '|') lại tách theo chỗ đặt, mỗi bước chỉ lắp 1 cụm ở 1 chỗ (các mảnh cách nhau ≤ 3 núm)
   let st=[];
-  [...det,'|',...(VOX_SCENE[name]||[])].forEach(d=>{ if(d==="|"){ if(st.length) steps.push(st); st=[]; return; }
+  const flush=()=>{ let cl=[]; st.forEach((p,i)=>{ const near=cl.filter(c=>c.some(([q])=>Math.max(Math.abs(q[2]-p[2]),Math.abs(q[4]-p[4]))<=3)); // gần nhiều cụm thì gộp lại, giữ thứ tự gốc
+    cl=cl.filter(c=>!near.includes(c)); cl.push([].concat(...near,[[p,i]]).sort((u,v)=>u[1]-v[1])); }); cl.sort((u,v)=>u[0][1]-v[0][1]).forEach(c=>steps.push(c.map(([p])=>p))); st=[]; };
+  [...det,'|',...(VOX_SCENE[name]||[])].forEach(d=>{ if(d==="|") return flush();
     const [p,c,x,z,r=0]=d, fw=r%2?PARTS[p].d:PARTS[p].w, fd=r%2?PARTS[p].w:PARTS[p].d;
     let y=0; for(let i=0;i<fw;i++) for(let j=0;j<fd;j++) y=Math.max(y,hm.get((x+i)+","+(z+j))||0);
     for(let i=0;i<fw;i++) for(let j=0;j<fd;j++) hm.set((x+i)+","+(z+j),y+PARTS[p].h);
     st.push([p,c,x,y,z,r]); });
-  if (st.length) steps.push(st);
+  flush();
   return {name,size:[bh.w,bh.d],steps,fix};
 }
 // chia voxel từng tầng thành gạch: ô treo (không có gì bên dưới) phải nằm chung viên gạch với ô có chỗ tựa.
@@ -2588,13 +2591,34 @@ $('iapBody').onclick=e=>{ if (e.target.closest('.price, .iapFoot button')){ sfx.
 // ---- sách hướng dẫn kiểu LEGO: bìa → mỗi bước một trang (khung mảnh "2x + tên màu") → danh sách mảnh ----
 // sổ bước: mảnh các bước trước xám nhạt đồng màu để mảnh của bước hiện tại nổi bật
 const sbBrick=(t,n,sp)=>t.step<n?['gray','ghost']:[kitColor(sp,t.color)];
-// ảnh mô hình lắp tới hết bước n; hl: mảnh của bước n viền đỏ; hl còn làm xám các bước trước
+// góc nhìn cho từng bước: góc quen thuộc trước, rồi 8 hướng quanh × 2 độ cao
+const STEP_DIRS=[[0.55,0.65,1]].concat([...Array(8)].flatMap((_,k)=>{ const a=k*Math.PI/4+Math.PI/8; return [[Math.sin(a),0.65,Math.cos(a)],[Math.sin(a)*0.6,1.5,Math.cos(a)*0.6]]; }));
+const boxOf=t=>{ const [fx,fz]=footprint(t.key,t.rot); return [t.x,t.y*PLATE,t.z,t.x+fx,(t.y+PARTS[t.key].h)*PLATE,t.z+fz]; };
+const rayHit=(p,d,b)=>{ let t0=1e-3,t1=1e9; for(let a=0;a<3;a++){ let u=(b[a]-p[a])/d[a], v=(b[a+3]-p[a])/d[a]; if(u>v) [u,v]=[v,u]; t0=Math.max(t0,u); t1=Math.min(t1,v); if(t0>t1) return false; } return true; };
+// chọn góc thấy rõ mảnh của bước n nhất (bắn tia từ các điểm trên mảnh mới về phía máy ảnh, đếm điểm không bị mảnh cũ che);
+// trả cả các mảnh cũ còn che ở góc đó để vẽ trong suốt
+function stepView(ts,n){
+  const now=ts.filter(t=>t.step===n), old=ts.filter(t=>t.step<n).map(t=>[t,boxOf(t)]);
+  const pts=now.flatMap(t=>{ const [x0,y0,z0,x1,y1,z1]=boxOf(t), e=0.15, ym=(y0+y1)/2; return [[(x0+x1)/2,y1-0.02,(z0+z1)/2],[x0+e,y1-0.02,z0+e],[x1-e,y1-0.02,z1-e],[(x0+x1)/2,ym,z1-0.02],[x1-0.02,ym,(z0+z1)/2],[x0+0.02,ym,(z0+z1)/2],[(x0+x1)/2,ym,z0+0.02]]; });
+  let best=null;
+  STEP_DIRS.forEach((v,k)=>{ const L=Math.hypot(...v), d=v.map(c=>c/L), hid=new Set(); let vis=0;
+    pts.forEach(p=>{ let ok=true; for(const [t,b] of old) if(rayHit(p,d,b)){ ok=false; hid.add(t); } if(ok) vis++; });
+    const sc=(pts.length?vis/pts.length:1)-(k?0.12:0); // góc quen thuộc được ưu tiên, chỉ xoay khi bị che nhiều
+    if (!best||sc>best.sc) best={sc,dir:new THREE.Vector3(...v),hid}; });
+  return best;
+}
+const xray=o=>{ o.userData.meshes.forEach(m=>{ m.material=m.material.clone(); m.material.transparent=true; m.material.opacity=0.16; m.material.depthWrite=false; }); o.userData.lines.material=LINE.ghost; };
+// ảnh mô hình lắp tới hết bước n; hl: mảnh của bước n viền đỏ; hl còn làm xám các bước trước. Mảnh cũ che mảnh mới → trong suốt
 function thumbStep(i,n,sp,hl){
   const k='st'+i+':'+n+(sp?'s':'')+(hl?'h':''); if (thumbCache[k]) return thumbCache[k];
-  const info=modelInfo(LEVELS[i]), g=new THREE.Group();
-  info.ts.forEach(t=>{ if(t.step>n) return; const o=hl?makeBrick(t.key,...sbBrick(t,n,sp)):makeBrick(t.key,kitColor(sp,t.color)); if(hl&&t.step===n) o.userData.lines.material=LINE.hl; placeObj(o,t.key,t.x,t.y,t.z,t.rot); g.add(o); });
+  const info=modelInfo(LEVELS[i]), g=new THREE.Group(), v=stepView(info.ts,n);
+  info.ts.forEach(t=>{ if(t.step>n) return; const o=hl?makeBrick(t.key,...sbBrick(t,n,sp)):makeBrick(t.key,kitColor(sp,t.color)); if(hl&&t.step===n) o.userData.lines.material=LINE.hl; if(v.hid.has(t)) xray(o); placeObj(o,t.key,t.x,t.y,t.z,t.rot); g.add(o); });
   if (hl) thumbR.setSize(512,512); // sổ bước phóng to được → ảnh nét hơn
-  thumbCache[k]=renderThumb(g,info.center,info.radius,new THREE.Vector3(0.55,0.65,1));
+  // phóng về phía chỗ đang lắp: tâm lệch về mảnh mới, khung nhỏ lại nhưng vẫn thấy đủ phần xung quanh
+  const nb=info.ts.filter(t=>t.step===n).map(boxOf), lo=[0,1,2].map(a=>Math.min(...nb.map(b=>b[a]))), hi=[3,4,5].map(a=>Math.max(...nb.map(b=>b[a])));
+  const nc=new THREE.Vector3((lo[0]+hi[0])/2,(lo[1]+hi[1])/2,(lo[2]+hi[2])/2), nr=Math.hypot(hi[0]-lo[0],hi[1]-lo[1],hi[2]-lo[2])/2;
+  const r=clamp(nr*2.6+1.5,info.radius*0.5,info.radius), c=info.center.clone().lerp(nc,1-r/info.radius);
+  thumbCache[k]=renderThumb(g,c,r,v.dir);
   if (hl) thumbR.setSize(256,256);
   return thumbCache[k];
 }
