@@ -2375,7 +2375,7 @@ $('hLevels').onclick=e=>{ const b=e.target.closest('[data-i]'); if(!b) return; s
 // mỗi bộ 1 tầng kệ cuộn ngang (cuối Tiệm Gạch)
 const seriesRows=()=>SERIES.map((r,s)=>{ const ids=seriesIdx(s), have=ids.filter(owned).length, stars=ids.reduce((a,i)=>a+best(i),0);
     return `<div class="sRow" style="--sc:${r.c}"><div class="sRowH"><b>${r.name}</b><small>${have}/${ids.length} ✓ · ★${stars}/${ids.length*3}</small>${ids.length>3?'<span class="sHint">Kéo ngang ›</span>':''}</div>`
-      +`<div class="sRowL">${ids.map(mItemHtml).join('')}</div><small class="sBonus">${ids.every(built)?'✓ Đủ bộ':'Đủ bộ +'+seriesBonus(s)+'🪙'}</small></div>`; }).join('');
+      +`<div class="sRowL">${[...ids].sort((a,b)=>owned(a)-owned(b)).map(mItemHtml).join('')}</div><small class="sBonus">${ids.every(built)?'✓ Đủ bộ':'Đủ bộ +'+seriesBonus(s)+'🪙'}</small></div>`; }).join('');
 
 // ====================== HỘP BÍ ẨN / CỬA HÀNG / SÁCH HƯỚNG DẪN ======================
 // một hộp chung cho cả game, tỉ lệ cố định; ra trùng thì đổi xu bằng giá cửa hàng

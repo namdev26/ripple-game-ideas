@@ -68,9 +68,10 @@ module.exports = [
       $('shopBtn').click();
       const items = document.querySelectorAll('#mAll .sRowL .mItem');
       ok(items.length === LEVELS.length && document.querySelectorAll('#mAll .sRow').length === SERIES.length, 'tiệm gạch: đủ mọi mô hình, mỗi bộ 1 hàng: ' + items.length);
-      ok(items[0].textContent.includes('Đã có') && items[1].textContent.includes('miễn phí'), 'Cây nấm đã có, Ngôi nhà là level kế miễn phí');
+      const row0 = [...document.querySelectorAll('#mAll .sRow')[0].querySelectorAll('.mItem')];
+      ok(row0[0].textContent.includes('miễn phí') && row0[row0.length - 1].textContent.includes('Đã có') && +row0[row0.length - 1].dataset.i === 0, 'Ngôi nhà (level kế miễn phí) lên đầu, Cây nấm đã có xuống cuối hàng');
       ok([...items].every(e => e.querySelector('.pbox') && !e.querySelector(':scope > img')), 'cửa hàng hiển thị hộp sản phẩm, không phải ảnh mô hình trần');
-      items[6].click(); ok($('shop').classList.contains('show') && mSel === 6 && $('mImg').querySelector('.pbox'), 'chạm mô hình chưa có → khung mua');
+      document.querySelector('#mAll .mItem[data-i="6"]').click(); ok($('shop').classList.contains('show') && mSel === 6 && $('mImg').querySelector('.pbox'), 'chạm mô hình chưa có → khung mua');
       $('mBuy').click();
       ok(S.coins === 50 && owned(6) && !special(6), 'mua Tượng Zeus 150: ' + S.coins);
       ok($('unbox').classList.contains('show') && $('ubReel').offsetWidth === 0, 'mua xong có mở hộp, không quay');
@@ -78,7 +79,7 @@ module.exports = [
       await wait(4200); ok($('ubBtns').classList.contains('on') && $('ubPrize').textContent.includes('Tượng Zeus'), 'hiệu ứng ngắn phải xong, hiện hộp Tượng Zeus');
   } },
   { name: 'cua-hang-thieu-xu', pre: save0({ coins: 50, best: { 'Cây nấm': 3 } }), post: async () => {
-      $('shopBtn').click(); document.querySelectorAll('#mAll .sRowL .mItem')[3].click(); $('mBuy').click();
+      $('shopBtn').click(); document.querySelector('#mAll .mItem[data-i="3"]').click(); $('mBuy').click();
       ok(S.coins === 50 && !owned(3) && !$('unbox').classList.contains('show') && $('needModal').classList.contains('show'), 'thiếu xu không mua được Lâu đài, hiện bảng thiếu xu');
   } },
   { name: 'home-bo-cuc', pre: save0({ coins: 100, best: { 'Cây nấm': 3 }, own: { 'Ngôi nhà': true, 'Dưa hấu': true }, sp: { 'Dưa hấu': true }, tut: 6 }), post: async () => {
