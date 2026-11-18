@@ -37,5 +37,10 @@ module.exports = [
       const same = LEVELS.every(l => { const c = l.steps.length; splitHiddenSteps(l); return l.steps.length === c; });
       ok(same && LEVELS.find(l => l.name === 'Lâu đài').steps.length > 21, 'bước rải nhiều chỗ bị che đã được tách (chia lại không đổi gì nữa)');
   } },
+  { name: 'so-buoc-quay-theo-board', post: async () => {
+      giveModel(1); startBuild(1); await wait(300); const a = $('sbImg').src;
+      const v = camera.position.clone().sub(controls.target); v.applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.75); camera.position.copy(controls.target).add(v); controls.update();
+      await wait(400); ok($('sbImg').src !== a && $('sbImg').src.startsWith('data:image'), 'xoay board → hình sổ bước quay theo cùng hướng');
+  } },
 ];
 module.exports.lib = require('./t4-build.js').lib;

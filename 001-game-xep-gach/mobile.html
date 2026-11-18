@@ -1740,6 +1740,17 @@ heldScene.add(new THREE.HemisphereLight(0xffffff,0x9894c8,0.78));
 const heldSun=new THREE.DirectionalLight(0xfff4e6,0.62); heldScene.add(heldSun); heldScene.add(heldSun.target);
 const camera=new THREE.PerspectiveCamera(38,9/16,0.1,400);
 const controls=new THREE.OrbitControls(camera,canvas);
+// sổ bước quay cùng hướng với board người chơi đang xoay (làm tròn 15° để dùng lại ảnh đã vẽ, cập nhật tối đa ~12 lần/giây)
+const camDir=()=>{ const v=camera.position.clone().sub(controls.target), q=Math.PI/12;
+  const az=Math.round(Math.atan2(v.x,v.z)/q)*q, el=clamp(Math.round(Math.atan2(v.y,Math.hypot(v.x,v.z))/q)*q,q,Math.PI/2-0.01);
+  return new THREE.Vector3(Math.sin(az)*Math.cos(el),Math.sin(el),Math.cos(az)*Math.cos(el)); };
+let sbKey='', sbT=0;
+function updateSb(){
+  if (!L||done||replaying) return;
+  const d=camDir(), k=levelIdx+':'+step+':'+d.toArray().join(); if (k===sbKey) return;
+  sbKey=k; $('sbImg').src=thumbStep(levelIdx,step,special(levelIdx),true,d);
+}
+controls.addEventListener('change',()=>{ if(!sbT) sbT=setTimeout(()=>{ sbT=0; updateSb(); },80); });
 controls.enablePan=false; controls.enableDamping=true; controls.dampingFactor=0.12;
 controls.maxPolarAngle=Math.PI*0.47; controls.minPolarAngle=0.2;
 controls.addEventListener('start',()=>{controls.autoRotate=false;});
@@ -1887,7 +1898,7 @@ function renderBook(){
   const m=new Map();
   targets.forEach(t=>{ if(t.step!==step) return; const k=t.key+'|'+t.color; if(!m.has(k)) m.set(k,{key:t.key,color:t.color,n:0,d:0}); const e=m.get(k); e.n++; if(t.placed) e.d++; });
   $('sbParts').innerHTML=[...m.values()].map(e=>`<div><img src="${thumb(e.key,e.color)}" alt=""><b>${e.d}/${e.n}</b></div>`).join('');
-  $('sbImg').src=thumbStep(levelIdx,step,special(levelIdx),true);
+  sbKey=''; updateSb();
   $('sbNo').textContent=`Bước ${step+1}/${L.steps.length}`;
 }
 function updateHint(){ $('hintN').textContent=hintsLeft>0?hintsLeft:'+'; }
@@ -2609,11 +2620,11 @@ const boxOf=t=>{ const [fx,fz]=footprint(t.key,t.rot); return [t.x,t.y*PLATE,t.z
 const rayHit=(p,d,b)=>{ let t0=1e-3,t1=1e9; for(let a=0;a<3;a++){ let u=(b[a]-p[a])/d[a], v=(b[a+3]-p[a])/d[a]; if(u>v) [u,v]=[v,u]; t0=Math.max(t0,u); t1=Math.min(t1,v); if(t0>t1) return false; } return true; };
 // chọn góc thấy rõ mảnh của bước n nhất (bắn tia từ các điểm trên mảnh mới về phía máy ảnh, đếm điểm không bị mảnh cũ che);
 // trả cả các mảnh cũ còn che ở góc đó để vẽ trong suốt
-function stepView(ts,n){
+function stepView(ts,n,dirs=STEP_DIRS){
   const now=ts.filter(t=>t.step===n), old=ts.filter(t=>t.step<n).map(t=>[t,boxOf(t)]);
   const pts=now.flatMap(t=>{ const [x0,y0,z0,x1,y1,z1]=boxOf(t), e=0.15, ym=(y0+y1)/2; return [[(x0+x1)/2,y1-0.02,(z0+z1)/2],[x0+e,y1-0.02,z0+e],[x1-e,y1-0.02,z1-e],[(x0+x1)/2,ym,z1-0.02],[x1-0.02,ym,(z0+z1)/2],[x0+0.02,ym,(z0+z1)/2],[(x0+x1)/2,ym,z0+0.02]]; });
   let best=null;
-  STEP_DIRS.forEach((v,k)=>{ const L=Math.hypot(...v), d=v.map(c=>c/L), hid=new Set(); let vis=0;
+  dirs.forEach((v,k)=>{ const L=Math.hypot(...v), d=v.map(c=>c/L), hid=new Set(); let vis=0;
     pts.forEach(p=>{ let ok=true; for(const [t,b] of old) if(rayHit(p,d,b)){ ok=false; hid.add(t); } if(ok) vis++; });
     const sc=(pts.length?vis/pts.length:1)-(k?0.12:0); // góc quen thuộc được ưu tiên, chỉ xoay khi bị che nhiều
     if (!best||sc>best.sc) best={sc,f:pts.length?vis/pts.length:1,dir:new THREE.Vector3(...v),hid}; });
@@ -2634,9 +2645,10 @@ function splitHiddenSteps(lv){
 LEVELS.forEach(splitHiddenSteps);
 const xray=o=>{ o.userData.meshes.forEach(m=>{ m.material=m.material.clone(); m.material.transparent=true; m.material.opacity=0.16; m.material.depthWrite=false; }); o.userData.lines.material=LINE.ghost; };
 // ảnh mô hình lắp tới hết bước n; hl: mảnh của bước n viền đỏ; hl còn làm xám các bước trước. Mảnh cũ che mảnh mới → trong suốt
-function thumbStep(i,n,sp,hl){
-  const k='st'+i+':'+n+(sp?'s':'')+(hl?'h':''); if (thumbCache[k]) return thumbCache[k];
-  const info=modelInfo(LEVELS[i]), g=new THREE.Group(), v=stepView(info.ts,n);
+// dir: vẽ theo đúng hướng đó (sổ bước trong màn lắp quay theo camera người chơi); không có dir thì tự chọn góc thấy rõ nhất (sách)
+function thumbStep(i,n,sp,hl,dir){
+  const k='st'+i+':'+n+(sp?'s':'')+(hl?'h':'')+(dir?'d'+dir.toArray().map(c=>c.toFixed(2)).join(','):''); if (thumbCache[k]) return thumbCache[k];
+  const info=modelInfo(LEVELS[i]), g=new THREE.Group(), v=dir?stepView(info.ts,n,[dir.toArray()]):stepView(info.ts,n);
   info.ts.forEach(t=>{ if(t.step>n) return; const o=hl?makeBrick(t.key,...sbBrick(t,n,sp)):makeBrick(t.key,kitColor(sp,t.color)); if(hl&&t.step===n) o.userData.lines.material=LINE.hl; if(v.hid.has(t)) xray(o); placeObj(o,t.key,t.x,t.y,t.z,t.rot); g.add(o); });
   if (hl) thumbR.setSize(512,512); // sổ bước phóng to được → ảnh nét hơn
   // phóng về phía chỗ đang lắp: tâm lệch về mảnh mới, khung nhỏ lại nhưng vẫn thấy đủ phần xung quanh

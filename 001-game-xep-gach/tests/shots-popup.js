@@ -15,6 +15,8 @@ module.exports = [
   { name: 'pp-tab-gacha', pre: save0(ST), post: async () => { $('shopBtn').click(); $('gachaBtn').click(); await wait(500); } },
   { name: 'pp-tab-ke', pre: save0(ST), post: async () => { $('shelfBtn').click(); await wait(500); } },
   { name: 'pp-shop-duoi', pre: save0(ST), post: async () => { $('shopBtn').click(); await wait(300); $('shopBody').scrollTop = 700; await wait(300); } },
+  { name: 'pp-sb-thang', pre: save0(ST), post: async () => { giveModel(5); startBuild(5); targets.filter(t => t.step < 6).forEach(t => commit(t)); await wait(400); showStep(6); await wait(300); $('stepBook').classList.add('big'); } },
+  { name: 'pp-sb-xoay', pre: save0(ST), post: async () => { giveModel(5); startBuild(5); targets.filter(t => t.step < 6).forEach(t => commit(t)); await wait(400); showStep(6); const v = camera.position.clone().sub(controls.target); v.applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.8); camera.position.copy(controls.target).add(v); controls.update(); await wait(500); $('stepBook').classList.add('big'); } },
   { name: 'pp-odds', pre: save0(ST), post: async () => { openGacha(); $('oddsBtn').click(); await wait(500); } },
 ];
 module.exports.lib = require('./t4-build.js').lib;
