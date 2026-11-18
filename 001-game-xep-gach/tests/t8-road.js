@@ -3,7 +3,7 @@ const save0 = o => new Function("localStorage.setItem('xepgach.v2'," + JSON.stri
 module.exports = [
   { name: 'duong-lap', pre: save0({ tut: 6 }), post: async () => {
       ok(ROAD.length === LEVELS.length && new Set(ROAD).size === LEVELS.length && LEVELS[ROAD[0]].name === 'Cây nấm', 'đường lắp đủ mọi mô hình, bắt đầu Cây nấm');
-      ok(roadNext() === ROAD[0] && $('hNextBtn').textContent.includes('LEVEL 1') && $('hNext').textContent.includes('Cây nấm'), 'màn chính: LẮP LEVEL 1');
+      ok(roadNext() === ROAD[0] && $('hNextBtn').textContent.includes('LEVEL 1'), 'màn chính: LẮP LEVEL 1');
       $('hNextBtn').click();
       ok($('bpView').classList.contains('show') && bpI === ROAD[0] && owned(ROAD[0]), 'level miễn phí: có mô hình, mở sách');
       startBuild(bpI); commitAll();

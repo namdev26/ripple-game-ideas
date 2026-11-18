@@ -370,7 +370,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #hLife.inf i{color:#7a4cff;filter:drop-shadow(0 .6cqw 0 #3d1fa0)}
 /* tiêu điểm: mô hình level kế trên bục sáng + tên, nút chơi to phía dưới */
 #hNext{display:flex;flex-direction:column;align-items:center;margin-top:auto;margin-bottom:34cqw;position:relative}
-#hNext::before{content:"";position:absolute;top:-6cqw;left:50%;width:78cqw;height:62cqw;margin-left:-39cqw;border-radius:50%;background:radial-gradient(closest-side,#fff3c4cc,#ffd98a55 55%,#0000);z-index:-1}
 #hNext .pbox{font-size:4.6cqw;margin-right:2.4em}
 #hNext .nInfo{margin:3cqw 0 4cqw;text-align:center;color:#fff;font-weight:800;line-height:1.15}
 #hNext .nInfo b{display:block;font-size:6cqw}
@@ -2372,9 +2371,9 @@ function renderHome(){
   renderGacha(); renderGoal();
   updateLife();
   $('hNext').innerHTML=rn!=null
-    ?`${pboxHtml(rn,special(rn))}<div class="nInfo outline"><b>${LEVELS[rn].name}</b><small>Level ${roadNo(rn)}/${ROAD.length} · ${levelTargets(LEVELS[rn]).length} mảnh · ${RAR[rarOf(rn)].n}</small></div><button class="btn yellow" id="hNextBtn"><span class="t outline o">▶ LEVEL ${roadNo(rn)}</span><small class="lk">${!infLeft()&&!heartsNow()?'❤️ hồi sau '+mmss(nextHeartMs()):''}</small></button>`
-    :nx!=null?`${pboxHtml(nx,special(nx))}<button class="btn yellow" id="hNextBtn"><span class="t outline o">LẮP TIẾP</span><small>${LEVELS[nx].name}</small></button>`
-    :`<div class="gift">🎁</div><button class="btn yellow" id="hNextBtn"><span class="t outline o">MỞ HỘP</span><small>Hết đường · hộp ra bản vàng kim</small></button>`;
+    ?`<button class="btn yellow" id="hNextBtn"><span class="t outline o">▶ LEVEL ${roadNo(rn)}</span><small class="lk">${!infLeft()&&!heartsNow()?'❤️ hồi sau '+mmss(nextHeartMs()):''}</small></button>`
+    :nx!=null?`<button class="btn yellow" id="hNextBtn"><span class="t outline o">LẮP TIẾP</span><small>${LEVELS[nx].name}</small></button>`
+    :`<button class="btn yellow" id="hNextBtn"><span class="t outline o">MỞ HỘP</span><small>Hết đường · hộp ra bản vàng kim</small></button>`;
   const list=hTab==='wait'?pend:ALL_IDX.filter(built), hide=!S.showWait; // mặc định thu gọn: màn chính chỉ 1 tiêu điểm
   $('hTabWait').classList.toggle('cur',hTab==='wait'); $('hTabDone').classList.toggle('cur',hTab==='done');
   $('hDCount').textContent=`${list.length} bộ`; $('hDrawer').classList.toggle('hide',hide); $('hDrawerTog').textContent=hide?'▲':'▼';
