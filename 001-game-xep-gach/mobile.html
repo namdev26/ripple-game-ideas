@@ -336,6 +336,18 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #gacha{background:linear-gradient(#5b3fa8,#8a5cd6 55%,#c79bf0)}
 #gacha #oddsBtn{position:absolute;top:24cqw;left:5cqw}
 #gacha #hBoxWrap{margin-top:14cqw}
+/* trang trí quanh hộp chính: hộp nhỏ nhiều màu, chồng hộp LEGO, đống xu, lấp lánh, vệt sáng sàn (không bấm được) */
+#gDeco{position:absolute;inset:0;pointer-events:none}
+#gDeco>*{position:absolute}
+#gDeco .floor{left:-35cqw;right:-35cqw;bottom:-5cqw;height:12cqw;border-radius:50%;background:radial-gradient(closest-side,#fff8 0,#ffffff30 50%,#fff0);z-index:-1}
+#gDeco .mb{bottom:0;width:40cqw;height:40cqw;transform-origin:0 100%} /* left = mép trái thật sau khi thu nhỏ */
+#gacha #hName{margin-top:5cqw}
+#gDeco .mb .mbox{cursor:default}
+#gDeco .pb{bottom:0;font-size:1.7cqw;filter:drop-shadow(0 1cqw .8cqw #0005)}
+#gDeco .cn{width:7cqw;height:7cqw;left:auto;top:auto;transform:none}
+#gDeco .cn::after{inset:2cqw}
+#gDeco .sp{font-style:normal;font-size:5cqw;color:#fff6b0;text-shadow:0 0 2cqw #ffd84a;animation:twink 1.6s ease-in-out infinite}
+@keyframes twink{50%{opacity:.25;transform:scale(.6) rotate(20deg)}}
 /* giữa màn chính: mô hình chờ lắp kế tiếp, hoặc mời mở hộp */
 /* thanh trên trái: ❤️ mạng (số + đồng hồ hồi), đang ∞ thì phát sáng */
 #hLife{position:absolute;top:7cqw;left:5cqw;height:8.6cqw;min-width:30cqw;padding:0 3cqw 0 10cqw;border:none;border-radius:3cqw;background:#fff;box-shadow:inset 0 -.8cqw 0 #d6dbea,0 .6cqw 1cqw #0002;display:flex;align-items:center;gap:1.6cqw;cursor:pointer;font-family:inherit;color:#2b3150}
@@ -779,7 +791,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div class="sHead outline" style="margin-top:10cqw">HỘP BÍ ẨN</div>
     <button class="btn blue close" id="gachaClose" aria-label="Đóng">✕</button>
     <button class="sideB" id="oddsBtn"><i>🎲</i><span>Tỉ lệ</span></button>
-    <div id="hBoxWrap"><div id="hBox" class="mbox" role="button" aria-label="Lắc thử hộp"><i class="lid"></i><i class="body"><b>?</b></i></div></div>
+    <div id="hBoxWrap"><div id="gDeco" aria-hidden="true"></div><div id="hBox" class="mbox" role="button" aria-label="Lắc thử hộp"><i class="lid"></i><i class="body"><b>?</b></i></div></div>
     <div id="hName" class="outline"></div>
     <div id="hBtns"><button class="btn yellow" id="adBtn"><span class="t outline o">AD 🎬</span><small>Xem quảng cáo</small></button><button class="btn yellow" id="playBtn"><span class="t outline o">MỞ HỘP</span><small id="playSub"></small></button></div>
   </div>
@@ -2283,10 +2295,21 @@ function showHome(s){
 }
 const toMenu=()=>showHome(seriesOf(levelIdx));
 const pendingList=()=>ALL_IDX.filter(i=>owned(i)&&!built(i)); // đã có, chưa lắp (cả game: hộp chung ra được mọi bộ)
+// cảnh trang trí: chọn sẵn vài mô hình làm hộp sản phẩm, màu hộp nhỏ theo các bộ
+function gachaDeco(){
+  const C=['#e8463a','#3fa9f5','#9b5de5','#2fbf71','#ff8a1a'].filter(c=>c!==SERIES[curSeries].c), mb=(c,sc,x,b=0,z=0)=>`<div class="mb" style="left:${x}cqw;bottom:${b}cqw;transform:scale(${sc});z-index:${z}"><div class="mbox" style="--bc:${c}"><i class="lid"></i><i class="body"><b>?</b></i></div></div>`;
+  const pick=[...ALL_IDX].sort((a,b)=>(a*7919%31)-(b*7919%31)).slice(0,3);
+  const coins=[[25,-2],[31,-2],[37,-2],[28,1.5],[34,1.5],[31,5]].map(([x,b])=>`<span class="coin cn" style="left:${x}cqw;bottom:${b}cqw;z-index:2"></span>`).join('');
+  const sp=[[-22,40],[6,46],[36,42],[58,30],[-30,22],[66,12]].map(([x,y],k)=>`<i class="sp" style="left:${x}cqw;top:${-y+30}cqw;animation-delay:${k*.27}s">✦</i>`).join('');
+  return `<div class="floor"></div>`
+    +`<div class="pb" style="left:-29cqw;bottom:0">${pboxHtml(pick[0],false)}</div><div class="pb" style="left:-29cqw;bottom:12.5cqw;transform:rotate(-6deg)">${pboxHtml(pick[1],false)}</div><div class="pb" style="left:-26cqw;bottom:24.5cqw;transform:rotate(4deg)">${pboxHtml(pick[2],false)}</div>`
+    +mb(C[1],.5,40)+mb(C[2],.3,44,17)+mb(C[3]||C[0],.22,60)+mb(C[0],.24,-10,-2,3)+mb(C[3]||C[2],.17,-1,-2,3)+coins+sp;
+}
 function renderGacha(){
   const nx=peekBox(), al=adLeft('box');
+  $('gDeco').innerHTML=gachaDeco(); // màu hộp nhỏ khác màu hộp chính
   $('hBox').style.setProperty('--bc',SERIES[curSeries].c);
-  $('hName').textContent=allOwned()?'Đủ 16 mô hình · hộp ra bản ✨ vàng kim':`Đã có ${ALL_IDX.filter(owned).length}/${LEVELS.length} · chỉ ra mô hình chưa có`;
+  $('hName').textContent=allOwned()?`Đủ ${LEVELS.length} mô hình · hộp ra bản ✨ vàng kim`:`Đã có ${ALL_IDX.filter(owned).length}/${LEVELS.length} · chỉ ra mô hình chưa có`;
   $('playBtn').querySelector('.t').textContent=`🪙 ${boxPrice()}`; $('playSub').textContent='Mở bằng xu';
   $('adBtn').querySelector('small').textContent=`Còn ${Math.max(0,al)}/${AD_MAX.box} hôm nay`;
   $('adBtn').classList.toggle('dis',al<=0||!nx); $('playBtn').classList.toggle('dis',!nx);
