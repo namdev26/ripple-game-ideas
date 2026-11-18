@@ -76,11 +76,11 @@ module.exports = [
       ok(sale.length === 1 && rarOf(+sale[0].dataset.i) > 0 && buyPrice(+sale[0].dataset.i) === Math.round(shopPrice(+sale[0].dataset.i) * 0.8 / 5) * 5, '1 ô hiếm/huyền thoại giảm 20%');
       ok(/\d+:\d\d:\d\d/.test($('shop').textContent) && S.daily.d === new Date().toDateString(), 'đếm ngược tới lúc đổi kệ, lưu theo ngày');
       renderShopM(); ok(JSON.stringify(ids()) === JSON.stringify(a), 'trong ngày kệ giữ nguyên');
-      showSeries(); const rows = document.querySelectorAll('#sList .sRow');
+      const rows = document.querySelectorAll('#mAll .sRow');
       ok(rows.length === SERIES.length && [...rows].every((r, s) => r.querySelectorAll('.sRowL .mItem').length === SERIES[s].n && !r.querySelector('.sMore')), 'tất cả mô hình: mỗi bộ 1 hàng cuộn ngang, không mở rộng xuống');
       ok(rows[0].textContent.includes('1/4'), 'hàng có số đã có / tổng');
       const L1 = rows[1].querySelector('.sRowL'); ok(L1.scrollWidth > L1.clientWidth && getComputedStyle(L1).overflowX === 'auto', 'hàng dài hơn khung: cuộn ngang');
-      $('serClose').click(); const si = +sale[0].dataset.i; document.querySelector(`#mShelf .mItem[data-i="${si}"]`).click(); $('mBuy').click();
+      const si = +sale[0].dataset.i; document.querySelector(`#mShelf .mItem[data-i="${si}"]`).click(); $('mBuy').click();
       ok(owned(si) && S.coins === 500 - buyPrice(si), 'mua giá giảm: ' + S.coins);
       openShop(); $('mShelfAd').click(); await wait(3500);
       ok(S.daily.d === new Date().toDateString() && !$('mShelfAd'), 'xem QC đổi kệ mới, 1 lần/ngày');

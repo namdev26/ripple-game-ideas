@@ -235,10 +235,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .lvc{width:15cqw;height:15cqw;font-size:7cqw;flex:none}
 .lvc.cur{outline:1cqw solid #ffd43b;outline-offset:.6cqw}
 /* ---------- bộ sưu tập ---------- */
-#series{background:linear-gradient(#6a72d6 0%,#7d8fe4 28%,#9cc0f2 60%,#c3e2fb 100%);justify-content:flex-start;padding-top:9cqw;z-index:11}
-#series .close{top:6cqw;right:5cqw}
 .sHead{font-size:9cqw;font-weight:800;color:#fff;margin-bottom:3cqw}
-#sList{width:100%;flex:1;overflow-y:auto;padding:1cqw 5cqw 10cqw;box-sizing:border-box;display:flex;flex-direction:column;gap:3cqw;touch-action:pan-y;scrollbar-width:none}
 .scard{position:relative;display:flex;align-items:center;gap:4cqw;background:#fff;border:1cqw solid var(--c);border-radius:5cqw;padding:3cqw;flex:none;cursor:pointer;
   box-shadow:inset 0 -1.4cqw 0 #cfd6ec,0 1.5cqw 3cqw #0003}
 .scard.cur{outline:1cqw solid #ffd43b;outline-offset:.8cqw}
@@ -316,8 +313,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #hLevels.few{overflow:visible} /* ít thẻ: để bong bóng hướng dẫn tràn ra ngoài */
 /* bố cục home: thanh trên · cột nút trái · cột chờ lắp phải · hộp + MỞ HỘP giữa · thanh 3 mục dưới */
 #hSetBtn{position:absolute;top:6.4cqw;right:5cqw;width:11cqw;height:11cqw;font-size:6.4cqw;padding:0 0 .8cqw}
-.hSide{position:absolute;top:47cqw;width:20cqw;display:flex;flex-direction:column;align-items:center;gap:3.5cqw}
-#hLeft{left:2cqw}
 #hNav .navB{width:18cqw}
 .sideB .tmr{position:absolute;top:-2cqw;left:50%;transform:translateX(-50%);background:#e0303f;color:#fff;font-size:2.8cqw;font-weight:800;padding:.2cqw 1.4cqw;border-radius:1.6cqw;white-space:nowrap}
 .sideB{position:relative;border:none;background:none;padding:0;margin:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;font-family:inherit;flex:none}
@@ -457,7 +452,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #iapBody{width:90cqw;flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;gap:3cqw;padding:0 0 6cqw}
 #mAll{display:flex;flex-direction:column;margin-top:3cqw}
 .allH{margin:5cqw 0 2cqw;text-align:center;font-size:6cqw;font-weight:800;color:#fff}
-#sNote{font-size:3.8cqw;font-weight:800;color:#2b3150;background:#fff6c8;border-radius:3cqw;padding:1.2cqw 4cqw;margin-bottom:2cqw}
 #shopBody{width:90cqw;flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:0 0 4cqw;display:flex;flex-direction:column;gap:3cqw}
 .shopSec{display:flex;flex-direction:column;gap:3cqw;padding-bottom:4cqw}
 #offerBody,#coinBody{display:flex;flex-direction:column;gap:3cqw}
@@ -530,32 +524,32 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .sRowL .mItem{flex:none;width:27cqw} /* thẻ cuối hở 1 phần để biết còn kéo ngang được */
 .sRowH .sHint{margin-left:auto;font-size:3.2cqw;color:#4d557a;font-weight:800}
 /* kệ gỗ dùng chung (Bộ sưu tập, Tiệm Gạch, Kệ trưng bày) = 1 tủ chung: tường gỗ, 1 tủ gỗ liền (mái hiên ở đỉnh), mỗi bộ là 1 tầng ván, hộp đứng trên ván, giá trên mặt ván */
-:is(#series,#shop,#shelf){background:repeating-linear-gradient(90deg,#0000 0 24.6cqw,#5a2d0e40 24.6cqw 25cqw),radial-gradient(ellipse at 50% 30%,#e9a865 0,#c97a3c 45%,#8f4f22 100%)}
-#sList,#mShelf,#shGrid,#mAll{gap:0}
-:is(#series,#shop,#shelf) .sRow{flex:none;position:relative;background:linear-gradient(90deg,#3e1e08,#5e2f10 50%,#3e1e08);border:solid #3a1b06;border-width:0 1.4cqw;border-radius:0;padding:0 0 1.6cqw;
+:is(#shop,#shelf){background:repeating-linear-gradient(90deg,#0000 0 24.6cqw,#5a2d0e40 24.6cqw 25cqw),radial-gradient(ellipse at 50% 30%,#e9a865 0,#c97a3c 45%,#8f4f22 100%)}
+#mShelf,#shGrid,#mAll{gap:0}
+:is(#shop,#shelf) .sRow{flex:none;position:relative;background:linear-gradient(90deg,#3e1e08,#5e2f10 50%,#3e1e08);border:solid #3a1b06;border-width:0 1.4cqw;border-radius:0;padding:0 0 1.6cqw;
   box-shadow:inset .7cqw 0 0 #8a4a1c,inset -.7cqw 0 0 #8a4a1c}
-:is(#series,#shop,#shelf) .sRow:first-child{border-top-width:1.4cqw;border-radius:3cqw 3cqw 0 0;padding-top:4cqw}
-:is(#series,#shop,#shelf) .sRow:first-child::before{content:"";position:absolute;left:0;right:0;top:0;height:4cqw;
+:is(#shop,#shelf) .sRow:first-child{border-top-width:1.4cqw;border-radius:3cqw 3cqw 0 0;padding-top:4cqw}
+:is(#shop,#shelf) .sRow:first-child::before{content:"";position:absolute;left:0;right:0;top:0;height:4cqw;
   background:radial-gradient(circle at 50% 0,#e0303f 2.9cqw,#0000 3cqw) 0 0/6cqw 4cqw repeat-x,repeating-linear-gradient(90deg,#e0303f 0 6cqw,#fff3d6 6cqw 12cqw) 0 0/100% 1cqw no-repeat;filter:drop-shadow(0 .6cqw 0 #0004)}
-:is(#series,#shop,#shelf) .sRow:last-child{border-bottom-width:1.4cqw;border-radius:0 0 3cqw 3cqw;margin-bottom:4cqw;box-shadow:inset .7cqw 0 0 #8a4a1c,inset -.7cqw 0 0 #8a4a1c,0 2cqw 3cqw #0005}
-:is(#series,#shop,#shelf) .sRowH{margin:0;padding:2.4cqw 3cqw 0;color:#ffe7b0}
-:is(#series,#shop,#shelf) .sRowH b{background:linear-gradient(#f0bd7c,#cf8c4c);color:#4a240b;padding:.2cqw 3cqw .4cqw;border-radius:1.6cqw;box-shadow:inset 0 -.6cqw 0 #a8682e,inset 1.4cqw 0 0 var(--sc)}
-:is(#series,#shop,#shelf) .sRowH small,:is(#series,#shop,#shelf) .sRowH .sHint{color:#f0c890}
-:is(#series,#shop,#shelf) .sRowL{gap:3cqw;padding:3cqw 3cqw 1.6cqw;
+:is(#shop,#shelf) .sRow:last-child{border-bottom-width:1.4cqw;border-radius:0 0 3cqw 3cqw;margin-bottom:4cqw;box-shadow:inset .7cqw 0 0 #8a4a1c,inset -.7cqw 0 0 #8a4a1c,0 2cqw 3cqw #0005}
+:is(#shop,#shelf) .sRowH{margin:0;padding:2.4cqw 3cqw 0;color:#ffe7b0}
+:is(#shop,#shelf) .sRowH b{background:linear-gradient(#f0bd7c,#cf8c4c);color:#4a240b;padding:.2cqw 3cqw .4cqw;border-radius:1.6cqw;box-shadow:inset 0 -.6cqw 0 #a8682e,inset 1.4cqw 0 0 var(--sc)}
+:is(#shop,#shelf) .sRowH small,:is(#shop,#shelf) .sRowH .sHint{color:#f0c890}
+:is(#shop,#shelf) .sRowL{gap:3cqw;padding:3cqw 3cqw 1.6cqw;
   background:linear-gradient(#0000 calc(100% - 12.5cqw),#e3a35f calc(100% - 12.5cqw) calc(100% - 10cqw),#9a5523 calc(100% - 10cqw) calc(100% - 1.2cqw),#5a2d0e calc(100% - 1.2cqw)) local}
-:is(#series,#shop,#shelf) .mItem{background:none;box-shadow:none;border-radius:0;padding:0;outline:none;border-top:none}
-:is(#series,#shop,#shelf) .mItem.have{opacity:1}:is(#series,#shop,#shelf) .mItem.have .pbox{filter:saturate(.75)}
-:is(#series,#shop,#shelf) .mItem .pbox{filter:drop-shadow(0 1cqw .6cqw #0007)}
-:is(#series,#shop,#shelf) .mItem .mp{margin-top:2.6cqw;font-size:3.6cqw;white-space:nowrap;color:#fff;background:linear-gradient(#86e85f,#33b44a);border-radius:3cqw;padding:.5cqw 2.4cqw .9cqw;
+:is(#shop,#shelf) .mItem{background:none;box-shadow:none;border-radius:0;padding:0;outline:none;border-top:none}
+:is(#shop,#shelf) .mItem.have{opacity:1}:is(#shop,#shelf) .mItem.have .pbox{filter:saturate(.75)}
+:is(#shop,#shelf) .mItem .pbox{filter:drop-shadow(0 1cqw .6cqw #0007)}
+:is(#shop,#shelf) .mItem .mp{margin-top:2.6cqw;font-size:3.6cqw;white-space:nowrap;color:#fff;background:linear-gradient(#86e85f,#33b44a);border-radius:3cqw;padding:.5cqw 2.4cqw .9cqw;
   box-shadow:inset 0 -.8cqw 0 #22813a,0 .6cqw 0 #0004;text-shadow:0 .3cqw 0 #1d7030}
-:is(#series,#shop,#shelf) .mItem.have .mp{background:#fff3d6;color:#2fae43;text-shadow:none;box-shadow:inset 0 -.8cqw 0 #e0c590,0 .6cqw 0 #0004}
-:is(#series,#shop,#shelf) .mItem .mp s{color:#d8ffd0}
-:is(#series,#shop,#shelf) .sBonus{color:#ffe7b0;padding:0 3cqw}
+:is(#shop,#shelf) .mItem.have .mp{background:#fff3d6;color:#2fae43;text-shadow:none;box-shadow:inset 0 -.8cqw 0 #e0c590,0 .6cqw 0 #0004}
+:is(#shop,#shelf) .mItem .mp s{color:#d8ffd0}
+:is(#shop,#shelf) .sBonus{color:#ffe7b0;padding:0 3cqw}
 /* Tiệm Gạch: kệ hàng hôm nay = 2 tầng × 3 hộp, không cuộn */
 #mShelf .sRowL{justify-content:space-around;gap:1cqw;padding:3cqw 1cqw 1.6cqw;overflow:visible}
 #mShelf .sRowL .mItem{flex:1;min-width:0;width:auto}
-:is(#series,#shop) .mItem.sale{box-shadow:none}
-:is(#series,#shop) .mItem.sel .pbox{filter:drop-shadow(0 0 1cqw #ffd43b) drop-shadow(0 0 1cqw #ffd43b)}
+#shop .mItem.sale{box-shadow:none}
+#shop .mItem.sel .pbox{filter:drop-shadow(0 0 1cqw #ffd43b) drop-shadow(0 0 1cqw #ffd43b)}
 /* Kệ trưng bày: hình mô hình đã lắp đứng trên ván; chưa có = bóng đen */
 #shGrid{display:flex;flex-direction:column}
 #shelf .shItem{flex:none;width:26cqw;background:none;box-shadow:none;border-radius:0;padding:0;outline:none}
@@ -767,12 +761,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   </div></div>
 
 
-  <div id="series" class="screen">
-    <div class="sHead outline">BỘ SƯU TẬP</div>
-    <button class="btn blue close" id="serClose" aria-label="Đóng">✕</button>
-    <div id="sNote">Chạm mô hình chưa có để mua · đủ bộ có thưởng</div>
-    <div id="sList"></div>
-  </div>
 
   <div id="bpView" class="screen ov">
     <div class="sHead outline" id="bpName">Sách hướng dẫn</div>
@@ -847,9 +835,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <button id="hLife" aria-label="Mạng"><i id="hLifeI">❤</i><b id="hLifeN"></b><small id="hLifeT"></small></button>
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">100</span></div>
     <button class="btn blue" id="hSetBtn" aria-label="Cài đặt">⚙</button>
-    <div id="hLeft" class="hSide">
-      <button class="sideB" id="hColBtn"><i>📚</i><span>Bộ sưu tập</span></button>
-    </div>
     <div id="hGoal"></div>
     <div id="hNext"></div>
     <div id="hDrawer">
@@ -1877,7 +1862,7 @@ const sfx={
 };
 
 // ====================== TRẠNG THÁI ======================
-const OVERLAYS=['result','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','series','bpView','shop','shelf','unbox','oddsModal'];
+const OVERLAYS=['result','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
 let rebuild=false, placedOrder=[], replaying=false, replayTok=0, replayDone=null; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
@@ -2256,7 +2241,7 @@ function renderShelf(){
       const st=!owned(i)?'sil':!built(i)?'wait':'', sp=special(i);
       const tag=st==='sil'?'<b class="q">?</b><span class="lk">Chưa có</span>':st==='wait'?'<span class="wt">Chờ lắp</span>'
         :`<span class="st">${[0,1,2].map(k=>`<span class="${k<best(i)?'':'off'}">★</span>`).join('')}</span>`;
-      return `<div class="shItem ${st}${sp?' sp':''}${i===shSel?' sel':''}" data-i="${i}"><img src="${thumbLevel(i,sp)}" alt="">${tag}</div>`; }).join('')+'</div></div>';
+      return `<div class="shItem ${st}${sp?' sp':''}${i===shSel?' sel':''}" data-i="${i}"><img src="${thumbLevel(i,sp)}" alt="">${tag}</div>`; }).join('')+`</div><small class="sBonus">${ids.every(built)?`🏆 Đủ bộ · đã nhận +${seriesBonus(s)}🪙 + ∞ ${INF_SERIES/60e3} phút`:`🎁 Lắp đủ bộ nhận +${seriesBonus(s)}🪙 + ∞ ${INF_SERIES/60e3} phút`}</small></div>`;
   });
   $('shGrid').innerHTML=h;
   $('shCount').textContent=`Đã lắp ${LEVELS.filter((l,i)=>built(i)).length}/${LEVELS.length} · ✨ ${LEVELS.filter((l,i)=>special(i)).length}`;
@@ -2283,7 +2268,7 @@ function tutStep(){
   if (S.tut>=6||UNLOCK_ALL) return;
   let el=null, txt='';
   if (vis('bpView')){ if(bpI===0&&!built(0)) [el,txt]=bpPage===0?[$('bpNext'),'Lật trang xem từng bước']:[$('bpBuild'),'Bấm Lắp!']; }
-  else if (vis('home')&&!['series','shelf','shop','oddsModal','setModal','needModal'].some(vis)){
+  else if (vis('home')&&!['shelf','shop','oddsModal','setModal','needModal'].some(vis)){
     if (!built(0)) [el,txt]=[$('hNextBtn'),'Lắp Level 1 miễn phí!'];
     else if (S.tut===5) [el,txt]=[$('shopBtn'),'Thích mô hình nào? Mua trước ở Tiệm Gạch'];
   }
@@ -2387,18 +2372,10 @@ $('hDrawerTog').onclick=()=>{ sfx.pick(); S.showWait=!S.showWait; save(); render
 $('hDrawer').querySelector('.dHead').onclick=e=>{ if(!e.target.closest('button')) $('hDrawerTog').click(); };
 $('hLevels').onclick=e=>{ const b=e.target.closest('[data-i]'); if(!b) return; sfx.pick(); openBlueprint(+b.dataset.i); };
 // ====================== BỘ SƯU TẬP ======================
-// mỗi bộ 1 tầng kệ cuộn ngang (dùng ở Bộ sưu tập + cuối Tiệm Gạch)
+// mỗi bộ 1 tầng kệ cuộn ngang (cuối Tiệm Gạch)
 const seriesRows=()=>SERIES.map((r,s)=>{ const ids=seriesIdx(s), have=ids.filter(owned).length, stars=ids.reduce((a,i)=>a+best(i),0);
     return `<div class="sRow" style="--sc:${r.c}"><div class="sRowH"><b>${r.name}</b><small>${have}/${ids.length} ✓ · ★${stars}/${ids.length*3}</small>${ids.length>3?'<span class="sHint">Kéo ngang ›</span>':''}</div>`
       +`<div class="sRowL">${ids.map(mItemHtml).join('')}</div><small class="sBonus">${ids.every(built)?'✓ Đủ bộ':'Đủ bộ +'+seriesBonus(s)+'🪙'}</small></div>`; }).join('');
-function showSeries(){ $('sList').innerHTML=seriesRows(); show('series',true); }
-$('sList').onclick=e=>{
-  const it=e.target.closest('.mItem'); if(!it) return; const i=+it.dataset.i; sfx.pick();
-  if (built(i)) return toast('Đã lắp, xem ở kệ trưng bày 🏛');
-  if (owned(i)){ show('series',false); return openBlueprint(i); } // chờ lắp: mở sách
-  if (i===roadNext()){ show('series',false); return playRoad(); } // level kế: miễn phí
-  openShop(i); // chưa có: khung mua của tiệm gạch
-};
 
 // ====================== HỘP BÍ ẨN / CỬA HÀNG / SÁCH HƯỚNG DẪN ======================
 // một hộp chung cho cả game, tỉ lệ cố định; ra trùng thì đổi xu bằng giá cửa hàng
@@ -2734,13 +2711,12 @@ $('lCoin').onclick=()=>{ if(S.coins<REVIVE_COST){ toast(`Cần ${REVIVE_COST}�
 $('sMenu').onclick=()=>{ show('setModal',false); quitLevel(toMenu); };
 $('backBtn').onclick=()=>quitLevel(toMenu);
 $('lMenu').onclick=()=>{ if(!rebuild) loseHeart(); toMenu(); };
-$('hColBtn').onclick=()=>{ sfx.pick(); showSeries(); };
 $('hHomeTab').onclick=()=>tabGo(()=>{ sfx.pick(); showHome(curSeries); });
 // thanh tab nằm ngoài màn chính: hiện ở Trang chủ / Tiệm Gạch / Hộp bí ẩn / Kệ, ô sáng chạy theo màn đang mở; ẩn khi lắp, xem sách, mở hộp...
 function tabGo(f){ ['shop','iap','gacha','shelf'].forEach(id=>$(id).classList.remove('show')); f(); }
 function syncNav(){
   const v=id=>$(id).classList.contains('show'), tab=['iap','shop','gacha','shelf'].find(v)||(v('home')?'home':null);
-  $('hNav').classList.toggle('off',!tab||['series','bpView','unbox','adView'].some(v));
+  $('hNav').classList.toggle('off',!tab||['bpView','unbox','adView'].some(v));
   [['shop','shopBtn'],['iap','hIapBtn'],['gacha','gachaBtn'],['shelf','shelfBtn'],['home','hHomeTab']].forEach(([id,b])=>$(b).classList.toggle('cur',id===tab));
 }
 { const o=new MutationObserver(syncNav); document.querySelectorAll('.screen').forEach(e=>o.observe(e,{attributes:true,attributeFilter:['class']})); syncNav(); }
@@ -2748,7 +2724,6 @@ $('gachaBtn').onclick=()=>tabGo(openGacha);
 $('gachaClose').onclick=()=>{ sfx.back(); show('gacha',false); renderHome(); };
 $('hNext').onclick=e=>{ if(!e.target.closest('#hNextBtn')) return; sfx.pick(); if(roadNext()!=null) return playRoad(); const nx=pendingList()[0]; if(nx==null) return openGacha(); openBlueprint(nx); };
 $('hGoal').onclick=e=>{ if(!e.target.closest('#hGoalBuy')) return; const o=goalInfo(); if(!o) return; sfx.pick(); openShop(o.g); };
-$('serClose').onclick=()=>show('series',false);
 $('sHelp').onclick=()=>{ show('setModal',false); show('infoModal',true); sfx.pick(); };
 $('infoClose').onclick=()=>show('infoModal',false);
 $('infoModal').onclick=e=>{ if(e.target.id==='infoModal') show('infoModal',false); };

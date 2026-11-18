@@ -13,7 +13,7 @@ module.exports = [
   { name: 'hb-vo-han', pre: save0(ST), post: async () => { S.inf = Date.now() + 14 * 60e3 + 32e3; renderHome(); } },
   { name: 'hb-mang-home', pre: save0({ ...ST, hearts: 0, hT: 1 }), post: async () => { S.hearts = 0; S.hT = Date.now() - 11 * 60e3; renderHome(); } },
   { name: 'hb-ke-hang', pre: save0(ST), post: async () => { openShop(); } },
-  { name: 'hb-hang-bo', pre: save0(ST), post: async () => { showSeries(); } },
+  { name: 'hb-hang-bo', pre: save0(ST), post: async () => { openShop(); $('shopBody').scrollTop = 700; } },
   { name: 'hb-shop', pre: save0(ST), post: async () => { openShop(4); } },
   { name: 'hb-bia', pre: save0(ST), post: async () => { openBlueprint(6); } },
   { name: 'hb-trang', pre: save0(ST), post: async () => { openBlueprint(6); bpPage = 3; renderBp(); } },
