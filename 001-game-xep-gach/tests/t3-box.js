@@ -122,8 +122,9 @@ module.exports = [
       const dino = $('offerBody').firstElementChild;
       ok(dino && dino.classList.contains('dinoPack') && dino.querySelector('.dHero .pbox .pf img') && !/🦖|🦕/.test(dino.querySelector('.dHero').textContent) && dino.querySelectorAll('.dIt img').length >= 2 && /Khủng long/i.test(dino.textContent) && dino.querySelector('.price') && dino.querySelectorAll('.dIt').length >= 3 && /\d+:\d\d:\d\d/.test(dino.textContent), 'thẻ bộ khủng long: hộp LEGO có ảnh khủng long dựng bằng gạch, quà kèm, giá, đếm ngược');
       ok($('offerBody').textContent.includes('quảng cáo') && B.querySelector('.starter .price') && !B.querySelector('.mItem'), 'gói khởi đầu + bỏ quảng cáo, không bày mô hình');
-      packs[0].querySelector('.price').click();
-      ok(S.coins === 120 && $('toast').classList.contains('show'), 'nạp chỉ giả lập: không cộng xu, báo bản thử');
+      packs[0].querySelector('.price').click(); ok($('buyModal').classList.contains('show') && S.coins === 120 && $('buyP').textContent.includes('25.000'), 'bấm gói xu → bảng xác nhận mua, chưa cộng');
+      $('buyClose').click(); ok(!$('buyModal').classList.contains('show') && S.coins === 120, 'huỷ thì không mua');
+      packs[1].querySelector('.price').click(); $('buyOk').click(); ok(S.coins === 120 + 650 && !$('buyModal').classList.contains('show'), 'mua thử như thật: cộng xu gói 650: ' + S.coins);
       $('iapClose').click(); ok(!$('iap').classList.contains('show') && $('home').classList.contains('show'), 'đóng về màn chính');
       $('hIapBtn').click(); ok($('iap').classList.contains('show') && $('iapBody').scrollTop === 0, 'nút Ưu đãi ở màn chính mở từ đầu'); $('iapClose').click();
       $('gachaBtn').click(); document.querySelector('#gacha .coins').click();

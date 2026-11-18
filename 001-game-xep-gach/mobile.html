@@ -745,6 +745,16 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div class="oRow"><div class="oIt"><i>🪙</i>1.000 xu</div><div class="oIt"><i>🎁</i>1 hộp</div><div class="oIt"><i>💡</i>3 gợi ý</div><button class="price">49.000đ</button></div>
   </div></div>
 
+  <!-- mua gói xu (bản thử: cộng xu như mua thật, không trừ tiền) -->
+  <div id="buyModal" class="screen modal"><div class="panelM">
+    <div class="ribbon blue outline">XÁC NHẬN MUA</div>
+    <button class="btn close" id="buyClose" aria-label="Huỷ">✕</button>
+    <div class="pIcon"><span class="coin"></span></div>
+    <p class="loseP" id="buyT"></p>
+    <button class="btn green big" id="buyOk"><span class="outline g" id="buyP"></span></button>
+    <p class="ver">Bản thử · không trừ tiền thật</p>
+  </div></div>
+
   <div id="result" class="screen modal"><div class="panelM">
     <div class="ribbon outline o" id="rTitle">HOÀN THÀNH!</div>
     <div id="rLv"></div>
@@ -1873,7 +1883,7 @@ const sfx={
 };
 
 // ====================== TRẠNG THÁI ======================
-const OVERLAYS=['result','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
+const OVERLAYS=['result','buyModal','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
 let rebuild=false, placedOrder=[], replaying=false, replayTok=0, replayDone=null; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
@@ -2602,14 +2612,21 @@ function renderIap(){
     ${setCard(1)}${setCard(2)}
     <div class="iapCard soon"><span class="lock">🔒</span><div class="grow"><b>Bộ Nhật Bản</b><small>Sắp ra mắt: chùa vàng, núi Phú Sĩ, cổng Torii…</small></div></div>
 `;
-  $('coinBody').innerHTML=`<div class="coinGrid">${COIN_PACKS.map(([n,p,t],k)=>`<div class="coinPack">${t?`<span class="iapTag">${t}</span>`:''}${pile(k+1)}<b>${n.toLocaleString('vi-VN')}</b><button class="price">${p}</button></div>`).join('')}</div>
+  $('coinBody').innerHTML=`<div class="coinGrid">${COIN_PACKS.map(([n,p,t],k)=>`<div class="coinPack" data-k="${k}">${t?`<span class="iapTag">${t}</span>`:''}${pile(k+1)}<b>${n.toLocaleString('vi-VN')}</b><button class="price">${p}</button></div>`).join('')}</div>
     <div class="iapFoot"><button>Khôi phục giao dịch</button><span>Bản thử · chưa thanh toán thật</span></div>`;
 }
 function openIap(sec){ sfx.pick(); renderIap(); updateCoins(); show('iap',true); const B=$('iapBody'); B.scrollTop=sec?$(sec).offsetTop-B.offsetTop:0; }
 $('iapClose').onclick=()=>{ sfx.back(); show('iap',false); };
 $('hIapBtn').onclick=()=>tabGo(()=>openIap());
 document.querySelectorAll('.coins').forEach(c=>c.onclick=()=>openIap('secCoin')); // ô xu: nhảy tới gói xu
-$('iapBody').onclick=e=>{ if (e.target.closest('.price, .iapFoot button')){ sfx.pick(); toast('🧪 Bản thử: chưa mua thật được'); } };
+let buyN=0; // số xu của gói đang hỏi mua
+$('iapBody').onclick=e=>{
+  const cp=e.target.closest('.coinPack .price');
+  if (cp){ const [n,p]=COIN_PACKS[+cp.closest('.coinPack').dataset.k]; buyN=n; $('buyT').innerHTML=`Gói <b>${n.toLocaleString('vi-VN')}</b> xu`; $('buyP').textContent='MUA · '+p; sfx.pick(); show('buyModal',true); return; }
+  if (e.target.closest('.price, .iapFoot button')){ sfx.pick(); toast('🧪 Bản thử: chưa mua thật được'); }
+};
+$('buyOk').onclick=()=>{ const n=buyN; if(!n) return; buyN=0; show('buyModal',false); S.coins+=n; save(); updateCoins(true); sfx.coin(); toast(`✅ Mua thành công +${n.toLocaleString('vi-VN')}🪙`); };
+$('buyClose').onclick=()=>{ buyN=0; sfx.back(); show('buyModal',false); };
 
 // ---- sách hướng dẫn kiểu LEGO: bìa → mỗi bước một trang (khung mảnh "2x + tên màu") → danh sách mảnh ----
 // sổ bước: mảnh các bước trước xám nhạt đồng màu để mảnh của bước hiện tại nổi bật
