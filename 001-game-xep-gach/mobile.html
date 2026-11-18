@@ -503,6 +503,24 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .sRowL::-webkit-scrollbar{display:none}
 .sRowL .mItem{flex:none;width:27cqw} /* thẻ cuối hở 1 phần để biết còn kéo ngang được */
 .sRowH .sHint{margin-left:auto;font-size:3.2cqw;color:#4d557a;font-weight:800}
+/* bộ sưu tập = kệ trưng bày: tường gỗ, mỗi bộ 1 tủ gỗ (biển tên + mái hiên màu bộ), hộp đứng trên ván, giá trên mặt ván */
+#series{background:repeating-linear-gradient(90deg,#0000 0 24.6cqw,#5a2d0e40 24.6cqw 25cqw),radial-gradient(ellipse at 50% 30%,#e9a865 0,#c97a3c 45%,#8f4f22 100%)}
+#series .sRow{flex:none;position:relative;background:linear-gradient(#4a240b,#5e2f10);border:1cqw solid #3a1b06;border-radius:3cqw;padding:0 0 2cqw;overflow:hidden;
+  box-shadow:inset 0 0 0 .7cqw #8a4a1c,0 1.4cqw 0 #3a1b06,0 2cqw 3cqw #0005}
+#series .sRowH{margin:0;padding:1.6cqw 3cqw 1.4cqw;background:linear-gradient(#f0bd7c,#cf8c4c);color:#4a240b;box-shadow:inset 0 -.8cqw 0 #a8682e}
+#series .sRowH small,#series .sRowH .sHint{color:#7a4318}
+#series .sRowH::after{content:"";position:absolute;left:0;right:0;top:100%;height:3.4cqw;background:radial-gradient(circle at 50% 0,var(--sc) 2.9cqw,#0000 3cqw) 0 0/6cqw 3.4cqw repeat-x;filter:drop-shadow(0 .6cqw 0 #0004)}
+#series .sRowH{position:relative;z-index:1}
+#series .sRowL{gap:3cqw;padding:5cqw 3cqw 1.6cqw;
+  background:linear-gradient(#0000 calc(100% - 12.5cqw),#e3a35f calc(100% - 12.5cqw) calc(100% - 10cqw),#9a5523 calc(100% - 10cqw) calc(100% - 1.2cqw),#5a2d0e calc(100% - 1.2cqw)) local}
+#series .mItem{background:none;box-shadow:none;border-radius:0;padding:0;outline:none;border-top:none}
+#series .mItem.have{opacity:1}#series .mItem.have .pbox{filter:saturate(.75)}
+#series .mItem .pbox{filter:drop-shadow(0 1cqw .6cqw #0007)}
+#series .mItem .mp{margin-top:2.6cqw;font-size:3.6cqw;white-space:nowrap;color:#fff;background:linear-gradient(#86e85f,#33b44a);border-radius:3cqw;padding:.5cqw 2.4cqw .9cqw;
+  box-shadow:inset 0 -.8cqw 0 #22813a,0 .6cqw 0 #0004;text-shadow:0 .3cqw 0 #1d7030}
+#series .mItem.have .mp{background:#fff3d6;color:#2fae43;text-shadow:none;box-shadow:inset 0 -.8cqw 0 #e0c590,0 .6cqw 0 #0004}
+#series .mItem .mp s{color:#d8ffd0}
+#series .sBonus{color:#ffe7b0;padding:0 3cqw}
 .mItem{position:relative;background:#fff;border-radius:4cqw;cursor:pointer;box-shadow:inset 0 -1cqw 0 #dfe4f2;padding:2cqw 2cqw 3cqw;display:flex;flex-direction:column;align-items:center;
   border-top:1.4cqw solid var(--rc);font-weight:800;color:#2b3150;text-align:center}
 .mItem .pbox{font-size:2.9cqw;margin:2cqw 2.4em 1cqw 0} /* hộp sản phẩm thay ảnh mô hình */
