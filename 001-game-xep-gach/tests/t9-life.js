@@ -6,7 +6,7 @@ module.exports = [
       ok(heartsNow() === 5 && $('hLife').textContent.includes('5') && $('hLife').textContent.includes('Đầy'), 'mặc định 5 ❤ đầy: ' + $('hLife').textContent);
       ok(document.querySelectorAll('#lives i').length === 3 && $('lives').textContent.includes('✖') && !$('lives').textContent.includes('♥'), 'trong màn: 3 lần sai hiện ✖');
       giveModel(1); startBuild(1); wrong(); wrong(); wrong(); await wait(900);
-      ok($('loseModal').textContent.includes('−1 ❤'), 'bảng thua báo sẽ mất 1 ❤');
+      $('lClose').click(); ok($('failModal').classList.contains('show') && $('fT').textContent.includes('mất 1 ❤') && $('fIcon').offsetWidth > 0, 'bỏ hồi sinh → bảng thua báo mất 1 ❤');
       $('lRetry').click(); ok(heartsNow() === 4 && L.name === LEVELS[1].name && !done, 'thua level mới: −1 ❤, chơi lại');
       ok(S.hT && Date.now() - S.hT < 5000, 'bắt đầu hồi từ lúc mất');
       startBuild(0); wrong(); wrong(); wrong(); await wait(900); $('lMenu').click();
@@ -48,8 +48,9 @@ module.exports = [
   } },
   { name: 'thoat-giua-chung', pre: pre({ tut: 6, best: { 'Cây nấm': 3 } }), post: async () => {
       giveModel(1); startBuild(1); commit(targets.find(supported));
-      $('backBtn').click(); ok(!$('home').classList.contains('show') && $('toast').textContent.includes('❤'), 'thoát giữa chừng: cảnh báo mất ❤');
-      $('backBtn').click(); ok($('home').classList.contains('show') && heartsNow() === 4, 'bấm lần nữa: về, −1 ❤');
+      $('backBtn').click(); ok(!$('home').classList.contains('show') && $('quitModal').classList.contains('show') && $('qT').textContent.includes('❤'), 'thoát giữa chừng: bảng cảnh báo mất ❤');
+      $('qNo').click(); ok(!$('quitModal').classList.contains('show') && !$('home').classList.contains('show') && heartsNow() === 5, 'chơi tiếp: ở lại, không mất ❤');
+      $('backBtn').click(); $('qYes').click(); ok($('home').classList.contains('show') && heartsNow() === 4, 'xác nhận thoát: về, −1 ❤');
       giveModel(2); startBuild(2); $('backBtn').click(); ok($('home').classList.contains('show') && heartsNow() === 4, 'chưa lắp mảnh nào: thoát không mất ❤');
   } },
   { name: 'uu-dai-vo-han', pre: pre({ tut: 6 }), post: async () => {

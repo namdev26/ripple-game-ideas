@@ -32,7 +32,7 @@ module.exports = [
   { name: 'thieu-xu', pre: save0({ tut: 6, coins: 100, best: { 'Cây nấm': 3 } }), post: async () => {
       const ld = LEVELS.findIndex(l => l.name === 'Lâu đài');
       openShop(ld); $('mBuy').click();
-      ok($('needModal').classList.contains('show') && $('needModal').textContent.includes('Thiếu ' + (shopPrice(ld) - 100)), 'bảng thiếu xu');
+      ok($('needModal').classList.contains('show') && $('needModal').textContent.includes('thiếu ' + (shopPrice(ld) - 100)), 'bảng thiếu xu');
       ok(S.goal === 'Lâu đài' && !owned(ld) && S.coins === 100, 'tự ghim mục tiêu, chưa trừ xu');
       ok($('needPlay').textContent.includes('LEVEL 2') && $('needBox').textContent.includes('100') && $('needAd').textContent.includes('30'), '3 lối: lắp level kế, hộp, QC');
       $('needPlay').click(); ok($('bpView').classList.contains('show') && bpI === roadNext(), 'lắp level kế');
@@ -57,7 +57,7 @@ module.exports = [
       startBuild(0); wrong(); wrong(); wrong(); await wait(900);
       ok($('loseModal').classList.contains('show') && $('lAd').offsetWidth > 0 && $('lCoin').textContent.includes('50'), 'thua: hồi mạng bằng QC hoặc 50 xu');
       $('lCoin').click(); ok(!$('loseModal').classList.contains('show') && !done && mistakes === 2 && S.coins === 10, 'trả 50 xu: hồi 1 mạng');
-      wrong(); await wait(900); ok($('loseModal').classList.contains('show') && $('lAd').offsetWidth === 0 && $('lCoin').offsetWidth === 0, 'mỗi màn hồi 1 lần');
+      wrong(); await wait(900); ok(!$('loseModal').classList.contains('show') && $('failModal').classList.contains('show'), 'mỗi màn hồi 1 lần: thua lần 2 vào thẳng bảng thua');
   } },
   { name: 'gioi-han-qc', budget: 40000, pre: save0({ tut: 6, coins: 0, best: { 'Cây nấm': 3 } }), post: async () => {
       openGacha(); $('adBtn').click(); await wait(3500);

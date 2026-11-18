@@ -100,35 +100,82 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .btn.sq{width:14cqw;height:14cqw;font-size:7cqw}
 .screen{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:10}
 .screen.show{display:flex}
-.modal{background:#151a3aa8}
-.panelM{position:relative;background:linear-gradient(#ffffff,#eef1fb);border:1cqw solid #fff;border-radius:7cqw;width:80cqw;padding:13cqw 6cqw 7cqw;text-align:center;
-  box-shadow:inset 0 -1.8cqw 0 #cfd6ec,0 3cqw 6cqw #0006;animation:rise .35s}
-@keyframes rise{from{transform:translateY(10cqw) scale(.9);opacity:0}}
-.ribbon{position:absolute;top:-6.5cqw;left:50%;transform:translateX(-50%);padding:1.2cqw 9cqw 2.2cqw;border-radius:4.5cqw;font-size:8.2cqw;line-height:1.1;white-space:nowrap;
-  background:linear-gradient(#ffc04d,#ff8a1a);box-shadow:inset 0 -1.3cqw 0 #c85f00,inset 0 .7cqw 0 #ffe1a1,0 1.2cqw 2cqw #0003}
-.ribbon.red{background:linear-gradient(#ff7b86,#e0303f);box-shadow:inset 0 -1.3cqw 0 #a1182a,inset 0 .7cqw 0 #ffc1c7,0 1.2cqw 2cqw #0003}
-.ribbon.blue{background:linear-gradient(#7d8cf0,#4c58cf);box-shadow:inset 0 -1.3cqw 0 #333ea3,inset 0 .7cqw 0 #bcc4ff,0 1.2cqw 2cqw #0003}
-.stack{display:flex;flex-direction:column;gap:4cqw}
-.loseP{text-align:center;font-size:5cqw;font-weight:800;margin:4cqw 0 5cqw}
+/* ---------- popup chuẩn casual: nền tối mờ · bảng bật nảy viền đậm · băng tiêu đề có đuôi · ✕ đỏ góc phải ---------- */
+.modal{z-index:14;background:radial-gradient(circle at 50% 42%,#1d2356b0,#0a0d22e0)} /* trên mọi màn (màn chính cũng là .screen) */
+.modal.show{animation:fadeIn .18s}
+@keyframes fadeIn{from{opacity:0}}
+.panelM{position:relative;width:82cqw;padding:14cqw 5.5cqw 6cqw;text-align:center;border-radius:6cqw;background:linear-gradient(#ffffff,#e8edfa);border:1cqw solid #2b3150;
+  box-shadow:inset 0 0 0 1cqw #fff,inset 0 -2.2cqw 0 1cqw #cfd7ee,0 1.6cqw 0 #12163a99,0 4cqw 7cqw #0008;animation:popIn .4s cubic-bezier(.2,1.55,.45,1)}
+@keyframes popIn{from{transform:scale(.5);opacity:0}}
+/* băng tiêu đề: không transform/z-index để 2 đuôi (z-index:-1) nằm sau băng */
+.ribbon{--r1:#ffc04d;--r2:#ff8a1a;--rd:#c85f00;--rt:#d06a00;position:absolute;top:-7.5cqw;left:0;right:0;margin:0 auto;width:max-content;min-width:52cqw;
+  padding:1.4cqw 7cqw 2.6cqw;border-radius:2.6cqw;font-size:7.8cqw;line-height:1.1;white-space:nowrap;background:linear-gradient(var(--r1),var(--r2));
+  box-shadow:inset 0 -1.4cqw 0 var(--rd),inset 0 .8cqw 0 #ffffff70,0 0 0 .9cqw #2b3150,0 1.2cqw 0 .9cqw #2b3150}
+.ribbon::before,.ribbon::after{content:"";position:absolute;z-index:-1;top:3cqw;width:11cqw;height:calc(100% - .5cqw);background:linear-gradient(var(--rt),var(--rd))}
+.ribbon::before{left:-7.5cqw;clip-path:polygon(0 0,100% 0,100% 100%,0 100%,38% 50%)}
+.ribbon::after{right:-7.5cqw;clip-path:polygon(0 0,100% 0,62% 50%,100% 100%,0 100%)}
+.ribbon.red{--r1:#ff7b86;--r2:#e0303f;--rd:#a1182a;--rt:#c4202f}
+.ribbon.blue{--r1:#7d8cf0;--r2:#4c58cf;--rd:#333ea3;--rt:#3d48b8}
+.stack{display:flex;flex-direction:column;gap:3.6cqw}
+.loseP{text-align:center;font-size:5cqw;font-weight:800;margin:2cqw 0 4cqw;line-height:1.3}
+.loseP small{display:block;font-size:3.8cqw;color:#6b7190}
 .row{display:flex;gap:4cqw;justify-content:center;margin-top:4cqw}
 .close{position:absolute;top:-3cqw;right:-3cqw;width:10cqw;height:10cqw;font-size:5.6cqw}
-#rStars{display:flex;justify-content:center;gap:1.5cqw;margin-top:-2cqw}
-#rStars span{font-size:18cqw;line-height:1;color:#d4dbe8;text-shadow:0 1cqw 0 #b3bdd3}
+.panelM .close{top:-4.5cqw;right:-4.5cqw;width:12cqw;height:12cqw;border-radius:50%;font-size:6cqw;z-index:2;
+  background:linear-gradient(#ff7b86,#e0303f);box-shadow:inset 0 -1.1cqw 0 #a1182a,inset 0 .6cqw 0 #ffc1c7,0 0 0 .9cqw #2b3150,0 1.2cqw 1.6cqw #0004}
+.btn.red{background:linear-gradient(#ff7b86,#e0303f);box-shadow:inset 0 -1.3cqw 0 #a1182a,inset 0 .7cqw 0 #ffc1c7,0 1cqw 2cqw #0003}
+/* nút ngang có giá ở phải: [nhãn  (60 🪙)] */
+.btn.wide{width:100%;height:14cqw;flex-direction:row;gap:2.4cqw;font-size:4.9cqw;padding:0 3cqw .8cqw;white-space:nowrap}
+.cost{display:inline-flex;align-items:center;gap:1cqw;background:#0000002e;border-radius:3cqw;padding:.6cqw 2.4cqw .6cqw 2.8cqw;font-size:4.8cqw;color:#fff;text-shadow:0 .4cqw 0 #0005}
+.mc{display:inline-block;flex:none;width:5.4cqw;height:5.4cqw;border-radius:50%;vertical-align:-1cqw;background:radial-gradient(circle at 35% 30%,#fff6b0,#ffc61a 50%,#e48c00);box-shadow:inset 0 -.5cqw 0 #c06f00}
+/* biểu tượng lớn giữa bảng */
+.pIcon{position:relative;width:30cqw;height:28cqw;margin:0 auto 1cqw;display:flex;align-items:center;justify-content:center;animation:pbob 1.6s ease-in-out infinite}
+.pIcon svg{width:100%;height:100%;filter:drop-shadow(0 1.4cqw 0 #12163a44)}
+.pIcon b{position:absolute;inset:0;padding-bottom:3cqw;display:flex;align-items:center;justify-content:center;font-size:10cqw;line-height:1}
+.pIcon .neg{position:absolute;inset:auto -4cqw -1cqw auto;padding:.6cqw 2.6cqw;border-radius:4cqw;background:#2b3150;color:#fff;font-size:6cqw;font-style:normal;font-weight:800;border:.7cqw solid #fff}
+.pIcon.inf{--hf:linear-gradient(#a78bff,#6a3ff0);--hs:#3d1fa0}
+.pIcon .coin{position:relative;left:0;top:0;transform:none;width:24cqw;height:24cqw}
+.pIcon .coin::after{inset:6.5cqw;border-radius:1.4cqw}
+@keyframes pbob{50%{transform:translateY(-1.4cqw)}}
+.pill{display:inline-flex;align-items:center;gap:1.4cqw;background:#2b3150;color:#fff;border-radius:4cqw;padding:.8cqw 3.6cqw;font-size:4.4cqw;font-weight:800;margin-bottom:3cqw}
+.pill b{color:#ffd84a}
+/* thắng: tia sáng xoay sau mô hình, sao nảy có quầng */
+#rLv{font-size:4.2cqw;font-weight:800;color:#6b7190;margin:-3cqw 0 1cqw;letter-spacing:.3cqw}
+#rStars{display:flex;justify-content:center;gap:1.5cqw;margin-top:-1cqw}
+#rStars span{position:relative;font-size:18cqw;line-height:1;color:#d4dbe8;text-shadow:0 1cqw 0 #b3bdd3}
 #rStars span:nth-child(2){transform:translateY(-3.5cqw);font-size:21cqw}
-#rStars span.on{color:#ffc21a;text-shadow:0 1cqw 0 #c98a00;animation:starpop .45s}
-@keyframes starpop{0%{scale:0;rotate:-45deg}70%{scale:1.3}}
-#rImg{width:42cqw;height:42cqw;display:block;margin:0 auto;filter:drop-shadow(0 1.5cqw 1.5cqw #0002)}
-.reward{display:inline-flex;align-items:center;gap:2cqw;margin:0 0 5cqw;font-size:6.4cqw;font-weight:800;color:#2b3150}
+#rStars span.on{color:#ffc21a;text-shadow:0 1cqw 0 #c98a00,0 0 4cqw #ffd84a;animation:starpop .45s cubic-bezier(.2,1.6,.45,1)}
+@keyframes starpop{0%{scale:2.4;opacity:0;rotate:-60deg}}
+#rPic{position:relative;z-index:0;width:46cqw;height:42cqw;margin:0 auto}
+#rPic::before{content:"";position:absolute;left:50%;top:50%;width:90cqw;height:90cqw;margin:-45cqw 0 0 -45cqw;border-radius:50%;z-index:-1;
+  background:radial-gradient(closest-side,#fff8d0 20%,#fff8d000 70%),repeating-conic-gradient(#ffd84a66 0 9deg,#ffd84a00 9deg 22.5deg);
+  -webkit-mask:radial-gradient(closest-side,#000 35%,#0000);mask:radial-gradient(closest-side,#000 35%,#0000);animation:spin 14s linear infinite}
+#rImg{width:42cqw;height:42cqw;display:block;margin:0 auto;filter:drop-shadow(0 1.5cqw 1.5cqw #0003)}
+.reward{display:inline-flex;align-items:center;gap:2cqw;margin:0 0 4cqw;font-size:6.4cqw;font-weight:800;color:#2b3150;background:#dfe6f7;border-radius:5cqw;padding:.6cqw 5cqw .6cqw 1cqw;box-shadow:inset 0 .7cqw 0 #c5cfe8}
 .reward .coin{position:relative;left:0;top:0;transform:none;width:9cqw;height:9cqw}
 .reward .coin::after{inset:2.5cqw}
-#rGoal{font-size:3.8cqw;font-weight:800;color:#5d6488;margin:-3cqw 0 3cqw}#rGoal:empty{display:none}
-#rX2{width:100%;height:12cqw;font-size:4.8cqw;margin-bottom:3cqw}
-.info p{margin:0 0 3.5cqw;font-size:4.5cqw;font-weight:700;color:#4b5275;text-align:left;line-height:1.35}
+#rGoal{font-size:3.8cqw;font-weight:800;color:#5d6488;margin:-2cqw 0 3cqw}#rGoal:empty{display:none}
+#rX2{margin-bottom:3cqw}
+/* thua: ảnh mô hình + thanh tiến độ để mời hồi sinh */
+#lPic{width:34cqw;height:34cqw;margin:-2cqw auto 0;display:block;filter:grayscale(.35) drop-shadow(0 1.2cqw 1.2cqw #0003)}
+.prog{position:relative;height:6cqw;border-radius:3cqw;background:#cfd7ee;box-shadow:inset 0 .7cqw 0 #b4bfdc;margin:1cqw 4cqw 3cqw;overflow:hidden}
+.prog i{position:absolute;left:0;top:0;bottom:0;border-radius:3cqw;background:linear-gradient(#86e85f,#33b44a);box-shadow:inset 0 -.8cqw 0 #22813a}
+.prog b{position:relative;display:block;font-size:4cqw;line-height:6cqw;color:#fff;text-shadow:0 .4cqw 0 #2b3150,.3cqw 0 0 #2b3150,-.3cqw 0 0 #2b3150}
+/* cách chơi: mỗi dòng 1 ô biểu tượng */
+.info p{margin:0 0 3cqw;font-size:4.3cqw;font-weight:700;color:#4b5275;text-align:left;line-height:1.35}
 .info b{color:#2b3150}
-.toggle{display:flex;align-items:center;justify-content:space-between;font-size:5.4cqw;font-weight:800;color:#2b3150;margin-bottom:5cqw;padding:0 2cqw}
-.sw{width:17cqw;height:9cqw;border-radius:5cqw;background:#cfd6ec;position:relative;cursor:pointer;transition:background .2s;box-shadow:inset 0 .6cqw 0 #0001}
-.sw::after{content:"";position:absolute;top:1cqw;left:1cqw;width:7cqw;height:7cqw;border-radius:50%;background:#fff;box-shadow:0 .5cqw 1cqw #0003;transition:left .2s}
-.sw.on{background:#3cbf4c}.sw.on::after{left:9cqw}
+#infoModal p{display:flex;align-items:center;gap:3cqw}
+#infoModal p>i{flex:none;width:12cqw;height:12cqw;border-radius:3cqw;background:#fff;box-shadow:inset 0 -.8cqw 0 #d3d9ec,0 0 0 .5cqw #cfd7ee;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:6.6cqw}
+/* cài đặt: ô bật/tắt có biểu tượng (tắt = xám + gạch chéo) */
+.togs{display:flex;justify-content:center;gap:4cqw;margin-bottom:5cqw}
+.tog{border:none;background:none;padding:0;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1.2cqw;color:#2b3150;font-size:3.8cqw;font-weight:800}
+.tog i{position:relative;width:19cqw;height:19cqw;border-radius:5cqw;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:9.5cqw;
+  background:linear-gradient(#66c8ff,#2f8cf0);box-shadow:inset 0 -1.3cqw 0 #1c5fc2,inset 0 .7cqw 0 #a8e3ff,0 1cqw 1.6cqw #0003}
+.tog:active i{transform:translateY(.6cqw)}
+.tog.sw:not(.on) i{background:linear-gradient(#c9cfdf,#9ea6bf);box-shadow:inset 0 -1.3cqw 0 #7b829c,inset 0 .7cqw 0 #e6e9f2}
+.tog.sw:not(.on) i::after{content:"";position:absolute;width:15cqw;height:1.6cqw;border-radius:1cqw;background:#e0303f;rotate:-45deg;box-shadow:0 0 0 .6cqw #fff}
+#setModal.home .inGame{display:none}
+.ver{margin:4cqw 0 0;font-size:3.2cqw;font-weight:700;color:#9aa0bd}
 
 /* ---------- home ---------- */
 /* nền gỗ: vân ván dọc + quầng sáng giữa */
@@ -252,7 +299,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #hBoxWrap{position:relative;margin-top:7cqw}
 #hBox{width:40cqw;height:40cqw}
 #home>*{flex-shrink:0}
-#oddsModal{z-index:14}
 #hName{font-size:6cqw;line-height:1;margin-top:2.5cqw}
 #hLevels.few{overflow:visible} /* ít thẻ: để bong bóng hướng dẫn tràn ra ngoài */
 /* bố cục home: thanh trên · cột nút trái · cột chờ lắp phải · hộp + MỞ HỘP giữa · thanh 3 mục dưới */
@@ -285,8 +331,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #hLife small{font-size:3.6cqw;font-weight:800;color:#6b7190}
 #hLife.inf{background:linear-gradient(#fff3b0,#ffd34d);box-shadow:inset 0 -.8cqw 0 #d9a21a,0 0 3cqw #ffd34d}
 #hLife.inf i{color:#7a4cff;filter:drop-shadow(0 .6cqw 0 #3d1fa0)}
-#lifeModal{z-index:14}
-#lifeModal .stack .btn{height:12cqw;font-size:4.2cqw}
 /* tiêu điểm: mô hình level kế trên bục sáng + tên, nút chơi to phía dưới */
 #hNext{display:flex;flex-direction:column;align-items:center;margin-top:auto;margin-bottom:34cqw;position:relative}
 #hNext::before{content:"";position:absolute;top:-6cqw;left:50%;width:78cqw;height:62cqw;margin-left:-39cqw;border-radius:50%;background:radial-gradient(closest-side,#fff3c4cc,#ffd98a55 55%,#0000);z-index:-1}
@@ -462,8 +506,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #mBuy{width:100%}
 #mGoal{width:11cqw;height:11cqw;flex:none;font-size:5.4cqw;filter:grayscale(1);opacity:.6}#mGoal.on{filter:none;opacity:1}
 .mItem .mStar{position:absolute;top:-2cqw;left:-1cqw;font-style:normal;font-size:5cqw;z-index:1}
-#needModal{z-index:14}
-#needModal .stack .btn{height:13cqw;font-size:4.4cqw}
 /* ---------- sách hướng dẫn kiểu LEGO ---------- */
 .page{width:86cqw;flex:1;min-height:0;background:#fbf8ef;border-radius:3cqw;box-shadow:inset 1.4cqw 0 0 #e9e2cc,0 1.5cqw 3cqw #0003;overflow-y:auto;box-sizing:border-box;
   padding:4cqw 4cqw 4cqw 6cqw;display:flex;flex-direction:column;align-items:center;touch-action:pan-y;scrollbar-width:none;transform-origin:left center}
@@ -541,66 +583,96 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 
   <div id="setModal" class="screen modal"><div class="panelM">
     <div class="ribbon blue outline">CÀI ĐẶT</div>
-    <button class="btn blue close" id="setClose" aria-label="Đóng">✕</button>
-    <div class="toggle">Âm thanh <div class="sw" id="sndSw"></div></div>
-    <div class="toggle">Rung <div class="sw" id="vibSw"></div></div>
-    <div class="stack">
-      <button class="btn blue big" id="sRestart"><span class="outline">CHƠI LẠI</span></button>
-      <button class="btn blue big" id="sMenu"><span class="outline">VỀ MENU</span></button>
-      <button class="btn blue big" id="sHelp"><span class="outline">CÁCH CHƠI</span></button>
+    <button class="btn close" id="setClose" aria-label="Đóng">✕</button>
+    <div class="togs">
+      <button class="tog sw" id="sndSw"><i>🔊</i>Âm thanh</button>
+      <button class="tog sw" id="vibSw"><i>📳</i>Rung</button>
+      <button class="tog" id="sHelp"><i>❓</i>Cách chơi</button>
     </div>
+    <div class="stack inGame">
+      <button class="btn green big" id="sResume"><span class="outline g">TIẾP TỤC</span></button>
+      <div class="row" style="margin:0"><button class="btn blue" id="sRestart" style="width:29cqw;height:13cqw"><span class="outline">↻ Chơi lại</span></button><button class="btn red" id="sMenu" style="width:29cqw;height:13cqw"><span class="outline r">⌂ Thoát</span></button></div>
+    </div>
+    <p class="ver">Xếp Gạch · bản thử</p>
   </div></div>
 
   <div id="infoModal" class="screen modal"><div class="panelM info">
     <div class="ribbon blue outline">CÁCH CHƠI</div>
-    <button class="btn blue close" id="infoClose" aria-label="Đóng">✕</button>
-    <p>🧱 <b>Kéo mảnh</b> từ khay lên mô hình, thả đúng chỗ là <b>tự khớp</b>.</p>
-    <p>📖 <b>Sổ bước</b> ở trên cho biết bước này cần mảnh gì, lắp vào đâu (viền đỏ). Chạm để phóng to.</p>
-    <p>❤️ Có <b>3 mạng</b>: thả sai mất 1, hết mạng phải chơi lại. Còn bao nhiêu mạng được bấy nhiêu sao.</p>
-    <p>💡 Bí thì dùng <b>gợi ý</b>. Kéo nền để xoay, chụm 2 ngón để zoom.</p>
+    <button class="btn close" id="infoClose" aria-label="Đóng">✕</button>
+    <p><i>🧱</i><span><b>Kéo mảnh</b> từ khay lên mô hình, thả đúng chỗ là <b>tự khớp</b>.</span></p>
+    <p><i>📖</i><span><b>Sổ bước</b> ở trên cho biết bước này cần mảnh gì, lắp vào đâu (viền đỏ). Chạm để phóng to.</span></p>
+    <p><i>✖</i><span>Được sai <b>3 lần</b>. Sai ít thì nhiều sao: không sai = 3 ⭐.</span></p>
+    <p><i>💡</i><span>Bí thì dùng <b>gợi ý</b>. Kéo nền để xoay, chụm 2 ngón để zoom.</span></p>
+    <button class="btn green big" id="infoOk" style="margin-top:2cqw"><span class="outline g">ĐÃ HIỂU</span></button>
   </div></div>
 
+  <!-- thua bước 1: mời hồi sinh (✕ = bỏ cuộc → bước 2) -->
   <div id="loseModal" class="screen modal"><div class="panelM">
-    <div class="ribbon red outline r">SAI 3 LẦN</div>
-    <p class="loseP">Hết lượt sai rồi, thử lại nhé!</p>
+    <div class="ribbon red outline r">HẾT LƯỢT SAI</div>
+    <button class="btn close" id="lClose" aria-label="Bỏ cuộc">✕</button>
+    <img id="lPic" alt="">
+    <div class="prog"><i id="lBar"></i><b id="lProg"></b></div>
+    <p class="loseP">Gần xong rồi! Lắp tiếp chứ?<small>Thêm 1 lượt sai để không mất tiến độ</small></p>
     <div class="stack">
-      <button class="btn yellow big" id="lAd"><span class="outline o">🎬 Thêm 1 lượt</span></button>
-      <button class="btn yellow big" id="lCoin"><span class="outline o">50🪙 Thêm 1 lượt</span></button>
+      <button class="btn green wide" id="lCoin"><span class="outline g">+1 lượt</span><b class="cost">50<i class="mc"></i></b></button>
+      <button class="btn yellow wide" id="lAd"><span class="outline o">🎬 +1 lượt miễn phí</span></button>
+    </div>
+  </div></div>
+
+  <!-- thua bước 2: báo mất ❤️ + chơi lại -->
+  <div id="failModal" class="screen modal"><div class="panelM">
+    <div class="ribbon red outline r">THUA RỒI</div>
+    <div class="pIcon" id="fIcon"><svg viewBox="0 0 34 31"><use href="#heart"/></svg><i class="neg">−1</i></div>
+    <p class="loseP" id="fT"></p>
+    <div class="stack">
       <button class="btn green big" id="lRetry"><span class="outline g">CHƠI LẠI</span></button>
       <button class="btn blue big" id="lMenu"><span class="outline">VỀ MENU</span></button>
     </div>
   </div></div>
 
+  <!-- thoát giữa chừng level mới: xác nhận mất ❤️ -->
+  <div id="quitModal" class="screen modal"><div class="panelM">
+    <div class="ribbon red outline r">THOÁT MÀN?</div>
+    <button class="btn close" id="qClose" aria-label="Ở lại">✕</button>
+    <div class="pIcon"><svg viewBox="0 0 34 31"><use href="#heart"/></svg><i class="neg">−1</i></div>
+    <p class="loseP" id="qT"></p>
+    <div class="row" style="margin:0"><button class="btn red" id="qYes" style="width:32cqw;height:14cqw"><span class="outline r">THOÁT</span></button><button class="btn green" id="qNo" style="width:32cqw;height:14cqw"><span class="outline g">CHƠI TIẾP</span></button></div>
+  </div></div>
+
   <div id="lifeModal" class="screen modal"><div class="panelM">
     <div class="ribbon red outline r" id="lifeH">HẾT MẠNG</div>
-    <button class="btn blue close" id="lifeClose" aria-label="Đóng">✕</button>
-    <p class="loseP" id="lifeT"></p>
+    <button class="btn close" id="lifeClose" aria-label="Đóng">✕</button>
+    <div class="pIcon" id="lifeI"><svg viewBox="0 0 34 31"><use href="#heart"/></svg><b class="outline" id="lifeN"></b></div>
+    <div class="pill" id="lifeT"></div>
+    <p class="loseP" style="margin-top:0"><small>Chỉ mất ❤️ khi thua level mới · lắp lại mô hình cũ thì miễn phí</small></p>
     <div class="stack">
-      <button class="btn yellow" id="lifeAd"><span class="outline o">🎬 Chơi ∞ 15 phút</span></button>
-      <button class="btn green" id="lifeCoin"><span class="outline g"></span></button>
-      <button class="btn blue" id="lifeShop"><span class="outline">🛍 Gói ∞ 3 giờ · Ưu Đãi</span></button>
-      <button class="btn blue" id="lifeOld"><span class="outline">🏛 Lắp lại mô hình cũ (không tốn ❤️)</span></button>
+      <button class="btn green wide" id="lifeCoin"></button>
+      <button class="btn yellow wide" id="lifeAd"><span class="outline o"></span></button>
+      <button class="btn blue wide" id="lifeShop"><span class="outline">🛍 Gói ∞ 3 giờ · Ưu Đãi</span></button>
+      <button class="btn blue wide" id="lifeOld"><span class="outline">🏛 Lắp lại mô hình cũ</span></button>
     </div>
   </div></div>
 
   <div id="needModal" class="screen modal"><div class="panelM">
     <div class="ribbon red outline r">THIẾU XU</div>
-    <button class="btn blue close" id="needClose" aria-label="Đóng">✕</button>
+    <button class="btn close" id="needClose" aria-label="Đóng">✕</button>
+    <div class="pIcon"><span class="coin"></span></div>
     <p class="loseP" id="needT"></p>
     <div class="stack">
-      <button class="btn green" id="needPlay"><span class="outline g"></span></button>
-      <button class="btn yellow" id="needBox"><span class="outline o"></span></button>
-      <button class="btn blue" id="needAd"><span class="outline"></span></button>
+      <button class="btn green wide" id="needPlay"><span class="outline g"></span></button>
+      <button class="btn yellow wide" id="needBox"><span class="outline o"></span></button>
+      <button class="btn blue wide" id="needAd"><span class="outline"></span></button>
     </div>
   </div></div>
 
   <div id="result" class="screen modal"><div class="panelM">
     <div class="ribbon outline o" id="rTitle">HOÀN THÀNH!</div>
+    <div id="rLv"></div>
     <div id="rStars"><span>★</span><span>★</span><span>★</span></div>
-    <img id="rImg" alt="">
+    <div id="rPic"><img id="rImg" alt=""></div>
     <div class="reward"><span class="coin"></span>+<span id="rCoins">0</span></div>
     <p id="rGoal"></p>
-    <button class="btn yellow" id="rX2"><span class="outline o">🎬 Xem QC · ×2 xu</span></button>
+    <button class="btn yellow wide" id="rX2"><span class="outline o">🎬 Nhân đôi thưởng</span><b class="cost">×2<i class="mc"></i></b></button>
     <button class="btn green big" id="rNext"><span class="outline g">TIẾP TỤC</span></button>
     <div class="row">
       <button class="btn blue sq" id="rMenu" aria-label="Menu">⌂</button>
@@ -1447,7 +1519,7 @@ const sfx={
 };
 
 // ====================== TRẠNG THÁI ======================
-const OVERLAYS=['result','loseModal','needModal','lifeModal','iap','gacha','setModal','infoModal','series','bpView','shop','shelf','unbox','oddsModal'];
+const OVERLAYS=['result','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','series','bpView','shop','shelf','unbox','oddsModal'];
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
 let rebuild=false, placedOrder=[], replaying=false, replayTok=0, replayDone=null; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
@@ -1704,9 +1776,19 @@ function wrong(){
   app.classList.remove('shake'); void app.offsetWidth; app.classList.add('shake');
   if (mistakes<LIVES) return toast('Sai chỗ rồi! Mất 1 mạng');
   done=true; endDrag(true); // hết mạng: thua
-  setTimeout(()=>{ if(!done||mistakes<LIVES) return; $('lAd').style.display=$('lCoin').style.display=revived?'none':'';
-    const c=failCost(); $('lRetry').querySelector('span').textContent=c?'CHƠI LẠI (−1 ❤️)':'CHƠI LẠI'; $('lMenu').querySelector('span').textContent=c?'VỀ MENU (−1 ❤️)':'VỀ MENU';
+  setTimeout(()=>{ if(!done||mistakes<LIVES) return; if(revived) return openFail(); // mỗi màn hồi sinh 1 lần: lần thua sau vào thẳng bảng thua
+    const n=targets.filter(t=>t.placed).length, all=targets.length;
+    $('lPic').src=thumbLevel(levelIdx,special(levelIdx)); $('lProg').textContent=`${n}/${all} mảnh`; $('lBar').style.width=Math.round(n/all*100)+'%';
+    $('lCoin').querySelector('.cost').firstChild.textContent=REVIVE_COST;
     show('loseModal',true); },700);
+}
+// thua bước 2 (bỏ hồi sinh): báo mất ❤️, ❤️ chỉ trừ khi bấm CHƠI LẠI / VỀ MENU
+function openFail(){
+  const c=failCost();
+  $('fIcon').style.display=c?'':'none';
+  $('fT').innerHTML=c?`Bạn mất 1 ❤️ · còn ${Math.max(0,heartsNow()-1)}/${HEART_MAX}<small>Chỉ mất ❤️ khi thua level mới</small>`
+    :(rebuild?'Lắp lại mô hình cũ không tốn ❤️':'∞ đang bật: không mất ❤️')+'<small>Thử lại nhé!</small>';
+  show('loseModal',false); show('failModal',true);
 }
 function updateLives(lose){
   $('lives').innerHTML=Array.from({length:LIVES},(_,k)=>`<i class="${k<LIVES-mistakes?'on':''}${lose&&k===LIVES-mistakes?' lose':''}">✖</i>`).join('');
@@ -1750,16 +1832,20 @@ function win(){
 }
 let rX2=0; // thưởng có thể nhân đôi bằng QC (0 = đã dùng / lắp lại)
 function renderRGoal(){ const o=goalInfo(); $('rGoal').textContent=o?`⭐ ${LEVELS[o.g].name}: ${Math.min(S.coins,o.price)}/${o.price} 🪙`+(o.need?` · còn ${o.need}!`:' · đủ rồi!'):''; }
-$('rX2').onclick=()=>{ const r=rX2; if(!r) return; rX2=0; watchAd(()=>{ S.coins+=r; save(); $('rCoins').textContent=+$('rCoins').textContent+r; $('rX2').style.display='none'; renderRGoal(); updateCoins(true); sfx.coin(); }); };
+let rTot=0; // xu thưởng đang hiện: đếm dần từ số cũ lên số mới
+function countCoins(to){ const el=$('rCoins'), from=+el.textContent||0, t0=performance.now(); rTot=to;
+  const tick=()=>{ if(rTot!==to) return; const k=Math.min(1,(performance.now()-t0)/600); el.textContent=Math.round(from+(to-from)*k); if(k<1) requestAnimationFrame(tick); }; tick(); }
+$('rX2').onclick=()=>{ const r=rX2; if(!r) return; rX2=0; watchAd(()=>{ S.coins+=r; save(); countCoins(rTot+r); $('rX2').style.display='none'; renderRGoal(); updateCoins(true); sfx.coin(); }); };
 function showResult(stars,reward,bonus=0){
   $('rTitle').textContent=['','HOÀN THÀNH!','GIỎI LẮM!','TUYỆT VỜI!'][stars];
-  $('rImg').src=thumbLevel(levelIdx,special(levelIdx)); $('rCoins').textContent=reward+bonus;
+  $('rImg').src=thumbLevel(levelIdx,special(levelIdx)); $('rCoins').textContent=0; rTot=reward+bonus;
+  const no=roadNo(levelIdx); $('rLv').textContent=(rebuild?'LẮP LẠI':no?'LEVEL '+no:'MÔ HÌNH')+' · '+L.name;
   rX2=reward; $('rX2').style.display=reward?'':'none'; renderRGoal();
   if (bonus) setTimeout(()=>toast(`🎉 Đủ bộ ${SERIES[seriesOf(levelIdx)].name}! +${bonus}🪙`,3000),900);
   const ss=[...$('rStars').children]; ss.forEach(s=>s.classList.remove('on'));
   $('result').classList.add('show');
   ss.forEach((s,i)=>{ if(i<stars) setTimeout(()=>{ s.classList.add('on'); sfx.star(i); },400+i*300); });
-  setTimeout(()=>{ updateCoins(true); sfx.coin(); },400+stars*300);
+  setTimeout(()=>{ countCoins(rTot); updateCoins(true); sfx.coin(); },400+stars*300);
 }
 
 // ====================== PHÁT LẠI ======================
@@ -1886,9 +1972,10 @@ function updateLife(){
 function renderLife(){
   const inf=infLeft(), h=heartsNow();
   $('lifeH').textContent=inf||h?'MẠNG':'HẾT MẠNG';
-  $('lifeT').innerHTML=inf?`∞ Đang chơi không tốn ❤️ · còn ${mmss(inf)}`:`❤️ ${h}/${HEART_MAX}`+(h<HEART_MAX?` · hồi 1 ❤️ sau ${mmss(nextHeartMs())}`:' · đầy')+'<br><small>Chỉ mất ❤️ khi thua level mới</small>';
+  $('lifeI').classList.toggle('inf',inf>0); $('lifeN').textContent=inf?'∞':h;
+  $('lifeT').innerHTML=inf?`∞ Không tốn ❤️ · còn <b>${mmss(inf)}</b>`:h<HEART_MAX?`❤️ kế tiếp sau <b>${mmss(nextHeartMs())}</b>`:'Đầy mạng!';
   const al=adLeft('inf'); $('lifeAd').style.display=al>0?'':'none'; $('lifeAd').querySelector('span').textContent=`🎬 Chơi ∞ 15 phút (còn ${al}/${AD_MAX.inf})`;
-  $('lifeCoin').style.display=h<HEART_MAX?'':'none'; $('lifeCoin').querySelector('span').textContent=`${HEART_FULL_COST}🪙 Nạp đầy ❤️`;
+  $('lifeCoin').style.display=h<HEART_MAX?'':'none'; $('lifeCoin').innerHTML=`<span class="outline g">Nạp đầy ❤️</span><b class="cost">${HEART_FULL_COST}<i class="mc"></i></b>`;
 }
 function openLife(){ sfx.pick(); renderLife(); show('lifeModal',true); }
 $('hLife').onclick=openLife;
@@ -2122,10 +2209,10 @@ $('mBuy').onclick=()=>{
 };
 function renderNeed(){
   const o=goalInfo(); if (!o){ show('needModal',false); return; }
-  $('needT').innerHTML=o.need?`Thiếu ${o.need} 🪙 để mua ${LEVELS[o.g].name}<br><small>⭐ Đã ghim làm mục tiêu</small>`:`Đủ xu mua ${LEVELS[o.g].name} rồi!`;
+  $('needT').innerHTML=o.need?`Còn thiếu <b>${o.need}</b> <i class="mc"></i> để mua<br>${LEVELS[o.g].name}<small>⭐ Đã ghim làm mục tiêu</small>`:`Đủ xu mua ${LEVELS[o.g].name} rồi!`;
   $('needPlay').style.display=o.rn==null?'none':''; if(o.rn!=null) $('needPlay').querySelector('span').textContent=`▶ LẮP LEVEL ${roadNo(o.rn)} (tới +${o.gain})${o.need&&o.need<=o.gain?' → đủ!':''}`;
-  $('needBox').querySelector('span').textContent=`🎁 Hộp bí ẩn ${boxPrice()}🪙 · có thể ra đúng nó`;
-  const al=adLeft('coin'); $('needAd').style.display=al>0?'':'none'; $('needAd').querySelector('span').textContent=`🎬 Xem QC +30🪙 (còn ${al}/${AD_MAX.coin})`;
+  $('needBox').querySelector('span').textContent=`🎁 Mở hộp ${boxPrice()}🪙 (có thể ra nó)`;
+  const al=adLeft('coin'); $('needAd').style.display=al>0?'':'none'; $('needAd').querySelector('span').textContent=`🎬 Xem QC +30🪙 · ${al}/${AD_MAX.coin}`;
 }
 $('needPlay').onclick=()=>{ sfx.pick(); OVERLAYS.forEach(id=>$(id).classList.remove('show')); playRoad(); };
 $('needBox').onclick=()=>{ show('needModal',false); show('shop',false); openGacha(); };
@@ -2221,20 +2308,25 @@ function startBuild(i){
 // ====================== NÚT ======================
 const show=(id,on)=>{ $(id).classList.toggle('show',on); tutStep(); };
 $('hintBtn').onclick=useHint;
-$('setBtn').onclick=$('hSetBtn').onclick=()=>{ $('sndSw').classList.toggle('on',S.snd); $('vibSw').classList.toggle('on',S.vib); show('setModal',true); sfx.pick(); };
+$('setBtn').onclick=$('hSetBtn').onclick=()=>{ $('setModal').classList.toggle('home',$('home').classList.contains('show')); $('sndSw').classList.toggle('on',S.snd); $('vibSw').classList.toggle('on',S.vib); show('setModal',true); sfx.pick(); };
 $('setClose').onclick=()=>show('setModal',false);
 $('sndSw').onclick=()=>{ S.snd=!S.snd; save(); $('sndSw').classList.toggle('on',S.snd); sfx.pick(); };
 $('vibSw').onclick=()=>{ S.vib=!S.vib; save(); $('vibSw').classList.toggle('on',S.vib); vib(30); };
 const failCost=()=>!rebuild&&!infLeft(); // thua level mới thì mất ❤️ (đang ∞ thì không)
 $('lRetry').onclick=()=>{ if(!rebuild) loseHeart(); loadLevel(levelIdx); };
-let quitAsk=0;
-function quitLevel(then){ // thoát khi đang lắp dở level mới = thua: hỏi lại bằng cách bấm lần 2
+let quitThen=null;
+function quitLevel(then){ // thoát khi đang lắp dở level mới = thua: bảng xác nhận mất ❤️
   if (!done&&!rebuild&&placedOrder.length&&!infLeft()){
-    if (Date.now()-quitAsk>3000){ quitAsk=Date.now(); toast('Thoát giữa chừng sẽ mất 1 ❤️ · bấm lần nữa để thoát',2800); return; }
-    loseHeart();
+    quitThen=then; $('qT').innerHTML=`Thoát giữa chừng sẽ mất 1 ❤️<small>Đã lắp ${targets.filter(t=>t.placed).length}/${targets.length} mảnh</small>`;
+    sfx.pick(); show('quitModal',true); return;
   }
-  quitAsk=0; then();
+  then();
 }
+$('qYes').onclick=()=>{ const f=quitThen; quitThen=null; show('quitModal',false); loseHeart(); if(f) f(); };
+$('qNo').onclick=$('qClose').onclick=()=>{ quitThen=null; sfx.back(); show('quitModal',false); };
+$('lClose').onclick=()=>{ sfx.back(); openFail(); };
+$('sResume').onclick=()=>{ sfx.pick(); show('setModal',false); };
+$('infoOk').onclick=()=>{ sfx.pick(); show('infoModal',false); };
 $('sRestart').onclick=()=>{ show('setModal',false); quitLevel(()=>loadLevel(levelIdx)); };
 const revive=()=>{ revived=true; mistakes=LIVES-1; done=false; updateLives(); show('loseModal',false); toast('✖ Thêm 1 lượt sai, cố lên!'); };
 $('lAd').onclick=()=>watchAd(revive);
@@ -2274,7 +2366,7 @@ $('ztrack').addEventListener('pointerdown',e=>{ zdrag=true; $('ztrack').setPoint
 $('ztrack').addEventListener('pointermove',e=>{ if(zdrag) zFromY(e); });
 $('ztrack').addEventListener('pointerup',()=>{ zdrag=false; });
 canvas.addEventListener('contextmenu',e=>e.preventDefault());
-addEventListener('keydown',e=>{ if(e.key==='h'||e.key==='H') useHint(); if(e.key==='Escape') ['setModal','infoModal'].forEach(id=>show(id,false)); });
+addEventListener('keydown',e=>{ if(e.key==='h'||e.key==='H') useHint(); if(e.key==='Escape') ['setModal','infoModal','quitModal'].forEach(id=>show(id,false)); });
 
 // ====================== KHAY 3D XOAY THEO GÓC NHÌN ======================
 const trayR=new THREE.WebGLRenderer({canvas:$('trayCanvas'),antialias:true,alpha:true});
