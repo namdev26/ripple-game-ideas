@@ -326,7 +326,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .sideB .badge{position:absolute;top:-1.4cqw;right:1cqw;width:5.4cqw;height:5.4cqw;border-radius:50%;background:#ff3b30;color:#fff;font-size:3.6cqw;font-weight:800;
   display:flex;align-items:center;justify-content:center;border:.6cqw solid #fff;font-style:normal}
 .btn.yellow{background:linear-gradient(#ffe45c,#ffb800);box-shadow:inset 0 -1.4cqw 0 #c98a00,inset 0 .7cqw 0 #fff3b0,0 1.6cqw 0 #8a5a2b,0 2.6cqw 2cqw #0004}
-#hNav{position:absolute;left:0;right:0;bottom:0;height:20cqw;display:flex;align-items:flex-end;justify-content:space-around;
+#hNav{position:absolute;z-index:12;left:0;right:0;bottom:0;height:20cqw;display:flex;align-items:flex-end;justify-content:space-around;
   background:repeating-linear-gradient(90deg,#0000 0 2.6cqw,#0000000f 2.6cqw 3cqw),linear-gradient(#7a3f17,#55290c);box-shadow:0 -1.2cqw 0 #d79a5a,0 -1.8cqw 0 #5a2d0e}
 .navB{position:relative;border:none;background:none;font-family:inherit;color:#fff;cursor:pointer;width:19cqw;height:20cqw;padding:0 0 2cqw;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.5cqw}
 .navB i{font-style:normal;font-size:8.5cqw;line-height:1}
@@ -362,6 +362,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #hGoal .gBar span{position:relative;display:block;text-align:center;font-size:3.4cqw;line-height:5cqw}
 #hGoal small{font-size:3.4cqw;color:#5d6488}
 #hGoalBuy{align-self:center;height:9cqw;padding:0 5cqw;font-size:4.4cqw}
+#hNav.off{display:none}
+:is(#shop,#gacha,#shelf){padding-bottom:20cqw} /* chừa chỗ thanh tab */
+.navB{transition:width .2s,height .2s}
 .navB.cur{width:22cqw;height:27cqw;border-radius:9cqw 9cqw 0 0;background:linear-gradient(#ffb547,#e07a12);box-shadow:inset 0 1cqw 0 #ffe1a1}
 .navB.cur i{font-size:12cqw}
 #unbox{background:radial-gradient(circle at 50% 40%,#5a5fb8,#1b1f4a 72%);z-index:13;justify-content:flex-start;padding-top:12cqw;--rc:#fff}
@@ -808,6 +811,12 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
       <div class="btns"><button class="btn blue" id="shReplay"><span class="outline">▶ Phát lại</span></button><button class="btn green" id="shBuild"><span class="outline g">↻ Lắp lại</span></button></div></div>
   </div>
 
+  <div id="hNav">
+    <button class="navB" id="shopBtn"><i>🧱</i><span class="outline">Tiệm Gạch</span></button>
+    <button class="navB" id="gachaBtn"><i>🎁</i><span class="outline">Hộp bí ẩn</span></button>
+    <button class="navB cur" id="hHomeTab"><i>🏠</i><span class="outline">Trang chủ</span></button>
+    <button class="navB" id="shelfBtn"><i>🏛</i><span class="outline">Kệ</span></button>
+  </div>
   <div id="home" class="screen show">
     <button id="hLife" aria-label="Mạng"><i id="hLifeI">❤</i><b id="hLifeN"></b><small id="hLifeT"></small></button>
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">100</span></div>
@@ -821,12 +830,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div id="hDrawer">
       <div class="dHead"><button class="dTab cur" id="hTabWait">🧱<span>Chờ lắp</span></button><button class="dTab" id="hTabDone">✅<span>Đã xong</span></button><b id="hDCount"></b><button id="hDrawerTog" aria-label="Thu gọn / mở">▼</button></div>
       <div id="hLevels"></div>
-    </div>
-    <div id="hNav">
-      <button class="navB" id="shopBtn"><i>🧱</i><span class="outline">Tiệm Gạch</span></button>
-      <button class="navB" id="gachaBtn"><i>🎁</i><span class="outline">Hộp bí ẩn</span></button>
-      <button class="navB cur" id="hHomeTab"><i>🏠</i><span class="outline">Trang chủ</span></button>
-      <button class="navB" id="shelfBtn"><i>🏛</i><span class="outline">Kệ</span></button>
     </div>
   </div>
 </div></div>
@@ -1972,7 +1975,7 @@ $('shGrid').onclick=e=>{
 $('shReplay').onclick=()=>{ const i=shSel; sfx.pick(); loadLevel(i); placeAll(); playReplay(()=>openShelf(i),i); };
 $('shBuild').onclick=()=>{ sfx.pick(); startBuild(shSel); };
 $('shClose').onclick=()=>{ sfx.back(); showHome(curSeries); };
-$('shelfBtn').onclick=()=>{ sfx.pick(); openShelf(); };
+$('shelfBtn').onclick=()=>tabGo(()=>{ sfx.pick(); openShelf(); });
 
 // ====================== HƯỚNG DẪN LẦN ĐẦU (màn 1) ======================
 // S.tut: 0 đang hướng dẫn (bước suy ra từ trạng thái) → 5 lắp xong mô hình đầu, chỉ cửa hàng 1 lần → 6 xong
@@ -2274,7 +2277,7 @@ $('needPlay').onclick=()=>{ sfx.pick(); OVERLAYS.forEach(id=>$(id).classList.rem
 $('needBox').onclick=()=>{ show('needModal',false); show('shop',false); openGacha(); };
 $('needAd').onclick=adCoins;
 $('needClose').onclick=()=>{ sfx.back(); show('needModal',false); };
-$('shopBtn').onclick=()=>{ sfx.pick(); openShop(); };
+$('shopBtn').onclick=()=>tabGo(()=>{ sfx.pick(); openShop(); });
 $('stepBook').onclick=()=>$('stepBook').classList.toggle('big');
 addEventListener('pointerdown',e=>{ if(!$('stepBook').contains(e.target)) $('stepBook').classList.remove('big'); },true); // chạm ra ngoài → thu nhỏ
 $('shopClose').onclick=()=>{ sfx.back(); show('shop',false); renderHome(); updateCoins(); }; // về màn đã mở cửa hàng (chính / hộp bí ẩn)
@@ -2391,8 +2394,16 @@ $('sMenu').onclick=()=>{ show('setModal',false); quitLevel(toMenu); };
 $('backBtn').onclick=()=>quitLevel(toMenu);
 $('lMenu').onclick=()=>{ if(!rebuild) loseHeart(); toMenu(); };
 $('hColBtn').onclick=()=>{ sfx.pick(); showSeries(); };
-$('hHomeTab').onclick=()=>sfx.pick();
-$('gachaBtn').onclick=openGacha;
+$('hHomeTab').onclick=()=>tabGo(()=>{ sfx.pick(); showHome(curSeries); });
+// thanh tab nằm ngoài màn chính: hiện ở Trang chủ / Tiệm Gạch / Hộp bí ẩn / Kệ, ô sáng chạy theo màn đang mở; ẩn khi lắp, xem sách, mở hộp...
+function tabGo(f){ ['shop','gacha','shelf'].forEach(id=>$(id).classList.remove('show')); f(); }
+function syncNav(){
+  const v=id=>$(id).classList.contains('show'), tab=['shop','gacha','shelf'].find(v)||(v('home')?'home':null);
+  $('hNav').classList.toggle('off',!tab||['series','iap','bpView','unbox','adView'].some(v));
+  [['shop','shopBtn'],['gacha','gachaBtn'],['shelf','shelfBtn'],['home','hHomeTab']].forEach(([id,b])=>$(b).classList.toggle('cur',id===tab));
+}
+{ const o=new MutationObserver(syncNav); document.querySelectorAll('.screen').forEach(e=>o.observe(e,{attributes:true,attributeFilter:['class']})); syncNav(); }
+$('gachaBtn').onclick=()=>tabGo(openGacha);
 $('gachaClose').onclick=()=>{ sfx.back(); show('gacha',false); renderHome(); };
 $('hNext').onclick=e=>{ if(!e.target.closest('#hNextBtn')) return; sfx.pick(); if(roadNext()!=null) return playRoad(); const nx=pendingList()[0]; if(nx==null) return openGacha(); openBlueprint(nx); };
 $('hGoal').onclick=e=>{ if(!e.target.closest('#hGoalBuy')) return; const o=goalInfo(); if(!o) return; sfx.pick(); openShop(o.g); };

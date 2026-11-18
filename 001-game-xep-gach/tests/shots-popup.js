@@ -11,6 +11,9 @@ module.exports = [
   { name: 'pp-fail', pre: save0(ST), post: async () => { giveModel(1); startBuild(1); wrong(); wrong(); wrong(); await wait(1000); $('lClose').click(); await wait(500); } },
   { name: 'pp-quit', pre: save0({ coins: 260, tut: 6 }), post: async () => { giveModel(1); startBuild(1); commit(targets.find(supported)); $('backBtn').click(); await wait(500); } },
   { name: 'pp-setting-home', pre: save0({ ...ST, snd: false }), post: async () => { $('hSetBtn').click(); await wait(500); } },
+  { name: 'pp-tab-shop', pre: save0(ST), post: async () => { $('shopBtn').click(); await wait(500); } },
+  { name: 'pp-tab-gacha', pre: save0(ST), post: async () => { $('shopBtn').click(); $('gachaBtn').click(); await wait(500); } },
+  { name: 'pp-tab-ke', pre: save0(ST), post: async () => { $('shelfBtn').click(); await wait(500); } },
   { name: 'pp-odds', pre: save0(ST), post: async () => { openGacha(); $('oddsBtn').click(); await wait(500); } },
 ];
 module.exports.lib = require('./t4-build.js').lib;
