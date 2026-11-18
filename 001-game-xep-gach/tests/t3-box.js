@@ -109,7 +109,7 @@ module.exports = [
   { name: 'shop-tach', pre: save0({ coins: 120, best: { 'Cây nấm': 3 }, tut: 6 }), post: async () => {
       $('shopBtn').click();
       ok($('shop').classList.contains('show') && $('shop').textContent.includes('TIỆM GẠCH') && document.querySelectorAll('#mShelf .mItem').length === 6, 'Tiệm Gạch: chỉ kệ hàng hôm nay');
-      ok(!$('shop').querySelector('.coinPack, .setPack, .dinoPack, .sRow, #shopTabs'), 'tiệm gạch không có nạp tiền / toàn bộ mô hình');
+      ok(!$('shop').querySelector('.coinPack, .setPack, .dinoPack, #shopTabs') && [...$('shop').querySelectorAll('.sRow')].every(r => r.closest('#mShelf')), 'tiệm gạch không có nạp tiền / toàn bộ mô hình (chỉ 2 tầng kệ hàng hôm nay)');
       $('shopAll').click(); ok($('series').classList.contains('show'), 'Xem tất cả → bộ sưu tập');
       $('serClose').click(); $('shopClose').click();
       document.querySelector('#home .coins').click();
