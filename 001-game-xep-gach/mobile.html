@@ -852,7 +852,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div id="hGoal"></div>
     <div id="hNext"></div>
     <div id="hDrawer">
-      <div class="dHead"><button class="dTab cur" id="hTabWait">🧱<span>Chờ lắp</span></button><button class="dTab" id="hTabDone">✅<span>Đã xong</span></button><b id="hDCount"></b><button id="hDrawerTog" aria-label="Thu gọn / mở">▼</button></div>
+      <div class="dHead"><button class="dTab cur" id="hTabWait">🧱<span>Chờ lắp</span></button><b id="hDCount"></b><button id="hDrawerTog" aria-label="Thu gọn / mở">▼</button></div>
       <div id="hLevels"></div>
     </div>
   </div>
@@ -2296,7 +2296,7 @@ function tutStep(){
 }
 
 // ====================== HOME ======================
-let curSeries=0, hTab='wait'; // hTab: tab ngăn kéo chờ lắp / đã xong
+let curSeries=0;
 function showHome(s){
   cancelReplay();
   if (typeof s!=='number'){ const i=roadNext(); s=seriesOf(i==null?0:i); } // mặc định: bộ của level kế
@@ -2374,16 +2374,14 @@ function renderHome(){
     ?`<button class="btn yellow" id="hNextBtn"><span class="t outline o">▶ LEVEL ${roadNo(rn)}</span><small class="lk">${!infLeft()&&!heartsNow()?'❤️ hồi sau '+mmss(nextHeartMs()):''}</small></button>`
     :nx!=null?`<button class="btn yellow" id="hNextBtn"><span class="t outline o">LẮP TIẾP</span><small>${LEVELS[nx].name}</small></button>`
     :`<button class="btn yellow" id="hNextBtn"><span class="t outline o">MỞ HỘP</span><small>Hết đường · hộp ra bản vàng kim</small></button>`;
-  const list=hTab==='wait'?pend:ALL_IDX.filter(built), hide=!S.showWait; // mặc định thu gọn: màn chính chỉ 1 tiêu điểm
-  $('hTabWait').classList.toggle('cur',hTab==='wait'); $('hTabDone').classList.toggle('cur',hTab==='done');
+  const list=pend, hide=!S.showWait; // ngăn kéo chỉ còn mô hình chờ lắp (đã lắp xem ở Kệ); mặc định thu gọn
   $('hDCount').textContent=`${list.length} bộ`; $('hDrawer').classList.toggle('hide',hide); $('hDrawerTog').textContent=hide?'▲':'▼';
   $('hLevels').classList.toggle('few',list.length<=2); // ≤2 thẻ không cần cuộn → để bong bóng hướng dẫn tràn ra ngoài được
-  $('hLevels').innerHTML=!list.length?`<p class="dEmpty">${hTab==='wait'?'Chưa có mô hình chờ lắp<br>Mở hộp bí ẩn để có thêm':'Chưa lắp xong mô hình nào'}</p>`
+  $('hLevels').innerHTML=!list.length?`<p class="dEmpty">Chưa có mô hình chờ lắp<br>Mở hộp bí ẩn để có thêm</p>`
     :list.map(i=>`<button class="wCard${special(i)?' sp':''}" data-i="${i}" aria-label="${LEVELS[i].name}"><b class="nm outline">${LEVELS[i].name}</b>${pboxHtml(i,special(i))}`
-      +(hTab==='wait'?'<i class="new">NEW</i><i class="pct outline">0%</i>':`<i class="pct outline">100% ${'★'.repeat(best(i))}</i>`)+'</button>').join('');
+      +'<i class="new">NEW</i><i class="pct outline">0%</i></button>').join('');
 }
-$('hTabWait').onclick=()=>{ sfx.pick(); hTab='wait'; S.showWait=true; renderHome(); };
-$('hTabDone').onclick=()=>{ sfx.pick(); hTab='done'; S.showWait=true; renderHome(); };
+$('hTabWait').onclick=()=>{ sfx.pick(); S.showWait=true; renderHome(); };
 $('hDrawerTog').onclick=()=>{ sfx.pick(); S.showWait=!S.showWait; save(); renderHome(); };
 $('hDrawer').querySelector('.dHead').onclick=e=>{ if(!e.target.closest('button')) $('hDrawerTog').click(); };
 $('hLevels').onclick=e=>{ const b=e.target.closest('[data-i]'); if(!b) return; sfx.pick(); openBlueprint(+b.dataset.i); };

@@ -91,7 +91,7 @@ module.exports = [
       ok($('hDrawer').textContent.includes('2 bộ') && R('hDrawer').bottom <= R('hNav').top + 1 && R('hLevels').height === 0, 'ngăn kéo mặc định thu gọn thành 1 thanh trên thanh dưới, đếm số bộ');
       ok(!$('serBtn') && !document.querySelector('#home .logo') && $('hNextBtn').textContent.includes('LEVEL 2') && $('hLife').textContent.includes('5'), 'bỏ nút bộ + logo; thanh trên hiện ❤; nút level kế');
       ok(!$('hNext').querySelector('.pbox') && !$('hNext').textContent.includes('Ngôi nhà') && !hit(R('hNext'), R('hLeft')) && !hit(R('hNext'), R('hDrawer')) && !hit(R('hNextBtn'), R('hNav')), 'màn chính chỉ nút LEVEL (không hộp, không thông tin), không đè cột trái / ngăn kéo / thanh dưới');
-      $('hTabDone').click(); ok(R('hLevels').height > 0 && $('hLevels').children.length === 1 && $('hLevels').textContent.includes('100%') && $('hDrawer').textContent.includes('1 bộ'), 'chạm tab Đã xong: mở ngăn kéo, mô hình đã lắp');
+      ok(!$('hTabDone') && !$('hDrawer').textContent.includes('Đã xong'), 'ngăn kéo chỉ còn Chờ lắp');
       $('hTabWait').click(); $('hDrawerTog').click(); ok(R('hLevels').height === 0 && !S.showWait, 'thu gọn ngăn kéo');
       $('hDrawerTog').click(); showHome(); ok(R('hLevels').height > 0 && S.showWait, 'nhớ trạng thái mở'); $('hDrawerTog').click();
       ok([...document.querySelectorAll('#home *')].every(e => { const r = e.getBoundingClientRect(); return !r.width || (r.left >= A.left - 1 && r.right <= A.right + 1); }), 'không tràn ngang');
