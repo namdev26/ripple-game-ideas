@@ -1828,7 +1828,7 @@ function commit(t,from){
   updateTray(); updateCount();
   if (targets.every(x=>x.placed)) return win();
   if (targets.filter(x=>x.step===step).every(x=>x.placed)){
-    sfx.step(); toast(`Bước ${step+1} xong!`,900);
+    sfx.step(); // xong bước: chỉ âm thanh, không hiện chữ
     setTimeout(()=>{ if(!done) showStep(step+1); },260);
   }
 }
