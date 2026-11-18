@@ -176,6 +176,19 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .tog.sw:not(.on) i::after{content:"";position:absolute;width:15cqw;height:1.6cqw;border-radius:1cqw;background:#e0303f;rotate:-45deg;box-shadow:0 0 0 .6cqw #fff}
 #setModal.home .inGame{display:none}
 .ver{margin:4cqw 0 0;font-size:3.2cqw;font-weight:700;color:#9aa0bd}
+/* thẻ ưu đãi tách riêng dưới popup: tag −%, đồng hồ, các món, nút giá */
+.offer{position:relative;width:86cqw;margin-top:7cqw;padding:2.4cqw 3cqw 3cqw;border-radius:4.5cqw;background:linear-gradient(#ffd55a,#ff9f1c);border:1cqw solid #2b3150;
+  box-shadow:inset 0 -1.4cqw 0 #d06a00,inset 0 .8cqw 0 #fff3b0,0 1.6cqw 0 #12163a99,0 3cqw 5cqw #0006;animation:popIn .4s .18s both cubic-bezier(.2,1.55,.45,1)}
+.oTag{position:absolute;top:-4.5cqw;left:-3.5cqw;width:14cqw;height:14cqw;border-radius:50%;background:radial-gradient(#ff5a68,#d0182b);color:#fff;font-size:4cqw;font-weight:800;line-height:1;
+  display:flex;align-items:center;justify-content:center;rotate:-15deg;border:.7cqw solid #fff;box-shadow:0 .8cqw 1.4cqw #0004}
+.oHead{display:flex;align-items:center;justify-content:space-between;gap:2cqw;margin:0 0 2cqw 10cqw}
+.oHead b{font-size:6cqw;line-height:1.1;white-space:nowrap}
+.oTime{background:#2b3150;color:#fff;font-size:3.4cqw;font-weight:800;border-radius:3cqw;padding:.4cqw 2cqw;white-space:nowrap}
+.oRow{display:flex;align-items:stretch;gap:2cqw}
+.oIt{flex:1;min-width:0;background:#fff8e6;border-radius:3cqw;box-shadow:inset 0 -.8cqw 0 #e8c98a;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:1.4cqw .6cqw 1.2cqw;font-size:3.3cqw;font-weight:800;color:#2b3150;line-height:1.1;text-align:center}
+.oIt i{font-style:normal;font-size:7cqw;line-height:1.15}
+.offer .price{align-self:center;font-size:4.6cqw;padding:3.6cqw 3cqw}
 
 /* ---------- home ---------- */
 /* nền gỗ: vân ván dọc + quầng sáng giữa */
@@ -617,6 +630,10 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
       <button class="btn green wide" id="lCoin"><span class="outline g">+1 lượt</span><b class="cost">50<i class="mc"></i></b></button>
       <button class="btn yellow wide" id="lAd"><span class="outline o">🎬 +1 lượt miễn phí</span></button>
     </div>
+  </div>
+  <div class="offer" id="loseOffer"><span class="oTag">−60%</span>
+    <div class="oHead"><b class="outline o">GÓI CỨU NGUY</b><span class="oTime">⏳ <span class="oT"></span></span></div>
+    <div class="oRow"><div class="oIt"><i>✖</i>+1 lượt</div><div class="oIt"><i>💡</i>3 gợi ý</div><div class="oIt"><i>🪙</i>+500 xu</div><button class="price">25.000đ</button></div>
   </div></div>
 
   <!-- thua bước 2: báo mất ❤️ + chơi lại -->
@@ -648,9 +665,11 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div class="stack">
       <button class="btn green wide" id="lifeCoin"></button>
       <button class="btn yellow wide" id="lifeAd"><span class="outline o"></span></button>
-      <button class="btn blue wide" id="lifeShop"><span class="outline">🛍 Gói ∞ 3 giờ · Ưu Đãi</span></button>
-      <button class="btn blue wide" id="lifeOld"><span class="outline">🏛 Lắp lại mô hình cũ</span></button>
     </div>
+  </div>
+  <div class="offer" id="lifeOffer"><span class="oTag">−50%</span>
+    <div class="oHead"><b class="outline o">GÓI VÔ HẠN</b><span class="oTime">⏳ <span class="oT"></span></span></div>
+    <div class="oRow"><div class="oIt"><i>∞</i>3 giờ</div><div class="oIt"><i>❤️</i>Đầy mạng</div><div class="oIt"><i>🪙</i>+300 xu</div><button class="price">29.000đ</button></div>
   </div></div>
 
   <div id="needModal" class="screen modal"><div class="panelM">
@@ -663,6 +682,10 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
       <button class="btn yellow wide" id="needBox"><span class="outline o"></span></button>
       <button class="btn blue wide" id="needAd"><span class="outline"></span></button>
     </div>
+  </div>
+  <div class="offer" id="needOffer"><span class="oTag">−60%</span>
+    <div class="oHead"><b class="outline o">TÚI XU</b><span class="oTime">⏳ <span class="oT"></span></span></div>
+    <div class="oRow"><div class="oIt"><i>🪙</i>1.000 xu</div><div class="oIt"><i>🎁</i>1 hộp</div><div class="oIt"><i>💡</i>3 gợi ý</div><button class="price">49.000đ</button></div>
   </div></div>
 
   <div id="result" class="screen modal"><div class="panelM">
@@ -1982,8 +2005,7 @@ $('hLife').onclick=openLife;
 $('lifeClose').onclick=()=>{ sfx.back(); show('lifeModal',false); };
 $('lifeAd').onclick=()=>{ if(adLeft('inf')<=0) return; watchAd(()=>{ S.ad.inf=(S.ad.inf||0)+1; giveInf(INF_AD); show('lifeModal',false); updateLife(); toast('∞ 15 phút chơi không tốn ❤️!'); }); };
 $('lifeCoin').onclick=()=>{ if(S.coins<HEART_FULL_COST){ toast(`Cần ${HEART_FULL_COST}🪙`); sfx.wrong(); return; } S.coins-=HEART_FULL_COST; S.hearts=HEART_MAX; save(); updateCoins(true); sfx.coin(); show('lifeModal',false); updateLife(); };
-$('lifeShop').onclick=()=>{ show('lifeModal',false); openIap(); };
-$('lifeOld').onclick=()=>{ show('lifeModal',false); hTab='done'; S.showWait=true; showHome(); };
+document.querySelectorAll('.offer .price').forEach(b=>b.onclick=()=>{ sfx.pick(); toast('🧪 Bản thử: chưa mua thật được'); }); // giống nút giá ở Ưu Đãi
 // mục tiêu ghim: thứ người chơi muốn mua + con đường ngắn nhất tới nó (luôn là level kế)
 function goalInfo(){
   const g=S.goal?LEVELS.findIndex(l=>l.name===S.goal):-1; if (g<0||owned(g)) return null;
@@ -2226,8 +2248,8 @@ $('shopClose').onclick=()=>{ sfx.back(); show('shop',false); renderHome(); updat
 
 // ---- shop nạp giả lập: chỉ để xem giao diện, bấm mua chỉ báo bản thử ----
 const dinoLeft=()=>{ const n=new Date(), t=Math.floor((new Date(n).setHours(24,0,0,0)-n)/1000); return [t/3600,t/60%60,t%60].map(v=>String(Math.floor(v)).padStart(2,'0')).join(':'); }; // ưu đãi hết lúc nửa đêm
-setInterval(()=>{ document.querySelectorAll('#dinoT,.shT,#hIapT').forEach(e=>e.textContent=dinoLeft()); if($('home').classList.contains('show')||$('lifeModal').classList.contains('show')) updateLife(); },1000); // đếm ngược tới 0h: ưu đãi + kệ hàng
-$('hIapT').textContent=dinoLeft();
+setInterval(()=>{ document.querySelectorAll('#dinoT,.shT,#hIapT,.oT').forEach(e=>e.textContent=dinoLeft()); if($('home').classList.contains('show')||$('lifeModal').classList.contains('show')) updateLife(); },1000); // đếm ngược tới 0h: ưu đãi + kệ hàng
+document.querySelectorAll('#hIapT,.oT').forEach(e=>e.textContent=dinoLeft());
 const COIN_PACKS=[[120,'25.000đ'],[650,'99.000đ','+8%'],[1400,'199.000đ','Phổ biến'],[3000,'399.000đ','+25%'],[8000,'999.000đ','+33%'],[17000,'1.999.000đ','Lợi nhất']];
 function renderIap(){
   const pile=n=>`<div class="pile">${'<span class="coin"></span>'.repeat(n)}</div>`;
