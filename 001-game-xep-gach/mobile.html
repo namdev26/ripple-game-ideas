@@ -317,7 +317,10 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 /* bố cục home: thanh trên · cột nút trái · cột chờ lắp phải · hộp + MỞ HỘP giữa · thanh 3 mục dưới */
 #hSetBtn{position:absolute;top:6.4cqw;right:5cqw;width:11cqw;height:11cqw;font-size:6.4cqw;padding:0 0 .8cqw}
 .hSide{position:absolute;top:47cqw;width:20cqw;display:flex;flex-direction:column;align-items:center;gap:3.5cqw}
-#hLeft{left:2cqw}#hRight{right:2cqw}
+#hLeft{left:2cqw}
+#hNav .navB{width:18cqw}
+.navB .tmr{position:absolute;top:.6cqw;left:50%;transform:translateX(-50%);background:#e0303f;color:#fff;font-size:2.6cqw;font-weight:800;padding:.1cqw 1.2cqw;border-radius:1.4cqw;white-space:nowrap;border:.4cqw solid #fff}
+.navB.cur .tmr{top:-1.6cqw}
 .sideB .tmr{position:absolute;top:-2cqw;left:50%;transform:translateX(-50%);background:#e0303f;color:#fff;font-size:2.8cqw;font-weight:800;padding:.2cqw 1.4cqw;border-radius:1.6cqw;white-space:nowrap}
 .sideB{position:relative;border:none;background:none;padding:0;margin:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;font-family:inherit;flex:none}
 .sideB i{font-style:normal;width:14cqw;height:14cqw;border-radius:3.6cqw;display:flex;align-items:center;justify-content:center;font-size:8cqw;
@@ -326,7 +329,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .sideB .badge{position:absolute;top:-1.4cqw;right:1cqw;width:5.4cqw;height:5.4cqw;border-radius:50%;background:#ff3b30;color:#fff;font-size:3.6cqw;font-weight:800;
   display:flex;align-items:center;justify-content:center;border:.6cqw solid #fff;font-style:normal}
 .btn.yellow{background:linear-gradient(#ffe45c,#ffb800);box-shadow:inset 0 -1.4cqw 0 #c98a00,inset 0 .7cqw 0 #fff3b0,0 1.6cqw 0 #8a5a2b,0 2.6cqw 2cqw #0004}
-#hNav{position:absolute;z-index:12;left:0;right:0;bottom:0;height:20cqw;display:flex;align-items:flex-end;justify-content:space-around;
+#hNav{position:absolute;z-index:13;left:0;right:0;bottom:0;height:20cqw;display:flex;align-items:flex-end;justify-content:space-around;
   background:repeating-linear-gradient(90deg,#0000 0 2.6cqw,#0000000f 2.6cqw 3cqw),linear-gradient(#7a3f17,#55290c);box-shadow:0 -1.2cqw 0 #d79a5a,0 -1.8cqw 0 #5a2d0e}
 .navB{position:relative;border:none;background:none;font-family:inherit;color:#fff;cursor:pointer;width:19cqw;height:20cqw;padding:0 0 2cqw;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.5cqw}
 .navB i{font-style:normal;font-size:8.5cqw;line-height:1}
@@ -386,7 +389,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #hGoal small{font-size:3.4cqw;color:#5d6488}
 #hGoalBuy{align-self:center;height:9cqw;padding:0 5cqw;font-size:4.4cqw}
 #hNav.off{display:none}
-:is(#shop,#gacha,#shelf){padding-bottom:20cqw} /* chừa chỗ thanh tab */
+:is(#shop,#gacha,#shelf,#iap){padding-bottom:20cqw} /* chừa chỗ thanh tab */
 .navB{transition:width .2s,height .2s}
 .navB.cur{width:22cqw;height:27cqw;border-radius:9cqw 9cqw 0 0;background:linear-gradient(#ffb547,#e07a12);box-shadow:inset 0 1cqw 0 #ffe1a1}
 .navB.cur i{font-size:12cqw}
@@ -837,15 +840,15 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 
   <div id="hNav">
     <button class="navB" id="shopBtn"><i>🧱</i><span class="outline">Tiệm Gạch</span></button>
-    <button class="navB" id="gachaBtn"><i>🎁</i><span class="outline">Hộp bí ẩn</span></button>
+    <button class="navB" id="hIapBtn"><i>💎</i><span class="outline">Ưu đãi</span><b class="tmr" id="hIapT"></b></button>
     <button class="navB cur" id="hHomeTab"><i>🏠</i><span class="outline">Trang chủ</span></button>
+    <button class="navB" id="gachaBtn"><i>🎁</i><span class="outline">Hộp bí ẩn</span></button>
     <button class="navB" id="shelfBtn"><i>🏛</i><span class="outline">Kệ</span></button>
   </div>
   <div id="home" class="screen show">
     <button id="hLife" aria-label="Mạng"><i id="hLifeI">❤</i><b id="hLifeN"></b><small id="hLifeT"></small></button>
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">100</span></div>
     <button class="btn blue" id="hSetBtn" aria-label="Cài đặt">⚙</button>
-    <div id="hRight" class="hSide"><button class="sideB" id="hIapBtn"><i>🎁</i><span>Ưu đãi</span><b class="tmr" id="hIapT"></b></button></div>
     <div id="hLeft" class="hSide">
       <button class="sideB" id="hColBtn"><i>📚</i><span>Bộ sưu tập</span></button>
     </div>
@@ -2618,7 +2621,7 @@ function renderIap(){
 }
 function openIap(sec){ sfx.pick(); renderIap(); updateCoins(); show('iap',true); const B=$('iapBody'); B.scrollTop=sec?$(sec).offsetTop-B.offsetTop:0; }
 $('iapClose').onclick=()=>{ sfx.back(); show('iap',false); };
-$('hIapBtn').onclick=()=>openIap();
+$('hIapBtn').onclick=()=>tabGo(()=>openIap());
 document.querySelectorAll('.coins').forEach(c=>c.onclick=()=>openIap('secCoin')); // ô xu: nhảy tới gói xu
 $('iapBody').onclick=e=>{ if (e.target.closest('.price, .iapFoot button')){ sfx.pick(); toast('🧪 Bản thử: chưa mua thật được'); } };
 
@@ -2736,11 +2739,11 @@ $('lMenu').onclick=()=>{ if(!rebuild) loseHeart(); toMenu(); };
 $('hColBtn').onclick=()=>{ sfx.pick(); showSeries(); };
 $('hHomeTab').onclick=()=>tabGo(()=>{ sfx.pick(); showHome(curSeries); });
 // thanh tab nằm ngoài màn chính: hiện ở Trang chủ / Tiệm Gạch / Hộp bí ẩn / Kệ, ô sáng chạy theo màn đang mở; ẩn khi lắp, xem sách, mở hộp...
-function tabGo(f){ ['shop','gacha','shelf'].forEach(id=>$(id).classList.remove('show')); f(); }
+function tabGo(f){ ['shop','iap','gacha','shelf'].forEach(id=>$(id).classList.remove('show')); f(); }
 function syncNav(){
-  const v=id=>$(id).classList.contains('show'), tab=['shop','gacha','shelf'].find(v)||(v('home')?'home':null);
-  $('hNav').classList.toggle('off',!tab||['series','iap','bpView','unbox','adView'].some(v));
-  [['shop','shopBtn'],['gacha','gachaBtn'],['shelf','shelfBtn'],['home','hHomeTab']].forEach(([id,b])=>$(b).classList.toggle('cur',id===tab));
+  const v=id=>$(id).classList.contains('show'), tab=['iap','shop','gacha','shelf'].find(v)||(v('home')?'home':null);
+  $('hNav').classList.toggle('off',!tab||['series','bpView','unbox','adView'].some(v));
+  [['shop','shopBtn'],['iap','hIapBtn'],['gacha','gachaBtn'],['shelf','shelfBtn'],['home','hHomeTab']].forEach(([id,b])=>$(b).classList.toggle('cur',id===tab));
 }
 { const o=new MutationObserver(syncNav); document.querySelectorAll('.screen').forEach(e=>o.observe(e,{attributes:true,attributeFilter:['class']})); syncNav(); }
 $('gachaBtn').onclick=()=>tabGo(openGacha);

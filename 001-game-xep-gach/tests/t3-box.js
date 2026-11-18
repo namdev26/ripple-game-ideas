@@ -83,9 +83,9 @@ module.exports = [
   } },
   { name: 'home-bo-cuc', pre: save0({ coins: 100, best: { 'Cây nấm': 3 }, own: { 'Ngôi nhà': true, 'Dưa hấu': true }, sp: { 'Dưa hấu': true }, tut: 6 }), post: async () => {
       const R = e => $(e).getBoundingClientRect(), A = R('app'), hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
-      ok(['shopBtn', 'gachaBtn', 'hHomeTab', 'shelfBtn'].every(id => $(id).closest('#hNav')) && $('hNav').children.length === 4 && Math.abs(R('hNav').bottom - A.bottom) < 2, 'thanh dưới: cửa hàng, hộp bí ẩn, trang chủ, kệ');
+      ok([...$('hNav').children].map(e => e.id).join() === 'shopBtn,hIapBtn,hHomeTab,gachaBtn,shelfBtn' && Math.abs(R('hNav').bottom - A.bottom) < 2, 'thanh dưới: tiệm gạch, ưu đãi, TRANG CHỦ giữa, hộp bí ẩn, kệ');
       ok(!$('playBtn').closest('#home') && $('playBtn').closest('#gacha') && !$('hBox').closest('#home'), 'gacha không còn ở màn chính');
-      ok($('hColBtn').closest('#hLeft') && $('hLevels').closest('#hDrawer') && $('hIapBtn').closest('#hRight') && /\d+:\d\d/.test($('hIapT').textContent) && $('hSetBtn'), 'cột trái: bộ sưu tập; phải: Ưu đãi có đồng hồ; chờ lắp thành ngăn kéo dưới; có nút cài đặt');
+      ok($('hColBtn').closest('#hLeft') && $('hLevels').closest('#hDrawer') && $('hIapBtn').closest('#hNav') && /\d+:\d\d/.test($('hIapT').textContent) && $('hSetBtn'), 'cột trái: bộ sưu tập; Ưu đãi có đồng hồ ở thanh dưới; chờ lắp thành ngăn kéo dưới; có nút cài đặt');
       const pend = [...$('hLevels').children];
       ok(pend.length === 2 && pend[1].classList.contains('sp') && pend.every(e => e.querySelector('.pbox') && e.textContent.includes('NEW') && e.textContent.includes('0%')), 'thẻ chờ lắp: hộp sản phẩm, NEW, 0%, bản đặc biệt vàng');
       ok($('hDrawer').textContent.includes('2 bộ') && R('hDrawer').bottom <= R('hNav').top + 1 && R('hLevels').height === 0, 'ngăn kéo mặc định thu gọn thành 1 thanh trên thanh dưới, đếm số bộ');
