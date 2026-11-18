@@ -341,7 +341,17 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #gDeco>*{position:absolute}
 #gDeco .floor{left:-35cqw;right:-35cqw;bottom:-5cqw;height:12cqw;border-radius:50%;background:radial-gradient(closest-side,#fff8 0,#ffffff30 50%,#fff0);z-index:-1}
 #gDeco .mb{bottom:0;width:40cqw;height:40cqw;transform-origin:0 100%} /* left = mép trái thật sau khi thu nhỏ */
-#gacha #hName{margin-top:5cqw}
+#gacha #hName{margin-top:5cqw;font-size:5cqw}
+/* bố cục gacha dọc: hộp giữa → dải phần thưởng có thể nhận → nút mở sát đáy (ngay trên thanh tab) */
+#gacha #hBtns{margin-top:auto;margin-bottom:4cqw}
+#gacha #playBtn,#gacha #adBtn{width:40cqw;height:20cqw}
+#gPrev{margin-top:3cqw;width:90cqw;background:#2b1f5a80;border-radius:4cqw;padding:2cqw 2cqw 2.6cqw;box-shadow:inset 0 0 0 .6cqw #ffffff26}
+.gpH{color:#fff;font-weight:800;font-size:4.2cqw;text-align:center;margin-bottom:1.8cqw}
+.gpL{display:flex;gap:2.2cqw;justify-content:center}
+.gpI{position:relative;width:15.4cqw;border-radius:2.6cqw;background:linear-gradient(#fff,#eef1fb);box-shadow:0 0 0 .7cqw var(--rc),0 .8cqw 1.4cqw #0004;padding:.6cqw .4cqw 1cqw;display:flex;flex-direction:column;align-items:center}
+.gpI img{width:13cqw;height:13cqw;object-fit:contain}
+.gpI b{font-size:2.5cqw;line-height:1.15;color:#2b3150;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:14.4cqw}
+.gpI i{position:absolute;top:-2.2cqw;left:50%;transform:translateX(-50%);font-style:normal;font-size:2.3cqw;font-weight:800;color:#2b3150;background:var(--rc);border-radius:1.4cqw;padding:.1cqw 1.4cqw;white-space:nowrap}
 #gDeco .mb .mbox{cursor:default}
 #gDeco .pb{bottom:0;font-size:1.7cqw;filter:drop-shadow(0 1cqw .8cqw #0005)}
 #gDeco .cn{width:7cqw;height:7cqw;left:auto;top:auto;transform:none}
@@ -793,6 +803,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <button class="sideB" id="oddsBtn"><i>🎲</i><span>Tỉ lệ</span></button>
     <div id="hBoxWrap"><div id="gDeco" aria-hidden="true"></div><div id="hBox" class="mbox" role="button" aria-label="Lắc thử hộp"><i class="lid"></i><i class="body"><b>?</b></i></div></div>
     <div id="hName" class="outline"></div>
+    <div id="gPrev"><div class="gpH outline">🎁 CÓ THỂ NHẬN</div><div class="gpL" id="gPrevL"></div></div>
     <div id="hBtns"><button class="btn yellow" id="adBtn"><span class="t outline o">AD 🎬</span><small>Xem quảng cáo</small></button><button class="btn yellow" id="playBtn"><span class="t outline o">MỞ HỘP</span><small id="playSub"></small></button></div>
   </div>
 
@@ -2308,6 +2319,8 @@ function gachaDeco(){
 function renderGacha(){
   const nx=peekBox(), al=adLeft('box');
   $('gDeco').innerHTML=gachaDeco(); // màu hộp nhỏ khác màu hộp chính
+  // dải có thể nhận: 5 mô hình hiếm nhất còn trong hộp
+  $('gPrevL').innerHTML=boxPool().sort((a,b)=>rarOf(b)-rarOf(a)||a-b).slice(0,5).map(i=>`<div class="gpI" style="--rc:${RAR[rarOf(i)].c}"><i>${RAR[rarOf(i)].n}</i><img src="${thumbLevel(i)}" alt=""><b>${LEVELS[i].name}</b></div>`).join('');
   $('hBox').style.setProperty('--bc',SERIES[curSeries].c);
   $('hName').textContent=allOwned()?`Đủ ${LEVELS.length} mô hình · hộp ra bản ✨ vàng kim`:`Đã có ${ALL_IDX.filter(owned).length}/${LEVELS.length} · chỉ ra mô hình chưa có`;
   $('playBtn').querySelector('.t').textContent=`🪙 ${boxPrice()}`; $('playSub').textContent='Mở bằng xu';
