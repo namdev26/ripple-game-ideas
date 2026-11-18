@@ -14,6 +14,7 @@ module.exports = [
   { name: 'pp-tab-shop', pre: save0(ST), post: async () => { $('shopBtn').click(); await wait(500); } },
   { name: 'pp-tab-gacha', pre: save0(ST), post: async () => { $('shopBtn').click(); $('gachaBtn').click(); await wait(500); } },
   { name: 'pp-tab-ke', pre: save0(ST), post: async () => { $('shelfBtn').click(); await wait(500); } },
+  { name: 'pp-shop-duoi', pre: save0(ST), post: async () => { $('shopBtn').click(); await wait(300); $('shopBody').scrollTop = 700; await wait(300); } },
   { name: 'pp-odds', pre: save0(ST), post: async () => { openGacha(); $('oddsBtn').click(); await wait(500); } },
 ];
 module.exports.lib = require('./t4-build.js').lib;

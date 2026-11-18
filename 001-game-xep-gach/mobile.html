@@ -431,7 +431,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #shop{z-index:12} /* mở được từ bộ sưu tập / màn chính */
 #iap{z-index:13} /* tiền thật: mở từ ô xu ở mọi màn */
 #iapBody{width:90cqw;flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column;gap:3cqw;padding:0 0 6cqw}
-#shopAll{align-self:center;height:11cqw;padding:0 5cqw;font-size:4.4cqw;margin-top:4cqw}
+#mAll{display:flex;flex-direction:column;margin-top:3cqw}
+.allH{margin:5cqw 0 2cqw;text-align:center;font-size:6cqw;font-weight:800;color:#fff}
 #sNote{font-size:3.8cqw;font-weight:800;color:#2b3150;background:#fff6c8;border-radius:3cqw;padding:1.2cqw 4cqw;margin-bottom:2cqw}
 #shopBody{width:90cqw;flex:1;min-height:0;overflow-y:auto;scrollbar-width:none;padding:0 0 4cqw;display:flex;flex-direction:column;gap:3cqw}
 .shopSec{display:flex;flex-direction:column;gap:3cqw;padding-bottom:4cqw}
@@ -506,7 +507,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .sRowH .sHint{margin-left:auto;font-size:3.2cqw;color:#4d557a;font-weight:800}
 /* kệ gỗ dùng chung (Bộ sưu tập, Tiệm Gạch, Kệ trưng bày) = 1 tủ chung: tường gỗ, 1 tủ gỗ liền (mái hiên ở đỉnh), mỗi bộ là 1 tầng ván, hộp đứng trên ván, giá trên mặt ván */
 :is(#series,#shop,#shelf){background:repeating-linear-gradient(90deg,#0000 0 24.6cqw,#5a2d0e40 24.6cqw 25cqw),radial-gradient(ellipse at 50% 30%,#e9a865 0,#c97a3c 45%,#8f4f22 100%)}
-#sList,#mShelf,#shGrid{gap:0}
+#sList,#mShelf,#shGrid,#mAll{gap:0}
 :is(#series,#shop,#shelf) .sRow{flex:none;position:relative;background:linear-gradient(90deg,#3e1e08,#5e2f10 50%,#3e1e08);border:solid #3a1b06;border-width:0 1.4cqw;border-radius:0;padding:0 0 1.6cqw;
   box-shadow:inset .7cqw 0 0 #8a4a1c,inset -.7cqw 0 0 #8a4a1c}
 :is(#series,#shop,#shelf) .sRow:first-child{border-top-width:1.4cqw;border-radius:3cqw 3cqw 0 0;padding-top:4cqw}
@@ -527,8 +528,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 :is(#series,#shop,#shelf) .mItem .mp s{color:#d8ffd0}
 :is(#series,#shop,#shelf) .sBonus{color:#ffe7b0;padding:0 3cqw}
 /* Tiệm Gạch: kệ hàng hôm nay = 2 tầng × 3 hộp, không cuộn */
-#shop .sRowL{justify-content:space-around;gap:1cqw;padding:3cqw 1cqw 1.6cqw;overflow:visible}
-#shop .sRowL .mItem{flex:1;min-width:0;width:auto}
+#mShelf .sRowL{justify-content:space-around;gap:1cqw;padding:3cqw 1cqw 1.6cqw;overflow:visible}
+#mShelf .sRowL .mItem{flex:1;min-width:0;width:auto}
 :is(#series,#shop) .mItem.sale{box-shadow:none}
 :is(#series,#shop) .mItem.sel .pbox{filter:drop-shadow(0 0 1cqw #ffd43b) drop-shadow(0 0 1cqw #ffd43b)}
 /* Kệ trưng bày: hình mô hình đã lắp đứng trên ván; chưa có = bóng đen */
@@ -763,7 +764,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <button class="btn blue close" id="shopClose" aria-label="Đóng">✕</button>
     <div id="shopBody">
       <div id="shopNote">⏩ Mua trước mô hình mình thích để lắp ngay · ⭐ ghim làm mục tiêu</div><div class="grid" id="mGrid"></div>
-      <button class="btn blue" id="shopAll"><span class="outline">📚 Xem tất cả mô hình</span></button>
     </div>
     <div class="pick" id="mPick"><div class="row2"><div id="mImg"></div><div id="mInfo"></div><button class="btn blue" id="mGoal" aria-label="Ghim mục tiêu">⭐</button></div><button class="btn green" id="mBuy"></button></div>
   </div>
@@ -2351,12 +2351,11 @@ $('hDrawerTog').onclick=()=>{ sfx.pick(); S.showWait=!S.showWait; save(); render
 $('hDrawer').querySelector('.dHead').onclick=e=>{ if(!e.target.closest('button')) $('hDrawerTog').click(); };
 $('hLevels').onclick=e=>{ const b=e.target.closest('[data-i]'); if(!b) return; sfx.pick(); openBlueprint(+b.dataset.i); };
 // ====================== BỘ SƯU TẬP ======================
-function showSeries(){
-  $('sList').innerHTML=SERIES.map((r,s)=>{ const ids=seriesIdx(s), have=ids.filter(owned).length, stars=ids.reduce((a,i)=>a+best(i),0);
+// mỗi bộ 1 tầng kệ cuộn ngang (dùng ở Bộ sưu tập + cuối Tiệm Gạch)
+const seriesRows=()=>SERIES.map((r,s)=>{ const ids=seriesIdx(s), have=ids.filter(owned).length, stars=ids.reduce((a,i)=>a+best(i),0);
     return `<div class="sRow" style="--sc:${r.c}"><div class="sRowH"><b>${r.name}</b><small>${have}/${ids.length} ✓ · ★${stars}/${ids.length*3}</small>${ids.length>3?'<span class="sHint">Kéo ngang ›</span>':''}</div>`
       +`<div class="sRowL">${ids.map(mItemHtml).join('')}</div><small class="sBonus">${ids.every(built)?'✓ Đủ bộ':'Đủ bộ +'+seriesBonus(s)+'🪙'}</small></div>`; }).join('');
-  show('series',true);
-}
+function showSeries(){ $('sList').innerHTML=seriesRows(); show('series',true); }
 $('sList').onclick=e=>{
   const it=e.target.closest('.mItem'); if(!it) return; const i=+it.dataset.i; sfx.pick();
   if (built(i)) return toast('Đã lắp, xem ở kệ trưng bày 🏛');
@@ -2492,7 +2491,6 @@ $('ubLater').onclick=()=>{ sfx.back(); showHome(seriesOf(ubI)); if(ubFull) openG
 let mSel=null;
 // sel: số = mở sẵn khung mua của mô hình đó (từ bộ sưu tập / mục tiêu)
 function openShop(sel){ mSel=typeof sel==='number'&&!owned(sel)?sel:null; if(S.tut===5){ S.tut=6; save(); } renderShopM(); updateCoins(); show('shop',true); $('shopBody').scrollTop=0; }
-$('shopAll').onclick=()=>{ sfx.pick(); showSeries(); };
 // kệ hàng hôm nay: shop chỉ bày vài món đáng mua, đổi mỗi ngày → shop ngắn dù có bao nhiêu hộp
 const SHELF_N=6, SALE=0.8, today=()=>new Date().toDateString();
 const buyPrice=i=>S.daily&&S.daily.d===today()&&S.daily.sale===i?r5(shopPrice(i)*SALE):shopPrice(i);
@@ -2510,7 +2508,8 @@ function renderShopM(){
   const d=shelf();
   const tier=(ids,head='')=>`<div class="sRow">${head}<div class="sRowL">${ids.map(mItemHtml).join('')}</div></div>`; // 1 tầng ván 3 hộp
   $('mGrid').innerHTML=(d.ids.length?`<div id="mShelf">${tier(d.ids.slice(0,3),`<div class="sRowH"><b>🛒 Kệ hàng hôm nay</b><span class="sHint">⏳ <span class="shT">${dinoLeft()}</span></span></div>`)}${d.ids.length>3?tier(d.ids.slice(3)):''}</div>`:'<p class="shEmpty">Đã có đủ mô hình 🎉</p>')
-    +(adLeft('shelf')>0&&d.ids.length?'<button class="btn blue" id="mShelfAd"><span class="outline">🎬 Đổi kệ mới</span></button>':'');
+    +(adLeft('shelf')>0&&d.ids.length?'<button class="btn blue" id="mShelfAd"><span class="outline">🎬 Đổi kệ mới</span></button>':'')
+    +`<div class="allH outline">📚 TẤT CẢ MÔ HÌNH</div><div id="mAll">${seriesRows()}</div>`; // xem hết ngay bên dưới, khỏi bấm nút
   renderPick();
 }
 function mItemHtml(i){ const rn=roadNext(); { const h=owned(i), free=i===rn&&!h, sale=!h&&buyPrice(i)<shopPrice(i);

@@ -109,9 +109,10 @@ module.exports = [
   { name: 'shop-tach', pre: save0({ coins: 120, best: { 'Cây nấm': 3 }, tut: 6 }), post: async () => {
       $('shopBtn').click();
       ok($('shop').classList.contains('show') && $('shop').textContent.includes('TIỆM GẠCH') && document.querySelectorAll('#mShelf .mItem').length === 6, 'Tiệm Gạch: chỉ kệ hàng hôm nay');
-      ok(!$('shop').querySelector('.coinPack, .setPack, .dinoPack, #shopTabs') && [...$('shop').querySelectorAll('.sRow')].every(r => r.closest('#mShelf')), 'tiệm gạch không có nạp tiền / toàn bộ mô hình (chỉ 2 tầng kệ hàng hôm nay)');
-      $('shopAll').click(); ok($('series').classList.contains('show'), 'Xem tất cả → bộ sưu tập');
-      $('serClose').click(); $('shopClose').click();
+      ok(!$('shop').querySelector('.coinPack, .setPack, .dinoPack, #shopTabs'), 'tiệm gạch không có nạp tiền');
+      ok(!$('shopAll') && document.querySelectorAll('#mAll .sRow').length === SERIES.length && document.querySelectorAll('#mAll .mItem').length === LEVELS.length, 'tất cả mô hình bày ngay dưới kệ hàng hôm nay, không cần nút');
+      const far = [...document.querySelectorAll('#mAll .mItem')].find(e => !owned(+e.dataset.i) && +e.dataset.i !== roadNext()); far.click(); ok(mSel === +far.dataset.i && $('mPick').style.display !== 'none', 'chạm mô hình ở danh sách dưới → khung mua');
+      $('shopClose').click();
       document.querySelector('#home .coins').click();
       const B = $('iapBody'); ok($('iap').classList.contains('show') && Math.abs(B.scrollTop - Math.min($('secCoin').offsetTop - B.offsetTop, B.scrollHeight - B.clientHeight)) < 3, 'chạm ô xu → Ưu Đãi, cuộn tới gói xu');
       const packs = B.querySelectorAll('.coinPack'), sets = B.querySelectorAll('.setPack');
