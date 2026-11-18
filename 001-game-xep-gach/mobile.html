@@ -2604,9 +2604,22 @@ function stepView(ts,n){
   STEP_DIRS.forEach((v,k)=>{ const L=Math.hypot(...v), d=v.map(c=>c/L), hid=new Set(); let vis=0;
     pts.forEach(p=>{ let ok=true; for(const [t,b] of old) if(rayHit(p,d,b)){ ok=false; hid.add(t); } if(ok) vis++; });
     const sc=(pts.length?vis/pts.length:1)-(k?0.12:0); // góc quen thuộc được ưu tiên, chỉ xoay khi bị che nhiều
-    if (!best||sc>best.sc) best={sc,dir:new THREE.Vector3(...v),hid}; });
+    if (!best||sc>best.sc) best={sc,f:pts.length?vis/pts.length:1,dir:new THREE.Vector3(...v),hid}; });
   return best;
 }
+// bước lắp ở nhiều chỗ mà không góc nào thấy đủ mảnh mới (vd 4 tháp ở 4 góc, tháp sau bị che) → tách thành nhiều bước, mỗi bước 1 chỗ
+// (các mảnh cách nhau ≤ 3 núm coi là 1 chỗ; giữ thứ tự mảnh trong mỗi chỗ). Bước nhìn rõ được thì giữ nguyên
+function splitHiddenSteps(lv){
+  const out=[];
+  lv.steps.forEach(st=>{
+    let cl=[]; st.forEach((p,i)=>{ const near=cl.filter(c=>c.some(([q])=>Math.max(Math.abs(q[2]-p[2]),Math.abs(q[4]-p[4]))<=3));
+      cl=cl.filter(c=>!near.includes(c)); cl.push([].concat(...near,[[p,i]]).sort((u,v)=>u[1]-v[1])); });
+    if (cl.length>1&&stepView(levelTargets({steps:[...out,st]}),out.length).f<0.9) cl.sort((u,v)=>u[0][1]-v[0][1]).forEach(c=>out.push(c.map(([p])=>p)));
+    else out.push(st);
+  });
+  lv.steps=out;
+}
+LEVELS.forEach(splitHiddenSteps);
 const xray=o=>{ o.userData.meshes.forEach(m=>{ m.material=m.material.clone(); m.material.transparent=true; m.material.opacity=0.16; m.material.depthWrite=false; }); o.userData.lines.material=LINE.ghost; };
 // ảnh mô hình lắp tới hết bước n; hl: mảnh của bước n viền đỏ; hl còn làm xám các bước trước. Mảnh cũ che mảnh mới → trong suốt
 function thumbStep(i,n,sp,hl){

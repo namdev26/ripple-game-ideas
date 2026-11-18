@@ -34,6 +34,8 @@ module.exports = [
       ok(stepView(ts, 1).dir.equals(new THREE.Vector3(0.55, 0.65, 1)), 'bước không bị che giữ góc quen thuộc');
       ok(ts.filter(t => t.step === n).every(t => t.x < 4 && t.z < 4), 'bước chỉ lắp 1 cụm ở 1 chỗ (không gom phô mai ở góc kia)');
       ok(thumbStep(i, n, false, true).startsWith('data:image'), 'vẽ được ảnh bước');
+      const same = LEVELS.every(l => { const c = l.steps.length; splitHiddenSteps(l); return l.steps.length === c; });
+      ok(same && LEVELS.find(l => l.name === 'Lâu đài').steps.length > 21, 'bước rải nhiều chỗ bị che đã được tách (chia lại không đổi gì nữa)');
   } },
 ];
 module.exports.lib = require('./t4-build.js').lib;
