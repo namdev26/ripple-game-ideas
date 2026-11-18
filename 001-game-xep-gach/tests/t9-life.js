@@ -57,5 +57,11 @@ module.exports = [
       openIap(); const t = $('offerBody').textContent;
       ok($('offerBody').querySelector('.starter').textContent.includes('∞') && t.includes('3 giờ'), 'gói khởi đầu kèm ∞ + gói ∞ 3 giờ');
   } },
+  { name: 'uu-dai-cuu-nguy', pre: pre({ tut: 6, coins: 0, best: { 'Cây nấm': 3 } }), post: async () => {
+      giveModel(1); startBuild(1); wrong(); wrong(); wrong(); await wait(900);
+      document.querySelector('#loseOffer .price').click(); ok($('buyModal').classList.contains('show'), 'thẻ ưu đãi trong bảng thua → xác nhận mua');
+      $('buyOk').click(); ok(!done && mistakes === 2 && S.coins === 500 && S.hintBank === 3 && !$('loseModal').classList.contains('show'), 'gói cứu nguy: chơi tiếp +1 lượt, 500 xu, 3 gợi ý dự trữ');
+      hintsLeft = 0; useHint(); ok(S.hintBank === 2 && S.coins === 500, 'hết gợi ý màn thì dùng gợi ý dự trữ, không trừ xu');
+  } },
 ];
 module.exports.lib = require('./t4-build.js').lib;

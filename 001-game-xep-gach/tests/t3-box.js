@@ -125,6 +125,11 @@ module.exports = [
       packs[0].querySelector('.price').click(); ok($('buyModal').classList.contains('show') && S.coins === 120 && $('buyP').textContent.includes('25.000'), 'bấm gói xu → bảng xác nhận mua, chưa cộng');
       $('buyClose').click(); ok(!$('buyModal').classList.contains('show') && S.coins === 120, 'huỷ thì không mua');
       packs[1].querySelector('.price').click(); $('buyOk').click(); ok(S.coins === 120 + 650 && !$('buyModal').classList.contains('show'), 'mua thử như thật: cộng xu gói 650: ' + S.coins);
+      const own0 = ALL_IDX.filter(owned).length; B.querySelector('[data-buy="starter"]').click(); $('buyOk').click();
+      ok(ALL_IDX.filter(owned).length === own0 + 3 && S.coins === 770 + 500 && S.noAds && infLeft() > 3500e3, 'gói khởi đầu: 3 mô hình + 500 xu + bỏ QC + ∞ 1 giờ');
+      B.querySelector('[data-buy="starter"]').click(); ok(!$('buyModal').classList.contains('show') && B.querySelector('[data-buy="starter"]').textContent === 'Đã mua', 'gói khởi đầu chỉ mua 1 lần');
+      B.querySelector('[data-buy="set2"]').click(); $('buyOk').click(); ok(seriesIdx(2).every(owned) && seriesIdx(2).some(special), 'mua bộ: có cả bộ + 1 vàng kim');
+      let got = 0; watchAd(() => got = 1); ok(got === 1, 'đã bỏ QC: xem QC nhận thưởng ngay');
       $('iapClose').click(); ok(!$('iap').classList.contains('show') && $('home').classList.contains('show'), 'đóng về màn chính');
       $('hIapBtn').click(); ok($('iap').classList.contains('show') && $('iapBody').scrollTop === 0, 'nút Ưu đãi ở màn chính mở từ đầu'); $('iapClose').click();
       $('gachaBtn').click(); document.querySelector('#gacha .coins').click();

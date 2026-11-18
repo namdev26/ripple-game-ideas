@@ -337,6 +337,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #gDeco .floor{left:-35cqw;right:-35cqw;bottom:-5cqw;height:12cqw;border-radius:50%;background:radial-gradient(closest-side,#fff8 0,#ffffff30 50%,#fff0);z-index:-1}
 #gDeco .mb{bottom:0;width:40cqw;height:40cqw;transform-origin:0 100%} /* left = mép trái thật sau khi thu nhỏ */
 #gacha #hName{margin-top:5cqw;font-size:5cqw}
+#buyI .em{font-size:17cqw;line-height:1;filter:drop-shadow(0 1.2cqw 0 #12163a44)}
 /* bố cục gacha dọc: hộp giữa → dải phần thưởng có thể nhận → nút mở sát đáy (ngay trên thanh tab) */
 #gacha #hBtns{margin-top:auto;margin-bottom:4cqw}
 #gacha #playBtn,#gacha #adBtn{width:40cqw;height:20cqw}
@@ -749,7 +750,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
   <div id="buyModal" class="screen modal"><div class="panelM">
     <div class="ribbon blue outline">XÁC NHẬN MUA</div>
     <button class="btn close" id="buyClose" aria-label="Huỷ">✕</button>
-    <div class="pIcon"><span class="coin"></span></div>
+    <div class="pIcon" id="buyI"></div>
     <p class="loseP" id="buyT"></p>
     <button class="btn green big" id="buyOk"><span class="outline g" id="buyP"></span></button>
     <p class="ver">Bản thử · không trừ tiền thật</p>
@@ -2161,6 +2162,7 @@ function updateLives(lose){
 // ====================== GỢI Ý ======================
 function useHint(){
   if (done) return;
+  if (hintsLeft<=0&&S.hintBank>0){ S.hintBank--; hintsLeft++; save(); } // gợi ý mua từ gói ưu đãi
   if (hintsLeft<=0){
     if (S.coins<HINT_COST) return toast(`Cần ${HINT_COST} xu để mua gợi ý`);
     S.coins-=HINT_COST; save(); updateCoins(true); hintsLeft++; toast(`Mua gợi ý −${HINT_COST} xu (còn ${S.coins})`); // màn lắp không hiện xu
@@ -2360,7 +2362,7 @@ $('hLife').onclick=openLife;
 $('lifeClose').onclick=()=>{ sfx.back(); show('lifeModal',false); };
 $('lifeAd').onclick=()=>{ if(adLeft('inf')<=0) return; watchAd(()=>{ S.ad.inf=(S.ad.inf||0)+1; giveInf(INF_AD); show('lifeModal',false); updateLife(); toast('∞ 15 phút chơi không tốn ❤️!'); }); };
 $('lifeCoin').onclick=()=>{ if(S.coins<HEART_FULL_COST){ toast(`Cần ${HEART_FULL_COST}🪙`); sfx.wrong(); return; } S.coins-=HEART_FULL_COST; S.hearts=HEART_MAX; save(); updateCoins(true); sfx.coin(); show('lifeModal',false); updateLife(); };
-document.querySelectorAll('.offer .price').forEach(b=>b.onclick=()=>{ sfx.pick(); toast('🧪 Bản thử: chưa mua thật được'); }); // giống nút giá ở Ưu Đãi
+document.querySelectorAll('.offer .price').forEach(b=>b.onclick=()=>openBuy(b.closest('.offer').id)); // mua thử như ở Ưu Đãi
 // mục tiêu ghim: thứ người chơi muốn mua + con đường ngắn nhất tới nó (luôn là level kế)
 function goalInfo(){
   const g=S.goal?LEVELS.findIndex(l=>l.name===S.goal):-1; if (g<0||owned(g)) return null;
@@ -2429,6 +2431,7 @@ function openBox(viaAd){
 const AD_MAX={box:1,coin:3,shelf:1,inf:2};
 const adLeft=k=>{ const d=new Date().toDateString(); if(!S.ad||S.ad.d!==d) S.ad={d,box:0,coin:0,shelf:0}; return AD_MAX[k]-(S.ad[k]||0); };
 function watchAd(cb){
+  if (S.noAds) return cb(); // đã mua bỏ quảng cáo
   sfx.pick(); let n=3; $('adSec').textContent=n; show('adView',true);
   const t=setInterval(()=>{ n--; $('adSec').textContent=n; if(n>0) return; clearInterval(t); show('adView',false); cb(); },1000);
 }
@@ -2596,19 +2599,19 @@ const COIN_PACKS=[[120,'25.000đ'],[650,'99.000đ','+8%'],[1400,'199.000đ','Ph�
 function renderIap(){
   const pile=n=>`<div class="pile">${'<span class="coin"></span>'.repeat(n)}</div>`;
   const setCard=s=>`<div class="iapCard setPack" style="--sc:${SERIES[s].c}"><img src="${thumbLevel(SERIES[s].from+SERIES[s].n-1)}" alt="">
-    <div class="grow"><b>Bộ ${SERIES[s].name}</b><small>Nhận ngay ${SERIES[s].n} mô hình + 1 bản ✨ vàng kim</small></div><button class="price">${s===1?'99.000đ':'119.000đ'}</button></div>`;
+    <div class="grow"><b>Bộ ${SERIES[s].name}</b><small>Nhận ngay ${SERIES[s].n} mô hình + 1 bản ✨ vàng kim</small></div><button class="price" data-buy="set${s}">${s===1?'99.000đ':'119.000đ'}</button></div>`;
   $('offerBody').innerHTML=`
     <div class="iapCard dinoPack">
       <div class="dTop"><b class="ttl outline">BỘ KHỦNG LONG</b><span class="dTime">⏳ <span id="dinoT">${dinoLeft()}</span></span></div>
       <div class="dHero"><div class="pbox dinoBox"><div class="pf"><img src="${dinoImg('dino',DINO_SCENE)}" alt=""><b class="pn">Khủng long</b><small class="pc">3 mô hình · 420 mảnh</small><i class="pr">Mới</i></div><div class="ps"><img src="${dinoImg('trex',DINO_TREX)}" alt=""><b>Khủng long</b></div></div><span class="iapTag">-75%</span></div>
       <small class="dSub">Khủng long bạo chúa · Tam giác long · Khủng long cổ dài</small>
       <div class="dIts"><div class="dIt"><img src="${dinoImg('trex',DINO_TREX)}" alt="">3 mô hình</div><div class="dIt"><i>🪙</i>2.000 xu</div><div class="dIt"><i>🎁</i>5 hộp bí ẩn</div><div class="dIt gold"><img src="${dinoImg('trexG',DINO_TREX,true)}" alt="">T-Rex vàng kim</div></div>
-      <div class="buy"><span class="old">499.000đ</span><button class="price">119.000đ</button></div></div>
+      <div class="buy"><span class="old">499.000đ</span><button class="price" data-buy="dino">119.000đ</button></div></div>
     <div class="iapCard starter"><span class="iapTag">-70%</span><b class="ttl outline o">GÓI KHỞI ĐẦU</b>
       <div class="its"><div class="it"><i>🎁</i>3 hộp bí ẩn</div><div class="it"><i>🪙</i>+500 xu</div><div class="it"><i>🚫</i>Bỏ quảng cáo</div><div class="it"><i>∞</i>∞ 1 giờ</div></div>
-      <div class="buy"><span class="old">129.000đ</span><button class="price">39.000đ</button></div><small style="text-align:center">Chỉ mua được 1 lần</small></div>
-    <div class="iapCard"><span class="big">∞</span><div class="grow"><b>Chơi không giới hạn 3 giờ</b><small>Thua không mất ❤️ trong 3 giờ</small></div><button class="price">29.000đ</button></div>
-    <div class="iapCard"><span class="big">🚫</span><div class="grow"><b>Bỏ quảng cáo</b><small>Không còn quảng cáo giữa các màn, vĩnh viễn</small></div><button class="price">59.000đ</button></div>
+      <div class="buy"><span class="old">129.000đ</span><button class="price" data-buy="starter">${S.bought&&S.bought.starter?'Đã mua':'39.000đ'}</button></div><small style="text-align:center">Chỉ mua được 1 lần</small></div>
+    <div class="iapCard"><span class="big">∞</span><div class="grow"><b>Chơi không giới hạn 3 giờ</b><small>Thua không mất ❤️ trong 3 giờ</small></div><button class="price" data-buy="inf3">29.000đ</button></div>
+    <div class="iapCard"><span class="big">🚫</span><div class="grow"><b>Bỏ quảng cáo</b><small>Xem quảng cáo là nhận thưởng ngay, vĩnh viễn</small></div><button class="price" data-buy="noads">${S.noAds?'Đã mua':'59.000đ'}</button></div>
     ${setCard(1)}${setCard(2)}
     <div class="iapCard soon"><span class="lock">🔒</span><div class="grow"><b>Bộ Nhật Bản</b><small>Sắp ra mắt: chùa vàng, núi Phú Sĩ, cổng Torii…</small></div></div>
 `;
@@ -2619,14 +2622,48 @@ function openIap(sec){ sfx.pick(); renderIap(); updateCoins(); show('iap',true);
 $('iapClose').onclick=()=>{ sfx.back(); show('iap',false); };
 $('hIapBtn').onclick=()=>tabGo(()=>openIap());
 document.querySelectorAll('.coins').forEach(c=>c.onclick=()=>openIap('secCoin')); // ô xu: nhảy tới gói xu
-let buyN=0; // số xu của gói đang hỏi mua
-$('iapBody').onclick=e=>{
-  const cp=e.target.closest('.coinPack .price');
-  if (cp){ const [n,p]=COIN_PACKS[+cp.closest('.coinPack').dataset.k]; buyN=n; $('buyT').innerHTML=`Gói <b>${n.toLocaleString('vi-VN')}</b> xu`; $('buyP').textContent='MUA · '+p; sfx.pick(); show('buyModal',true); return; }
-  if (e.target.closest('.price, .iapFoot button')){ sfx.pick(); toast('🧪 Bản thử: chưa mua thật được'); }
+// ---- mua bản thử: mỗi gói = tên, giá, mô tả, hàm nhận đồ (trả về tên mô hình nhận được). Không trừ tiền thật ----
+const fmtN=n=>n.toLocaleString('vi-VN');
+const giveBoxes=n=>{ const got=[]; for(let k=0;k<n;k++){ const g=peekBox(); if(!g) break; grant(g.i,g.sp); delete S.next.g; got.push(LEVELS[g.i].name+(g.sp?' ✨':'')); } peekBox(); return got; };
+const giveHints=n=>{ S.hintBank=(S.hintBank||0)+n; }; // gợi ý dự trữ, dùng khi hết gợi ý của màn
+function packOf(k){
+  if (k[0]==='c'){ const [n,p]=COIN_PACKS[+k.slice(1)]; return {t:`Gói ${fmtN(n)} xu`,p,i:'coin',g:()=>{ S.coins+=n; }}; }
+  if (k.startsWith('set')){ const s=+k.slice(3), ids=seriesIdx(s); return {t:`Bộ ${SERIES[s].name}`,p:s===1?'99.000đ':'119.000đ',d:`${ids.length} mô hình + 1 bản ✨ vàng kim`,i:'🧱',
+    g:()=>{ ids.forEach(i=>grant(i,false)); grant(ids[ids.length-1],true); return ids.map(i=>LEVELS[i].name); }}; }
+  return {
+    dino:{t:'Bộ Khủng Long',p:'119.000đ',d:'2.000 xu + 5 hộp bí ẩn (3 mô hình khủng long sắp có)',i:'🦖',g:()=>{ S.coins+=2000; return giveBoxes(5); }},
+    starter:{t:'Gói Khởi Đầu',p:'39.000đ',d:'3 hộp bí ẩn + 500 xu + bỏ quảng cáo + ∞ 1 giờ',i:'🎁',once:1,g:()=>{ S.coins+=500; S.noAds=1; giveInf(3600e3); return giveBoxes(3); }},
+    inf3:{t:'Chơi không giới hạn',p:'29.000đ',d:'∞ 3 giờ: thua không mất ❤️',i:'♾️',g:()=>{ giveInf(3*3600e3); }},
+    noads:{t:'Bỏ quảng cáo',p:'59.000đ',d:'Xem quảng cáo là nhận thưởng ngay',i:'🚫',once:1,g:()=>{ S.noAds=1; }},
+    lifeOffer:{t:'Gói Vô Hạn',p:'29.000đ',d:'∞ 3 giờ + đầy ❤️ + 300 xu',i:'❤️',g:()=>{ giveInf(3*3600e3); S.hearts=HEART_MAX; S.coins+=300; show('lifeModal',false); }},
+    loseOffer:{t:'Gói Cứu Nguy',p:'25.000đ',d:'+1 lượt sai + 3 gợi ý + 500 xu',i:'🛟',g:()=>{ S.coins+=500; giveHints(3); if($('loseModal').classList.contains('show')) revive(); }},
+    needOffer:{t:'Túi Xu',p:'49.000đ',d:'1.000 xu + 1 hộp bí ẩn + 3 gợi ý',i:'💰',g:()=>{ S.coins+=1000; giveHints(3); return giveBoxes(1); }},
+  }[k];
+}
+let buyK=null; // gói đang hỏi mua
+function openBuy(k){
+  const P=packOf(k); if (!P) return;
+  if (P.once&&S.bought&&S.bought[k]){ sfx.back(); return toast('Gói này đã mua rồi'); }
+  buyK=k; $('buyI').innerHTML=P.i==='coin'?'<span class="coin"></span>':`<span class="em">${P.i}</span>`;
+  $('buyT').innerHTML=`<b>${P.t}</b>${P.d?`<small>${P.d}</small>`:''}`; $('buyP').textContent='MUA · '+P.p; sfx.pick(); show('buyModal',true);
+}
+$('buyOk').onclick=()=>{
+  const k=buyK, P=k&&packOf(k); if(!P) return; buyK=null; show('buyModal',false);
+  const c0=S.coins, got=P.g()||[]; S.bought=S.bought||{}; S.bought[k]=1; save();
+  updateCoins(true); updateLife(); sfx.coin();
+  if ($('needModal').classList.contains('show')) renderNeed();
+  if ($('gacha').classList.contains('show')) renderGacha();
+  if ($('iap').classList.contains('show')) renderIap();
+  if ($('home').classList.contains('show')) renderHome();
+  toast('✅ Mua thành công'+(S.coins>c0?` +${fmtN(S.coins-c0)}🪙`:'')+(got.length?' · '+got.join(', '):''),3200);
 };
-$('buyOk').onclick=()=>{ const n=buyN; if(!n) return; buyN=0; show('buyModal',false); S.coins+=n; save(); updateCoins(true); sfx.coin(); toast(`✅ Mua thành công +${n.toLocaleString('vi-VN')}🪙`); };
-$('buyClose').onclick=()=>{ buyN=0; sfx.back(); show('buyModal',false); };
+$('buyClose').onclick=()=>{ buyK=null; sfx.back(); show('buyModal',false); };
+$('iapBody').onclick=e=>{
+  const cp=e.target.closest('.coinPack .price'), b=e.target.closest('[data-buy]');
+  if (cp) return openBuy('c'+cp.closest('.coinPack').dataset.k);
+  if (b) return openBuy(b.dataset.buy);
+  if (e.target.closest('.iapFoot button')){ sfx.pick(); toast('🧪 Bản thử: không có giao dịch để khôi phục'); }
+};
 
 // ---- sách hướng dẫn kiểu LEGO: bìa → mỗi bước một trang (khung mảnh "2x + tên màu") → danh sách mảnh ----
 // sổ bước: mảnh các bước trước xám nhạt đồng màu để mảnh của bước hiện tại nổi bật
