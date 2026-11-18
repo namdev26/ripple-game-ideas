@@ -20,7 +20,7 @@ module.exports = [
       $('hNextBtn').click();
       ok($('lifeModal').classList.contains('show') && !$('bpView').classList.contains('show'), 'hết ❤: không vào level mới, hiện bảng hết mạng');
       const t = $('lifeModal').textContent;
-      ok(/(30:00|29:\d\d)/.test(t) && t.includes('15 phút') && t.includes('60') && t.includes('3 giờ') && t.includes('Lắp lại'), 'bảng: đồng hồ, QC ∞15p, 60 xu, gói ∞, lắp lại: ' + t);
+      ok(/(30:00|29:\d\d)/.test(t) && t.includes('15 phút') && t.includes('60') && $('lifeOffer').textContent.includes('3 giờ') && t.includes('lắp lại'), 'bảng: đồng hồ, QC ∞15p, 60 xu, thẻ ưu đãi gói ∞ tách riêng, nhắc lắp lại miễn phí: ' + t);
       ok($('hNextBtn').textContent.includes('LEVEL') && $('hNext').textContent.match(/\d\d:\d\d/), 'nút level hiện đồng hồ hồi');
       $('lifeCoin').click(); ok(heartsNow() === 5 && S.coins === 40 && !$('lifeModal').classList.contains('show'), '60 xu nạp đầy');
       $('hNextBtn').click(); ok($('bpView').classList.contains('show'), 'có ❤ thì vào được');

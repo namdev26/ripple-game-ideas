@@ -32,7 +32,7 @@ module.exports = [
   { name: 'thieu-xu', pre: save0({ tut: 6, coins: 100, best: { 'Cây nấm': 3 } }), post: async () => {
       const ld = LEVELS.findIndex(l => l.name === 'Lâu đài');
       openShop(ld); $('mBuy').click();
-      ok($('needModal').classList.contains('show') && $('needModal').textContent.includes('thiếu ' + (shopPrice(ld) - 100)), 'bảng thiếu xu');
+      ok($('needModal').classList.contains('show') && $('needModal').textContent.includes('thiếu ' + (buyPrice(ld) - 100)), 'bảng thiếu xu');
       ok(S.goal === 'Lâu đài' && !owned(ld) && S.coins === 100, 'tự ghim mục tiêu, chưa trừ xu');
       ok($('needPlay').textContent.includes('LEVEL 2') && $('needBox').textContent.includes('100') && $('needAd').textContent.includes('30'), '3 lối: lắp level kế, hộp, QC');
       $('needPlay').click(); ok($('bpView').classList.contains('show') && bpI === roadNext(), 'lắp level kế');
@@ -77,9 +77,9 @@ module.exports = [
       ok(/\d+:\d\d:\d\d/.test($('shop').textContent) && S.daily.d === new Date().toDateString(), 'đếm ngược tới lúc đổi kệ, lưu theo ngày');
       renderShopM(); ok(JSON.stringify(ids()) === JSON.stringify(a), 'trong ngày kệ giữ nguyên');
       showSeries(); const rows = document.querySelectorAll('#sList .sRow');
-      ok(rows.length === 3 && [...rows].every((r, s) => r.querySelectorAll('.sRowL .mItem').length === SERIES[s].n && r.textContent.includes('Xem hết')), 'tất cả mô hình: mỗi bộ 1 hàng ngang');
+      ok(rows.length === 3 && [...rows].every((r, s) => r.querySelectorAll('.sRowL .mItem').length === SERIES[s].n && !r.querySelector('.sMore')), 'tất cả mô hình: mỗi bộ 1 hàng cuộn ngang, không mở rộng xuống');
       ok(rows[0].textContent.includes('1/4'), 'hàng có số đã có / tổng');
-      rows[1].querySelector('.sMore').click(); ok(document.querySelectorAll('#sList .sRow')[1].classList.contains('full'), 'Xem hết → mở lưới cả bộ');
+      const L1 = rows[1].querySelector('.sRowL'); ok(L1.scrollWidth > L1.clientWidth && getComputedStyle(L1).overflowX === 'auto', 'hàng dài hơn khung: cuộn ngang');
       $('serClose').click(); const si = +sale[0].dataset.i; document.querySelector(`#mShelf .mItem[data-i="${si}"]`).click(); $('mBuy').click();
       ok(owned(si) && S.coins === 500 - buyPrice(si), 'mua giá giảm: ' + S.coins);
       openShop(); $('mShelfAd').click(); await wait(3500);
