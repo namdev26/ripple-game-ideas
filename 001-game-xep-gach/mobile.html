@@ -634,6 +634,16 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .qOk{width:19cqw;text-align:center;font-size:6cqw;color:#33b44a;flex:none}
 .qRow.all{background:linear-gradient(#fff6c8,#ffe27a);box-shadow:inset 0 -.8cqw 0 #e3a923}
 .qTime{font-size:3.4cqw;font-weight:800;color:#6b7190;margin:-1cqw 0 3cqw}
+/* thử thách ngày */
+.dcPic{display:block;width:42cqw;height:42cqw;object-fit:contain;margin:-2cqw auto 0}
+.dcName{display:block;font-size:6.2cqw;color:#2b3150;margin-bottom:2cqw}
+.mrTime{font-size:11cqw;line-height:1.1}
+#mTag{display:none;position:absolute;left:4cqw;top:21cqw;z-index:5;flex-direction:column;align-items:flex-start;gap:.6cqw;pointer-events:none}
+#app.mode #mTag{display:flex}
+#mTime{background:#2b3150cc;border-radius:3cqw;padding:.6cqw 3cqw;font-size:5.6cqw}
+#mTime.warn{background:#e0303fcc}
+#mRule{background:#fff;color:#2b3150;border-radius:2cqw;padding:.4cqw 2cqw;font-size:3.2cqw;font-weight:800}
+#mRule:empty{display:none}
 /* ---------- hướng dẫn lần đầu ---------- */
 #tip{display:none;position:absolute;z-index:25;pointer-events:none;left:50%;bottom:calc(100% + 3.5cqw);transform:translateX(-50%);line-height:1.3;background:#fff;color:#2b3150;font-size:4.4cqw;font-weight:800;
   padding:2cqw 4cqw;border-radius:3.5cqw;border:.7cqw solid #ffd43b;box-shadow:0 1.5cqw 3cqw #0004;white-space:nowrap;animation:tipbob 1s ease-in-out infinite}
@@ -664,6 +674,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div id="lives" aria-label="Mạng"></div>
     <button id="setBtn" aria-label="Cài đặt">⚙️</button>
   </div>
+  <div id="mTag"><b id="mTime" class="outline"></b><small id="mRule"></small></div>
   <div id="stepBook"><b id="lvName" class="outline"></b><img id="sbImg" alt=""><div id="sbSide"><div id="sbParts"></div><div id="sbNo"></div></div></div>
 
   <div id="zoom"><span id="zIn">+</span><div id="ztrack"><div id="zthumb">🔍</div></div><span id="zOut">−</span></div>
@@ -875,6 +886,28 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div class="qList" id="qList"></div>
   </div></div>
 
+  <!-- thử thách ngày: mọi người cùng 1 mô hình + 1 luật, đổi lúc 0h -->
+  <div id="dcModal" class="screen modal"><div class="panelM">
+    <div class="ribbon red outline r">THỬ THÁCH NGÀY</div>
+    <button class="btn close" id="dcClose" aria-label="Đóng">✕</button>
+    <div class="qTime">🔄 Đổi thử thách sau <span class="oT"></span></div>
+    <img id="dcPic" class="dcPic" alt="">
+    <b id="dcName" class="dcName"></b>
+    <div class="pill" id="dcRuleP"></div>
+    <p class="loseP" id="dcInfo"></p>
+    <button class="btn green big" id="dcPlay"><span class="outline g">CHƠI</span></button>
+  </div></div>
+
+  <!-- xong thử thách ngày -->
+  <div id="mResult" class="screen modal"><div class="panelM">
+    <div class="ribbon outline o" id="mrTitle">XONG THỬ THÁCH!</div>
+    <img id="mrPic" class="dcPic" alt="">
+    <div class="mrTime outline" id="mrTime"></div>
+    <p class="loseP" id="mrInfo"></p>
+    <div class="reward" id="mrRew"><span class="coin"></span>+<span id="mrCoins"></span></div>
+    <div class="row" style="margin:0"><button class="btn blue" id="mrAgain" style="width:32cqw;height:14cqw"><span class="outline">↻ Chơi lại</span></button><button class="btn green" id="mrOk" style="width:32cqw;height:14cqw"><span class="outline g">VỀ MENU</span></button></div>
+  </div></div>
+
   <div id="hNav">
     <button class="navB" id="hIapBtn"><i>💎</i><span class="outline">Ưu đãi</span></button>
     <button class="navB" id="shopBtn"><i>🧱</i><span class="outline">Tiệm Gạch</span></button>
@@ -891,6 +924,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div class="hSide" id="hSideL">
       <button class="sideB" id="sbLogin"><i>📅</i><span>Điểm danh</span></button>
       <button class="sideB" id="sbQuest"><i>📋</i><span>Nhiệm vụ</span></button>
+      <button class="sideB" id="sbDaily"><i>🎯</i><span>Thử thách</span></button>
     </div>
     <div class="hSide" id="hSideR"></div>
     <div id="hDrawer">
@@ -1929,12 +1963,12 @@ const sfx={
 };
 
 // ====================== TRẠNG THÁI ======================
-const OVERLAYS=['loginModal','questModal','result','buyModal','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
+const OVERLAYS=['loginModal','questModal','dcModal','mResult','result','buyModal','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
 let rebuild=false, placedOrder=[], replaying=false, replayTok=0, replayDone=null; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
 const HINT_COST=30;
-const LIVES=3, starsNow=()=>Math.max(1,LIVES-mistakes), REVIVE_COST=50; // sao = số mạng còn
+let LIVES=3; const starsNow=()=>Math.max(1,LIVES-mistakes), REVIVE_COST=50; // sao = số mạng còn
 let revived=false; // mỗi màn chỉ hồi mạng 1 lần
 
 function toast(msg,ms=1700){
@@ -1960,17 +1994,20 @@ function renderBook(){
 function updateHint(){ $('hintN').textContent=hintsLeft>0?hintsLeft:'+'; }
 const supported=t=>t.deps.every(u=>u.placed);
 
-function loadLevel(i){
-  if (!built(i)&&!canPlay()){ OVERLAYS.forEach(id=>$(id).classList.remove('show')); showHome(); return openLife(); } // hết ❤️: level mới bị chặn, lắp lại thì không
-  levelIdx=i; L=LEVELS[i]; rebuild=built(i); placedOrder=[];
+// m: null = lắp thường, 'daily' = thử thách ngày (không tốn ❤️, không lưu tiến độ, có luật riêng)
+function loadLevel(i,m=null){
+  if (!m&&!built(i)&&!canPlay()){ OVERLAYS.forEach(id=>$(id).classList.remove('show')); showHome(); return openLife(); } // hết ❤️: level mới bị chặn, lắp lại thì không
+  levelIdx=i; L=LEVELS[i]; rebuild=built(i)||!!m; placedOrder=[]; mode=m; mT=0;
+  const rule=m==='daily'?dcToday().k:null; LIVES=rule==='one'?1:3;
   cancelReplay();
   if (levelRoot) scene.remove(levelRoot);
   levelRoot=new THREE.Group(); scene.add(levelRoot);
-  mistakes=0; hintsLeft=3; done=false; revived=false; anims=[]; hintT=null; endDrag(true);
+  mistakes=0; hintsLeft=rule==='nohint'?0:3; done=false; revived=!!m; // chế độ: hết lượt sai là thua luôn, không hồi sinh anims=[]; hintT=null; endDrag(true);
   OVERLAYS.forEach(id=>$(id).classList.remove('show')); $('home').classList.remove('show');
   controls.autoRotate=false;
 
-  const sp=special(i);
+  const sp=!m&&special(i);
+  $('app').classList.toggle('mode',!!m); $('hintBtn').style.display=rule==='nohint'?'none':''; $('mRule').textContent=rule?DC_RULES[rule]:'';
   targets=levelTargets(L).map((t,idx)=>({...t,color:kitColor(sp,t.color),idx,placed:false}));
   targets.forEach(t=>{ [t.fx,t.fz]=footprint(t.key,t.rot); t.top=t.y+PARTS[t.key].h; });
   // mảnh u là "bên dưới" t nếu chồng diện tích và nằm thấp hơn → phải lắp trước
@@ -2213,7 +2250,7 @@ function openFail(){
   const c=failCost();
   $('fIcon').style.display=c?'':'none';
   $('fT').innerHTML=c?`Bạn mất 1 ❤️ · còn ${Math.max(0,heartsNow()-1)}/${HEART_MAX}<small>Chỉ mất ❤️ khi thua level mới</small>`
-    :(rebuild?'Lắp lại mô hình cũ không tốn ❤️':'∞ đang bật: không mất ❤️')+'<small>Thử lại nhé!</small>';
+    :(mode?'Thử thách không tốn ❤️':rebuild?'Lắp lại mô hình cũ không tốn ❤️':'∞ đang bật: không mất ❤️')+'<small>Thử lại nhé!</small>';
   show('loseModal',false); show('failModal',true);
 }
 function updateLives(lose){
@@ -2243,6 +2280,7 @@ function useHint(){
 
 // ====================== KẾT THÚC ======================
 function win(){
+  if (mode) return modeWin();
   done=true; endDrag(true); sfx.win();
   const stars=starsNow(), s=seriesOf(levelIdx), wasDone=seriesDone(s);
   const reward=rebuild?REBUILD_REWARD:rewardFor(levelIdx,stars,special(levelIdx));
@@ -2818,7 +2856,7 @@ $('setClose').onclick=()=>show('setModal',false);
 $('sndSw').onclick=()=>{ S.snd=!S.snd; save(); $('sndSw').classList.toggle('on',S.snd); sfx.pick(); };
 $('vibSw').onclick=()=>{ S.vib=!S.vib; save(); $('vibSw').classList.toggle('on',S.vib); vib(30); };
 const failCost=()=>!rebuild&&!infLeft(); // thua level mới thì mất ❤️ (đang ∞ thì không)
-$('lRetry').onclick=()=>{ if(!rebuild) loseHeart(); loadLevel(levelIdx); };
+$('lRetry').onclick=()=>{ if(!rebuild) loseHeart(); loadLevel(levelIdx,mode); };
 let quitThen=null;
 function quitLevel(then){ // thoát khi đang lắp dở level mới = thua: bảng xác nhận mất ❤️
   if (!done&&!rebuild&&placedOrder.length&&!infLeft()){
@@ -2832,7 +2870,7 @@ $('qNo').onclick=$('qClose').onclick=()=>{ quitThen=null; sfx.back(); show('quit
 $('lClose').onclick=()=>{ sfx.back(); openFail(); };
 $('sResume').onclick=()=>{ sfx.pick(); show('setModal',false); };
 $('infoOk').onclick=()=>{ sfx.pick(); show('infoModal',false); };
-$('sRestart').onclick=()=>{ show('setModal',false); quitLevel(()=>loadLevel(levelIdx)); };
+$('sRestart').onclick=()=>{ show('setModal',false); quitLevel(()=>loadLevel(levelIdx,mode)); };
 const revive=()=>{ revived=true; mistakes=LIVES-1; done=false; updateLives(); show('loseModal',false); toast('✖ Thêm 1 lượt sai, cố lên!'); };
 $('lAd').onclick=()=>watchAd(revive);
 $('lCoin').onclick=()=>{ if(S.coins<REVIVE_COST){ toast(`Cần ${REVIVE_COST}🪙`); sfx.wrong(); return; } S.coins-=REVIVE_COST; save(); revive(); };
@@ -2956,6 +2994,7 @@ $('sbLogin').onclick=openLogin;
 // ---- nhiệm vụ ngày: luôn có "lắp gạch" + 2 việc ngẫu nhiên theo ngày; xong cả 3 nhận 1 hộp ----
 const QUESTS={
   brick:{t:n=>`Lắp ${n} mảnh gạch`,n:[40,60,80],c:40},
+  daily:{t:()=>'Hoàn thành Thử thách của ngày',n:[1],c:60},
   win:{t:n=>`Lắp xong ${n} mô hình mới`,n:[1,2],c:60},
   perfect:{t:()=>'Lắp 1 mô hình không sai lần nào',n:[1],c:60},
   box:{t:()=>'Mở 1 hộp bí ẩn',n:[1],c:40},
@@ -2996,10 +3035,51 @@ $('sbQuest').onclick=openQuest;
 // chấm đỏ trên nút bên: có quà nhận được
 function renderSide(){
   const dot=(id,n)=>{ const b=$(id); let d=b.querySelector('.badge'); if(!n){ d&&d.remove(); return; } if(!d){ d=document.createElement('b'); d.className='badge'; b.appendChild(d); } d.textContent=n===true?'':n; };
-  dot('sbLogin',loginK().can); dot('sbQuest',questReady());
+  dot('sbLogin',loginK().can); dot('sbQuest',questReady()); dot('sbDaily',!dcState().won);
 }
 // mở game lần đầu trong ngày: tự hiện bảng điểm danh (không chen vào hướng dẫn lần đầu)
 function autoDaily(){ if (window.__noAuto||UNLOCK_ALL||S.tut<6||!$('home').classList.contains('show')||!loginK().can) return; openLogin(); }
+
+// ====================== THỬ THÁCH CỦA NGÀY ======================
+// mỗi ngày 1 mô hình (kể cả chưa có: chơi thử trước khi mua) + 1 luật; tính giờ; lần đầu xong trong ngày có thưởng
+let mode=null, mT=0; // mT = giây đã chơi, chỉ chạy khi không mở bảng nào
+const DC_RULES={one:'✖ Chỉ 1 lượt sai',nohint:'💡 Không có gợi ý',time:'⏱ Giới hạn thời gian'}, DC_REW=150;
+const DC_POOL=ALL_IDX.filter(i=>levelTargets(LEVELS[i]).length<=90); // mô hình vừa sức chơi nhanh
+function dcToday(){
+  const r=rng(dayNo()*7+3), i=DC_POOL[Math.floor(r()*DC_POOL.length)], k=Object.keys(DC_RULES)[Math.floor(r()*3)], n=levelTargets(LEVELS[i]).length;
+  return {i,k,n,limit:k==='time'?Math.round(n*4+30):0};
+}
+const dcState=()=>S.dc&&S.dc.d===today()?S.dc:{d:today(),won:false,best:0};
+// shortcut: xếp hạng mô phỏng (trung vị ~2,2 giây/mảnh), khi có server thì lấy phân bố thật
+const dcBeat=(t,n)=>clamp(Math.round(100/(1+Math.exp((t/(n*2.2)-1)*4))),1,99);
+function openDc(){
+  const c=dcToday(), d=dcState();
+  $('dcPic').src=thumbLevel(c.i); $('dcName').textContent=LEVELS[c.i].name+' · '+c.n+' mảnh';
+  $('dcRuleP').textContent=DC_RULES[c.k]+(c.limit?' · '+mmss(c.limit*1000):'');
+  $('dcInfo').innerHTML=d.won?`✓ Đã xong · kỷ lục ${mmss(d.best*1000)}<small>Chơi lại để phá kỷ lục</small>`:`Lần đầu xong: +${DC_REW}🪙<small>Không tốn ❤️ · mọi người cùng chơi 1 mô hình</small>`;
+  sfx.pick(); show('dcModal',true);
+}
+$('sbDaily').onclick=openDc;
+$('dcClose').onclick=()=>{ sfx.back(); show('dcModal',false); };
+$('dcPlay').onclick=()=>{ sfx.pick(); loadLevel(dcToday().i,'daily'); };
+function modeTick(dt){
+  if (!mode||done) return;
+  if (!OVERLAYS.some(id=>$(id).classList.contains('show'))) mT+=dt;
+  const lim=dcToday().limit, s=lim?Math.max(0,lim-mT):mT;
+  $('mTime').textContent='⏱ '+mmss(s*1000); $('mTime').classList.toggle('warn',!!lim&&s<15);
+  if (lim&&s<=0){ done=true; endDrag(true); sfx.wrong(); toast('⏱ Hết giờ!'); setTimeout(openFail,700); }
+}
+function modeWin(){
+  done=true; endDrag(true); sfx.win(); setTimeout(confetti,250); controls.autoRotate=true; controls.autoRotateSpeed=3;
+  const t=Math.max(1,Math.round(mT)), d=dcState(), rew=d.won?0:DC_REW;
+  S.dc={d:today(),won:true,best:d.best?Math.min(d.best,t):t}; if (rew){ S.coins+=rew; questAdd('daily'); } save();
+  setTimeout(()=>{ if(!done||!mode) return;
+    $('mrPic').src=thumbLevel(levelIdx); $('mrTime').textContent='⏱ '+mmss(t*1000);
+    $('mrInfo').innerHTML=`Nhanh hơn <b>${dcBeat(t,targets.length)}%</b> người chơi<small>Kỷ lục hôm nay: ${mmss(S.dc.best*1000)}</small>`;
+    $('mrRew').style.display=rew?'':'none'; $('mrCoins').textContent=rew; show('mResult',true); updateCoins(true); },1300);
+}
+$('mrAgain').onclick=()=>{ sfx.pick(); loadLevel(levelIdx,mode); };
+$('mrOk').onclick=()=>{ sfx.pick(); toMenu(); };
 
 // ====================== LOOP ======================
 function resize(){
@@ -3011,7 +3091,7 @@ function resize(){
 new ResizeObserver(resize).observe(app); resize();
 function frame(){
   requestAnimationFrame(frame);
-  const now=performance.now();
+  const now=performance.now(), dt=Math.min(0.1,(now-(frame.t||now))/1000); frame.t=now;
   controls.update();
   anims=anims.filter(a=>{ const k=clamp((now-a.t0)/a.dur,0,1); a.fn(k); return k<1; });
   if (hintT && hintT.glow && hintT.ghost){
@@ -3022,6 +3102,7 @@ function frame(){
   if (L && controls.maxDistance>controls.minDistance)
     $('zthumb').style.top=clamp((camDist()-controls.minDistance)/(controls.maxDistance-controls.minDistance),0,1)*100+'%';
   if ($('home').classList.contains('show')){ renderer.clear(); return; }
+  modeTick(dt);
   renderer.render(scene,camera);
   if (drag&&drag.obj&&drag.obj.visible){
     heldSun.position.copy(sun.position); heldSun.target.position.copy(sun.target.position);

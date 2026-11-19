@@ -7,3 +7,8 @@ module.exports = [
   { name: 'rt-quest', pre: save0(ST), post: async () => { qList(); S.q.list[0].got = 25; S.q.list[1].got = S.q.list[1].n; S.q.list[2].got = S.q.list[2].n; S.q.list[2].done = true; openQuest(); await wait(600); } },
 ];
 module.exports.lib = require('./t4-build.js').lib;
+module.exports.push(
+  { name: 'rt-dc', pre: save0(ST), post: async () => { openDc(); await wait(600); } },
+  { name: 'rt-dc-play', pre: save0(ST), post: async () => { $('dcPlay').click(); targets.filter(t => t.step < 2).forEach(t => commit(t)); mT = 37; await pump(800); } },
+  { name: 'rt-dc-win', pre: save0(ST), post: async () => { $('dcPlay').click(); mT = 74; commitAll(); await wait(1600); } },
+);
