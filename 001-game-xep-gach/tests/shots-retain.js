@@ -1,6 +1,6 @@
 // Ảnh các tính năng giữ chân: SHOT=1 node tests/run-headless.js tests/shots-retain.js → tests/.tmp/rt_*.png
 const save0 = o => new Function("localStorage.setItem('xepgach.v2'," + JSON.stringify(JSON.stringify(o)) + ')');
-const ST = { goal: 'Khuê Văn Các', coins: 260, best: { 'Cây nấm': 3, 'Ngôi nhà': 2, 'Dưa hấu': 3, 'Lâu đài': 1 }, own: { 'Tượng Zeus': true }, tut: 6 };
+const ST = { coins: 260, best: { 'Cây nấm': 3, 'Ngôi nhà': 2, 'Dưa hấu': 3, 'Lâu đài': 1 }, own: { 'Tượng Zeus': true }, tut: 6 };
 module.exports = [
   { name: 'rt-home', pre: save0(ST), post: async () => { await wait(500); } },
   { name: 'rt-login', pre: save0({ ...ST, login: { n: 3, d: new Date(Date.now() - 864e5).toDateString() } }), post: async () => { openLogin(); await wait(600); } },

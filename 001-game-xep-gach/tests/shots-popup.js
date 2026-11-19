@@ -1,6 +1,6 @@
 // Ảnh các popup: SHOT=1 node tests/run-headless.js tests/shots-popup.js → tests/.tmp/pp-*.png
 const save0 = o => new Function("localStorage.setItem('xepgach.v2'," + JSON.stringify(JSON.stringify(o)) + ')');
-const ST = { goal: 'Khuê Văn Các', coins: 260, best: { 'Cây nấm': 3, 'Ngôi nhà': 2, 'Dưa hấu': 3, 'Lâu đài': 1 }, own: { 'Tượng Zeus': true }, tut: 6 };
+const ST = { coins: 260, best: { 'Cây nấm': 3, 'Ngôi nhà': 2, 'Dưa hấu': 3, 'Lâu đài': 1 }, own: { 'Tượng Zeus': true }, tut: 6 };
 module.exports = [
   { name: 'pp-setting', pre: save0(ST), post: async () => { startBuild(1, true); await wait(300); $('setBtn').click(); await wait(500); } },
   { name: 'pp-help', pre: save0(ST), post: async () => { startBuild(1, true); await wait(300); $('setBtn').click(); $('sHelp').click(); await wait(500); } },

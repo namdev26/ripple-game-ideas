@@ -33,22 +33,13 @@ module.exports = [
       const ld = LEVELS.findIndex(l => l.name === 'Lâu đài');
       openShop(ld); $('mBuy').click();
       ok($('needModal').classList.contains('show') && $('needModal').textContent.includes('thiếu ' + (buyPrice(ld) - 100)), 'bảng thiếu xu');
-      ok(S.goal === 'Lâu đài' && !owned(ld) && S.coins === 100, 'tự ghim mục tiêu, chưa trừ xu');
+      ok(!('goal' in S) && !owned(ld) && S.coins === 100, 'chưa trừ xu, không ghim mục tiêu');
       ok($('needPlay').textContent.includes('LEVEL 2') && $('needBox').textContent.includes('100') && $('needAd').textContent.includes('30'), '3 lối: lắp level kế, hộp, QC');
       $('needPlay').click(); ok($('bpView').classList.contains('show') && bpI === roadNext(), 'lắp level kế');
   } },
-  { name: 'muc-tieu', pre: save0({ tut: 6, coins: 100, best: { 'Cây nấm': 3 }, goal: 'Lâu đài' }), post: async () => {
-      const ld = LEVELS.findIndex(l => l.name === 'Lâu đài'), t = $('hGoal').textContent;
-      ok(t.includes('Lâu đài') && t.includes('100/' + shopPrice(ld)) && t.includes('LEVEL 2'), 'thẻ mục tiêu: ' + t);
-      const R = e => $(e).getBoundingClientRect(), hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
-      ok(!hit(R('hGoal'), R('hDrawer')) && !hit(R('hGoal'), R('hNext')), 'thẻ mục tiêu không đè ngăn kéo / nút level');
-      S.coins = 999; renderHome(); $('hGoalBuy').click();
-      ok($('shop').classList.contains('show') && mSel === ld, 'đủ xu: bấm mua mở cửa hàng chọn sẵn');
-      $('mBuy').click(); ok(owned(ld) && !S.goal, 'mua xong bỏ mục tiêu');
-  } },
-  { name: 'qc-x2', budget: 30000, pre: save0({ tut: 6, coins: 0, best: { 'Cây nấm': 3 }, goal: 'Lâu đài' }), post: async () => {
+  { name: 'qc-x2', budget: 30000, pre: save0({ tut: 6, coins: 0, best: { 'Cây nấm': 3 } }), post: async () => {
       giveModel(1); startBuild(1); commitAll(); const r = rewardFor(1, 3); await wait(1500); $('skipBtn').click();
-      ok(S.coins === r && $('rX2').offsetWidth > 0 && $('result').textContent.includes('Lâu đài'), 'kết quả: nút ×2 + tiến độ mục tiêu');
+      ok(S.coins === r && $('rX2').offsetWidth > 0, 'kết quả: nút ×2');
       $('rX2').click(); await wait(3500);
       ok(S.coins === 2 * r && $('rX2').offsetWidth === 0, 'xem QC: nhân đôi, 1 lần');
       $('rAgain').click(); commitAll(); await wait(1500); $('skipBtn').click(); ok(S.coins === 2 * r && $('rX2').offsetWidth === 0, 'lắp lại: không xu, không ×2');
@@ -66,12 +57,12 @@ module.exports = [
       for (let k = 0; k < 4; k++) { adCoins(); await wait(3500); }
       ok(S.coins === 90, 'QC +30 tối đa 3 lần/ngày: ' + S.coins);
   } },
-  { name: 'ke-hom-nay', budget: 30000, pre: save0({ tut: 6, coins: 500, best: { 'Cây nấm': 3 }, goal: 'Khuê Văn Các' }), post: async () => {
+  { name: 'ke-hom-nay', budget: 30000, pre: save0({ tut: 6, coins: 500, best: { 'Cây nấm': 3 } }), post: async () => {
       openShop();
-      const ids = () => [...document.querySelectorAll('#mShelf .mItem')].map(e => +e.dataset.i), kv = LEVELS.findIndex(l => l.name === 'Khuê Văn Các');
+      const ids = () => [...document.querySelectorAll('#mShelf .mItem')].map(e => +e.dataset.i);
       const a = ids();
       ok(a.length === 6 && new Set(a).size === 6 && a.every(i => !owned(i) && i !== roadNext()), 'kệ 6 ô, chưa có, không gồm level kế (miễn phí): ' + a);
-      ok(a.includes(kv) && a.includes(ROAD[2]) && a.includes(ROAD[3]), 'kệ có mục tiêu + 2 mô hình sắp tới trên đường');
+      ok(a.includes(ROAD[2]) && a.includes(ROAD[3]), 'kệ có 2 mô hình sắp tới trên đường');
       const sale = document.querySelectorAll('#mShelf .mItem.sale');
       ok(sale.length === 1 && rarOf(+sale[0].dataset.i) > 0 && buyPrice(+sale[0].dataset.i) === Math.round(shopPrice(+sale[0].dataset.i) * 0.8 / 5) * 5, '1 ô hiếm/huyền thoại giảm 20%');
       ok(/\d+:\d\d:\d\d/.test($('shop').textContent) && S.daily.d === new Date().toDateString(), 'đếm ngược tới lúc đổi kệ, lưu theo ngày');
@@ -87,3 +78,7 @@ module.exports = [
   } },
 ];
 module.exports.lib = require('./t4-build.js').lib;
+
+module.exports.push({ name: 'bo-muc-tieu', pre: save0({ tut: 6, coins: 100, best: { 'Cây nấm': 3 }, goal: 'Lâu đài' }), post: async () => {
+  ok(!('goal' in S) && !$('hGoal') && !$('mGoal') && !$('rGoal'), 'save cũ có mục tiêu: xoá, không còn thẻ/nút mục tiêu');
+} });

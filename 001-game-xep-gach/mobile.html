@@ -154,7 +154,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .reward{display:inline-flex;align-items:center;gap:2cqw;margin:0 0 4cqw;font-size:6.4cqw;font-weight:800;color:#2b3150;background:#dfe6f7;border-radius:5cqw;padding:.6cqw 5cqw .6cqw 1cqw;box-shadow:inset 0 .7cqw 0 #c5cfe8}
 .reward .coin{position:relative;left:0;top:0;transform:none;width:9cqw;height:9cqw}
 .reward .coin::after{inset:2.5cqw}
-#rGoal{font-size:3.8cqw;font-weight:800;color:#5d6488;margin:-2cqw 0 3cqw}#rGoal:empty{display:none}
 #rX2{margin-bottom:3cqw}
 /* thua: ảnh mô hình + thanh tiến độ để mời hồi sinh */
 #lPic{width:34cqw;height:34cqw;margin:-2cqw auto 0;display:block;filter:grayscale(.35) drop-shadow(0 1.2cqw 1.2cqw #0003)}
@@ -375,13 +374,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #hNextBtn .t{font-size:9cqw;line-height:.95}
 #hNextBtn .lk{font-size:3.6cqw;font-weight:800}#hNextBtn .lk:empty{display:none}
 #hNext .gift{font-size:30cqw;line-height:1}
-#hGoal{width:88cqw;margin-top:1cqw;box-sizing:border-box;background:#fffbe9;border-radius:4cqw;padding:2cqw 3cqw;box-shadow:inset 0 -.8cqw 0 #e4d4a4,0 1cqw 2cqw #0002;color:#2b3150;font-weight:800;font-size:3.8cqw;display:flex;flex-direction:column;gap:1cqw}
-#hGoal:empty{display:none}
 .gBar{position:relative;height:5cqw;border-radius:3cqw;background:#e3ddc8;overflow:hidden}
 .gBar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(#ffd34d,#f5a400)}
 .gBar span{position:relative;display:block;text-align:center;font-size:3.4cqw;line-height:5cqw}
-#hGoal small{font-size:3.4cqw;color:#5d6488}
-#hGoalBuy{align-self:center;height:9cqw;padding:0 5cqw;font-size:4.4cqw}
 #hNav.off{display:none}
 :is(#shop,#gacha,#shelf,#iap){padding-bottom:20cqw} /* chừa chỗ thanh tab */
 .navB{transition:width .2s,height .2s}
@@ -575,8 +570,6 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #mInfo{flex:1;min-width:0;font-size:4.4cqw}
 #mInfo small{display:block;font-size:3.6cqw;color:#6a7195}
 #mBuy{width:100%}
-#mGoal{width:11cqw;height:11cqw;flex:none;font-size:5.4cqw;filter:grayscale(1);opacity:.6}#mGoal.on{filter:none;opacity:1}
-.mItem .mStar{position:absolute;top:-2cqw;left:-1cqw;font-style:normal;font-size:5cqw;z-index:1}
 /* ---------- sách hướng dẫn kiểu LEGO ---------- */
 .page{width:86cqw;flex:1;min-height:0;background:#fbf8ef;border-radius:3cqw;box-shadow:inset 1.4cqw 0 0 #e9e2cc,0 1.5cqw 3cqw #0003;overflow-y:auto;box-sizing:border-box;
   padding:4cqw 4cqw 4cqw 6cqw;display:flex;flex-direction:column;align-items:center;touch-action:pan-y;scrollbar-width:none;transform-origin:left center}
@@ -611,7 +604,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .shItem.sp{background:linear-gradient(#fff6c8,#ffe27a);box-shadow:inset 0 -1cqw 0 #e3a923}
 .shItem.sp::after{content:"✨";position:absolute;top:.4cqw;right:1cqw;font-size:4.6cqw}
 /* ---------- giữ chân: cột nút 2 bên màn chính, điểm danh, nhiệm vụ ---------- */
-.hSide{position:absolute;top:44cqw;display:flex;flex-direction:column;gap:3.4cqw;z-index:2}
+.hSide{position:absolute;top:24cqw;display:flex;flex-direction:column;gap:3.4cqw;z-index:2}
 #hSideL{left:3.5cqw} #hSideR{right:3.5cqw}
 .sideB .badge:empty{width:3.6cqw;height:3.6cqw}
 .rwI{font-style:normal}
@@ -880,7 +873,6 @@ a.btn{text-decoration:none;justify-content:center;align-items:center}
     <div id="rPic"><img id="rImg" alt=""></div>
     <div class="reward"><span class="coin"></span>+<span id="rCoins">0</span></div>
     <small id="rLg" class="rLg"></small>
-    <p id="rGoal"></p>
     <button class="btn yellow wide" id="rX2"><span class="outline o">🎬 Nhân đôi thưởng</span><b class="cost">×2<i class="mc"></i></b></button>
     <button class="btn green big" id="rNext"><span class="outline g">TIẾP TỤC</span></button>
     <div class="row">
@@ -904,9 +896,9 @@ a.btn{text-decoration:none;justify-content:center;align-items:center}
     <div class="sHead outline" style="margin-top:10cqw">TIỆM GẠCH</div>
     <button class="btn blue close" id="shopClose" aria-label="Đóng">✕</button>
     <div id="shopBody">
-      <div id="shopNote">⏩ Mua trước mô hình mình thích để lắp ngay · ⭐ ghim làm mục tiêu</div><div class="grid" id="mGrid"></div>
+      <div id="shopNote">⏩ Mua trước mô hình mình thích để lắp ngay</div><div class="grid" id="mGrid"></div>
     </div>
-    <div class="pick" id="mPick"><div class="row2"><div id="mImg"></div><div id="mInfo"></div><button class="btn blue" id="mGoal" aria-label="Ghim mục tiêu">⭐</button></div><button class="btn green" id="mBuy"></button></div>
+    <div class="pick" id="mPick"><div class="row2"><div id="mImg"></div><div id="mInfo"></div></div><button class="btn green" id="mBuy"></button></div>
   </div>
 
   <div id="iap" class="screen ov">
@@ -1043,7 +1035,6 @@ a.btn{text-decoration:none;justify-content:center;align-items:center}
     <button id="hLife" aria-label="Mạng"><i id="hLifeI">❤</i><b id="hLifeN"></b><small id="hLifeT"></small></button>
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">100</span></div>
     <button class="btn blue" id="hSetBtn" aria-label="Cài đặt">⚙</button>
-    <div id="hGoal"></div>
     <div id="hNext"></div>
     <div class="hSide" id="hSideL">
       <button class="sideB" id="sbLogin"><i>📅</i><span>Điểm danh</span></button>
@@ -2067,6 +2058,7 @@ function giveInf(ms,why){ S.inf=Math.max(Date.now(),S.inf||0)+ms; save(); if(why
 const mmss=ms=>{ const t=Math.ceil(ms/1000), h=Math.floor(t/3600), m=Math.floor(t/60)%60, s=t%60; return (h?h+':'+String(m).padStart(2,'0'):m)+':'+String(s).padStart(2,'0'); };
 // quà quay lại: vắng hơn 24 giờ
 if (!UNLOCK_ALL&&S.last&&Date.now()-S.last>24*3600e3) giveInf(INF_BACK,'👋 Chào mừng trở lại');
+if ('goal' in S){ delete S.goal; migrated=true; } // bỏ tính năng ghim mục tiêu
 if (migrated) save();
 let actx=null;
 function tone(f,dur,type='triangle',vol=0.12,delay=0){
@@ -2434,16 +2426,15 @@ function win(){
   setTimeout(()=>{ if(tok===replayTok) playReplay(()=>showResult(stars,reward,bonus)); },1200);
 }
 let rX2=0, lastLp=0, lastEp=0; // thưởng có thể nhân đôi bằng QC (0 = đã dùng / lắp lại); điểm giải đấu vừa nhận
-function renderRGoal(){ const o=goalInfo(); $('rGoal').textContent=o?`⭐ ${LEVELS[o.g].name}: ${Math.min(S.coins,o.price)}/${o.price} 🪙`+(o.need?` · còn ${o.need}!`:' · đủ rồi!'):''; }
 let rTot=0; // xu thưởng đang hiện: đếm dần từ số cũ lên số mới
 function countCoins(to){ const el=$('rCoins'), from=+el.textContent||0, t0=performance.now(); rTot=to;
   const tick=()=>{ if(rTot!==to) return; const k=Math.min(1,(performance.now()-t0)/600); el.textContent=Math.round(from+(to-from)*k); if(k<1) requestAnimationFrame(tick); }; tick(); }
-$('rX2').onclick=()=>{ const r=rX2; if(!r) return; rX2=0; watchAd(()=>{ S.coins+=r; save(); countCoins(rTot+r); $('rX2').style.display='none'; renderRGoal(); updateCoins(true); sfx.coin(); }); };
+$('rX2').onclick=()=>{ const r=rX2; if(!r) return; rX2=0; watchAd(()=>{ S.coins+=r; save(); countCoins(rTot+r); $('rX2').style.display='none'; updateCoins(true); sfx.coin(); }); };
 function showResult(stars,reward,bonus=0){
   $('rTitle').textContent=['','HOÀN THÀNH!','GIỎI LẮM!','TUYỆT VỜI!'][stars];
   $('rImg').src=thumbLevel(levelIdx,special(levelIdx)); $('rCoins').textContent=0; rTot=reward+bonus;
   const no=roadNo(levelIdx); $('rLv').textContent=(rebuild?'LẮP LẠI':no?'LEVEL '+no:'MÔ HÌNH')+' · '+L.name;
-  rX2=reward; $('rX2').style.display=reward?'':'none'; renderRGoal(); $('rLg').textContent=lastLp?`🏆 +${lastLp} giải đấu · ${evNow().e} +${lastEp} sự kiện`:'';
+  rX2=reward; $('rX2').style.display=reward?'':'none'; $('rLg').textContent=lastLp?`🏆 +${lastLp} giải đấu · ${evNow().e} +${lastEp} sự kiện`:'';
   if (bonus) setTimeout(()=>toast(`🎉 Đủ bộ ${SERIES[seriesOf(levelIdx)].name}! +${bonus}🪙`,3000),900);
   const ss=[...$('rStars').children]; ss.forEach(s=>s.classList.remove('on'));
   $('result').classList.add('show');
@@ -2600,21 +2591,16 @@ $('lifeClose').onclick=()=>{ sfx.back(); show('lifeModal',false); };
 $('lifeAd').onclick=()=>{ if(adLeft('inf')<=0) return; watchAd(()=>{ S.ad.inf=(S.ad.inf||0)+1; giveInf(INF_AD); show('lifeModal',false); updateLife(); toast('∞ 15 phút chơi không tốn ❤️!'); }); };
 $('lifeCoin').onclick=()=>{ if(S.coins<HEART_FULL_COST){ toast(`Cần ${HEART_FULL_COST}🪙`); sfx.wrong(); return; } S.coins-=HEART_FULL_COST; S.hearts=HEART_MAX; save(); updateCoins(true); sfx.coin(); show('lifeModal',false); updateLife(); };
 document.querySelectorAll('.offer .price').forEach(b=>b.onclick=()=>openBuy(b.closest('.offer').id)); // mua thử như ở Ưu Đãi
-// mục tiêu ghim: thứ người chơi muốn mua + con đường ngắn nhất tới nó (luôn là level kế)
-function goalInfo(){
-  const g=S.goal?LEVELS.findIndex(l=>l.name===S.goal):-1; if (g<0||owned(g)) return null;
+// thiếu xu mua mô hình needI: còn thiếu bao nhiêu + con đường ngắn nhất tới nó (luôn là level kế)
+let needI=null;
+function needInfo(){
+  const g=needI; if (g==null||owned(g)) return null;
   const price=buyPrice(g), need=Math.max(0,price-S.coins), rn=roadNext(), gain=rn==null?0:rewardFor(rn,3);
   return {g,price,need,rn,gain};
 }
-const roadTip=o=>o.rn==null?'Mở hộp hoặc xem QC để thêm xu':o.need<=o.gain?`Lắp LEVEL ${roadNo(o.rn)} (tới +${o.gain}) là đủ!`:`Lắp LEVEL ${roadNo(o.rn)} để kiếm thêm tới +${o.gain}`;
-function renderGoal(){
-  const o=goalInfo(); $('home').classList.toggle('goal',!!o); if (!o){ $('hGoal').innerHTML=''; return; }
-  $('hGoal').innerHTML=`<span>⭐ Mục tiêu: ${LEVELS[o.g].name}</span><div class="gBar"><i style="width:${Math.min(100,100*S.coins/o.price)}%"></i><span>${S.coins}/${o.price} 🪙</span></div>`
-    +(o.need?`<small>${roadTip(o)}</small>`:'<button class="btn green" id="hGoalBuy"><span class="outline g">Đủ xu! Mua ngay</span></button>');
-}
 function renderHome(){
   const s=curSeries, r=SERIES[s], pend=pendingList(), nx=pend[0], rn=roadNext();
-  renderGacha(); renderGoal(); renderSide();
+  renderGacha(); renderSide();
   updateLife();
   $('hNext').innerHTML=rn!=null
     ?`<button class="btn yellow" id="hNextBtn"><span class="t outline o">▶ LEVEL ${roadNo(rn)}</span><small class="lk">${!infLeft()&&!heartsNow()?'❤️ hồi sau '+mmss(nextHeartMs()):''}</small></button>`
@@ -2640,7 +2626,7 @@ const seriesRows=()=>SERIES.map((r,s)=>{ const ids=seriesIdx(s), have=ids.filter
 // ====================== HỘP BÍ ẨN / CỬA HÀNG / SÁCH HƯỚNG DẪN ======================
 // một hộp chung cho cả game, tỉ lệ cố định; ra trùng thì đổi xu bằng giá cửa hàng
 const ALL_IDX=LEVELS.map((_,i)=>i);
-const grant=(i,sp)=>{ const n=LEVELS[i].name; S.own[n]=true; if(sp) S.sp[n]=true; if(S.goal===n) delete S.goal; };
+const grant=(i,sp)=>{ const n=LEVELS[i].name; S.own[n]=true; if(sp) S.sp[n]=true; };
 const allOwned=()=>ALL_IDX.every(owned);
 function boxPool(){
   const miss=ALL_IDX.filter(i=>!owned(i));
@@ -2771,7 +2757,6 @@ const buyPrice=i=>S.daily&&S.daily.d===today()&&S.daily.sale===i?r5(shopPrice(i)
 function rollShelf(){
   const free=roadNext(), un=ALL_IDX.filter(i=>!owned(i)&&i!==free), ids=[];
   const add=i=>{ if(i!=null&&i>=0&&un.includes(i)&&!ids.includes(i)&&ids.length<SHELF_N) ids.push(i); };
-  add(S.goal?LEVELS.findIndex(l=>l.name===S.goal):-1); // mục tiêu đang ghim
   ROAD.filter(i=>un.includes(i)).slice(0,2).forEach(add); // 2 mô hình sắp tới trên đường: để nhảy cóc
   const rare=un.filter(i=>rarOf(i)>0&&!ids.includes(i)), sale=rare.length?rare[Math.floor(Math.random()*rare.length)]:null; add(sale); // 1 ô hiếm giảm giá
   un.filter(i=>!ids.includes(i)).sort(()=>Math.random()-.5).forEach(add); // còn lại ngẫu nhiên
@@ -2787,7 +2772,7 @@ function renderShopM(){
   renderPick();
 }
 function mItemHtml(i){ const rn=roadNext(); { const h=owned(i), free=i===rn&&!h, sale=!h&&buyPrice(i)<shopPrice(i);
-    return `<div class="mItem${h?' have':''}${i===mSel?' sel':''}${sale?' sale':''}" data-i="${i}" style="--rc:${RAR[rarOf(i)].c}">${S.goal===LEVELS[i].name?'<i class="mStar">⭐</i>':''}${sale?`<i class="mSale">-${Math.round((1-SALE)*100)}%</i>`:''}${pboxHtml(i,false)}`
+    return `<div class="mItem${h?' have':''}${i===mSel?' sel':''}${sale?' sale':''}" data-i="${i}" style="--rc:${RAR[rarOf(i)].c}">${sale?`<i class="mSale">-${Math.round((1-SALE)*100)}%</i>`:''}${pboxHtml(i,false)}`
       +`<span class="mp">${h?'✓ Đã có':free?`▶ Lv ${roadNo(i)} miễn phí`:sale?`<s>${shopPrice(i)}</s> ${buyPrice(i)}🪙`:shopPrice(i)+'🪙'}</span></div>`; } }
 function renderPick(){
   const p=$('mPick'); p.style.display=mSel==null?'none':'';
@@ -2795,9 +2780,7 @@ function renderPick(){
   const i=mSel;
   $('mImg').innerHTML=pboxHtml(i,false); $('mInfo').innerHTML=`${LEVELS[i].name}<small>${RAR[rarOf(i)].n} · ${LEVELS[i].steps.length} bước · ${levelTargets(LEVELS[i]).length} mảnh</small>`;
   $('mBuy').innerHTML=`<span class="outline g">Mua · ${buyPrice(i)}🪙</span>`; $('mBuy').classList.toggle('dis',S.coins<buyPrice(i));
-  $('mGoal').classList.toggle('on',S.goal===LEVELS[i].name);
 }
-$('mGoal').onclick=()=>{ const n=LEVELS[mSel].name; if(S.goal===n) delete S.goal; else S.goal=n; save(); sfx.pick(); renderShopM(); toast(S.goal?'⭐ Đã ghim mục tiêu ở màn chính':'Bỏ mục tiêu'); };
 $('mGrid').onclick=e=>{
   if (e.target.closest('#mShelfAd')){ if(adLeft('shelf')>0) watchAd(()=>{ S.ad.shelf=(S.ad.shelf||0)+1; rollShelf(); renderShopM(); toast('🛒 Kệ hàng mới!'); }); return; }
   const it=e.target.closest('.mItem'); if(!it) return; const i=+it.dataset.i;
@@ -2807,13 +2790,13 @@ $('mGrid').onclick=e=>{
 $('mBuy').onclick=()=>{
   const i=mSel; if (i==null||owned(i)) return;
   const c=buyPrice(i);
-  if (S.coins<c){ S.goal=LEVELS[i].name; save(); sfx.wrong(); renderShopM(); renderNeed(); show('needModal',true); return; } // thiếu xu: tự ghim mục tiêu + chỉ đường
+  if (S.coins<c){ needI=i; sfx.wrong(); renderNeed(); show('needModal',true); return; } // thiếu xu: chỉ đường kiếm xu
   S.coins-=c; grant(i,false); save(); updateCoins(true); sfx.coin();
   $('shop').classList.remove('show'); openUnbox(i,false,false);
 };
 function renderNeed(){
-  const o=goalInfo(); if (!o){ show('needModal',false); return; }
-  $('needT').innerHTML=o.need?`Còn thiếu <b>${o.need}</b> <i class="mc"></i> để mua<br>${LEVELS[o.g].name}<small>⭐ Đã ghim làm mục tiêu</small>`:`Đủ xu mua ${LEVELS[o.g].name} rồi!`;
+  const o=needInfo(); if (!o){ show('needModal',false); return; }
+  $('needT').innerHTML=o.need?`Còn thiếu <b>${o.need}</b> <i class="mc"></i> để mua<br>${LEVELS[o.g].name}`:`Đủ xu mua ${LEVELS[o.g].name} rồi!`;
   $('needPlay').style.display=o.rn==null?'none':''; if(o.rn!=null) $('needPlay').querySelector('span').textContent=`▶ LẮP LEVEL ${roadNo(o.rn)} (tới +${o.gain})${o.need&&o.need<=o.gain?' → đủ!':''}`;
   $('needBox').querySelector('span').textContent=`🎁 Mở hộp ${boxPrice()}🪙 (có thể ra nó)`;
   const al=adLeft('coin'); $('needAd').style.display=al>0?'':'none'; $('needAd').querySelector('span').textContent=`🎬 Xem QC +30🪙 · ${al}/${AD_MAX.coin}`;
@@ -3027,7 +3010,6 @@ function syncNav(){
 $('gachaBtn').onclick=()=>tabGo(openGacha);
 $('gachaClose').onclick=()=>{ sfx.back(); show('gacha',false); renderHome(); };
 $('hNext').onclick=e=>{ if(!e.target.closest('#hNextBtn')) return; sfx.pick(); if(roadNext()!=null) return playRoad(); const nx=pendingList()[0]; if(nx==null) return openGacha(); openBlueprint(nx); };
-$('hGoal').onclick=e=>{ if(!e.target.closest('#hGoalBuy')) return; const o=goalInfo(); if(!o) return; sfx.pick(); openShop(o.g); };
 $('sHelp').onclick=()=>{ show('setModal',false); show('infoModal',true); sfx.pick(); };
 $('infoClose').onclick=()=>show('infoModal',false);
 $('infoModal').onclick=e=>{ if(e.target.id==='infoModal') show('infoModal',false); };
