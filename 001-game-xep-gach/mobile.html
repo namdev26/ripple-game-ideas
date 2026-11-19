@@ -1704,9 +1704,9 @@ const CLAY=new THREE.Color(0xf3f0f9);
 function getMat(color,mode){
   const k=color+'|'+mode; if (matCache[k]) return matCache[k];
   const c=mode==='ghost' ? CLAY.clone().lerp(new THREE.Color(COLORS[color].hex),0.2) : new THREE.Color(COLORS[color].hex);
-  const a=COLORS[color].a, tr=a&&mode!=='ghost';
-  return matCache[k]=new THREE.MeshPhongMaterial({color:c,shininess:COLORS[color].sh||35,specular:COLORS[color].spec||0x1c1c1c,transparent:tr,opacity:tr?a:1,
-    polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1});
+  const a=COLORS[color].a, tr=a&&mode!=='ghost', pv=mode==='preview';
+  return matCache[k]=new THREE.MeshPhongMaterial({color:c,shininess:COLORS[color].sh||35,specular:COLORS[color].spec||0x1c1c1c,transparent:tr||pv,opacity:pv?0.45:tr?a:1,
+    depthWrite:!pv,polygonOffset:true,polygonOffsetFactor:1,polygonOffsetUnits:1});
 }
 const LINE={ solid:new THREE.LineBasicMaterial({color:0x22202c,transparent:true,opacity:0.5}),
   dark:new THREE.LineBasicMaterial({color:0x8a90a0}), ghost:new THREE.LineBasicMaterial({color:0xc4bcd8}), hl:new THREE.LineBasicMaterial({color:0xff2a2a}) };
@@ -2039,7 +2039,7 @@ addEventListener('pointermove',e=>{
     $('dragImg').style.display='none';
     const res=findGhost(cx,cy,tray[drag.idx]);
     if (res.ok){ commit(res.ok,drag.obj.position.clone()); endDrag(true); }
-  } else { drag.obj.visible=false; $('dragImg').style.display='block'; }
+  } else { drag.obj.visible=false; $('dragImg').style.display='block'; setPreview(null); }
 });
 // Mảnh đang cầm nằm trên mặt phẳng qua tâm mô hình, vuông góc hướng nhìn → cùng phối cảnh với hình trên bàn
 const _pl=new THREE.Plane(), _v=new THREE.Vector3();
@@ -2051,17 +2051,31 @@ function placeHeld(cx,cy){
   refreshHeldRot(cx,cy);
   return true;
 }
-// lấy hướng của hình cùng loại (bước hiện tại) gần ngón tay nhất trên màn hình
-function refreshHeldRot(cx,cy){
-  const it=tray[drag.idx], r=canvas.getBoundingClientRect(), p=new THREE.Vector3();
+// hình cùng loại (bước hiện tại) gần ngón tay nhất trên màn hình; ok = chỉ xét hình lắp được ngay
+function nearestTarget(cx,cy,it,ok){
+  const r=canvas.getBoundingClientRect(), p=new THREE.Vector3();
   let best=null, bd=1e9;
   targets.forEach(t=>{
-    if (t.placed||t.step!==step||t.key!==it.key||t.color!==it.color) return;
+    if (t.placed||t.step!==step||t.key!==it.key||t.color!==it.color||(ok&&!supported(t))) return;
     p.set(t.x+t.fx/2,(t.y+PARTS[t.key].h/2)*PLATE,t.z+t.fz/2).project(camera);
     const d=Math.hypot(r.left+(p.x+1)/2*r.width-cx, r.top+(1-p.y)/2*r.height-cy);
     if (d<bd){ bd=d; best=t; }
   });
+  return {t:best,d:bd,w:r.width};
+}
+function refreshHeldRot(cx,cy){
+  const it=tray[drag.idx], best=nearestTarget(cx,cy,it).t;
   drag.obj.userData.inner.rotation.y=(best?best.rot:trayRot(it))*Math.PI/2;
+  const n=nearestTarget(cx,cy,it,true);
+  setPreview(n.d<n.w*PREVIEW_R?n.t:null);
+}
+// Bóng mờ trên bàn: chỗ mảnh sẽ vào nếu thả tay (hình lắp được gần ngón tay trong PREVIEW_R bề ngang)
+const PREVIEW_R=0.22;
+function setPreview(t){
+  drag.prev=t;
+  if (!t){ if (drag.pv) drag.pv.visible=false; return; }
+  if (!drag.pv){ const it=tray[drag.idx]; drag.pv=makeBrick(it.key,it.color,'preview'); drag.pv.userData.meshes.forEach(m=>m.castShadow=false); levelRoot.add(drag.pv); }
+  placeObj(drag.pv,t.key,t.x,t.y,t.z,t.rot); drag.pv.visible=true;
 }
 addEventListener('pointerup',e=>{
   if (!drag) return;
@@ -2069,7 +2083,8 @@ addEventListener('pointerup',e=>{
   const cx=e.clientX, cy=e.clientY-drag.lift, it=tray[drag.idx];
   if (cy < $('panel').getBoundingClientRect().top){
     const res=findGhost(cx,cy,it);
-    if (res.ok){ commit(res.ok,drag.obj&&drag.obj.visible?drag.obj.position.clone():null); return endDrag(true); }
+    const t=res.ok||drag.prev; // đang thấy bóng mờ thì thả là vào chỗ đó
+    if (t){ commit(t,drag.obj&&drag.obj.visible?drag.obj.position.clone():null); return endDrag(true); }
     if (res.blocked) toast('Lắp các mảnh bên dưới trước nhé');
     else if (hitsModel(cx,cy)) wrong();
   }
@@ -2080,6 +2095,7 @@ function endDrag(instant){
   if (!drag) return;
   const it=tray[drag.idx], img=$('dragImg');
   if (drag.obj) heldScene.remove(drag.obj);
+  if (drag.pv&&drag.pv.parent) drag.pv.parent.remove(drag.pv);
   drag=null;
   img.style.display='block';
   if (instant||!it){ img.style.display='none'; it&&it.el.classList.remove('drag'); return; }

@@ -19,6 +19,13 @@ module.exports = [
   { name: 'pp-sb-xoay', pre: save0(ST), post: async () => { giveModel(5); startBuild(5); targets.filter(t => t.step < 6).forEach(t => commit(t)); await wait(400); showStep(6); const v = camera.position.clone().sub(controls.target); v.applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * 0.8); camera.position.copy(controls.target).add(v); controls.update(); await wait(500); $('stepBook').classList.add('big'); } },
   { name: 'pp-mua-xu', pre: save0(ST), post: async () => { openIap('secCoin'); await wait(300); document.querySelectorAll('.coinPack .price')[2].click(); await wait(500); } },
   { name: 'pp-mua-goi', pre: save0(ST), post: async () => { openIap(); await wait(300); document.querySelector('[data-buy="starter"]').click(); await wait(500); } },
+  { name: 'pp-bong-mo', pre: save0(ST), post: async () => { giveModel(5); startBuild(5); targets.filter(t => t.step < 3).forEach(t => commit(t)); await wait(400); showStep(3); await wait(300);
+      scene.updateMatrixWorld(); camera.updateMatrixWorld();
+      const t = targets.find(t => t.step === 3 && supported(t)), r = canvas.getBoundingClientRect(), it = tray.find(i => i.key === t.key && i.color === t.color);
+      const p = new THREE.Vector3(t.x + t.fx / 2, (t.y + PARTS[t.key].h / 2) * PLATE, t.z + t.fz / 2).project(camera);
+      const e = { clientX: r.left + (p.x + 1) / 2 * r.width + r.width * 0.12, clientY: r.top + (1 - p.y) / 2 * r.height - r.width * 0.06, pointerType: 'mouse' };
+      trayDown(e, tray.indexOf(it)); drag.started = true; drag.obj = makeBrick(it.key, it.color); heldScene.add(drag.obj); drag.H = PARTS[it.key].h * PLATE;
+      placeHeld(e.clientX, e.clientY); dragPos(e); $('dragImg').style.display = 'none'; await pump(600); } },
   { name: 'pp-odds', pre: save0(ST), post: async () => { openGacha(); $('oddsBtn').click(); await wait(500); } },
 ];
 module.exports.lib = require('./t4-build.js').lib;

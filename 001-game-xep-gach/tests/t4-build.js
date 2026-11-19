@@ -71,6 +71,23 @@ module.exports = [
       ok(res.ok && res.ok.key === t.key, 'thả đúng chỗ vẫn khớp dù không hiện hình: ' + JSON.stringify(Object.keys(res)));
       $('hintBtn').click(); ok(hintT && hintT.ghost.visible, 'gợi ý thì hiện hình chỗ cần lắp');
   } },
+  { name: 'bong-mo-xem-truoc', post: async () => {
+      giveModel(0); startBuild(0); await wait(300);
+      scene.updateMatrixWorld(); camera.updateMatrixWorld();
+      const t = targets.find(t => t.step === 0 && supported(t)), r = canvas.getBoundingClientRect(), it = tray.find(i => i.key === t.key && i.color === t.color);
+      const p = new THREE.Vector3(t.x + t.fx / 2, (t.y + PARTS[t.key].h / 2) * PLATE, t.z + t.fz / 2).project(camera);
+      const cx = r.left + (p.x + 1) / 2 * r.width + r.width * 0.1, cy = r.top + (1 - p.y) / 2 * r.height;
+      drag = { idx: tray.indexOf(it), started: true, lift: 0, obj: makeBrick(t.key, t.color), H: 1 };
+      refreshHeldRot(r.left - r.width, r.top - r.height); ok(!drag.prev, 'xa mọi chỗ lắp → không có bóng mờ');
+      refreshHeldRot(cx, cy); const pv = drag.prev;
+      ok(pv && drag.pv.visible && drag.pv.parent === levelRoot, 'gần chỗ lắp → hiện bóng mờ trên bàn');
+      ok(drag.pv.userData.body.material.transparent && drag.pv.userData.body.material.opacity < 0.6, 'bóng mờ trong suốt');
+      ok(Math.abs(drag.pv.position.x - (pv.x + pv.fx / 2)) < 1e-6 && Math.abs(drag.pv.position.z - (pv.z + pv.fz / 2)) < 1e-6, 'bóng mờ đúng chỗ lắp');
+      const m0 = mistakes;
+      dispatchEvent(new PointerEvent('pointerup', { clientX: cx, clientY: cy }));
+      ok(pv.placed && !drag && mistakes === m0, 'thả khi thấy bóng mờ → lắp vào đó, không mất mạng');
+      ok(!levelRoot.children.some(o => o.userData.body && o.userData.body.material.opacity < 0.6 && o.visible), 'thả xong bóng mờ biến mất');
+  } },
   { name: 'mang-song', post: async () => {
       giveModel(0); S.coins = 99999; startBuild(0); // xu nhiều nhất vẫn không đè mạng
       const on = () => document.querySelectorAll('#lives .on').length, W = $('app').getBoundingClientRect(), V = $('lives').getBoundingClientRect();
