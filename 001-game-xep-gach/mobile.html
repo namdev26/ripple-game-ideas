@@ -377,9 +377,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #hNext .gift{font-size:30cqw;line-height:1}
 #hGoal{width:88cqw;margin-top:1cqw;box-sizing:border-box;background:#fffbe9;border-radius:4cqw;padding:2cqw 3cqw;box-shadow:inset 0 -.8cqw 0 #e4d4a4,0 1cqw 2cqw #0002;color:#2b3150;font-weight:800;font-size:3.8cqw;display:flex;flex-direction:column;gap:1cqw}
 #hGoal:empty{display:none}
-#hGoal .gBar{position:relative;height:5cqw;border-radius:3cqw;background:#e3ddc8;overflow:hidden}
-#hGoal .gBar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(#ffd34d,#f5a400)}
-#hGoal .gBar span{position:relative;display:block;text-align:center;font-size:3.4cqw;line-height:5cqw}
+.gBar{position:relative;height:5cqw;border-radius:3cqw;background:#e3ddc8;overflow:hidden}
+.gBar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(#ffd34d,#f5a400)}
+.gBar span{position:relative;display:block;text-align:center;font-size:3.4cqw;line-height:5cqw}
 #hGoal small{font-size:3.4cqw;color:#5d6488}
 #hGoalBuy{align-self:center;height:9cqw;padding:0 5cqw;font-size:4.4cqw}
 #hNav.off{display:none}
@@ -664,6 +664,28 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .sideB .tmr:empty{display:none}
 .rLg{display:block;font-size:3.6cqw;font-weight:800;color:#6b7190;margin:-1cqw 0 2cqw}
 .rLg:empty{display:none}
+/* sự kiện + sổ sự kiện */
+#event #evHead{display:flex;align-items:center;gap:3cqw;width:90cqw;background:#fff;border-radius:4cqw;padding:2.4cqw 4cqw;box-shadow:inset 0 -1cqw 0 #cfd6ec;margin-bottom:2.4cqw;flex:none;color:#2b3150}
+#evHead .lgE{font-style:normal;font-size:13cqw;line-height:1}
+#evHead .grow{flex:1;display:flex;flex-direction:column}
+#evHead b{font-size:5.6cqw}
+#evHead small{font-size:3.3cqw;font-weight:800;color:#6b7190}
+#evHead .gBar{margin-top:1cqw}
+#evPass{width:80cqw;height:12cqw;font-size:4.6cqw;margin-bottom:2.4cqw;flex:none}
+#evBody{width:92cqw;flex:1;min-height:0;overflow-y:auto;padding:0 1cqw 24cqw;scrollbar-width:none}
+.evRow{display:grid;grid-template-columns:1fr 10cqw 1fr;align-items:center;gap:2cqw;margin-bottom:2cqw}
+.evH b{text-align:center;color:#fff;font-size:3.8cqw;-webkit-text-stroke:.5cqw #2b3150;paint-order:stroke}
+.evN{width:10cqw;height:10cqw;border-radius:50%;background:#c9cfdf;color:#fff;display:flex;align-items:center;justify-content:center;font-size:4.4cqw;border:.6cqw solid #fff}
+.evN.on{background:var(--ec,#3fb6e8)}
+.evC{position:relative;height:20cqw;border-radius:3.4cqw;background:#fff;box-shadow:inset 0 -.9cqw 0 #d6dbea;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:#2b3150;padding:0 1cqw}
+.evC.prem{background:linear-gradient(#fff6c8,#ffe27a);box-shadow:inset 0 -.9cqw 0 #e3a923}
+.evC i{font-style:normal;font-size:8cqw;line-height:1.1}
+.evC small{font-size:2.9cqw;font-weight:800;text-align:center;line-height:1.1}
+.evC.far{opacity:.55}
+.evC.can{box-shadow:inset 0 0 0 .9cqw #33b44a,inset 0 -1.6cqw 0 #33b44a;animation:pbob 1.2s ease-in-out infinite}
+.evC.got>*{opacity:.3}
+.evC.got::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10cqw;color:#33b44a;-webkit-text-stroke:.5cqw #fff;paint-order:stroke}
+.evC .lk{position:absolute;top:.6cqw;right:1.4cqw;font-size:4.4cqw}
 /* ---------- hướng dẫn lần đầu ---------- */
 #tip{display:none;position:absolute;z-index:25;pointer-events:none;left:50%;bottom:calc(100% + 3.5cqw);transform:translateX(-50%);line-height:1.3;background:#fff;color:#2b3150;font-size:4.4cqw;font-weight:800;
   padding:2cqw 4cqw;border-radius:3.5cqw;border:.7cqw solid #ffd43b;box-shadow:0 1.5cqw 3cqw #0004;white-space:nowrap;animation:tipbob 1s ease-in-out infinite}
@@ -926,6 +948,14 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div id="lgBody"></div>
   </div>
 
+  <div id="event" class="screen ov">
+    <div class="sHead outline">SỰ KIỆN</div>
+    <button class="btn blue close" id="evClose" aria-label="Đóng">✕</button>
+    <div id="evHead"></div>
+    <button class="btn yellow" id="evPass"><span class="outline o">👑 Mở Sổ Vàng · 49.000đ</span></button>
+    <div id="evBody"></div>
+  </div>
+
   <!-- chốt tuần: hạng, lên/xuống hạng, thưởng -->
   <div id="lgResModal" class="screen modal"><div class="panelM">
     <div class="ribbon outline o">KẾT QUẢ GIẢI ĐẤU</div>
@@ -964,6 +994,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
       <button class="sideB" id="sbDaily"><i>🎯</i><span>Thử thách</span></button>
     </div>
     <div class="hSide" id="hSideR">
+      <button class="sideB" id="sbEvent"><b class="tmr"></b><i></i><span>Sự kiện</span></button>
       <button class="sideB" id="sbLeague"><b class="tmr"></b><i>🏆</i><span>Giải đấu</span></button>
     </div>
     <div id="hDrawer">
@@ -2002,7 +2033,7 @@ const sfx={
 };
 
 // ====================== TRẠNG THÁI ======================
-const OVERLAYS=['loginModal','questModal','dcModal','mResult','league','lgResModal','result','buyModal','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
+const OVERLAYS=['loginModal','questModal','dcModal','mResult','league','lgResModal','event','result','buyModal','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
 let rebuild=false, placedOrder=[], replaying=false, replayTok=0, replayDone=null; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
@@ -2329,14 +2360,14 @@ function win(){
   if (!rebuild){ S.streak=(S.streak||0)+1; if(S.streak%3===0) giveInf(INF_STREAK,'🔥 Thắng 3 level liên tiếp'); }
   if (bonus) giveInf(INF_SERIES,'🎉 Đủ bộ');
   questAdd(rebuild?'rebuild':'win'); if (!mistakes) questAdd('perfect');
-  lastLp=lgPts(stars,rebuild); lgAdd(lastLp);
+  lastLp=lgPts(stars,rebuild); lgAdd(lastLp); lastEp=evPts(stars,rebuild); evAdd(lastEp);
   S.coins+=reward+bonus; save();
   setTimeout(confetti,250);
   controls.autoRotate=true; controls.autoRotateSpeed=3;
   const tok=replayTok; // rời màn/về menu/chơi lại đều tăng replayTok → thôi phát lại
   setTimeout(()=>{ if(tok===replayTok) playReplay(()=>showResult(stars,reward,bonus)); },1200);
 }
-let rX2=0, lastLp=0; // thưởng có thể nhân đôi bằng QC (0 = đã dùng / lắp lại); điểm giải đấu vừa nhận
+let rX2=0, lastLp=0, lastEp=0; // thưởng có thể nhân đôi bằng QC (0 = đã dùng / lắp lại); điểm giải đấu vừa nhận
 function renderRGoal(){ const o=goalInfo(); $('rGoal').textContent=o?`⭐ ${LEVELS[o.g].name}: ${Math.min(S.coins,o.price)}/${o.price} 🪙`+(o.need?` · còn ${o.need}!`:' · đủ rồi!'):''; }
 let rTot=0; // xu thưởng đang hiện: đếm dần từ số cũ lên số mới
 function countCoins(to){ const el=$('rCoins'), from=+el.textContent||0, t0=performance.now(); rTot=to;
@@ -2346,7 +2377,7 @@ function showResult(stars,reward,bonus=0){
   $('rTitle').textContent=['','HOÀN THÀNH!','GIỎI LẮM!','TUYỆT VỜI!'][stars];
   $('rImg').src=thumbLevel(levelIdx,special(levelIdx)); $('rCoins').textContent=0; rTot=reward+bonus;
   const no=roadNo(levelIdx); $('rLv').textContent=(rebuild?'LẮP LẠI':no?'LEVEL '+no:'MÔ HÌNH')+' · '+L.name;
-  rX2=reward; $('rX2').style.display=reward?'':'none'; renderRGoal(); $('rLg').textContent=lastLp?`🏆 +${lastLp} điểm giải đấu`:'';
+  rX2=reward; $('rX2').style.display=reward?'':'none'; renderRGoal(); $('rLg').textContent=lastLp?`🏆 +${lastLp} giải đấu · ${evNow().e} +${lastEp} sự kiện`:'';
   if (bonus) setTimeout(()=>toast(`🎉 Đủ bộ ${SERIES[seriesOf(levelIdx)].name}! +${bonus}🪙`,3000),900);
   const ss=[...$('rStars').children]; ss.forEach(s=>s.classList.remove('on'));
   $('result').classList.add('show');
@@ -2777,6 +2808,7 @@ function packOf(k){
     noads:{t:'Bỏ quảng cáo',p:'59.000đ',d:'Xem quảng cáo là nhận thưởng ngay',i:'🚫',once:1,g:()=>{ S.noAds=1; }},
     lifeOffer:{t:'Gói Vô Hạn',p:'29.000đ',d:'∞ 3 giờ + đầy ❤️ + 300 xu',i:'❤️',g:()=>{ giveInf(3*3600e3); S.hearts=HEART_MAX; S.coins+=300; show('lifeModal',false); }},
     loseOffer:{t:'Gói Cứu Nguy',p:'25.000đ',d:'+1 lượt sai + 3 gợi ý + 500 xu',i:'🛟',g:()=>{ S.coins+=500; giveHints(3); if($('loseModal').classList.contains('show')) revive(); }},
+    evpass:{t:'Sổ Vàng sự kiện',p:'49.000đ',d:`Mở hàng quà 👑 của ${evNow().n}: thêm hộp bí ẩn, xu, ∞ và đồ trang trí`,i:'👑',g:()=>{ evState().pass=true; if($('event').classList.contains('show')) renderEvent(); }},
     needOffer:{t:'Túi Xu',p:'49.000đ',d:'1.000 xu + 1 hộp bí ẩn + 3 gợi ý',i:'💰',g:()=>{ S.coins+=1000; giveHints(3); return giveBoxes(1); }},
   }[k];
 }
@@ -2919,7 +2951,7 @@ $('backBtn').onclick=()=>quitLevel(toMenu);
 $('lMenu').onclick=()=>{ if(!rebuild) loseHeart(); toMenu(); };
 $('hHomeTab').onclick=()=>tabGo(()=>{ sfx.pick(); showHome(curSeries); });
 // thanh tab nằm ngoài màn chính: hiện ở Trang chủ / Tiệm Gạch / Hộp bí ẩn / Kệ, ô sáng chạy theo màn đang mở; ẩn khi lắp, xem sách, mở hộp...
-function tabGo(f){ ['shop','iap','gacha','shelf','league'].forEach(id=>$(id).classList.remove('show')); f(); }
+function tabGo(f){ ['shop','iap','gacha','shelf','league','event'].forEach(id=>$(id).classList.remove('show')); f(); }
 function syncNav(){
   const v=id=>$(id).classList.contains('show'), tab=['iap','shop','gacha','shelf'].find(v)||(v('home')?'home':null);
   $('hNav').classList.toggle('off',!tab||['bpView','unbox','adView'].some(v));
@@ -3006,10 +3038,11 @@ function renderTray(){
 
 // ====================== GIỮ CHÂN: ĐIỂM DANH + NHIỆM VỤ NGÀY ======================
 // phần thưởng chung: c xu, h gợi ý dự trữ, inf ms chơi ∞, box hộp bí ẩn
-const rewTxt=r=>[r.c&&`${fmtN(r.c)}🪙`,r.h&&`${r.h}💡`,r.inf&&`∞ ${r.inf/60e3} phút`,r.box&&`${r.box} hộp 🎁`].filter(Boolean).join(' + ');
+const rewTxt=r=>[r.c&&`${fmtN(r.c)}🪙`,r.h&&`${r.h}💡`,r.inf&&`∞ ${r.inf/60e3} phút`,r.box&&`${r.box} hộp 🎁`,r.deco&&(DECO_N[r.deco]||'Trang trí')].filter(Boolean).join(' + ');
+const DECO_N={'🎄':'Cây thông','⛄':'Người tuyết','🦌':'Tuần lộc','🎅':'Ông già Noel','🏮':'Đèn lồng','🌸':'Cây đào','🎋':'Cây nêu','🐉':'Rồng vàng','🌴':'Cây dừa','⛱️':'Ô bãi biển','🐚':'Vỏ ốc','🐳':'Cá voi'};
 const rewIcon=r=>r.box?'🎁':r.inf?'∞':r.h?'💡':'🪙';
 function giveRew(r){
-  if (r.c) S.coins+=r.c; if (r.h) giveHints(r.h); if (r.inf) S.inf=Math.max(Date.now(),S.inf||0)+r.inf;
+  if (r.c) S.coins+=r.c; if (r.deco){ S.deco=S.deco||{}; S.deco[r.deco]=(S.deco[r.deco]||0)+1; } if (r.h) giveHints(r.h); if (r.inf) S.inf=Math.max(Date.now(),S.inf||0)+r.inf;
   const got=r.box?giveBoxes(r.box):[]; save(); updateCoins(true); updateLife(); sfx.coin();
   toast('🎉 Nhận '+rewTxt(r)+(got.length?' · '+got.join(', '):''),3000); return got;
 }
@@ -3066,7 +3099,7 @@ $('qList').onclick=e=>{
   const b=e.target.closest('[data-q]'); if (!b) return;
   if (b.classList.contains('dis')){ sfx.back(); return toast('Chưa xong nhiệm vụ này'); }
   if (b.dataset.q==='all'){ S.q.all=true; giveRew(Q_ALL); }
-  else { const q=qList()[+b.dataset.q]; q.done=true; giveRew({c:QUESTS[q.k].c}); }
+  else { const q=qList()[+b.dataset.q]; q.done=true; evAdd(10); giveRew({c:QUESTS[q.k].c}); }
   renderQuest(); renderSide();
 };
 $('questClose').onclick=()=>{ sfx.back(); show('questModal',false); };
@@ -3076,6 +3109,7 @@ $('sbQuest').onclick=openQuest;
 function renderSide(){
   const dot=(id,n)=>{ const b=$(id); let d=b.querySelector('.badge'); if(!n){ d&&d.remove(); return; } if(!d){ d=document.createElement('b'); d.className='badge'; b.appendChild(d); } d.textContent=n===true?'':n; };
   dot('sbLogin',loginK().can); dot('sbQuest',questReady()); dot('sbDaily',!dcState().won);
+  dot('sbEvent',evReady()); $('sbEvent').querySelector('i').textContent=evNow().e; $('sbEvent').querySelector('.tmr').textContent=evLeft();
   const g=lgCheck(); dot('sbLeague',!!g.res); $('sbLeague').querySelector('.tmr').textContent=g.res?'Nhận thưởng':'#'+lgRank(g.w,g.tier,g.pts,Date.now());
 }
 // mở game lần đầu trong ngày: tự hiện bảng điểm danh (không chen vào hướng dẫn lần đầu)
@@ -3113,10 +3147,10 @@ function modeTick(dt){
 function modeWin(){
   done=true; endDrag(true); sfx.win(); setTimeout(confetti,250); controls.autoRotate=true; controls.autoRotateSpeed=3;
   const t=Math.max(1,Math.round(mT)), d=dcState(), rew=d.won?0:DC_REW;
-  S.dc={d:today(),won:true,best:d.best?Math.min(d.best,t):t}; if (rew){ S.coins+=rew; questAdd('daily'); lgAdd(30); } save();
+  S.dc={d:today(),won:true,best:d.best?Math.min(d.best,t):t}; if (rew){ S.coins+=rew; questAdd('daily'); lgAdd(30); evAdd(20); } save();
   setTimeout(()=>{ if(!done||!mode) return;
     $('mrPic').src=thumbLevel(levelIdx); $('mrTime').textContent='⏱ '+mmss(t*1000);
-    $('mrInfo').innerHTML=`Nhanh hơn <b>${dcBeat(t,targets.length)}%</b> người chơi<small>Kỷ lục hôm nay: ${mmss(S.dc.best*1000)}${rew?' · 🏆 +30 điểm giải đấu':''}</small>`;
+    $('mrInfo').innerHTML=`Nhanh hơn <b>${dcBeat(t,targets.length)}%</b> người chơi<small>Kỷ lục hôm nay: ${mmss(S.dc.best*1000)}${rew?` · 🏆 +30 · ${evNow().e} +20`:''}</small>`;
     $('mrRew').style.display=rew?'':'none'; $('mrCoins').textContent=rew; show('mResult',true); updateCoins(true); },1300);
 }
 $('mrAgain').onclick=()=>{ sfx.pick(); loadLevel(levelIdx,mode); };
@@ -3174,6 +3208,49 @@ function openLgRes(){
   sfx.pick(); show('lgResModal',true);
 }
 $('lgrOk').onclick=()=>{ const r=lgCheck().res; if(!r) return; delete S.lg.res; if (r.rew){ S.coins+=r.rew; sfx.coin(); } save(); updateCoins(true); show('lgResModal',false); renderSide(); openLeague(); };
+
+// ====================== SỰ KIỆN MÙA + SỔ SỰ KIỆN ======================
+// mỗi sự kiện 14 ngày, xoay vòng theo lịch; lắp/thử thách/nhiệm vụ ra điểm sự kiện → mở mốc quà (miễn phí + Sổ Vàng trả phí)
+// quà riêng của sự kiện là đồ trang trí (S.deco) dùng cho Thành phố; hết sự kiện là hết, không mua lại được
+const EV_EPOCH=new Date(2026,10,16).getTime(), EV_LEN=14*864e5, EV_STEP=40;
+const evTrack=d=>({
+  free:[{c:50},{h:1},{deco:d[0]},{c:80},{box:1},{h:2},{deco:d[1]},{c:120},{inf:30*60e3},{box:1},{c:150},{h:3},{deco:d[2]},{c:200},{box:2,deco:d[3]}],
+  prem:[{c:100},{box:1},{inf:30*60e3},{deco:d[0]},{c:150},{h:3},{box:1},{deco:d[1]},{c:200},{inf:60*60e3},{box:1},{deco:d[2]},{c:300},{box:2},{box:3,deco:d[3]}]});
+const EVENTS=[
+  {id:'winter',n:'Lễ hội Mùa Đông',e:'❄️',c:'#3fb6e8',...evTrack(['🎄','⛄','🦌','🎅'])},
+  {id:'tet',n:'Tết Sum Vầy',e:'🧧',c:'#e8463a',...evTrack(['🏮','🌸','🎋','🐉'])},
+  {id:'sea',n:'Mùa Hè Biển Xanh',e:'🌊',c:'#1b7fc4',...evTrack(['🌴','⛱️','🐚','🐳'])},
+];
+const evNow=(t=Date.now())=>{ const k=Math.floor((t-EV_EPOCH)/EV_LEN), ev=EVENTS[((k%EVENTS.length)+EVENTS.length)%EVENTS.length]; return {...ev,end:EV_EPOCH+(k+1)*EV_LEN,key:ev.id+k}; };
+// sự kiện mới: điểm + quà chưa nhận của sự kiện cũ mất
+function evState(){ const e=evNow(); if (!S.ev||S.ev.key!==e.key){ S.ev={key:e.key,pts:0,free:[],prem:[],pass:false}; save(); } return S.ev; }
+function evAdd(n){ if (UNLOCK_ALL) return; evState().pts+=n; save(); }
+const evPts=(stars,re)=>re?5:10+5*stars; // lắp mới 3 sao = 25, lắp lại 5, thử thách ngày 20, mỗi nhiệm vụ 10
+const evTier=()=>Math.min(evNow().free.length,Math.floor(evState().pts/EV_STEP)); // số mốc đã mở
+const evReady=()=>{ const s=evState(), n=evTier(); let k=0; for(let i=0;i<n;i++){ if(!s.free.includes(i)) k++; if(s.pass&&!s.prem.includes(i)) k++; } return k; };
+const evLeft=()=>{ const s=Math.max(0,Math.floor((evNow().end-Date.now())/1000)), d=Math.floor(s/86400); return d?d+' ngày':mmss(s*1000); };
+function renderEvent(){
+  const e=evNow(), s=evState(), n=evTier(), N=e.free.length, cur=s.pts-n*EV_STEP;
+  $('event').style.setProperty('--ec',e.c);
+  $('evHead').innerHTML=`<i class="lgE">${e.e}</i><div class="grow"><b>${e.n}</b><small>⏳ Còn ${evLeft()}</small>`
+    +`<div class="gBar"><i style="width:${n>=N?100:cur/EV_STEP*100}%"></i><span>${n>=N?'Đã mở hết quà!':`Mốc ${n+1}: ${cur}/${EV_STEP} ${e.e}`}</span></div></div>`;
+  $('evPass').style.display=s.pass?'none':'';
+  const cell=(r,i,t)=>{ const got=s[t].includes(i), lock=t==='prem'&&!s.pass, can=i<n&&!got&&!lock;
+    return `<div class="evC ${t}${got?' got':''}${can?' can':''}${i>=n?' far':''}" data-t="${t}" data-i="${i}"><i>${r.deco||rewIcon(r)}</i><small>${rewTxt(r)}</small>${lock?'<b class="lk">🔒</b>':''}</div>`; };
+  $('evBody').innerHTML=`<div class="evRow evH"><b>MIỄN PHÍ</b><span></span><b>👑 SỔ VÀNG</b></div>`
+    +e.free.map((r,i)=>`<div class="evRow">${cell(r,i,'free')}<b class="evN${i<n?' on':''}">${i+1}</b>${cell(e.prem[i],i,'prem')}</div>`).join('');
+}
+function openEvent(){ sfx.pick(); renderEvent(); show('event',true); const c=$('evBody').querySelector('.can')||$('evBody').querySelectorAll('.evRow')[evTier()+1]; if (c) $('evBody').scrollTop=c.offsetTop-$('evBody').offsetTop-40; }
+$('evBody').onclick=e=>{
+  const c=e.target.closest('.evC'); if (!c) return;
+  const t=c.dataset.t, i=+c.dataset.i, s=evState();
+  if (t==='prem'&&!s.pass){ sfx.back(); return openBuy('evpass'); }
+  if (!c.classList.contains('can')){ sfx.back(); return toast(s[t].includes(i)?'Đã nhận':`Cần mốc ${i+1}: lắp thêm mô hình để có ${evNow().e}`); }
+  s[t].push(i); giveRew((t==='free'?evNow().free:evNow().prem)[i]); renderEvent(); renderSide();
+};
+$('evPass').onclick=()=>openBuy('evpass');
+$('evClose').onclick=()=>{ sfx.back(); show('event',false); renderSide(); };
+$('sbEvent').onclick=openEvent;
 
 // ====================== LOOP ======================
 function resize(){

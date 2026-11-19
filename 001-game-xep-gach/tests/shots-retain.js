@@ -16,3 +16,7 @@ module.exports.push(
   { name: 'rt-league', pre: save0(ST), post: async () => { lgCheck().pts = 260; save(); openLeague(); await wait(600); } },
   { name: 'rt-lg-res', pre: new Function("localStorage.setItem('xepgach.v2',JSON.stringify({tut:6,coins:260,best:{'Cây nấm':3},lg:{w:new Date(2026,0,5).getTime(),pts:99999,tier:0}}))"), post: async () => { openLgRes(); await wait(600); } },
 );
+module.exports.push(
+  { name: 'rt-event', pre: save0(ST), post: async () => { evState().pts = EV_STEP * 3 + 22; evState().free = [0, 1]; save(); openEvent(); await wait(600); } },
+  { name: 'rt-event-pass', pre: save0(ST), post: async () => { evState().pts = EV_STEP * 3 + 22; evState().free = [0, 1]; evState().pass = true; evState().prem = [0]; save(); openEvent(); await wait(600); } },
+);
