@@ -1746,26 +1746,36 @@ function bomOf(i){
 }
 // độ hiếm = độ khó trong bộ (nhiều mảnh hơn = hiếm hơn); không có tên = Thường
 const RARITY={'Rồng':2,'Hổ':1,'Rắn':1,'Ngựa':1,'Mèo':1,'Lâu đài':2,'Vườn treo Babylon':1,'Lăng Halicarnassus':1,'Kim tự tháp Giza':1,'Đền Artemis':2,'Chùa Cầu Hội An':1,'Chùa Một Cột':1,'Khuê Văn Các':2};
-// shop = giá mua đúng (khoảng 2–4 level xu), rew = thưởng lắp xong 1★ (thiếu một chút so với hộp 100)
-const RAR=[{n:'Thường',w:6,shop:150,rew:60,c:'#dfe6f3'},{n:'Hiếm',w:3,shop:250,rew:80,c:'#4aa8ff'},{n:'Huyền thoại',w:1,shop:400,rew:120,c:'#ffc21a'}];
+// vòng chơi: mở hộp 100 → lắp → thắng ≥ 100 → mở hộp kế. rew = thưởng lắp xong 1★ (luôn ≥ giá hộp), shop = giá chọn đúng mô hình (~2–3 hộp)
+const RAR=[{n:'Thường',w:6,shop:250,rew:100,c:'#dfe6f3'},{n:'Hiếm',w:3,shop:300,rew:120,c:'#4aa8ff'},{n:'Huyền thoại',w:1,shop:400,rew:160,c:'#ffc21a'}];
 const STAR_REW=[0,1,1.25,1.5], SPECIAL_P=0.12, SPECIAL_REW=1.2, REBUILD_REWARD=0; // lắp lại không có xu: hết cày
 const rarOf=i=>RARITY[LEVELS[i].name]||0;
 const r5=x=>Math.round(x/5)*5;
 const seriesIdx=s=>[...Array(SERIES[s].n).keys()].map(k=>SERIES[s].from+k);
 const shopPrice=i=>RAR[rarOf(i)].shop;
 const BOX_PRICE=100, boxPrice=()=>BOX_PRICE; // một hộp chung cho cả game, chỉ ra mô hình chưa có
+console.assert(RAR.every(r=>r.rew>=BOX_PRICE),'thắng 1★ phải đủ mở hộp kế');
 const rewardFor=(i,stars,sp)=>r5(RAR[rarOf(i)].rew*STAR_REW[stars]*(sp?SPECIAL_REW:1));
 const SERIES_BONUS=[200,300,300,400], seriesBonus=s=>SERIES_BONUS[s]; // đủ bộ ≈ đủ mua 1 mô hình mơ ước
-// đường lắp: thứ tự level tự dẫn, độ khó răng cưa (xen kẽ các bộ). Mua trước mô hình nào thì tới lượt nó tự bỏ qua
+// đường lắp: thứ tự độ khó răng cưa (xen kẽ các bộ); hộp bám theo đường này. Mua trước mô hình nào thì nó tự rời đường
 const ROAD=['Cây nấm','Ngôi nhà','Dưa hấu','Tượng Rhodes','Chuột','Cột cờ Hà Nội','Cầu Vàng','Lợn','Vườn treo Babylon','Tượng Zeus','Gà','Chùa Cầu Hội An','Lâu đài','Chó',
   'Hải đăng Alexandria','Dê','Chùa Một Cột','Trâu','Kim tự tháp Giza','Mèo','Khỉ','Lăng Halicarnassus','Hổ','Khuê Văn Các','Ngựa','Rắn','Đền Artemis','Rồng'].map(n=>LEVELS.findIndex(l=>l.name===n));
 console.assert(ROAD.length===LEVELS.length&&new Set(ROAD).size===LEVELS.length&&!ROAD.includes(-1),'đường lắp phải có đủ mọi mô hình');
-// tỉ lệ ra từng mô hình trong pool (cả game, cố định theo độ hiếm, không đổi theo thứ đã có)
-function boxOdds(pool){ const W=pool.reduce((a,i)=>a+RAR[rarOf(i)].w,0); return pool.map(i=>({i,p:RAR[rarOf(i)].w/W})); }
-// rút 1 hộp trong pool (người gọi chỉ đưa mô hình chưa có); bản đặc biệt SPECIAL_P mỗi hộp
-function rollBox(pool,rnd=Math.random){
-  let x=rnd(), i=pool[pool.length-1];
-  for (const o of boxOdds(pool)){ if (x<o.p){ i=o.i; break; } x-=o.p; }
+// hộp "ngẫu nhiên có kiểm soát": 90% ra 1 trong 3 mô hình kế tiếp trên đường lắp (50/30/20 → độ khó vẫn tăng dần),
+// 10% nhảy xa bất ngờ (chia theo trọng số độ hiếm: huyền thoại ít nhất). Bảo hiểm: BOX_PITY hộp liền không ra Hiếm+ (dry)
+// thì hộp sau chắc chắn là 1 trong BOX_PITY_N mô hình Hiếm+ gần nhất trên đường. pool = mô hình được phép ra (chưa có / chưa vàng kim)
+const BOX_NEAR=[0.5,0.3,0.2], BOX_FAR=0.1, BOX_PITY=4, BOX_PITY_N=2;
+function boxOdds(pool,dry=0){
+  const road=ROAD.filter(i=>pool.includes(i));
+  if (dry>=BOX_PITY){ const r=road.filter(i=>rarOf(i)>0).slice(0,BOX_PITY_N); if (r.length) return r.map(i=>({i,p:1/r.length})); }
+  const near=road.slice(0,BOX_NEAR.length), far=road.slice(BOX_NEAR.length), fw=far.reduce((a,i)=>a+RAR[rarOf(i)].w,0);
+  const kn=far.length?1-BOX_FAR:1, ns=BOX_NEAR.slice(0,near.length).reduce((a,b)=>a+b,0);
+  return near.map((i,k)=>({i,p:kn*BOX_NEAR[k]/ns})).concat(far.map(i=>({i,p:BOX_FAR*RAR[rarOf(i)].w/fw})));
+}
+// rút 1 hộp; bản đặc biệt SPECIAL_P mỗi hộp
+function rollBox(pool,rnd=Math.random,dry=0){
+  const od=boxOdds(pool,dry); let x=rnd(), i=od[od.length-1].i;
+  for (const o of od){ if (x<o.p){ i=o.i; break; } x-=o.p; }
   return {i, sp:rnd()<SPECIAL_P};
 }
 Object.keys(COLORS).forEach(c=>console.assert(COLOR_VI[c],'thiếu tên màu '+c));
@@ -2433,7 +2443,7 @@ $('rX2').onclick=()=>{ const r=rX2; if(!r) return; rX2=0; watchAd(()=>{ S.coins+
 function showResult(stars,reward,bonus=0){
   $('rTitle').textContent=['','HOÀN THÀNH!','GIỎI LẮM!','TUYỆT VỜI!'][stars];
   $('rImg').src=thumbLevel(levelIdx,special(levelIdx)); $('rCoins').textContent=0; rTot=reward+bonus;
-  const no=roadNo(levelIdx); $('rLv').textContent=(rebuild?'LẮP LẠI':no?'LEVEL '+no:'MÔ HÌNH')+' · '+L.name;
+  $('rLv').textContent=(rebuild?'LẮP LẠI':SERIES[seriesOf(levelIdx)].name)+' · '+L.name;
   rX2=reward; $('rX2').style.display=reward?'':'none'; $('rLg').textContent=lastLp?`🏆 +${lastLp} giải đấu · ${evNow().e} +${lastEp} sự kiện`:'';
   if (bonus) setTimeout(()=>toast(`🎉 Đủ bộ ${SERIES[seriesOf(levelIdx)].name}! +${bonus}🪙`,3000),900);
   const ss=[...$('rStars').children]; ss.forEach(s=>s.classList.remove('on'));
@@ -2520,7 +2530,7 @@ function tutStep(){
   let el=null, txt='';
   if (vis('bpView')){ if(bpI===0&&!built(0)) [el,txt]=bpPage===0?[$('bpNext'),'Lật trang xem từng bước']:[$('bpBuild'),'Bấm Lắp!']; }
   else if (vis('home')&&!['shelf','shop','oddsModal','setModal','needModal'].some(vis)){
-    if (!built(0)) [el,txt]=[$('hNextBtn'),'Lắp Level 1 miễn phí!'];
+    if (!built(0)) [el,txt]=[$('hNextBtn'),'Lắp mô hình đầu tiên miễn phí!'];
     else if (S.tut===5) [el,txt]=[$('shopBtn'),'Thích mô hình nào? Mua trước ở Tiệm Gạch'];
   }
   if (!el) return;
@@ -2561,15 +2571,18 @@ function renderGacha(){
   $('gPrevL').innerHTML=boxPool().sort((a,b)=>rarOf(b)-rarOf(a)||a-b).slice(0,5).map(i=>`<div class="gpI" style="--rc:${RAR[rarOf(i)].c}"><i>${RAR[rarOf(i)].n}</i><img src="${thumbLevel(i)}" alt=""><b>${LEVELS[i].name}</b></div>`).join('');
   $('hBox').style.setProperty('--bc',SERIES[curSeries].c);
   $('hName').textContent=allOwned()?`Đủ ${LEVELS.length} mô hình · hộp ra bản ✨ vàng kim`:`Đã có ${ALL_IDX.filter(owned).length}/${LEVELS.length} · chỉ ra mô hình chưa có`;
-  $('playBtn').querySelector('.t').textContent=`🪙 ${boxPrice()}`; $('playSub').textContent='Mở bằng xu';
+  const bc=boxCost(); $('playBtn').querySelector('.t').textContent=bc?`🪙 ${bc}`:'MIỄN PHÍ'; $('playSub').textContent=bc?'Mở bằng xu':'Hộp cứu trợ';
   $('adBtn').querySelector('small').textContent=`Còn ${Math.max(0,al)}/${AD_MAX.box} hôm nay`;
   $('adBtn').classList.toggle('dis',al<=0||!nx); $('playBtn').classList.toggle('dis',!nx);
 }
 const openGacha=()=>{ sfx.pick(); renderGacha(); updateCoins(); show('gacha',true); };
 // level kế trên đường lắp: mô hình đầu tiên chưa lắp (đã mua trước rồi lắp xong thì tự bỏ qua)
 const roadNext=()=>{ const i=ROAD.find(i=>!built(i)); return i==null?null:i; };
-const roadNo=i=>ROAD.indexOf(i)+1;
-function playRoad(){ const i=roadNext(); if(i==null) return; if(!canPlay()) return openLife(); if(!owned(i)){ grant(i,false); save(); } openBlueprint(i); } // level miễn phí (cần ❤️ hoặc ∞)
+function playFirst(){ const i=ROAD[0]; if(!canPlay()) return openLife(); if(!owned(i)){ grant(i,false); save(); } openBlueprint(i); } // mô hình đầu tiên miễn phí cho người mới
+const firstFree=()=>!built(ROAD[0]);
+// việc kế tiếp: lắp mô hình đang chờ, không thì mở hộp (kẹt: hết mô hình chờ + thiếu xu → hộp cứu trợ miễn phí)
+const boxCost=()=>!pendingList().length&&S.coins<BOX_PRICE?0:BOX_PRICE;
+function nextStep(){ if (firstFree()) return playFirst(); const nx=pendingList()[0]; if (nx!=null) return canPlay()?openBlueprint(nx):openLife(); if (peekBox()) return openBox(); toast('Đã có đủ cả bản vàng kim!'); }
 function updateLife(){
   const inf=infLeft(), h=heartsNow(), nx=nextHeartMs();
   $('hLife').classList.toggle('inf',inf>0); $('hLifeI').textContent=inf?'∞':'❤';
@@ -2595,17 +2608,18 @@ document.querySelectorAll('.offer .price').forEach(b=>b.onclick=()=>openBuy(b.cl
 let needI=null;
 function needInfo(){
   const g=needI; if (g==null||owned(g)) return null;
-  const price=buyPrice(g), need=Math.max(0,price-S.coins), rn=roadNext(), gain=rn==null?0:rewardFor(rn,3);
+  const price=buyPrice(g), need=Math.max(0,price-S.coins), rn=pendingList()[0], gain=rn==null?0:rewardFor(rn,3,special(rn));
   return {g,price,need,rn,gain};
 }
 function renderHome(){
-  const s=curSeries, r=SERIES[s], pend=pendingList(), nx=pend[0], rn=roadNext();
+  const pend=pendingList(), nx=pend[0];
   renderGacha(); renderSide();
   updateLife();
-  $('hNext').innerHTML=rn!=null
-    ?`<button class="btn yellow" id="hNextBtn"><span class="t outline o">▶ LEVEL ${roadNo(rn)}</span><small class="lk">${!infLeft()&&!heartsNow()?'❤️ hồi sau '+mmss(nextHeartMs()):''}</small></button>`
-    :nx!=null?`<button class="btn yellow" id="hNextBtn"><span class="t outline o">LẮP TIẾP</span><small>${LEVELS[nx].name}</small></button>`
-    :`<button class="btn yellow" id="hNextBtn"><span class="t outline o">MỞ HỘP</span><small>Hết đường · hộp ra bản vàng kim</small></button>`;
+  const lk=`<small class="lk">${!infLeft()&&!heartsNow()?'❤️ hồi sau '+mmss(nextHeartMs()):''}</small>`, bc=boxCost();
+  $('hNext').innerHTML=firstFree()
+    ?`<button class="btn yellow" id="hNextBtn"><span class="t outline o">▶ LẮP</span><small>${LEVELS[ROAD[0]].name} · miễn phí</small>${lk}</button>`
+    :nx!=null?`<button class="btn yellow" id="hNextBtn"><span class="t outline o">▶ LẮP TIẾP</span><small>${LEVELS[nx].name}</small>${lk}</button>`
+    :`<button class="btn yellow" id="hNextBtn"><span class="t outline o">🎁 MỞ HỘP</span><small>${!peekBox()?'Đã có đủ':bc?'🪙 '+bc:'Hộp cứu trợ · miễn phí'}</small></button>`;
   const list=pend, hide=!S.showWait; // ngăn kéo chỉ còn mô hình chờ lắp (đã lắp xem ở Kệ); mặc định thu gọn
   $('hDCount').textContent=`${list.length} bộ`; $('hDrawer').classList.toggle('hide',hide); $('hDrawerTog').textContent=hide?'▲':'▼';
   $('hLevels').classList.toggle('few',list.length<=2); // ≤2 thẻ không cần cuộn → để bong bóng hướng dẫn tràn ra ngoài được
@@ -2631,22 +2645,22 @@ const allOwned=()=>ALL_IDX.every(owned);
 function boxPool(){
   const miss=ALL_IDX.filter(i=>!owned(i));
   if (!miss.length) return ALL_IDX.filter(i=>!special(i)); // đủ 16: hộp ra bản vàng kim
-  return miss.length>1?miss.filter(i=>i!==roadNext()):miss; // level kế đã miễn phí thì không bán qua hộp
+  return miss.length>1?miss.filter(i=>i!==ROAD[0]||owned(i)):miss; // mô hình đầu tiên đã miễn phí thì hộp không ra nó
 }
 // kết quả hộp kế được tung trước và lưu (lắc thử khớp với thứ sẽ ra); mua ở cửa hàng làm nó hết hợp lệ thì tung lại
 function peekBox(){
   const g=S.next.g, pool=boxPool();
   if (!g||!pool.includes(g.i)||(owned(g.i)&&!g.sp)){
     if (!pool.length){ delete S.next.g; return null; }
-    const r=rollBox(pool); S.next.g=allOwned()?{i:r.i,sp:true}:r; save();
+    const r=rollBox(pool,Math.random,S.dry||0); S.next.g=allOwned()?{i:r.i,sp:true}:r; save();
   }
   return S.next.g;
 }
 function openBox(viaAd){
-  const nx=peekBox(), c=viaAd?0:boxPrice(), pool=boxPool();
+  const nx=peekBox(), c=viaAd?0:boxCost(), pool=boxPool();
   if (!nx){ toast('Đã có đủ cả bản vàng kim!'); return; }
   if (S.coins<c){ toast(`Không đủ xu (cần ${c}🪙)`); sfx.wrong(); return; }
-  S.coins-=c; grant(nx.i,nx.sp); delete S.next.g; if(S.tut===5) S.tut=6; questAdd('box');
+  S.coins-=c; grant(nx.i,nx.sp); delete S.next.g; S.dry=rarOf(nx.i)>0?0:(S.dry||0)+1; if(S.tut===5) S.tut=6; questAdd('box');
   peekBox(); save(); updateCoins(true); $('gacha').classList.remove('show');
   openUnbox(nx.i,nx.sp,true,pool);
 }
@@ -2674,8 +2688,8 @@ $('adBtn').onclick=()=>{
 };
 $('oddsBtn').onclick=()=>{
   const pct=p=>(Math.round(p*1000)/10).toString().replace('.',',')+'%';
-  const pool=boxPool(), rows=boxOdds(pool).sort((a,b)=>b.p-a.p).map(o=>`<p><span><b style="color:${RAR[rarOf(o.i)].c};-webkit-text-stroke:.3cqw #2b3150">●</b> ${LEVELS[o.i].name}</span><b>${pct(o.p)}</b></p>`).join('');
-  $('oddsList').innerHTML=`<p class="note">🎁 Chỉ ra mô hình <b>chưa có</b>, không bao giờ trùng (trừ level kế tiếp vì nó đã miễn phí). Tỉ lệ theo độ hiếm Thường 6 · Hiếm 3 · Huyền thoại 1.</p><p class="note">✨ <b>Bản đặc biệt</b> (vàng kim): ${Math.round(SPECIAL_P*100)}% mỗi hộp. Có đủ ${LEVELS.length} mô hình rồi thì hộp ra bản vàng kim của mô hình đã có.</p>`+rows; // luật ở trên cùng, danh sách cuộn bên dưới
+  const pool=boxPool(), rows=boxOdds(pool,S.dry||0).sort((a,b)=>b.p-a.p).map(o=>`<p><span><b style="color:${RAR[rarOf(o.i)].c};-webkit-text-stroke:.3cqw #2b3150">●</b> ${LEVELS[o.i].name}</span><b>${pct(o.p)}</b></p>`).join('');
+  $('oddsList').innerHTML=`<p class="note">🎁 Chỉ ra mô hình <b>chưa có</b>, không bao giờ trùng. ${Math.round((1-BOX_FAR)*100)}% ra 1 trong 3 mô hình sắp tới, ${Math.round(BOX_FAR*100)}% bất ngờ ở xa (Huyền thoại hiếm nhất).</p><p class="note">🛡 Bảo hiểm: ${BOX_PITY} hộp liền không ra Hiếm thì hộp sau chắc chắn Hiếm trở lên${(S.dry||0)>=BOX_PITY?' · <b>hộp này chắc chắn Hiếm+!</b>':` · còn ${BOX_PITY-(S.dry||0)} hộp`}.</p><p class="note">✨ <b>Bản đặc biệt</b> (vàng kim): ${Math.round(SPECIAL_P*100)}% mỗi hộp. Có đủ ${LEVELS.length} mô hình rồi thì hộp ra bản vàng kim của mô hình đã có.</p>`+rows; // luật ở trên cùng, danh sách cuộn bên dưới
   show('oddsModal',true); sfx.pick();
 };
 $('oddsClose').onclick=()=>show('oddsModal',false);
@@ -2755,7 +2769,7 @@ function openShop(sel){ mSel=typeof sel==='number'&&!owned(sel)?sel:null; if(S.t
 const SHELF_N=6, SALE=0.8, today=()=>new Date().toDateString();
 const buyPrice=i=>S.daily&&S.daily.d===today()&&S.daily.sale===i?r5(shopPrice(i)*SALE):shopPrice(i);
 function rollShelf(){
-  const free=roadNext(), un=ALL_IDX.filter(i=>!owned(i)&&i!==free), ids=[];
+  const un=ALL_IDX.filter(i=>!owned(i)), ids=[];
   const add=i=>{ if(i!=null&&i>=0&&un.includes(i)&&!ids.includes(i)&&ids.length<SHELF_N) ids.push(i); };
   ROAD.filter(i=>un.includes(i)).slice(0,2).forEach(add); // 2 mô hình sắp tới trên đường: để nhảy cóc
   const rare=un.filter(i=>rarOf(i)>0&&!ids.includes(i)), sale=rare.length?rare[Math.floor(Math.random()*rare.length)]:null; add(sale); // 1 ô hiếm giảm giá
@@ -2771,9 +2785,9 @@ function renderShopM(){
     +`<div class="allH outline">📚 TẤT CẢ MÔ HÌNH</div><div id="mAll">${seriesRows()}</div>`; // xem hết ngay bên dưới, khỏi bấm nút
   renderPick();
 }
-function mItemHtml(i){ const rn=roadNext(); { const h=owned(i), free=i===rn&&!h, sale=!h&&buyPrice(i)<shopPrice(i);
+function mItemHtml(i){ { const h=owned(i), sale=!h&&buyPrice(i)<shopPrice(i);
     return `<div class="mItem${h?' have':''}${i===mSel?' sel':''}${sale?' sale':''}" data-i="${i}" style="--rc:${RAR[rarOf(i)].c}">${sale?`<i class="mSale">-${Math.round((1-SALE)*100)}%</i>`:''}${pboxHtml(i,false)}`
-      +`<span class="mp">${h?'✓ Đã có':free?`▶ Lv ${roadNo(i)} miễn phí`:sale?`<s>${shopPrice(i)}</s> ${buyPrice(i)}🪙`:shopPrice(i)+'🪙'}</span></div>`; } }
+      +`<span class="mp">${h?'✓ Đã có':sale?`<s>${shopPrice(i)}</s> ${buyPrice(i)}🪙`:shopPrice(i)+'🪙'}</span></div>`; } }
 function renderPick(){
   const p=$('mPick'); p.style.display=mSel==null?'none':'';
   if (mSel==null) return;
@@ -2785,7 +2799,6 @@ $('mGrid').onclick=e=>{
   if (e.target.closest('#mShelfAd')){ if(adLeft('shelf')>0) watchAd(()=>{ S.ad.shelf=(S.ad.shelf||0)+1; rollShelf(); renderShopM(); toast('🛒 Kệ hàng mới!'); }); return; }
   const it=e.target.closest('.mItem'); if(!it) return; const i=+it.dataset.i;
   if (owned(i)){ toast(built(i)?'Đã lắp, xem ở kệ trưng bày 🏛':'Đã có, đang chờ lắp'); sfx.back(); return; }
-  if (i===roadNext()){ sfx.pick(); show('shop',false); return playRoad(); } // level kế: miễn phí, khỏi mua
   mSel=i; renderShopM(); sfx.pick(); };
 $('mBuy').onclick=()=>{
   const i=mSel; if (i==null||owned(i)) return;
@@ -2797,11 +2810,11 @@ $('mBuy').onclick=()=>{
 function renderNeed(){
   const o=needInfo(); if (!o){ show('needModal',false); return; }
   $('needT').innerHTML=o.need?`Còn thiếu <b>${o.need}</b> <i class="mc"></i> để mua<br>${LEVELS[o.g].name}`:`Đủ xu mua ${LEVELS[o.g].name} rồi!`;
-  $('needPlay').style.display=o.rn==null?'none':''; if(o.rn!=null) $('needPlay').querySelector('span').textContent=`▶ LẮP LEVEL ${roadNo(o.rn)} (tới +${o.gain})${o.need&&o.need<=o.gain?' → đủ!':''}`;
-  $('needBox').querySelector('span').textContent=`🎁 Mở hộp ${boxPrice()}🪙 (có thể ra nó)`;
+  $('needPlay').style.display=o.rn==null?'none':''; if(o.rn!=null) $('needPlay').querySelector('span').textContent=`▶ LẮP ${LEVELS[o.rn].name} (tới +${o.gain})${o.need&&o.need<=o.gain?' → đủ!':''}`;
+  $('needBox').querySelector('span').textContent=`🎁 Mở hộp ${boxCost()}🪙 (có thể ra nó)`;
   const al=adLeft('coin'); $('needAd').style.display=al>0?'':'none'; $('needAd').querySelector('span').textContent=`🎬 Xem QC +30🪙 · ${al}/${AD_MAX.coin}`;
 }
-$('needPlay').onclick=()=>{ sfx.pick(); OVERLAYS.forEach(id=>$(id).classList.remove('show')); playRoad(); };
+$('needPlay').onclick=()=>{ sfx.pick(); OVERLAYS.forEach(id=>$(id).classList.remove('show')); nextStep(); };
 $('needBox').onclick=()=>{ show('needModal',false); show('shop',false); openGacha(); };
 $('needAd').onclick=adCoins;
 $('needClose').onclick=()=>{ sfx.back(); show('needModal',false); };
@@ -3009,7 +3022,7 @@ function syncNav(){
 { const o=new MutationObserver(syncNav); document.querySelectorAll('.screen').forEach(e=>o.observe(e,{attributes:true,attributeFilter:['class']})); syncNav(); }
 $('gachaBtn').onclick=()=>tabGo(openGacha);
 $('gachaClose').onclick=()=>{ sfx.back(); show('gacha',false); renderHome(); };
-$('hNext').onclick=e=>{ if(!e.target.closest('#hNextBtn')) return; sfx.pick(); if(roadNext()!=null) return playRoad(); const nx=pendingList()[0]; if(nx==null) return openGacha(); openBlueprint(nx); };
+$('hNext').onclick=e=>{ if(!e.target.closest('#hNextBtn')) return; sfx.pick(); nextStep(); };
 $('sHelp').onclick=()=>{ show('setModal',false); show('infoModal',true); sfx.pick(); };
 $('infoClose').onclick=()=>show('infoModal',false);
 $('infoModal').onclick=e=>{ if(e.target.id==='infoModal') show('infoModal',false); };
@@ -3018,7 +3031,7 @@ $('rAgain').onclick=()=>loadLevel(levelIdx);
 $('rNext').onclick=()=>{
   const pend=pendingList();
   if (pend.length){ sfx.pick(); $('result').classList.remove('show'); return openBlueprint(pend[0]); } // còn mô hình chờ lắp: mở sách luôn
-  if (roadNext()!=null){ sfx.pick(); $('result').classList.remove('show'); return playRoad(); } // rồi tới level kế
+  if (peekBox()){ sfx.pick(); showHome(); return openBox(); } // không thì mở hộp kế bằng xu vừa thắng
   showHome();
 };
 
@@ -3337,9 +3350,8 @@ function renderCityPick(){
   if (x){ p.innerHTML=`<div class="row2"><b>${x.m?x.m:DECO_N[x.d]||'Trang trí'}</b><small>+${plotRate(x)}🪙/giờ</small></div><div class="btns"><button class="btn red" id="cpDel"><span class="outline r">Cất vào kho</span></button><button class="btn blue" id="cpNo"><span class="outline">Xong</span></button></div>`; return; }
   const f=cityFree(), items=f.ms.map(i=>`<button class="cpIt" data-m="${i}"><img src="${thumbLevel(i,special(i))}" alt=""><small>+${plotRate({m:LEVELS[i].name})}/giờ</small></button>`)
     .concat(f.ds.map(([d,n])=>`<button class="cpIt" data-d="${d}"><i>${d}</i><small>${DECO_N[d]||''} ×${n}</small></button>`));
-  const rn=roadNext();
   p.innerHTML=`<div class="row2"><b>Đặt gì vào đây?</b><button class="btn blue" id="cpNo"><span class="outline">✕</span></button></div>`
-    +(items.length?`<div class="cpList">${items.join('')}</div>`:`<p class="cpEmpty">Hết công trình để đặt · lắp thêm mô hình nhé!</p>${rn!=null?`<button class="btn green" id="cpPlay"><span class="outline g">▶ LEVEL ${roadNo(rn)}</span></button>`:''}`);
+    +(items.length?`<div class="cpList">${items.join('')}</div>`:`<p class="cpEmpty">Hết công trình để đặt · lắp thêm mô hình nhé!</p><button class="btn green" id="cpPlay"><span class="outline g">${pendingList().length||firstFree()?'▶ LẮP TIẾP':'🎁 MỞ HỘP'}</span></button>`);
 }
 function openCity(){ sfx.pick(); cSel=null; renderCity(); updateCoins(); show('city',true); }
 $('cityGrid').onclick=e=>{
@@ -3352,7 +3364,7 @@ $('cityPick').onclick=e=>{
   if (it){ citySettle(); c.p[cSel]=it.dataset.m!=null?{m:LEVELS[+it.dataset.m].name}:{d:it.dataset.d}; cSel=null; save(); sfx.snap(); renderCity(); renderSide(); return; }
   if (e.target.closest('#cpDel')){ citySettle(); delete c.p[cSel]; cSel=null; save(); sfx.back(); renderCity(); renderSide(); return; }
   if (e.target.closest('#cpNo')){ cSel=null; sfx.back(); renderCity(); return; }
-  if (e.target.closest('#cpPlay')){ sfx.pick(); show('city',false); playRoad(); }
+  if (e.target.closest('#cpPlay')){ sfx.pick(); show('city',false); nextStep(); }
 };
 $('cityCollect').onclick=()=>{ const n=cityCoins(); if (!n){ sfx.back(); return toast('Chưa có xu · đặt thêm công trình nhé'); } const c=city(); c.bank=0; c.t=Date.now(); S.coins+=n; save(); updateCoins(true); sfx.coin(); toast(`💰 +${n}🪙 từ thành phố`); renderCity(); renderSide(); };
 $('cityExpand').onclick=()=>{ const c=city(), ex=CITY_EXP[c.rows-CITY_ROW0]; if (!ex) return;

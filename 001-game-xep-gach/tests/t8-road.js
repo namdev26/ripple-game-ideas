@@ -3,39 +3,39 @@ const save0 = o => new Function("localStorage.setItem('xepgach.v2'," + JSON.stri
 module.exports = [
   { name: 'duong-lap', pre: save0({ tut: 6 }), post: async () => {
       ok(ROAD.length === LEVELS.length && new Set(ROAD).size === LEVELS.length && LEVELS[ROAD[0]].name === 'Cây nấm', 'đường lắp đủ mọi mô hình, bắt đầu Cây nấm');
-      ok(roadNext() === ROAD[0] && $('hNextBtn').textContent.includes('LEVEL 1'), 'màn chính: LẮP LEVEL 1');
+      ok(firstFree() && $('hNextBtn').textContent.includes('Cây nấm'), 'màn chính: lắp Cây nấm miễn phí');
       $('hNextBtn').click();
-      ok($('bpView').classList.contains('show') && bpI === ROAD[0] && owned(ROAD[0]), 'level miễn phí: có mô hình, mở sách');
+      ok($('bpView').classList.contains('show') && bpI === ROAD[0] && owned(ROAD[0]), 'mô hình đầu miễn phí: có mô hình, mở sách');
       startBuild(bpI); commitAll();
-      ok(S.coins === rewardFor(ROAD[0], 3) && roadNext() === ROAD[1], 'xong Lv1 → Lv2');
-      $('rNext').click(); ok($('bpView').classList.contains('show') && bpI === ROAD[1], 'TIẾP TỤC → sách level kế');
+      ok(S.coins === rewardFor(ROAD[0], 3) && S.coins >= BOX_PRICE, 'thắng đủ xu mở hộp kế');
+      showHome(); ok($('hNextBtn').textContent.includes('MỞ HỘP'), 'hết mô hình chờ lắp: nút chính là MỞ HỘP');
+      $('hNextBtn').click(); ok($('unbox').classList.contains('show') && pendingList().length === 1, 'mở hộp ra mô hình mới');
+      showHome(); ok($('hNextBtn').textContent.includes(LEVELS[pendingList()[0]].name), 'rồi LẮP TIẾP mô hình đó');
   } },
   { name: 'nhay-coc', pre: save0({ tut: 6, coins: 300, best: { 'Cây nấm': 3 } }), post: async () => {
       const cmc = LEVELS.findIndex(l => l.name === 'Chùa Một Cột'), k = ROAD.indexOf(cmc);
       ok(k > 2, 'Chùa Một Cột ở xa trên đường: ' + k);
       shelf(); const pr = buyPrice(cmc); openShop(cmc); $('mBuy').click();
       ok(S.coins === 300 - pr && owned(cmc), 'mua trước: ' + S.coins);
-      S.best['Chùa Một Cột'] = 2; save();
-      ok(roadNext() === ROAD[1], 'nhảy cóc xong vẫn quay về Lv2');
-      ROAD.slice(1, k).forEach(i => S.best[LEVELS[i].name] = 1); save(); showHome();
-      ok(roadNext() === ROAD[k + 1] && $('hNextBtn').textContent.includes('LEVEL ' + (k + 2)), 'tới lượt mô hình đã mua thì tự bỏ qua');
+      showHome(); ok($('hNextBtn').textContent.includes('Chùa Một Cột'), 'mua xong: LẮP TIẾP mô hình vừa mua');
+      ok(!boxOdds(boxPool()).some(o => o.i === cmc), 'đã mua thì hộp không ra nữa');
   } },
   { name: 'hop-khong-trung', pre: save0({ tut: 6, coins: 99999, best: { 'Cây nấm': 3 } }), post: async () => {
       for (let n = 0; n < LEVELS.length - 1; n++) {
-        const g = peekBox(); ok(!owned(g.i) && (g.i !== roadNext() || ALL_IDX.filter(i => !owned(i)).length === 1), 'hộp ra cái chưa có, không trùng level kế: ' + g.i);
+        const g = peekBox(); ok(!owned(g.i), 'hộp ra cái chưa có: ' + g.i); ok((S.dry || 0) <= BOX_PITY, 'bảo hiểm Hiếm+ giữ được: ' + S.dry);
         const c = ALL_IDX.filter(owned).length; openBox(); ok(ALL_IDX.filter(owned).length === c + 1, 'mỗi hộp thêm 1 mô hình');
       }
       ok(!$('hKhoBtn') && !$('kho'), 'không còn kho');
       const sp = Object.keys(S.sp).length, g = peekBox(); ok(g.sp && !special(g.i), 'có đủ rồi: hộp ra bản vàng kim');
       openBox(); ok(Object.keys(S.sp).length === sp + 1, 'nâng vàng kim');
   } },
-  { name: 'thieu-xu', pre: save0({ tut: 6, coins: 100, best: { 'Cây nấm': 3 } }), post: async () => {
+  { name: 'thieu-xu', pre: save0({ tut: 6, coins: 100, best: { 'Cây nấm': 3 }, own: { 'Ngôi nhà': true } }), post: async () => {
       const ld = LEVELS.findIndex(l => l.name === 'Lâu đài');
       openShop(ld); $('mBuy').click();
       ok($('needModal').classList.contains('show') && $('needModal').textContent.includes('thiếu ' + (buyPrice(ld) - 100)), 'bảng thiếu xu');
       ok(!('goal' in S) && !owned(ld) && S.coins === 100, 'chưa trừ xu, không ghim mục tiêu');
-      ok($('needPlay').textContent.includes('LEVEL 2') && $('needBox').textContent.includes('100') && $('needAd').textContent.includes('30'), '3 lối: lắp level kế, hộp, QC');
-      $('needPlay').click(); ok($('bpView').classList.contains('show') && bpI === roadNext(), 'lắp level kế');
+      ok($('needPlay').textContent.includes('Ngôi nhà') && $('needBox').textContent.includes('100') && $('needAd').textContent.includes('30'), '3 lối: lắp mô hình đang chờ, hộp, QC');
+      $('needPlay').click(); ok($('bpView').classList.contains('show') && bpI === 1, 'lắp mô hình đang chờ');
   } },
   { name: 'qc-x2', budget: 30000, pre: save0({ tut: 6, coins: 0, best: { 'Cây nấm': 3 } }), post: async () => {
       giveModel(1); startBuild(1); commitAll(); const r = rewardFor(1, 3); await wait(1500); $('skipBtn').click();
@@ -61,8 +61,8 @@ module.exports = [
       openShop();
       const ids = () => [...document.querySelectorAll('#mShelf .mItem')].map(e => +e.dataset.i);
       const a = ids();
-      ok(a.length === 6 && new Set(a).size === 6 && a.every(i => !owned(i) && i !== roadNext()), 'kệ 6 ô, chưa có, không gồm level kế (miễn phí): ' + a);
-      ok(a.includes(ROAD[2]) && a.includes(ROAD[3]), 'kệ có 2 mô hình sắp tới trên đường');
+      ok(a.length === 6 && new Set(a).size === 6 && a.every(i => !owned(i)), 'kệ 6 ô, chưa có: ' + a);
+      ok(a.includes(ROAD[1]) && a.includes(ROAD[2]), 'kệ có 2 mô hình sắp tới trên đường');
       const sale = document.querySelectorAll('#mShelf .mItem.sale');
       ok(sale.length === 1 && rarOf(+sale[0].dataset.i) > 0 && buyPrice(+sale[0].dataset.i) === Math.round(shopPrice(+sale[0].dataset.i) * 0.8 / 5) * 5, '1 ô hiếm/huyền thoại giảm 20%');
       ok(/\d+:\d\d:\d\d/.test($('shop').textContent) && S.daily.d === new Date().toDateString(), 'đếm ngược tới lúc đổi kệ, lưu theo ngày');

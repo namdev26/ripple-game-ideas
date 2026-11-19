@@ -37,16 +37,21 @@ module.exports = [
       ok(owned(15), 'hộp chung ra được mô hình ở cuối đường (nhảy cóc)');
       $('ubBook').click(); ok($('bpView').classList.contains('show') && bpI === 15, 'mở sách lắp được luôn');
   } },
-  { name: 'mo-bang-quang-cao', pre: save0({ coins: 0, best: { 'Cây nấm': 3 }, next: { g: { i: 5, sp: false } }, tut: 6 }), post: async () => {
+  { name: 'mo-bang-quang-cao', pre: save0({ coins: 0, best: { 'Cây nấm': 3 }, own: { 'Ngôi nhà': true }, next: { g: { i: 5, sp: false } }, tut: 6 }), post: async () => {
       $('gachaBtn').click(); ok($('adBtn').offsetWidth > 0 && $('adBtn').textContent.includes('AD') && $('adBtn').textContent.includes('1/1') && $('playBtn').textContent.includes('100'), '2 nút: AD (còn lượt) + xu');
       $('playBtn').click(); ok(!$('unbox').classList.contains('show'), 'không đủ xu thì nút xu không mở');
       $('adBtn').click(); ok($('adView').classList.contains('show') && !$('unbox').classList.contains('show'), 'xem quảng cáo giả lập trước');
       await wait(3600);
       ok(!$('adView').classList.contains('show') && $('unbox').classList.contains('show') && owned(5) && S.coins === 0, 'xem xong → mở hộp miễn phí: ' + S.coins);
   } },
-  { name: 'khong-du-xu', pre: save0({ coins: 10, best: { 'Cây nấm': 3 } }), post: async () => {
+  { name: 'khong-du-xu', pre: save0({ coins: 10, best: { 'Cây nấm': 3 }, own: { 'Ngôi nhà': true } }), post: async () => {
       $('playBtn').click();
-      ok(!$('unbox').classList.contains('show') && S.coins === 10, 'không đủ xu thì không mở');
+      ok(!$('unbox').classList.contains('show') && S.coins === 10, 'còn mô hình chờ lắp + không đủ xu thì không mở (đi lắp để có xu)');
+  } },
+  { name: 'hop-cuu-tro', pre: save0({ coins: 10, best: { 'Cây nấm': 3 } }), post: async () => {
+      ok(boxCost() === 0 && $('playBtn').textContent.includes('MIỄN PHÍ') && $('hNextBtn').textContent.includes('cứu trợ'), 'hết mô hình chờ lắp + thiếu xu → hộp cứu trợ miễn phí');
+      $('hNextBtn').click(); ok($('unbox').classList.contains('show') && S.coins === 10 && pendingList().length === 1, 'mở được, không trừ xu');
+      ok(boxCost() === BOX_PRICE, 'có mô hình chờ lắp rồi thì hết cứu trợ');
   } },
   { name: 'du-bo-van-mo', pre: save0({ coins: 200, best: { 'Cây nấm': 1, 'Ngôi nhà': 1, 'Dưa hấu': 1 }, own: { 'Lâu đài': true } }), post: async () => {
       showHome(0);
@@ -61,19 +66,19 @@ module.exports = [
   { name: 'ti-le', pre: save0({ coins: 100, best: { 'Cây nấm': 3 } }), post: async () => {
       $('oddsBtn').click();
       const t = $('oddsModal').textContent;
-      ok($('oddsModal').classList.contains('show') && boxPool().every(i => t.includes(LEVELS[i].name)) && !t.includes('Cây nấm') && !t.includes('Ngôi nhà') && ['12%', 'chưa có'].every(s => t.includes(s)), 'bảng tỉ lệ: chỉ mô hình chưa có, trừ level kế: ' + t);
+      ok($('oddsModal').classList.contains('show') && boxPool().every(i => t.includes(LEVELS[i].name)) && !t.includes('Cây nấm') && ['12%', 'chưa có', 'Bảo hiểm', '45%'].every(s => t.includes(s)), 'bảng tỉ lệ: mô hình chưa có, % thật (gần 45%), bảo hiểm: ' + t);
   } },
-  { name: 'cua-hang', pre: save0({ coins: 200, best: { 'Cây nấm': 3 }, next: { g: { i: 5, sp: false } } }), post: async () => {
+  { name: 'cua-hang', pre: save0({ coins: 300, best: { 'Cây nấm': 3 }, next: { g: { i: 5, sp: false } } }), post: async () => {
       ok(!$('hColBtn') && !$('series'), 'không còn màn Bộ sưu tập (trùng Kệ)');
       $('shopBtn').click();
       const items = document.querySelectorAll('#mAll .sRowL .mItem');
       ok(items.length === LEVELS.length && document.querySelectorAll('#mAll .sRow').length === SERIES.length, 'tiệm gạch: đủ mọi mô hình, mỗi bộ 1 hàng: ' + items.length);
       const row0 = [...document.querySelectorAll('#mAll .sRow')[0].querySelectorAll('.mItem')];
-      ok(row0[0].textContent.includes('miễn phí') && row0[row0.length - 1].textContent.includes('Đã có') && +row0[row0.length - 1].dataset.i === 0, 'Ngôi nhà (level kế miễn phí) lên đầu, Cây nấm đã có xuống cuối hàng');
+      ok(!row0[0].textContent.includes('miễn phí') && !row0[0].textContent.includes('Đã có') && row0[row0.length - 1].textContent.includes('Đã có') && +row0[row0.length - 1].dataset.i === 0, 'chưa có lên đầu, Cây nấm đã có xuống cuối hàng, không còn mô hình miễn phí');
       ok([...items].every(e => e.querySelector('.pbox') && !e.querySelector(':scope > img')), 'cửa hàng hiển thị hộp sản phẩm, không phải ảnh mô hình trần');
       document.querySelector('#mAll .mItem[data-i="6"]').click(); ok($('shop').classList.contains('show') && mSel === 6 && $('mImg').querySelector('.pbox'), 'chạm mô hình chưa có → khung mua');
       $('mBuy').click();
-      ok(S.coins === 50 && owned(6) && !special(6), 'mua Tượng Zeus 150: ' + S.coins);
+      ok(S.coins === 50 && owned(6) && !special(6), 'mua Tượng Zeus 250: ' + S.coins);
       ok($('unbox').classList.contains('show') && $('ubReel').offsetWidth === 0, 'mua xong có mở hộp, không quay');
       ok(S.next.g.i === 5, 'mua ở cửa hàng không tung lại hộp');
       await wait(4200); ok($('ubBtns').classList.contains('on') && $('ubPrize').textContent.includes('Tượng Zeus'), 'hiệu ứng ngắn phải xong, hiện hộp Tượng Zeus');
@@ -90,18 +95,18 @@ module.exports = [
       const pend = [...$('hLevels').children];
       ok(pend.length === 2 && pend[1].classList.contains('sp') && pend.every(e => e.querySelector('.pbox') && e.textContent.includes('NEW') && e.textContent.includes('0%')), 'thẻ chờ lắp: hộp sản phẩm, NEW, 0%, bản đặc biệt vàng');
       ok($('hDrawer').textContent.includes('2 bộ') && R('hDrawer').bottom <= R('hNav').top + 1 && R('hLevels').height === 0, 'ngăn kéo mặc định thu gọn thành 1 thanh trên thanh dưới, đếm số bộ');
-      ok(!$('serBtn') && !document.querySelector('#home .logo') && $('hNextBtn').textContent.includes('LEVEL 2') && $('hLife').textContent.includes('5'), 'bỏ nút bộ + logo; thanh trên hiện ❤; nút level kế');
-      ok(!$('hNext').querySelector('.pbox') && !$('hNext').textContent.includes('Ngôi nhà') && !hit(R('hNext'), R('hDrawer')) && !hit(R('hNextBtn'), R('hNav')), 'màn chính chỉ nút LEVEL (không hộp, không thông tin), không đè ngăn kéo / thanh dưới');
+      ok(!$('serBtn') && !document.querySelector('#home .logo') && $('hNextBtn').textContent.includes('LẮP TIẾP') && $('hLife').textContent.includes('5'), 'bỏ nút bộ + logo; thanh trên hiện ❤; nút lắp tiếp');
+      ok(!$('hNext').querySelector('.pbox') && $('hNext').textContent.includes('Ngôi nhà') && !hit(R('hNext'), R('hDrawer')) && !hit(R('hNextBtn'), R('hNav')), 'màn chính 1 nút LẮP TIẾP + tên mô hình (không hộp), không đè ngăn kéo / thanh dưới');
       ok(!$('hTabDone') && !$('hDrawer').textContent.includes('Đã xong'), 'ngăn kéo chỉ còn Chờ lắp');
       $('hTabWait').click(); $('hDrawerTog').click(); ok(R('hLevels').height === 0 && !S.showWait, 'thu gọn ngăn kéo');
       $('hDrawerTog').click(); showHome(); ok(R('hLevels').height > 0 && S.showWait, 'nhớ trạng thái mở'); $('hDrawerTog').click();
       ok([...document.querySelectorAll('#home *')].every(e => { const r = e.getBoundingClientRect(); return !r.width || (r.left >= A.left - 1 && r.right <= A.right + 1); }), 'không tràn ngang');
-      $('hNextBtn').click(); ok($('bpView').classList.contains('show') && bpI === 1, 'LEVEL 2 mở sách Ngôi nhà');
+      $('hNextBtn').click(); ok($('bpView').classList.contains('show') && bpI === 1, 'LẮP TIẾP mở sách Ngôi nhà');
       showHome(); $('hDrawerTog').click(); $('hLevels').children[1].click(); ok($('bpView').classList.contains('show') && bpI === 2, 'chạm thẻ trong ngăn kéo mở sách');
       showHome(); $('hSetBtn').click(); ok($('setModal').classList.contains('show'), 'nút cài đặt mở bảng cài đặt');
   } },
   { name: 'gacha-rieng', pre: save0({ coins: 500, best: { 'Cây nấm': 3 }, next: { g: { i: 5, sp: false } }, tut: 6 }), post: async () => {
-      ok($('hNext').textContent.includes('LEVEL 2'), 'giữa màn chính: level kế');
+      ok($('hNext').textContent.includes('MỞ HỘP') && $('hNext').textContent.includes('100'), 'giữa màn chính: hết mô hình chờ lắp → MỞ HỘP 100');
       $('gachaBtn').click(); ok($('gacha').classList.contains('show') && $('hBox').offsetWidth > 0 && $('playBtn').offsetWidth > 0 && $('adBtn').offsetWidth > 0 && $('oddsBtn').closest('#gacha'), 'màn hộp bí ẩn riêng');
       $('playBtn').click(); ok($('unbox').classList.contains('show') && !$('gacha').classList.contains('show'), 'mở hộp → màn vòng quay');
       await wait(5600); $('ubLater').click(); ok($('gacha').classList.contains('show'), 'xong quay về màn hộp bí ẩn để quay tiếp');

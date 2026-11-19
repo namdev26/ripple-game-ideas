@@ -35,3 +35,7 @@ HOUSE.push(['pine_2x2', 'green', 1, 0, 1, 0], ['pine_2x2', 'green', 13, 0, 13, 0
 module.exports.push(
   { name: 'rt-free', pre: save0({ ...ST, free: HOUSE }), post: async () => { $('sbFree').click(); await pump(900); } },
 );
+module.exports.push(
+  { name: 'rt-home-box', pre: save0({ tut: 6, coins: 150, best: { 'Cây nấm': 3, 'Ngôi nhà': 2, 'Dưa hấu': 3, 'Lâu đài': 1 } }), post: async () => { await wait(500); } },
+  { name: 'rt-win', pre: save0({ tut: 6, coins: 40, best: { 'Cây nấm': 3 }, own: { 'Ngôi nhà': true } }), post: async () => { startBuild(1); commitAll(); await wait(1500); $('skipBtn').click(); await wait(2500); } },
+);

@@ -103,9 +103,10 @@ module.exports = [
       $('lRetry').click(); ok(!$('loseModal').classList.contains('show') && on() === 3 && !done, 'chơi lại đủ 3 mạng');
       wrong(); commitAll(); ok(S.best['Cây nấm'] === 2, 'sao = số mạng còn: ' + S.best['Cây nấm']);
   } },
-  { name: 'tiep-tuc-level-ke', post: async () => {
-      giveModel(0); startBuild(0); commitAll(); $('rNext').click();
-      ok($('bpView').classList.contains('show') && bpI === ROAD[1], 'hết mô hình chờ lắp → sang level kế');
+  { name: 'tiep-tuc-mo-hop', post: async () => {
+      giveModel(0); startBuild(0); commitAll(); const c = S.coins; ok(c >= BOX_PRICE, 'thắng đủ xu mở hộp: ' + c);
+      $('rNext').click();
+      ok($('unbox').classList.contains('show') && S.coins === c - BOX_PRICE && pendingList().length === 1, 'hết mô hình chờ lắp → TIẾP TỤC mở hộp kế bằng xu vừa thắng');
   } },
   { name: 'roi-man-truoc-phat-lai', post: async () => {
       giveModel(0); startBuild(0); commitAll(); toMenu();
