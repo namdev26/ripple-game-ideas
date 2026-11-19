@@ -690,6 +690,17 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .cpIt i{font-style:normal;font-size:11cqw;line-height:16cqw}
 .cpIt small{font-size:2.8cqw!important;font-weight:800;white-space:nowrap}
 .cpEmpty{font-size:4cqw;font-weight:800;color:#6b7190;text-align:center;margin:0}
+/* sáng tạo: thanh màu + nút thay sổ bước / mạng */
+#app.free #stepBook,#app.free #lives,#app.free #count{display:none}
+#freeBar{display:none;position:absolute;top:19cqw;left:4cqw;right:4cqw;z-index:5;flex-direction:column;gap:2cqw;align-items:center}
+#app.free #freeBar{display:flex}
+#fColors{display:flex;flex-wrap:wrap;justify-content:center;gap:1.6cqw;background:#ffffffd0;border-radius:4cqw;padding:1.6cqw 2.4cqw}
+.fC{width:8cqw;height:8cqw;border-radius:50%;border:.6cqw solid #fff;box-shadow:0 .5cqw 1cqw #0003;cursor:pointer;padding:0}
+.fC.on{outline:.8cqw solid #2b3150;transform:scale(1.15)}
+.fBtns{display:flex;gap:2.4cqw}
+.fBtns .btn{width:12cqw;height:12cqw;font-size:6cqw;padding:0 0 .8cqw}
+.shotImg{display:block;width:62cqw;height:62cqw;margin:-2cqw auto 3cqw;background:repeating-conic-gradient(#eef1fa 0 25%,#fff 0 50%) 0 0/6cqw 6cqw;border-radius:3cqw}
+a.btn{text-decoration:none;justify-content:center;align-items:center}
 /* sự kiện + sổ sự kiện */
 #event #evHead{display:flex;align-items:center;gap:3cqw;width:90cqw;background:#fff;border-radius:4cqw;padding:2.4cqw 4cqw;box-shadow:inset 0 -1cqw 0 #cfd6ec;margin-bottom:2.4cqw;flex:none;color:#2b3150}
 #evHead .lgE{font-style:normal;font-size:13cqw;line-height:1}
@@ -743,6 +754,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <button id="setBtn" aria-label="Cài đặt">⚙️</button>
   </div>
   <div id="mTag"><b id="mTime" class="outline"></b><small id="mRule"></small></div>
+  <div id="freeBar"><div id="fColors"></div><div class="fBtns">
+    <button class="btn blue" id="fRot" aria-label="Xoay gạch">⟳</button><button class="btn blue" id="fUndo" aria-label="Hoàn tác">↶</button>
+    <button class="btn red" id="fClear" aria-label="Xoá hết">🗑</button><button class="btn green" id="fShot" aria-label="Chụp ảnh">📷</button></div></div>
   <div id="stepBook"><b id="lvName" class="outline"></b><img id="sbImg" alt=""><div id="sbSide"><div id="sbParts"></div><div id="sbNo"></div></div></div>
 
   <div id="zoom"><span id="zIn">+</span><div id="ztrack"><div id="zthumb">🔍</div></div><span id="zOut">−</span></div>
@@ -974,6 +988,13 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div id="lgBody"></div>
   </div>
 
+  <div id="shotModal" class="screen modal"><div class="panelM">
+    <div class="ribbon blue outline">ẢNH CỦA BẠN</div>
+    <button class="btn close" id="shotClose" aria-label="Đóng">✕</button>
+    <img id="shotImg" class="shotImg" alt="Ảnh công trình">
+    <a class="btn green big" id="shotSave" download="cong-trinh-xep-gach.png"><span class="outline g">⬇ Lưu ảnh</span></a>
+  </div></div>
+
   <div id="city" class="screen ov">
     <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">0</span></div>
     <div class="sHead outline" style="margin-top:10cqw">THÀNH PHỐ</div>
@@ -1028,6 +1049,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
       <button class="sideB" id="sbLogin"><i>📅</i><span>Điểm danh</span></button>
       <button class="sideB" id="sbQuest"><i>📋</i><span>Nhiệm vụ</span></button>
       <button class="sideB" id="sbDaily"><i>🎯</i><span>Thử thách</span></button>
+      <button class="sideB" id="sbFree"><i>🎨</i><span>Sáng tạo</span></button>
     </div>
     <div class="hSide" id="hSideR">
       <button class="sideB" id="sbCity"><i>🏙️</i><span>Thành phố</span></button>
@@ -2070,7 +2092,7 @@ const sfx={
 };
 
 // ====================== TRẠNG THÁI ======================
-const OVERLAYS=['loginModal','questModal','dcModal','mResult','league','lgResModal','event','city','result','buyModal','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
+const OVERLAYS=['loginModal','questModal','dcModal','mResult','league','lgResModal','event','city','shotModal','result','buyModal','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
 let rebuild=false, placedOrder=[], replaying=false, replayTok=0, replayDone=null; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
@@ -2104,7 +2126,7 @@ const supported=t=>t.deps.every(u=>u.placed);
 // m: null = lắp thường, 'daily' = thử thách ngày (không tốn ❤️, không lưu tiến độ, có luật riêng)
 function loadLevel(i,m=null){
   if (!m&&!built(i)&&!canPlay()){ OVERLAYS.forEach(id=>$(id).classList.remove('show')); showHome(); return openLife(); } // hết ❤️: level mới bị chặn, lắp lại thì không
-  levelIdx=i; L=LEVELS[i]; rebuild=built(i)||!!m; placedOrder=[]; mode=m; mT=0;
+  levelIdx=i; L=m==='free'?FREE_LV:LEVELS[i]; rebuild=built(i)||!!m; placedOrder=[]; mode=m; mT=0;
   const rule=m==='daily'?dcToday().k:null; LIVES=rule==='one'?1:3;
   cancelReplay();
   if (levelRoot) scene.remove(levelRoot);
@@ -2114,7 +2136,7 @@ function loadLevel(i,m=null){
   controls.autoRotate=false;
 
   const sp=!m&&special(i);
-  $('app').classList.toggle('mode',!!m); $('hintBtn').style.display=rule==='nohint'?'none':''; $('mRule').textContent=rule?DC_RULES[rule]:'';
+  $('app').classList.toggle('mode',m==='daily'); $('app').classList.toggle('free',m==='free'); $('hintBtn').style.display=rule==='nohint'||m==='free'?'none':''; $('mRule').textContent=rule?DC_RULES[rule]:'';
   targets=levelTargets(L).map((t,idx)=>({...t,color:kitColor(sp,t.color),idx,placed:false}));
   targets.forEach(t=>{ [t.fx,t.fz]=footprint(t.key,t.rot); t.top=t.y+PARTS[t.key].h; });
   // mảnh u là "bên dưới" t nếu chồng diện tích và nằm thấp hơn → phải lắp trước
@@ -2150,6 +2172,15 @@ function loadLevel(i,m=null){
   // khay
   const map=new Map(); tray=[];
   targets.forEach(t=>{ const k=t.key+'|'+t.color; if(!map.has(k)){ const it={key:t.key,color:t.color,left:0}; map.set(k,it); tray.push(it);} map.get(k).left++; });
+  if (m==='free') tray=FREE_PARTS.map(key=>({key,color:freeColor,left:1})); // khay = bảng gạch, lấy bao nhiêu cũng được
+  trayDom();
+  $('lvName').textContent=L.name; updateCoins(); updateCount(); updateHint(); updateTray(); updateLives();
+  buildTrayObjs();
+  showStep(0);
+  if (m==='free') freeLoad();
+  if (i===0&&!rebuild) setTimeout(()=>{ if(L===LEVELS[0]&&!done&&!$('home').classList.contains('show')) toast('Kéo mảnh vào đúng hình trên mô hình',2800); },500);
+}
+function trayDom(){
   const box=$('parts'); box.innerHTML=''; box.scrollLeft=0;
   tray.forEach((it,idx)=>{
     const el=document.createElement('div'); el.className='part';
@@ -2158,10 +2189,6 @@ function loadLevel(i,m=null){
     el.addEventListener('pointerdown',e=>trayDown(e,idx));
     it.el=el; box.appendChild(el);
   });
-  $('lvName').textContent=L.name; updateCoins(); updateCount(); updateHint(); updateTray(); updateLives();
-  buildTrayObjs();
-  showStep(0);
-  if (i===0&&!rebuild) setTimeout(()=>{ if(L===LEVELS[0]&&!done&&!$('home').classList.contains('show')) toast('Kéo mảnh vào đúng hình trên mô hình',2800); },500);
 }
 // Hình trắng luôn ẩn (xem bước ở sổ bước); vẫn dùng để bắt chỗ thả vì raycast của three.js không xét visible. Chỉ hiện khi gợi ý
 function showStep(s){
@@ -2253,6 +2280,7 @@ function nearestTarget(cx,cy,it,ok){
   return {t:best,d:bd,w:r.width};
 }
 function refreshHeldRot(cx,cy){
+  if (mode==='free'){ drag.obj.userData.inner.rotation.y=freeRot*Math.PI/2; return setPreview(freeCell(cx,cy,tray[drag.idx].key)); }
   const it=tray[drag.idx], best=nearestTarget(cx,cy,it).t;
   drag.obj.userData.inner.rotation.y=(best?best.rot:trayRot(it))*Math.PI/2;
   const n=nearestTarget(cx,cy,it,true);
@@ -2271,6 +2299,7 @@ addEventListener('pointerup',e=>{
   if (!drag.started){ tapItem(drag.idx); drag=null; return; }
   const cx=e.clientX, cy=e.clientY-drag.lift, it=tray[drag.idx];
   if (cy < $('panel').getBoundingClientRect().top){
+    if (mode==='free'){ if (drag.prev) freeAdd(drag.prev,true); return endDrag(!!drag.prev); }
     const res=findGhost(cx,cy,it);
     const t=res.ok||drag.prev; // đang thấy bóng mờ thì thả là vào chỗ đó
     if (t){ commit(t,drag.obj&&drag.obj.visible?drag.obj.position.clone():null); return endDrag(true); }
@@ -3035,6 +3064,7 @@ const traySun=new THREE.DirectionalLight(0xfff4e6,0.62); trayScene.add(traySun);
 const trayCam=new THREE.PerspectiveCamera(28,1,0.1,100);
 // hướng xoay của mảnh = hướng của chỗ trống tiếp theo cùng loại (ưu tiên bước hiện tại)
 function trayRot(it){
+  if (mode==='free') return freeRot;
   const same=t=>!t.placed&&t.key===it.key&&t.color===it.color;
   const t=targets.find(t=>same(t)&&t.step===step)||targets.find(same);
   return t?t.rot:0;
@@ -3175,7 +3205,7 @@ $('sbDaily').onclick=openDc;
 $('dcClose').onclick=()=>{ sfx.back(); show('dcModal',false); };
 $('dcPlay').onclick=()=>{ sfx.pick(); loadLevel(dcToday().i,'daily'); };
 function modeTick(dt){
-  if (!mode||done) return;
+  if (mode!=='daily'||done) return;
   if (!OVERLAYS.some(id=>$(id).classList.contains('show'))) mT+=dt;
   const lim=dcToday().limit, s=lim?Math.max(0,lim-mT):mT;
   $('mTime').textContent='⏱ '+mmss(s*1000); $('mTime').classList.toggle('warn',!!lim&&s<15);
@@ -3350,6 +3380,64 @@ $('cityClose').onclick=()=>{ sfx.back(); cSel=null; show('city',false); renderSi
 $('sbCity').onclick=openCity;
 // có việc ở thành phố: xu chờ thu ≥ 20, hoặc còn ô trống + còn mô hình chưa đặt
 const cityTodo=()=>cityCoins()>=20||(cityPlaced().length<city().rows*CITY_W&&cityFree().ms.length>0);
+
+// ====================== CHẾ ĐỘ SÁNG TẠO ======================
+// bàn trống 16×16, khay = bảng gạch không giới hạn; kéo gạch lên bàn, bóng mờ chỉ chỗ sẽ đặt (chồng lên gạch bên dưới);
+// đổi màu, xoay, hoàn tác, xoá, chụp ảnh. Công trình tự lưu để lần sau lắp tiếp
+const FREE_LV={name:'Sáng tạo',size:[16,16],steps:[[]]};
+const FREE_PARTS=['brick_2x4','brick_2x2','brick_1x4','brick_1x2','brick_1x1','plate_2x4','plate_2x2','plate_1x2','tile_2x2','slope_2x2','slope_1x2',
+  'round_1x1','cyl_2x2','cone_2x2','dome_2x2','arch_1x4','column_1x1','pine_2x2','flame_1x1','ball_2x2'];
+const FREE_COLORS=['red','orange','yellow','lime','green','azure','blue','lavender','pink','white','gray','black','brown','sand'];
+const FREE_MAX_H=60; // tối đa 60 tấm (~20 viên gạch) chồng lên nhau
+let freeColor='red', freeRot=0, freeB=[]; // gạch đã đặt: {key,color,x,y,z,rot,obj}
+const freeColors=()=>FREE_COLORS.concat(LEVELS.some((l,i)=>special(i))?['goldsp']:[]); // có bản vàng kim thì mở màu vàng kim
+// ô sẽ đặt dưới ngón tay: trúng gạch hoặc mặt bàn → góc mảnh làm tròn theo lưới, cao = đỉnh cao nhất trong diện tích
+function freeCell(cx,cy,key){
+  setRay(cx,cy);
+  const hit=ray.intersectObjects(freeB.map(b=>b.obj.userData.body),false)[0], p=hit?hit.point:ray.ray.intersectPlane(new THREE.Plane(new THREE.Vector3(0,1,0),0),new THREE.Vector3());
+  if (!p) return null;
+  const [fx,fz]=footprint(key,freeRot), [sx,sz]=FREE_LV.size;
+  const x=clamp(Math.round(p.x-fx/2),0,sx-fx), z=clamp(Math.round(p.z-fz/2),0,sz-fz);
+  let y=0; freeB.forEach(b=>{ const [bx,bz]=footprint(b.key,b.rot); if (b.x<x+fx&&x<b.x+bx&&b.z<z+fz&&z<b.z+bz) y=Math.max(y,b.y+PARTS[b.key].h); });
+  return y+PARTS[key].h>FREE_MAX_H?null:{key,color:freeColor,x,y,z,rot:freeRot};
+}
+function freeAdd(b,user){
+  const o=makeBrick(b.key,b.color); placeObj(o,b.key,b.x,b.y,b.z,b.rot); levelRoot.add(o);
+  freeB.push({key:b.key,color:b.color,x:b.x,y:b.y,z:b.z,rot:b.rot,obj:o});
+  if (!user) return;
+  sfx.snap(); burst(o.position.x,o.position.y+0.1,o.position.z,b.color,8);
+  anims.push({t0:performance.now(),dur:180,fn:q=>{ const s=Math.sin(q*Math.PI)*0.08; o.scale.set(1+s,1-s,1+s); }});
+  freeSave();
+}
+const freeSave=()=>{ S.free=freeB.map(b=>[b.key,b.color,b.x,b.y,b.z,b.rot]); save(); };
+function freeLoad(){
+  freeB=[]; (S.free||[]).forEach(([key,color,x,y,z,rot])=>{ if (PARTS[key]&&COLORS[color]) freeAdd({key,color,x,y,z,rot},false); });
+  $('fColors').innerHTML=freeColors().map(c=>`<button class="fC${c===freeColor?' on':''}" data-c="${c}" style="background:#${COLORS[c].hex.toString(16).padStart(6,'0')}" aria-label="${COLOR_VI[c]}"></button>`).join('');
+}
+$('fColors').onclick=e=>{
+  const b=e.target.closest('.fC'); if (!b) return; freeColor=b.dataset.c; sfx.pick();
+  $('fColors').querySelectorAll('.fC').forEach(x=>x.classList.toggle('on',x===b));
+  tray.forEach(it=>it.color=freeColor); trayDom(); updateTray(); buildTrayObjs();
+};
+$('fRot').onclick=()=>{ freeRot=(freeRot+1)%4; sfx.pick(); refreshTrayRot(); };
+$('fUndo').onclick=()=>{ const b=freeB.pop(); if (!b){ sfx.back(); return toast('Chưa có gạch nào'); } levelRoot.remove(b.obj); sfx.back(); freeSave(); };
+let clearAsk=0;
+$('fClear').onclick=()=>{
+  if (!freeB.length) return toast('Bàn đang trống');
+  if (Date.now()-clearAsk>2500){ clearAsk=Date.now(); sfx.pick(); return toast('Bấm 🗑 lần nữa để xoá hết'); }
+  clearAsk=0; freeB.forEach(b=>levelRoot.remove(b.obj)); freeB=[]; freeSave(); sfx.wrong();
+};
+// chụp ảnh công trình theo góc đang nhìn (nền trong suốt), cho tải về
+$('fShot').onclick=()=>{
+  if (!freeB.length) return toast('Lắp gì đó rồi chụp nhé');
+  const g=new THREE.Group(), box=new THREE.Box3();
+  freeB.forEach(b=>{ const o=makeBrick(b.key,b.color); placeObj(o,b.key,b.x,b.y,b.z,b.rot); g.add(o); });
+  box.setFromObject(g); const c=box.getCenter(new THREE.Vector3()), r=box.getSize(new THREE.Vector3()).length()/2+0.3;
+  thumbR.setSize(512,512); const url=renderThumb(g,c,r,viewDir()); thumbR.setSize(256,256);
+  $('shotImg').src=url; $('shotSave').href=url; sfx.magic(); show('shotModal',true);
+};
+$('shotClose').onclick=()=>{ sfx.back(); show('shotModal',false); };
+$('sbFree').onclick=()=>{ sfx.pick(); loadLevel(0,'free'); toast('Kéo gạch lên bàn · chọn màu ở trên',2400); };
 
 // ====================== LOOP ======================
 function resize(){

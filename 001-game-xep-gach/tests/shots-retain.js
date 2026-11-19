@@ -26,3 +26,12 @@ module.exports.push(
   { name: 'rt-city', pre: save0(CT), post: async () => { openCity(); await wait(800); } },
   { name: 'rt-city-pick', pre: save0(CT), post: async () => { openCity(); $('cityGrid').querySelector('[data-k="10"]').click(); await wait(800); } },
 );
+// nhà nhỏ dựng sẵn cho ảnh chế độ sáng tạo
+const HOUSE = [];
+for (const [x, z, r] of [[5, 5, 0], [9, 5, 0], [5, 10, 0], [9, 10, 0], [5, 6, 1], [5, 8, 1], [12, 6, 1], [12, 8, 1]]) HOUSE.push(['brick_1x4', 'white', x, 0, z, r]);
+for (const [x, z, r] of [[5, 5, 0], [9, 5, 0], [5, 10, 0], [9, 10, 0], [5, 6, 1], [5, 8, 1], [12, 6, 1], [12, 8, 1]]) HOUSE.push(['brick_1x4', 'azure', x, 3, z, r]);
+for (const x of [5, 7, 9, 11]) for (const z of [5, 7, 9]) HOUSE.push(['slope_2x2', 'red', x, 6, z, 0]);
+HOUSE.push(['pine_2x2', 'green', 1, 0, 1, 0], ['pine_2x2', 'green', 13, 0, 13, 0], ['flame_1x1', 'yellow', 2, 0, 12, 0], ['round_1x1', 'pink', 3, 0, 13, 0]);
+module.exports.push(
+  { name: 'rt-free', pre: save0({ ...ST, free: HOUSE }), post: async () => { $('sbFree').click(); await pump(900); } },
+);
