@@ -664,6 +664,32 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .sideB .tmr:empty{display:none}
 .rLg{display:block;font-size:3.6cqw;font-weight:800;color:#6b7190;margin:-1cqw 0 2cqw}
 .rLg:empty{display:none}
+/* thành phố: đảo cỏ trên biển, lưới nghiêng 2.5D, mô hình đứng thẳng trên ô */
+#city{background:linear-gradient(#7fd3f5 0%,#4fb0e6 55%,#2f8cd0 100%)}
+#city.night{background:linear-gradient(#1b2350 0%,#2b3a7a 60%,#20407a 100%)}
+#city.night #cityIsle{filter:brightness(.78) saturate(.9)}
+#cityInfo{color:#fff;font-size:4.2cqw;font-weight:800;margin:-1cqw 0 3cqw}
+#cityIsle{padding:5cqw 4cqw 7cqw;border-radius:8cqw;background:radial-gradient(ellipse at 50% 40%,#9be36a,#5fbf45 70%,#3f9a33);box-shadow:0 2.4cqw 0 #c9a46a,0 4cqw 0 #a07a43,0 5cqw 4cqw #0004;perspective:200cqw}
+#cityGrid{display:grid;grid-template-columns:repeat(4,17cqw);gap:1.6cqw;transform:rotateX(38deg);transform-style:preserve-3d;margin-top:-4cqw}
+.plot{position:relative;height:17cqw;border-radius:2.4cqw;background:#7fd35a;box-shadow:inset 0 0 0 .5cqw #ffffff55,0 1cqw 0 #3f9a33;cursor:pointer;transform-style:preserve-3d;display:flex;align-items:center;justify-content:center}
+.plot .add{color:#ffffffaa;font-size:8cqw;font-weight:800}
+.plot.on{background:#c9b48a;box-shadow:inset 0 0 0 .5cqw #ffffff55,0 1cqw 0 #8f7a50}
+.plot img,.plot .dc{position:absolute;left:-15%;bottom:15%;width:130%;transform-origin:50% 100%;transform:rotateX(-38deg);pointer-events:none}
+.plot .dc{font-style:normal;font-size:11cqw;text-align:center;line-height:1;bottom:25%}
+.plot.lock{background:#ffffff40;box-shadow:none;cursor:default}
+.plot.lock b{font-size:8cqw}
+.plot.sel{outline:.9cqw solid #ffd43b;outline-offset:.4cqw}
+#cityBtns{display:flex;gap:3cqw;margin-top:7cqw}
+#cityBtns .btn{height:12cqw;padding:0 4cqw;font-size:4.6cqw}
+#cityPick{position:absolute;left:7cqw;bottom:22cqw;z-index:3;margin:0}
+#cityPick .btns{display:flex;gap:3cqw;justify-content:center}
+#cityPick small{font-size:3.4cqw;color:#e07a00}
+.cpList{display:flex;gap:2cqw;overflow-x:auto;scrollbar-width:none;padding-bottom:1cqw}
+.cpIt{flex:none;width:19cqw;border:none;border-radius:3cqw;background:#eef1fa;box-shadow:inset 0 -.8cqw 0 #d6dbea;display:flex;flex-direction:column;align-items:center;padding:1cqw;cursor:pointer;font-family:inherit}
+.cpIt img{width:16cqw;height:16cqw;object-fit:contain}
+.cpIt i{font-style:normal;font-size:11cqw;line-height:16cqw}
+.cpIt small{font-size:2.8cqw!important;font-weight:800;white-space:nowrap}
+.cpEmpty{font-size:4cqw;font-weight:800;color:#6b7190;text-align:center;margin:0}
 /* sự kiện + sổ sự kiện */
 #event #evHead{display:flex;align-items:center;gap:3cqw;width:90cqw;background:#fff;border-radius:4cqw;padding:2.4cqw 4cqw;box-shadow:inset 0 -1cqw 0 #cfd6ec;margin-bottom:2.4cqw;flex:none;color:#2b3150}
 #evHead .lgE{font-style:normal;font-size:13cqw;line-height:1}
@@ -948,6 +974,16 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div id="lgBody"></div>
   </div>
 
+  <div id="city" class="screen ov">
+    <div class="coins"><span class="coin"></span><span class="plus">+</span><span class="cn">0</span></div>
+    <div class="sHead outline" style="margin-top:10cqw">THÀNH PHỐ</div>
+    <button class="btn blue close" id="cityClose" aria-label="Đóng">✕</button>
+    <div id="cityInfo" class="outline"></div>
+    <div id="cityIsle"><div id="cityGrid"></div></div>
+    <div id="cityBtns"><button class="btn green" id="cityCollect"></button><button class="btn blue" id="cityExpand"></button></div>
+    <div class="pick" id="cityPick"></div>
+  </div>
+
   <div id="event" class="screen ov">
     <div class="sHead outline">SỰ KIỆN</div>
     <button class="btn blue close" id="evClose" aria-label="Đóng">✕</button>
@@ -994,6 +1030,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
       <button class="sideB" id="sbDaily"><i>🎯</i><span>Thử thách</span></button>
     </div>
     <div class="hSide" id="hSideR">
+      <button class="sideB" id="sbCity"><i>🏙️</i><span>Thành phố</span></button>
       <button class="sideB" id="sbEvent"><b class="tmr"></b><i></i><span>Sự kiện</span></button>
       <button class="sideB" id="sbLeague"><b class="tmr"></b><i>🏆</i><span>Giải đấu</span></button>
     </div>
@@ -2033,7 +2070,7 @@ const sfx={
 };
 
 // ====================== TRẠNG THÁI ======================
-const OVERLAYS=['loginModal','questModal','dcModal','mResult','league','lgResModal','event','result','buyModal','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
+const OVERLAYS=['loginModal','questModal','dcModal','mResult','league','lgResModal','event','city','result','buyModal','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
 let rebuild=false, placedOrder=[], replaying=false, replayTok=0, replayDone=null; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
@@ -2951,7 +2988,7 @@ $('backBtn').onclick=()=>quitLevel(toMenu);
 $('lMenu').onclick=()=>{ if(!rebuild) loseHeart(); toMenu(); };
 $('hHomeTab').onclick=()=>tabGo(()=>{ sfx.pick(); showHome(curSeries); });
 // thanh tab nằm ngoài màn chính: hiện ở Trang chủ / Tiệm Gạch / Hộp bí ẩn / Kệ, ô sáng chạy theo màn đang mở; ẩn khi lắp, xem sách, mở hộp...
-function tabGo(f){ ['shop','iap','gacha','shelf','league','event'].forEach(id=>$(id).classList.remove('show')); f(); }
+function tabGo(f){ ['shop','iap','gacha','shelf','league','event','city'].forEach(id=>$(id).classList.remove('show')); f(); }
 function syncNav(){
   const v=id=>$(id).classList.contains('show'), tab=['iap','shop','gacha','shelf'].find(v)||(v('home')?'home':null);
   $('hNav').classList.toggle('off',!tab||['bpView','unbox','adView'].some(v));
@@ -3109,7 +3146,7 @@ $('sbQuest').onclick=openQuest;
 function renderSide(){
   const dot=(id,n)=>{ const b=$(id); let d=b.querySelector('.badge'); if(!n){ d&&d.remove(); return; } if(!d){ d=document.createElement('b'); d.className='badge'; b.appendChild(d); } d.textContent=n===true?'':n; };
   dot('sbLogin',loginK().can); dot('sbQuest',questReady()); dot('sbDaily',!dcState().won);
-  dot('sbEvent',evReady()); $('sbEvent').querySelector('i').textContent=evNow().e; $('sbEvent').querySelector('.tmr').textContent=evLeft();
+  dot('sbCity',cityTodo()); dot('sbEvent',evReady()); $('sbEvent').querySelector('i').textContent=evNow().e; $('sbEvent').querySelector('.tmr').textContent=evLeft();
   const g=lgCheck(); dot('sbLeague',!!g.res); $('sbLeague').querySelector('.tmr').textContent=g.res?'Nhận thưởng':'#'+lgRank(g.w,g.tier,g.pts,Date.now());
 }
 // mở game lần đầu trong ngày: tự hiện bảng điểm danh (không chen vào hướng dẫn lần đầu)
@@ -3251,6 +3288,68 @@ $('evBody').onclick=e=>{
 $('evPass').onclick=()=>openBuy('evpass');
 $('evClose').onclick=()=>{ sfx.back(); show('event',false); renderSide(); };
 $('sbEvent').onclick=openEvent;
+
+// ====================== THÀNH PHỐ CỦA TÔI ======================
+// hòn đảo lưới 4 cột: đặt mô hình đã lắp + đồ trang trí sự kiện; mỗi công trình ra xu theo giờ (tối đa 8 giờ chưa thu);
+// mở rộng đất bằng xu. Ô trống nhắc người chơi lắp thêm mô hình
+const CITY_W=4, CITY_ROWS=6, CITY_ROW0=2, CITY_EXP=[150,250,400,600], CITY_RATE=[4,6,10], CITY_CAP=8;
+function city(){ if (!S.city) S.city={rows:CITY_ROW0,p:{},t:Date.now(),bank:0}; return S.city; }
+const lvIdx=n=>LEVELS.findIndex(l=>l.name===n);
+const cityPlaced=()=>Object.values(city().p);
+const plotRate=x=>x.m?Math.round(CITY_RATE[rarOf(lvIdx(x.m))]*(special(lvIdx(x.m))?1.5:1)):1; // xu/giờ: theo độ hiếm, bản vàng kim ×1,5; trang trí 1
+const cityRate=()=>cityPlaced().reduce((a,x)=>a+plotRate(x),0);
+const cityAccrued=()=>Math.floor(cityRate()*Math.min(CITY_CAP,(Date.now()-city().t)/3600e3));
+const cityCoins=()=>(city().bank||0)+cityAccrued();
+function citySettle(){ const c=city(); c.bank=cityCoins(); c.t=Date.now(); } // đổi công trình: chốt xu đã ra theo mức cũ
+// món chưa đặt: mô hình đã lắp + đồ trang trí còn trong kho
+function cityFree(){
+  const P=cityPlaced(), ms=ALL_IDX.filter(i=>built(i)&&!P.some(x=>x.m===LEVELS[i].name));
+  const ds=Object.entries(S.deco||{}).map(([d,n])=>[d,n-P.filter(x=>x.d===d).length]).filter(([,n])=>n>0);
+  return {ms,ds};
+}
+let cSel=null; // ô đang chọn
+function renderCity(){
+  const c=city(), n=CITY_W*Math.min(CITY_ROWS,c.rows+1), open=c.rows*CITY_W, h=new Date().getHours(); // chỉ hé 1 hàng đất chưa mở
+  $('city').classList.toggle('night',h<6||h>=18);
+  $('cityInfo').textContent=`🏗 ${cityPlaced().length} công trình · +${cityRate()}🪙/giờ`;
+  $('cityGrid').innerHTML=Array.from({length:n},(_,k)=>{ const x=c.p[k], lock=k>=open;
+    return `<div class="plot${lock?' lock':''}${x?' on':''}${k===cSel?' sel':''}" data-k="${k}">`+(lock?(k%CITY_W===1&&Math.floor(k/CITY_W)===c.rows?'<b>☁️</b>':'')
+      :x?(x.m?`<img src="${thumbLevel(lvIdx(x.m),special(lvIdx(x.m)))}" alt="">`:`<i class="dc">${x.d}</i>`):'<b class="add">+</b>')+'</div>'; }).join('');
+  const cc=cityCoins(); $('cityCollect').innerHTML=`<span class="outline g">💰 Thu ${cc}🪙</span>`; $('cityCollect').classList.toggle('dis',!cc);
+  const ex=CITY_EXP[c.rows-CITY_ROW0]; $('cityExpand').style.display=c.rows<CITY_ROWS?'':'none'; if (ex) $('cityExpand').innerHTML=`<span class="outline">🗺 Mở rộng · ${ex}🪙</span>`;
+  renderCityPick();
+}
+function renderCityPick(){
+  const p=$('cityPick'), c=city(); p.style.display=cSel==null?'none':''; if (cSel==null) return;
+  const x=c.p[cSel];
+  if (x){ p.innerHTML=`<div class="row2"><b>${x.m?x.m:DECO_N[x.d]||'Trang trí'}</b><small>+${plotRate(x)}🪙/giờ</small></div><div class="btns"><button class="btn red" id="cpDel"><span class="outline r">Cất vào kho</span></button><button class="btn blue" id="cpNo"><span class="outline">Xong</span></button></div>`; return; }
+  const f=cityFree(), items=f.ms.map(i=>`<button class="cpIt" data-m="${i}"><img src="${thumbLevel(i,special(i))}" alt=""><small>+${plotRate({m:LEVELS[i].name})}/giờ</small></button>`)
+    .concat(f.ds.map(([d,n])=>`<button class="cpIt" data-d="${d}"><i>${d}</i><small>${DECO_N[d]||''} ×${n}</small></button>`));
+  const rn=roadNext();
+  p.innerHTML=`<div class="row2"><b>Đặt gì vào đây?</b><button class="btn blue" id="cpNo"><span class="outline">✕</span></button></div>`
+    +(items.length?`<div class="cpList">${items.join('')}</div>`:`<p class="cpEmpty">Hết công trình để đặt · lắp thêm mô hình nhé!</p>${rn!=null?`<button class="btn green" id="cpPlay"><span class="outline g">▶ LEVEL ${roadNo(rn)}</span></button>`:''}`);
+}
+function openCity(){ sfx.pick(); cSel=null; renderCity(); updateCoins(); show('city',true); }
+$('cityGrid').onclick=e=>{
+  const pl=e.target.closest('.plot'); if (!pl) return; const k=+pl.dataset.k;
+  if (pl.classList.contains('lock')){ sfx.back(); return toast('Mở rộng đất để xây thêm'); }
+  sfx.pick(); cSel=cSel===k?null:k; renderCity();
+};
+$('cityPick').onclick=e=>{
+  const c=city(), it=e.target.closest('.cpIt');
+  if (it){ citySettle(); c.p[cSel]=it.dataset.m!=null?{m:LEVELS[+it.dataset.m].name}:{d:it.dataset.d}; cSel=null; save(); sfx.snap(); renderCity(); renderSide(); return; }
+  if (e.target.closest('#cpDel')){ citySettle(); delete c.p[cSel]; cSel=null; save(); sfx.back(); renderCity(); renderSide(); return; }
+  if (e.target.closest('#cpNo')){ cSel=null; sfx.back(); renderCity(); return; }
+  if (e.target.closest('#cpPlay')){ sfx.pick(); show('city',false); playRoad(); }
+};
+$('cityCollect').onclick=()=>{ const n=cityCoins(); if (!n){ sfx.back(); return toast('Chưa có xu · đặt thêm công trình nhé'); } const c=city(); c.bank=0; c.t=Date.now(); S.coins+=n; save(); updateCoins(true); sfx.coin(); toast(`💰 +${n}🪙 từ thành phố`); renderCity(); renderSide(); };
+$('cityExpand').onclick=()=>{ const c=city(), ex=CITY_EXP[c.rows-CITY_ROW0]; if (!ex) return;
+  if (S.coins<ex){ sfx.wrong(); return toast(`Cần ${ex}🪙 để mở rộng`); }
+  S.coins-=ex; c.rows++; save(); updateCoins(true); sfx.magic(); toast('🗺 Thêm 4 ô đất mới!'); renderCity(); };
+$('cityClose').onclick=()=>{ sfx.back(); cSel=null; show('city',false); renderSide(); };
+$('sbCity').onclick=openCity;
+// có việc ở thành phố: xu chờ thu ≥ 20, hoặc còn ô trống + còn mô hình chưa đặt
+const cityTodo=()=>cityCoins()>=20||(cityPlaced().length<city().rows*CITY_W&&cityFree().ms.length>0);
 
 // ====================== LOOP ======================
 function resize(){

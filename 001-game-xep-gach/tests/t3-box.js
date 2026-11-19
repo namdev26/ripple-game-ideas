@@ -29,7 +29,7 @@ module.exports = [
       ok(Math.abs(w.left + w.width / 2 - (R.left + R.width / 2)) < 2, 'ô trúng phải nằm giữa vạch: ' + (w.left + w.width / 2) + ' vs ' + (R.left + R.width / 2));
   } },
   { name: 'tua-nhanh', pre: save0({ coins: 500, best: { 'Cây nấm': 3 } }), post: async () => {
-      $('playBtn').click(); await wait(300); $('unbox').click(); await wait(1300);
+      $('playBtn').click(); await wait(300); $('unbox').click(); await wait(2200); // không tua phải ~4,3s; 1,3s quá sát nên chập chờn
       ok($('ubBtns').classList.contains('on'), 'chạm để tua phải lộ mô hình nhanh');
   } },
   { name: 'bo-chua-mo-van-ra', pre: save0({ coins: 500, best: { 'Cây nấm': 3 }, next: { g: { i: 15, sp: false } } }), post: async () => {

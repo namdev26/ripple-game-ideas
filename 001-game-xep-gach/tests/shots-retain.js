@@ -20,3 +20,9 @@ module.exports.push(
   { name: 'rt-event', pre: save0(ST), post: async () => { evState().pts = EV_STEP * 3 + 22; evState().free = [0, 1]; save(); openEvent(); await wait(600); } },
   { name: 'rt-event-pass', pre: save0(ST), post: async () => { evState().pts = EV_STEP * 3 + 22; evState().free = [0, 1]; evState().pass = true; evState().prem = [0]; save(); openEvent(); await wait(600); } },
 );
+const CT = { ...ST, best: { 'Cây nấm': 3, 'Ngôi nhà': 2, 'Dưa hấu': 3, 'Lâu đài': 1, 'Tượng Rhodes': 3, 'Chuột': 2, 'Cầu Vàng': 3 }, sp: { 'Dưa hấu': true }, deco: { '🎄': 2, '⛄': 1 },
+  city: { rows: 3, t: Date.now() - 5 * 3600e3, bank: 0, p: { 0: { m: 'Cây nấm' }, 1: { d: '🎄' }, 2: { m: 'Lâu đài' }, 5: { m: 'Dưa hấu' }, 6: { m: 'Ngôi nhà' }, 7: { d: '⛄' }, 9: { m: 'Tượng Rhodes' } } } };
+module.exports.push(
+  { name: 'rt-city', pre: save0(CT), post: async () => { openCity(); await wait(800); } },
+  { name: 'rt-city-pick', pre: save0(CT), post: async () => { openCity(); $('cityGrid').querySelector('[data-k="10"]').click(); await wait(800); } },
+);
