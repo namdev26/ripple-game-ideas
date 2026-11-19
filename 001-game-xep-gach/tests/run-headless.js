@@ -15,6 +15,7 @@ const _a=console.assert;console.assert=(c,...m)=>{if(!c)__errs.push('assert: '+m
 const _e=console.error;console.error=(...m)=>{__errs.push('console.error: '+m.join(' '));};
 window.ok=(c,m)=>{if(!c)throw m;};
 try{localStorage.clear();}catch(e){}
+window.__noAuto=1; // không tự bật bảng điểm danh (case cần thì tự xoá)
 (${cases.lib || (() => {})})();
 (${c.pre || (() => {})})();</script>`;
   const post = `<script>window.addEventListener('load',()=>setTimeout(async()=>{let r;try{await (${c.post})();r=__errs.length?'ERR:'+__errs.join(' | '):'OK';}catch(e){r='ERR:'+(e&&e.message||e)+(__errs.length?' | '+__errs.join(' | '):'');}

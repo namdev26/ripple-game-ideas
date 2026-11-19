@@ -610,6 +610,30 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 .shItem .wt{position:absolute;bottom:.6cqw;font-size:3.2cqw;font-weight:800;color:#e07a00}
 .shItem.sp{background:linear-gradient(#fff6c8,#ffe27a);box-shadow:inset 0 -1cqw 0 #e3a923}
 .shItem.sp::after{content:"✨";position:absolute;top:.4cqw;right:1cqw;font-size:4.6cqw}
+/* ---------- giữ chân: cột nút 2 bên màn chính, điểm danh, nhiệm vụ ---------- */
+.hSide{position:absolute;top:44cqw;display:flex;flex-direction:column;gap:3.4cqw;z-index:2}
+#hSideL{left:3.5cqw} #hSideR{right:3.5cqw}
+.sideB .badge:empty{width:3.6cqw;height:3.6cqw}
+.rwI{font-style:normal}
+.lgGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:2cqw;margin-bottom:4cqw}
+.lgC{position:relative;background:#fff;border-radius:3cqw;box-shadow:inset 0 -.8cqw 0 #d6dbea;padding:1.2cqw .4cqw 1.6cqw;font-weight:800;font-size:3cqw;color:#2b3150;display:flex;flex-direction:column;align-items:center;line-height:1.15}
+.lgC small{font-size:2.8cqw;color:#6b7190}
+.lgC i{font-style:normal;font-size:7.4cqw;line-height:1.2}
+.lgC.d7{grid-column:span 2;background:linear-gradient(#fff6c8,#ffe27a);box-shadow:inset 0 -.8cqw 0 #e3a923}
+.lgC.now{outline:.9cqw solid #33b44a;animation:pbob 1.2s ease-in-out infinite}
+.lgC.got>*{opacity:.35}
+.lgC.got::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9cqw;color:#33b44a;-webkit-text-stroke:.5cqw #fff;paint-order:stroke}
+.qList{display:flex;flex-direction:column;gap:2.4cqw;margin-bottom:3cqw}
+.qRow{display:flex;align-items:center;gap:2.4cqw;background:#fff;border-radius:3cqw;padding:2cqw 2.4cqw;box-shadow:inset 0 -.8cqw 0 #d6dbea;text-align:left}
+.qRow .qT{flex:1;min-width:0;font-size:3.7cqw;font-weight:800;color:#2b3150;line-height:1.2}
+.qRow .qR{font-size:3.2cqw;color:#e07a00}
+.qBar{position:relative;height:3.8cqw;background:#e3e7f3;border-radius:2cqw;overflow:hidden;margin-top:1cqw}
+.qBar i{display:block;height:100%;background:linear-gradient(#ffe45c,#ffb800)}
+.qBar b{position:absolute;inset:0;font-size:2.9cqw;line-height:3.8cqw;text-align:center;color:#2b3150}
+.qBtn{width:19cqw;height:10cqw;font-size:3.9cqw;flex:none;padding-bottom:.8cqw}
+.qOk{width:19cqw;text-align:center;font-size:6cqw;color:#33b44a;flex:none}
+.qRow.all{background:linear-gradient(#fff6c8,#ffe27a);box-shadow:inset 0 -.8cqw 0 #e3a923}
+.qTime{font-size:3.4cqw;font-weight:800;color:#6b7190;margin:-1cqw 0 3cqw}
 /* ---------- hướng dẫn lần đầu ---------- */
 #tip{display:none;position:absolute;z-index:25;pointer-events:none;left:50%;bottom:calc(100% + 3.5cqw);transform:translateX(-50%);line-height:1.3;background:#fff;color:#2b3150;font-size:4.4cqw;font-weight:800;
   padding:2cqw 4cqw;border-radius:3.5cqw;border:.7cqw solid #ffd43b;box-shadow:0 1.5cqw 3cqw #0004;white-space:nowrap;animation:tipbob 1s ease-in-out infinite}
@@ -835,6 +859,22 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
       <div class="btns"><button class="btn blue" id="shReplay"><span class="outline">▶ Phát lại</span></button><button class="btn green" id="shBuild"><span class="outline g">↻ Lắp lại</span></button></div></div>
   </div>
 
+  <!-- điểm danh 7 ngày liên tục (lỡ 1 ngày → về ngày 1) -->
+  <div id="loginModal" class="screen modal"><div class="panelM">
+    <div class="ribbon outline o">ĐIỂM DANH</div>
+    <button class="btn close" id="loginClose" aria-label="Đóng">✕</button>
+    <div class="lgGrid" id="lgGrid"></div>
+    <button class="btn green big" id="loginOk"><span class="outline g">NHẬN</span></button>
+  </div></div>
+
+  <!-- nhiệm vụ ngày: 3 việc nhỏ, xong cả 3 nhận rương -->
+  <div id="questModal" class="screen modal"><div class="panelM">
+    <div class="ribbon blue outline">NHIỆM VỤ NGÀY</div>
+    <button class="btn close" id="questClose" aria-label="Đóng">✕</button>
+    <div class="qTime">🔄 Làm mới sau <span class="oT"></span></div>
+    <div class="qList" id="qList"></div>
+  </div></div>
+
   <div id="hNav">
     <button class="navB" id="hIapBtn"><i>💎</i><span class="outline">Ưu đãi</span></button>
     <button class="navB" id="shopBtn"><i>🧱</i><span class="outline">Tiệm Gạch</span></button>
@@ -848,6 +888,11 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <button class="btn blue" id="hSetBtn" aria-label="Cài đặt">⚙</button>
     <div id="hGoal"></div>
     <div id="hNext"></div>
+    <div class="hSide" id="hSideL">
+      <button class="sideB" id="sbLogin"><i>📅</i><span>Điểm danh</span></button>
+      <button class="sideB" id="sbQuest"><i>📋</i><span>Nhiệm vụ</span></button>
+    </div>
+    <div class="hSide" id="hSideR"></div>
     <div id="hDrawer">
       <div class="dHead"><button class="dTab cur" id="hTabWait">🧱<span>Chờ lắp</span></button><b id="hDCount"></b><button id="hDrawerTog" aria-label="Thu gọn / mở">▼</button></div>
       <div id="hLevels"></div>
@@ -1884,7 +1929,7 @@ const sfx={
 };
 
 // ====================== TRẠNG THÁI ======================
-const OVERLAYS=['result','buyModal','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
+const OVERLAYS=['loginModal','questModal','result','buyModal','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
 let rebuild=false, placedOrder=[], replaying=false, replayTok=0, replayDone=null; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
@@ -2143,7 +2188,7 @@ function commit(t,from){
   const y1=t.y*PLATE, to=o.position.clone(), fr=from||to.clone().setY(y1+1.1); o.position.copy(fr);
   anims.push({t0:performance.now(),dur:from?150:200,fn:k=>{ o.position.lerpVectors(fr,to,k*k); if(k>=1){ burst(t.x+t.fx/2,y1+0.1,t.z+t.fz/2,t.color);
     anims.push({t0:performance.now(),dur:180,fn:q=>{ const s=Math.sin(q*Math.PI)*0.07; o.scale.set(1+s,1-s,1+s); }}); } }});
-  sfx.snap();
+  sfx.snap(); questAdd('brick');
   const it=tray.find(i=>i.key===t.key&&i.color===t.color); it.left--;
   updateTray(); updateCount();
   if (targets.every(x=>x.placed)) return win();
@@ -2206,6 +2251,7 @@ function win(){
   if (S.tut<5) S.tut=5; // lắp xong mô hình đầu: còn bước chỉ cửa hàng
   if (!rebuild){ S.streak=(S.streak||0)+1; if(S.streak%3===0) giveInf(INF_STREAK,'🔥 Thắng 3 level liên tiếp'); }
   if (bonus) giveInf(INF_SERIES,'🎉 Đủ bộ');
+  questAdd(rebuild?'rebuild':'win'); if (!mistakes) questAdd('perfect');
   S.coins+=reward+bonus; save();
   setTimeout(confetti,250);
   controls.autoRotate=true; controls.autoRotateSpeed=3;
@@ -2393,7 +2439,7 @@ function renderGoal(){
 }
 function renderHome(){
   const s=curSeries, r=SERIES[s], pend=pendingList(), nx=pend[0], rn=roadNext();
-  renderGacha(); renderGoal();
+  renderGacha(); renderGoal(); renderSide();
   updateLife();
   $('hNext').innerHTML=rn!=null
     ?`<button class="btn yellow" id="hNextBtn"><span class="t outline o">▶ LEVEL ${roadNo(rn)}</span><small class="lk">${!infLeft()&&!heartsNow()?'❤️ hồi sau '+mmss(nextHeartMs()):''}</small></button>`
@@ -2439,7 +2485,7 @@ function openBox(viaAd){
   const nx=peekBox(), c=viaAd?0:boxPrice(), pool=boxPool();
   if (!nx){ toast('Đã có đủ cả bản vàng kim!'); return; }
   if (S.coins<c){ toast(`Không đủ xu (cần ${c}🪙)`); sfx.wrong(); return; }
-  S.coins-=c; grant(nx.i,nx.sp); delete S.next.g; if(S.tut===5) S.tut=6;
+  S.coins-=c; grant(nx.i,nx.sp); delete S.next.g; if(S.tut===5) S.tut=6; questAdd('box');
   peekBox(); save(); updateCoins(true); $('gacha').classList.remove('show');
   openUnbox(nx.i,nx.sp,true,pool);
 }
@@ -2880,6 +2926,81 @@ function renderTray(){
   });
 }
 
+// ====================== GIỮ CHÂN: ĐIỂM DANH + NHIỆM VỤ NGÀY ======================
+// phần thưởng chung: c xu, h gợi ý dự trữ, inf ms chơi ∞, box hộp bí ẩn
+const rewTxt=r=>[r.c&&`${fmtN(r.c)}🪙`,r.h&&`${r.h}💡`,r.inf&&`∞ ${r.inf/60e3} phút`,r.box&&`${r.box} hộp 🎁`].filter(Boolean).join(' + ');
+const rewIcon=r=>r.box?'🎁':r.inf?'∞':r.h?'💡':'🪙';
+function giveRew(r){
+  if (r.c) S.coins+=r.c; if (r.h) giveHints(r.h); if (r.inf) S.inf=Math.max(Date.now(),S.inf||0)+r.inf;
+  const got=r.box?giveBoxes(r.box):[]; save(); updateCoins(true); updateLife(); sfx.coin();
+  toast('🎉 Nhận '+rewTxt(r)+(got.length?' · '+got.join(', '):''),3000); return got;
+}
+// số ngẫu nhiên theo hạt (mulberry32): cùng ngày → cùng nhiệm vụ / thử thách cho mọi lần mở
+const rng=seed=>()=>{ seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; };
+const dayNo=(t=Date.now())=>{ const d=new Date(t); return d.getFullYear()*1e4+(d.getMonth()+1)*100+d.getDate(); };
+const yday=()=>new Date(Date.now()-864e5).toDateString();
+
+// ---- điểm danh: 7 ngày liên tục, lỡ 1 ngày thì về ngày 1; nhận xong ngày 7 thì vòng lại ----
+const LOGIN=[{c:50},{h:2},{c:100},{inf:15*60e3},{c:150},{h:3},{box:1,c:200}];
+function loginK(){ const g=S.login||{n:0,d:''}; if (g.d===today()) return {k:g.n,can:false}; return {k:g.d===yday()&&g.n<7?g.n:0,can:true}; }
+function renderLogin(){
+  const {k,can}=loginK();
+  $('lgGrid').innerHTML=LOGIN.map((r,i)=>`<div class="lgC${i===6?' d7':''}${i<k?' got':''}${can&&i===k?' now':''}"><small>Ngày ${i+1}</small><i>${rewIcon(r)}</i>${rewTxt(r)}</div>`).join('');
+  $('loginOk').classList.toggle('dis',!can); $('loginOk').querySelector('span').textContent=can?'NHẬN':'Mai quay lại nhé';
+}
+function openLogin(){ sfx.pick(); renderLogin(); show('loginModal',true); }
+$('loginOk').onclick=()=>{ const {k,can}=loginK(); if(!can){ sfx.back(); return; } S.login={n:k+1,d:today()}; giveRew(LOGIN[k]); renderLogin(); renderSide(); setTimeout(()=>show('loginModal',false),500); };
+$('loginClose').onclick=()=>{ sfx.back(); show('loginModal',false); };
+$('sbLogin').onclick=openLogin;
+
+// ---- nhiệm vụ ngày: luôn có "lắp gạch" + 2 việc ngẫu nhiên theo ngày; xong cả 3 nhận 1 hộp ----
+const QUESTS={
+  brick:{t:n=>`Lắp ${n} mảnh gạch`,n:[40,60,80],c:40},
+  win:{t:n=>`Lắp xong ${n} mô hình mới`,n:[1,2],c:60},
+  perfect:{t:()=>'Lắp 1 mô hình không sai lần nào',n:[1],c:60},
+  box:{t:()=>'Mở 1 hộp bí ẩn',n:[1],c:40},
+  rebuild:{t:()=>'Lắp lại 1 mô hình trên Kệ',n:[1],c:50},
+};
+const Q_ALL={box:1};
+function qList(){
+  if (!S.q||S.q.d!==today()){
+    const r=rng(dayNo()), ks=['brick',...Object.keys(QUESTS).filter(k=>k!=='brick').sort(()=>r()-.5).slice(0,2)];
+    S.q={d:today(),all:false,list:ks.map(k=>({k,n:QUESTS[k].n[Math.floor(r()*QUESTS[k].n.length)],got:0,done:false}))}; save();
+  }
+  return S.q.list;
+}
+const qText=q=>QUESTS[q.k].t(q.n);
+function questAdd(k,v=1){
+  const q=qList().find(x=>x.k===k); if (!q||q.got>=q.n) return;
+  q.got=Math.min(q.n,q.got+v); save(); if (q.got>=q.n) setTimeout(()=>toast('📋 Xong nhiệm vụ: '+qText(q),2400),900);
+}
+const questReady=()=>qList().filter(q=>q.got>=q.n&&!q.done).length+(qList().every(q=>q.done)&&!S.q.all?1:0);
+function renderQuest(){
+  const L=qList(), allDone=L.every(q=>q.done);
+  $('qList').innerHTML=L.map((q,i)=>`<div class="qRow"><div class="qT">${qText(q)}<div class="qBar"><i style="width:${q.got/q.n*100}%"></i><b>${q.got}/${q.n}</b></div></div>`
+    +(q.done?'<b class="qOk">✓</b>':`<button class="btn green qBtn${q.got<q.n?' dis':''}" data-q="${i}"><span class="outline g">${QUESTS[q.k].c}🪙</span></button>`)+'</div>').join('')
+    +`<div class="qRow all"><div class="qT">🎁 Xong cả 3 nhiệm vụ<small class="qR" style="display:block">Thưởng: ${rewTxt(Q_ALL)}</small></div>`
+    +(S.q.all?'<b class="qOk">✓</b>':`<button class="btn yellow qBtn${allDone?'':' dis'}" data-q="all"><span class="outline o">NHẬN</span></button>`)+'</div>';
+}
+function openQuest(){ sfx.pick(); renderQuest(); show('questModal',true); }
+$('qList').onclick=e=>{
+  const b=e.target.closest('[data-q]'); if (!b) return;
+  if (b.classList.contains('dis')){ sfx.back(); return toast('Chưa xong nhiệm vụ này'); }
+  if (b.dataset.q==='all'){ S.q.all=true; giveRew(Q_ALL); }
+  else { const q=qList()[+b.dataset.q]; q.done=true; giveRew({c:QUESTS[q.k].c}); }
+  renderQuest(); renderSide();
+};
+$('questClose').onclick=()=>{ sfx.back(); show('questModal',false); };
+$('sbQuest').onclick=openQuest;
+
+// chấm đỏ trên nút bên: có quà nhận được
+function renderSide(){
+  const dot=(id,n)=>{ const b=$(id); let d=b.querySelector('.badge'); if(!n){ d&&d.remove(); return; } if(!d){ d=document.createElement('b'); d.className='badge'; b.appendChild(d); } d.textContent=n===true?'':n; };
+  dot('sbLogin',loginK().can); dot('sbQuest',questReady());
+}
+// mở game lần đầu trong ngày: tự hiện bảng điểm danh (không chen vào hướng dẫn lần đầu)
+function autoDaily(){ if (window.__noAuto||UNLOCK_ALL||S.tut<6||!$('home').classList.contains('show')||!loginK().can) return; openLogin(); }
+
 // ====================== LOOP ======================
 function resize(){
   const w=app.clientWidth, h=app.clientHeight;
@@ -2910,6 +3031,7 @@ function frame(){
 }
 loadLevel(0);
 showHome();
+setTimeout(autoDaily,700);
 requestAnimationFrame(frame);
 </script>
 </body>
