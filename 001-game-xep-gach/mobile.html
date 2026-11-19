@@ -644,6 +644,26 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
 #mTime.warn{background:#e0303fcc}
 #mRule{background:#fff;color:#2b3150;border-radius:2cqw;padding:.4cqw 2cqw;font-size:3.2cqw;font-weight:800}
 #mRule:empty{display:none}
+/* giải đấu tuần */
+#lgHead{display:flex;align-items:center;gap:3cqw;width:90cqw;background:#fff;border-radius:4cqw;padding:2.4cqw 4cqw;box-shadow:inset 0 -1cqw 0 #cfd6ec;margin-bottom:2.4cqw;flex:none}
+#lgHead .lgE{font-style:normal;font-size:13cqw;line-height:1}
+#lgHead .grow{display:flex;flex-direction:column;color:#2b3150}
+#lgHead b{font-size:5.6cqw}
+#lgHead small{font-size:3.3cqw;font-weight:800;color:#6b7190}
+#lgBody{width:92cqw;flex:1;min-height:0;overflow-y:auto;padding:0 1cqw 24cqw;scrollbar-width:none}
+.lgRow{display:flex;align-items:center;gap:2.4cqw;background:#fff;border-radius:3cqw;padding:1.4cqw 3cqw;margin-bottom:1.4cqw;font-weight:800;color:#2b3150;font-size:4cqw;box-shadow:inset 0 -.7cqw 0 #d6dbea}
+.lgRow .rk{width:7cqw;text-align:center;font-size:4.4cqw}
+.lgRow .av{width:9cqw;height:9cqw;border-radius:50%;background:#eef1fa;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:5.6cqw}
+.lgRow .nm{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lgRow .rw{font-size:3cqw;color:#33b44a}
+.lgRow .pt{min-width:10cqw;text-align:right;color:#e07a00}
+.lgRow.me{background:linear-gradient(#fff6c8,#ffe27a);box-shadow:inset 0 0 0 .8cqw #ffb800}
+.lgZone{font-size:3.4cqw;font-weight:800;text-align:center;margin:.6cqw 0 1.4cqw;padding:.4cqw;border-radius:2cqw;color:#fff}
+.lgZone.up{background:#33b44a}
+.lgZone.down{background:#e0303f}
+.sideB .tmr:empty{display:none}
+.rLg{display:block;font-size:3.6cqw;font-weight:800;color:#6b7190;margin:-1cqw 0 2cqw}
+.rLg:empty{display:none}
 /* ---------- hướng dẫn lần đầu ---------- */
 #tip{display:none;position:absolute;z-index:25;pointer-events:none;left:50%;bottom:calc(100% + 3.5cqw);transform:translateX(-50%);line-height:1.3;background:#fff;color:#2b3150;font-size:4.4cqw;font-weight:800;
   padding:2cqw 4cqw;border-radius:3.5cqw;border:.7cqw solid #ffd43b;box-shadow:0 1.5cqw 3cqw #0004;white-space:nowrap;animation:tipbob 1s ease-in-out infinite}
@@ -797,6 +817,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <div id="rStars"><span>★</span><span>★</span><span>★</span></div>
     <div id="rPic"><img id="rImg" alt=""></div>
     <div class="reward"><span class="coin"></span>+<span id="rCoins">0</span></div>
+    <small id="rLg" class="rLg"></small>
     <p id="rGoal"></p>
     <button class="btn yellow wide" id="rX2"><span class="outline o">🎬 Nhân đôi thưởng</span><b class="cost">×2<i class="mc"></i></b></button>
     <button class="btn green big" id="rNext"><span class="outline g">TIẾP TỤC</span></button>
@@ -898,6 +919,22 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
     <button class="btn green big" id="dcPlay"><span class="outline g">CHƠI</span></button>
   </div></div>
 
+  <div id="league" class="screen ov">
+    <div class="sHead outline">GIẢI ĐẤU TUẦN</div>
+    <button class="btn blue close" id="lgClose" aria-label="Đóng">✕</button>
+    <div id="lgHead"></div>
+    <div id="lgBody"></div>
+  </div>
+
+  <!-- chốt tuần: hạng, lên/xuống hạng, thưởng -->
+  <div id="lgResModal" class="screen modal"><div class="panelM">
+    <div class="ribbon outline o">KẾT QUẢ GIẢI ĐẤU</div>
+    <div class="pIcon"><b id="lgrI" style="font-size:20cqw"></b></div>
+    <p class="loseP" id="lgrT"></p>
+    <div class="reward" id="lgrRew"><span class="coin"></span>+<span id="lgrCoins"></span></div>
+    <button class="btn green big" id="lgrOk"><span class="outline g">NHẬN</span></button>
+  </div></div>
+
   <!-- xong thử thách ngày -->
   <div id="mResult" class="screen modal"><div class="panelM">
     <div class="ribbon outline o" id="mrTitle">XONG THỬ THÁCH!</div>
@@ -926,7 +963,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:#151a2c;font-family:'B
       <button class="sideB" id="sbQuest"><i>📋</i><span>Nhiệm vụ</span></button>
       <button class="sideB" id="sbDaily"><i>🎯</i><span>Thử thách</span></button>
     </div>
-    <div class="hSide" id="hSideR"></div>
+    <div class="hSide" id="hSideR">
+      <button class="sideB" id="sbLeague"><b class="tmr"></b><i>🏆</i><span>Giải đấu</span></button>
+    </div>
     <div id="hDrawer">
       <div class="dHead"><button class="dTab cur" id="hTabWait">🧱<span>Chờ lắp</span></button><b id="hDCount"></b><button id="hDrawerTog" aria-label="Thu gọn / mở">▼</button></div>
       <div id="hLevels"></div>
@@ -1963,7 +2002,7 @@ const sfx={
 };
 
 // ====================== TRẠNG THÁI ======================
-const OVERLAYS=['loginModal','questModal','dcModal','mResult','result','buyModal','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
+const OVERLAYS=['loginModal','questModal','dcModal','mResult','league','lgResModal','result','buyModal','loseModal','failModal','quitModal','needModal','lifeModal','iap','gacha','setModal','infoModal','bpView','shop','shelf','unbox','oddsModal'];
 let L=null, levelIdx=0, step=0, targets=[], tray=[], mistakes=0, hintsLeft=3, done=false;
 let rebuild=false, placedOrder=[], replaying=false, replayTok=0, replayDone=null; // lắp lại mô hình đã có (không trừ kho); thứ tự lắp để phát lại
 let levelRoot=null, anims=[], defDir=new THREE.Vector3(0.55,0.62,1).normalize(), defDist=20, hintT=null;
@@ -2290,13 +2329,14 @@ function win(){
   if (!rebuild){ S.streak=(S.streak||0)+1; if(S.streak%3===0) giveInf(INF_STREAK,'🔥 Thắng 3 level liên tiếp'); }
   if (bonus) giveInf(INF_SERIES,'🎉 Đủ bộ');
   questAdd(rebuild?'rebuild':'win'); if (!mistakes) questAdd('perfect');
+  lastLp=lgPts(stars,rebuild); lgAdd(lastLp);
   S.coins+=reward+bonus; save();
   setTimeout(confetti,250);
   controls.autoRotate=true; controls.autoRotateSpeed=3;
   const tok=replayTok; // rời màn/về menu/chơi lại đều tăng replayTok → thôi phát lại
   setTimeout(()=>{ if(tok===replayTok) playReplay(()=>showResult(stars,reward,bonus)); },1200);
 }
-let rX2=0; // thưởng có thể nhân đôi bằng QC (0 = đã dùng / lắp lại)
+let rX2=0, lastLp=0; // thưởng có thể nhân đôi bằng QC (0 = đã dùng / lắp lại); điểm giải đấu vừa nhận
 function renderRGoal(){ const o=goalInfo(); $('rGoal').textContent=o?`⭐ ${LEVELS[o.g].name}: ${Math.min(S.coins,o.price)}/${o.price} 🪙`+(o.need?` · còn ${o.need}!`:' · đủ rồi!'):''; }
 let rTot=0; // xu thưởng đang hiện: đếm dần từ số cũ lên số mới
 function countCoins(to){ const el=$('rCoins'), from=+el.textContent||0, t0=performance.now(); rTot=to;
@@ -2306,7 +2346,7 @@ function showResult(stars,reward,bonus=0){
   $('rTitle').textContent=['','HOÀN THÀNH!','GIỎI LẮM!','TUYỆT VỜI!'][stars];
   $('rImg').src=thumbLevel(levelIdx,special(levelIdx)); $('rCoins').textContent=0; rTot=reward+bonus;
   const no=roadNo(levelIdx); $('rLv').textContent=(rebuild?'LẮP LẠI':no?'LEVEL '+no:'MÔ HÌNH')+' · '+L.name;
-  rX2=reward; $('rX2').style.display=reward?'':'none'; renderRGoal();
+  rX2=reward; $('rX2').style.display=reward?'':'none'; renderRGoal(); $('rLg').textContent=lastLp?`🏆 +${lastLp} điểm giải đấu`:'';
   if (bonus) setTimeout(()=>toast(`🎉 Đủ bộ ${SERIES[seriesOf(levelIdx)].name}! +${bonus}🪙`,3000),900);
   const ss=[...$('rStars').children]; ss.forEach(s=>s.classList.remove('on'));
   $('result').classList.add('show');
@@ -2879,7 +2919,7 @@ $('backBtn').onclick=()=>quitLevel(toMenu);
 $('lMenu').onclick=()=>{ if(!rebuild) loseHeart(); toMenu(); };
 $('hHomeTab').onclick=()=>tabGo(()=>{ sfx.pick(); showHome(curSeries); });
 // thanh tab nằm ngoài màn chính: hiện ở Trang chủ / Tiệm Gạch / Hộp bí ẩn / Kệ, ô sáng chạy theo màn đang mở; ẩn khi lắp, xem sách, mở hộp...
-function tabGo(f){ ['shop','iap','gacha','shelf'].forEach(id=>$(id).classList.remove('show')); f(); }
+function tabGo(f){ ['shop','iap','gacha','shelf','league'].forEach(id=>$(id).classList.remove('show')); f(); }
 function syncNav(){
   const v=id=>$(id).classList.contains('show'), tab=['iap','shop','gacha','shelf'].find(v)||(v('home')?'home':null);
   $('hNav').classList.toggle('off',!tab||['bpView','unbox','adView'].some(v));
@@ -3036,9 +3076,10 @@ $('sbQuest').onclick=openQuest;
 function renderSide(){
   const dot=(id,n)=>{ const b=$(id); let d=b.querySelector('.badge'); if(!n){ d&&d.remove(); return; } if(!d){ d=document.createElement('b'); d.className='badge'; b.appendChild(d); } d.textContent=n===true?'':n; };
   dot('sbLogin',loginK().can); dot('sbQuest',questReady()); dot('sbDaily',!dcState().won);
+  const g=lgCheck(); dot('sbLeague',!!g.res); $('sbLeague').querySelector('.tmr').textContent=g.res?'Nhận thưởng':'#'+lgRank(g.w,g.tier,g.pts,Date.now());
 }
 // mở game lần đầu trong ngày: tự hiện bảng điểm danh (không chen vào hướng dẫn lần đầu)
-function autoDaily(){ if (window.__noAuto||UNLOCK_ALL||S.tut<6||!$('home').classList.contains('show')||!loginK().can) return; openLogin(); }
+function autoDaily(){ if (window.__noAuto||UNLOCK_ALL||S.tut<6||!$('home').classList.contains('show')) return; if (loginK().can) openLogin(); else if (lgCheck().res) openLgRes(); }
 
 // ====================== THỬ THÁCH CỦA NGÀY ======================
 // mỗi ngày 1 mô hình (kể cả chưa có: chơi thử trước khi mua) + 1 luật; tính giờ; lần đầu xong trong ngày có thưởng
@@ -3072,14 +3113,67 @@ function modeTick(dt){
 function modeWin(){
   done=true; endDrag(true); sfx.win(); setTimeout(confetti,250); controls.autoRotate=true; controls.autoRotateSpeed=3;
   const t=Math.max(1,Math.round(mT)), d=dcState(), rew=d.won?0:DC_REW;
-  S.dc={d:today(),won:true,best:d.best?Math.min(d.best,t):t}; if (rew){ S.coins+=rew; questAdd('daily'); } save();
+  S.dc={d:today(),won:true,best:d.best?Math.min(d.best,t):t}; if (rew){ S.coins+=rew; questAdd('daily'); lgAdd(30); } save();
   setTimeout(()=>{ if(!done||!mode) return;
     $('mrPic').src=thumbLevel(levelIdx); $('mrTime').textContent='⏱ '+mmss(t*1000);
-    $('mrInfo').innerHTML=`Nhanh hơn <b>${dcBeat(t,targets.length)}%</b> người chơi<small>Kỷ lục hôm nay: ${mmss(S.dc.best*1000)}</small>`;
+    $('mrInfo').innerHTML=`Nhanh hơn <b>${dcBeat(t,targets.length)}%</b> người chơi<small>Kỷ lục hôm nay: ${mmss(S.dc.best*1000)}${rew?' · 🏆 +30 điểm giải đấu':''}</small>`;
     $('mrRew').style.display=rew?'':'none'; $('mrCoins').textContent=rew; show('mResult',true); updateCoins(true); },1300);
 }
 $('mrAgain').onclick=()=>{ sfx.pick(); loadLevel(levelIdx,mode); };
 $('mrOk').onclick=()=>{ sfx.pick(); toMenu(); };
+
+// ====================== GIẢI ĐẤU TUẦN ======================
+// nhóm 30 người, tuần bắt đầu thứ Hai 0h; lắp càng nhiều càng nhiều điểm; top 5 lên hạng, 5 cuối xuống hạng
+// shortcut: 29 người còn lại là bot mô phỏng theo hạt của tuần; khi có server thì ghép nhóm người thật
+const LG_TIERS=[{n:'Đồng',e:'🥉',base:300},{n:'Bạc',e:'🥈',base:550},{n:'Vàng',e:'🥇',base:850},{n:'Kim cương',e:'💎',base:1200}]; // base ≈ điểm cuối tuần của người chơi trung bình trong hạng
+const LG_N=30, LG_UP=5, LG_DOWN=5, LG_REW=[300,200,100], WEEK=7*864e5;
+const LG_NAMES=['Minh Anh','Bảo Ngọc','Gia Huy','Khánh Linh','Tuấn Kiệt','Hà My','Đức Anh','Thảo Vy','Quốc Bảo','Ngọc Hân','LegoMaster','Bin Bin','Su Kem','Tí Nị','Bống',
+  'Cún Con','Mèo Mun','Gạch Vàng','Xếp Hình Pro','Kiến Trúc Sư','Phương Thảo','Hoàng Nam','Thanh Tâm','Mai Chi','Nhật Minh','Lan Anh','Trọng Nghĩa','Bảo Châu','Khôi Nguyên','An Nhiên','Tùng Lâm','Diệu Linh'];
+const LG_AV=['🐶','🐱','🐼','🦊','🐰','🐻','🐯','🐸','🐵','🐧','🦁','🐨'];
+const weekStart=(t=Date.now())=>{ const d=new Date(t); d.setHours(0,0,0,0); d.setDate(d.getDate()-(d.getDay()+6)%7); return d.getTime(); };
+const lgPts=(stars,re)=>re?10:20+10*stars; // điểm mỗi lần lắp xong (lắp lại ít điểm hơn); thử thách ngày 30
+// điểm của 29 người kia tại thời điểm at: điểm cuối tuần cố định theo hạt, tăng dần theo thời gian trong tuần
+function lgBots(w,tier,at){
+  const r=rng(Math.floor(w/1e5)+tier*977), k=clamp((at-w)/WEEK,0,1), names=[...LG_NAMES].sort(()=>r()-.5);
+  return names.slice(0,LG_N-1).map((nm,i)=>{ const fin=Math.round(LG_TIERS[tier].base*(0.15+1.7*Math.pow(r(),1.4))), a=0.6+r()*0.9;
+    return {nm,av:LG_AV[i%LG_AV.length],pts:Math.round(fin*Math.pow(k,a))}; });
+}
+const lgTable=(w,tier,pts,at)=>[...lgBots(w,tier,at),{nm:'Bạn',av:'🧱',pts,me:true}].sort((a,b)=>b.pts-a.pts||(b.me?1:0)-(a.me?1:0));
+const lgRank=(w,tier,pts,at)=>lgTable(w,tier,pts,at).findIndex(x=>x.me)+1;
+const lgRew=(rank,tier)=>rank<=3?Math.round(LG_REW[rank-1]*(1+tier*0.5)):rank<=10?50:0;
+// sang tuần mới: chốt hạng tuần trước, lên/xuống hạng, giữ kết quả chờ nhận thưởng
+function lgCheck(){
+  const w=weekStart();
+  if (!S.lg){ S.lg={w,pts:0,tier:0}; save(); }
+  else if (S.lg.w!==w){
+    const o=S.lg, rank=lgRank(o.w,o.tier,o.pts,o.w+WEEK), up=rank<=LG_UP&&o.pts>0, down=rank>LG_N-LG_DOWN;
+    const tier=clamp(o.tier+(up?1:down?-1:0),0,LG_TIERS.length-1);
+    S.lg={w,pts:0,tier,res:{rank,pts:o.pts,from:o.tier,to:tier,rew:lgRew(rank,o.tier)}}; save();
+  }
+  return S.lg;
+}
+function lgAdd(n){ if (UNLOCK_ALL) return; lgCheck().pts+=n; save(); }
+const lgLeft=()=>{ const s=Math.max(0,Math.floor((lgCheck().w+WEEK-Date.now())/1000)), d=Math.floor(s/86400); return (d?d+' ngày ':'')+mmss((s%86400)*1000); };
+function renderLeague(){
+  const g=lgCheck(), T=LG_TIERS[g.tier], tb=lgTable(g.w,g.tier,g.pts,Date.now());
+  $('lgHead').innerHTML=`<i class="lgE">${T.e}</i><div class="grow"><b>Hạng ${T.n}</b><small>⏳ Kết thúc sau <span id="lgT">${lgLeft()}</span></small><small>Top ${LG_UP} lên hạng · ${LG_DOWN} cuối xuống hạng</small></div>`;
+  $('lgBody').innerHTML=tb.map((x,k)=>{ const rk=k+1, rw=lgRew(rk,g.tier);
+    return (rk===LG_UP+1&&g.tier<LG_TIERS.length-1?'<div class="lgZone up">▲ Vùng lên hạng</div>':'')+(rk===LG_N-LG_DOWN+1&&g.tier>0?'<div class="lgZone down">▼ Vùng xuống hạng</div>':'')
+      +`<div class="lgRow${x.me?' me':''}"><b class="rk">${rk<=3?['🥇','🥈','🥉'][rk-1]:rk}</b><i class="av">${x.av}</i><b class="nm">${x.nm}</b>${rw?`<small class="rw">+${rw}🪙</small>`:''}<b class="pt">${x.pts}</b></div>`; }).join('');
+  const me=$('lgBody').querySelector('.me'); if (me) $('lgBody').scrollTop=me.offsetTop-$('lgBody').offsetTop-$('lgBody').clientHeight/2;
+}
+function openLeague(){ sfx.pick(); renderLeague(); show('league',true); }
+setInterval(()=>{ if($('league').classList.contains('show')&&$('lgT')) $('lgT').textContent=lgLeft(); },1000);
+$('sbLeague').onclick=()=>{ if (lgCheck().res) return openLgRes(); openLeague(); };
+$('lgClose').onclick=()=>{ sfx.back(); show('league',false); renderSide(); };
+function openLgRes(){
+  const r=lgCheck().res; if (!r) return;
+  $('lgrI').textContent=LG_TIERS[r.to].e;
+  $('lgrT').innerHTML=`Tuần trước: hạng <b>#${r.rank}</b> · ${r.pts} điểm<small>${r.to>r.from?`🎉 Lên hạng ${LG_TIERS[r.to].n}!`:r.to<r.from?`Xuống hạng ${LG_TIERS[r.to].n} · cố lên tuần này!`:`Giữ hạng ${LG_TIERS[r.to].n}`}</small>`;
+  $('lgrRew').style.display=r.rew?'':'none'; $('lgrCoins').textContent=r.rew;
+  sfx.pick(); show('lgResModal',true);
+}
+$('lgrOk').onclick=()=>{ const r=lgCheck().res; if(!r) return; delete S.lg.res; if (r.rew){ S.coins+=r.rew; sfx.coin(); } save(); updateCoins(true); show('lgResModal',false); renderSide(); openLeague(); };
 
 // ====================== LOOP ======================
 function resize(){

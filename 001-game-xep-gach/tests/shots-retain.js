@@ -12,3 +12,7 @@ module.exports.push(
   { name: 'rt-dc-play', pre: save0(ST), post: async () => { $('dcPlay').click(); targets.filter(t => t.step < 2).forEach(t => commit(t)); mT = 37; await pump(800); } },
   { name: 'rt-dc-win', pre: save0(ST), post: async () => { $('dcPlay').click(); mT = 74; commitAll(); await wait(1600); } },
 );
+module.exports.push(
+  { name: 'rt-league', pre: save0(ST), post: async () => { lgCheck().pts = 260; save(); openLeague(); await wait(600); } },
+  { name: 'rt-lg-res', pre: new Function("localStorage.setItem('xepgach.v2',JSON.stringify({tut:6,coins:260,best:{'Cây nấm':3},lg:{w:new Date(2026,0,5).getTime(),pts:99999,tier:0}}))"), post: async () => { openLgRes(); await wait(600); } },
+);
