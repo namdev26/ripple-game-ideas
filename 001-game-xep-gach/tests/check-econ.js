@@ -3,33 +3,38 @@ const fs = require('fs'), assert = require('assert');
 const html = fs.readFileSync(process.argv[2] || __dirname + '/../mobile.html', 'utf8');
 const a = html.indexOf('// ====================== DỮ LIỆU'), b = html.indexOf('// ====================== HÌNH HỌC');
 const E = new Function(html.slice(a, b) + ';return {LEVELS,SERIES,seriesOf,rarOf,RAR,shopPrice,boxPrice,rewardFor,seriesBonus,seriesIdx,boxOdds,rollBox,BOX_NEAR,BOX_FAR,BOX_PITY,BOX_PITY_N,SPECIAL_P,REBUILD_REWARD,ROAD,COLORS,COLOR_VI,bomOf,partPrice};')();
-const idx = n => { const i = E.LEVELS.findIndex(l => l.name === n); assert(i >= 0, n); return i; };
 const eq = (x, y, m) => assert.strictEqual(x, y, m);
 const ALL = E.LEVELS.map((_, i) => i);
+const ofRar = r => { const i = E.ROAD.find(i => E.rarOf(i) === r); assert(i != null, 'không có mô hình độ hiếm ' + r); return i; }; // mô hình đầu tiên trên đường có độ hiếm r
+const pcs = i => E.LEVELS[i].steps.flat().length;
 
 // kinh tế bản 3 (19/11/2026): vòng hộp — mở hộp 100 → lắp → thắng ≥ 100 → mở hộp kế; mua đúng mô hình ở cửa hàng ≈ 2–3 hộp
 eq(E.boxPrice(), 100);
-eq(E.shopPrice(idx('Ngôi nhà')), 250); eq(E.shopPrice(idx('Chùa Một Cột')), 300); eq(E.shopPrice(idx('Lâu đài')), 400);
-eq(E.rewardFor(idx('Ngôi nhà'), 1), 100); eq(E.rewardFor(idx('Ngôi nhà'), 2), 125); eq(E.rewardFor(idx('Ngôi nhà'), 3), 150);
-eq(E.rewardFor(idx('Chùa Một Cột'), 3), 180); eq(E.rewardFor(idx('Đền Artemis'), 3), 240); eq(E.rewardFor(idx('Tượng Rhodes'), 3, true), 180);
+const C0 = ofRar(0), C1 = ofRar(1), C2 = ofRar(2);
+eq(E.shopPrice(C0), 250); eq(E.shopPrice(C1), 300); eq(E.shopPrice(C2), 400);
+eq(E.rewardFor(C0, 1), 100); eq(E.rewardFor(C0, 2), 125); eq(E.rewardFor(C0, 3), 150);
+eq(E.rewardFor(C1, 3), 180); eq(E.rewardFor(C2, 3), 240); eq(E.rewardFor(C0, 3, true), 180);
 // thắng 1★ bất kỳ mô hình nào cũng đủ mở hộp kế
 ALL.forEach(i => assert(E.rewardFor(i, 1) >= E.boxPrice(), 'thắng 1★ không đủ mở hộp: ' + E.LEVELS[i].name));
-eq(E.REBUILD_REWARD, 0); eq(E.seriesBonus(0), 200); eq(E.seriesBonus(2), 300);
+eq(E.REBUILD_REWARD, 0); E.SERIES.forEach((sr, k) => assert(E.seriesBonus(k) >= 200, 'thưởng đủ bộ ' + sr.name));
 // lắp xong luôn hơi thiếu so với mua đúng: mua trước phải tốn ≥ 2 level
 ALL.forEach(i => assert(E.shopPrice(i) >= 1.6 * E.rewardFor(i, 3), 'mua đúng quá rẻ: ' + E.LEVELS[i].name));
-// độ hiếm
-const cnt = s => [0, 1, 2].map(r => E.seriesIdx(s).filter(i => E.rarOf(i) === r).length).join(',');
-eq(cnt(0), '3,0,1'); eq(cnt(1), '3,3,1'); eq(cnt(2), '2,2,1'); eq(cnt(3), '7,4,1'); eq(E.seriesBonus(3), 400);
-// đường lắp: đủ mọi mô hình (28 = 16 + 12 con giáp), bắt đầu dễ, mô hình huyền thoại không ở 5 level đầu
-eq(E.ROAD.length, 28); eq(E.LEVELS.length, 28); eq(new Set(E.ROAD).size, 28); eq(E.ROAD[0], idx('Cây nấm'));
+// độ hiếm tự tính theo số mảnh trong bộ: mỗi bộ ≥ 1 Huyền thoại; trong bộ, mô hình hiếm hơn không ít mảnh hơn
+E.SERIES.forEach((sr, k) => { const ids = E.seriesIdx(k), n = r => ids.filter(i => E.rarOf(i) === r).length;
+  assert(n(2) >= 1, 'bộ ' + sr.name + ' không có Huyền thoại'); assert(n(0) >= n(1) + n(2), 'bộ ' + sr.name + ' quá ít mô hình Thường');
+  ids.forEach(i => ids.forEach(j => { if (E.rarOf(i) > E.rarOf(j) && !E.LEVELS[i].rar && !E.LEVELS[j].rar) assert(pcs(i) >= pcs(j), 'hiếm hơn mà ít mảnh hơn: ' + E.LEVELS[i].name); })); });
+// đường lắp: đủ mọi mô hình, mảnh tăng dần, mô hình đầu (miễn phí) nhỏ, 5 mô hình đầu đều Thường
+eq(E.ROAD.length, E.LEVELS.length); eq(new Set(E.ROAD).size, E.LEVELS.length);
+assert(pcs(E.ROAD[0]) <= 30, 'mô hình đầu tiên phải nhỏ (dạy chơi): ' + pcs(E.ROAD[0]));
 E.ROAD.slice(0, 5).forEach(i => assert(E.rarOf(i) === 0, 'đầu đường phải dễ: ' + E.LEVELS[i].name));
 // hộp ngẫu nhiên có kiểm soát: 3 mô hình kế trên đường chiếm 90% (50/30/20), xa 10% theo độ hiếm
 const pOf = (od, i) => (od.find(o => o.i === i) || { p: 0 }).p, sum = od => od.reduce((s, o) => s + o.p, 0);
-const pool = E.ROAD.slice(1), odds = E.boxOdds(pool); // đã có Cây nấm
+const pool = E.ROAD.slice(1), odds = E.boxOdds(pool); // đã có mô hình đầu
 assert(Math.abs(sum(odds) - 1) < 1e-9, 'tổng tỉ lệ = 1');
 assert(Math.abs(pOf(odds, E.ROAD[1]) - 0.45) < 1e-9 && Math.abs(pOf(odds, E.ROAD[2]) - 0.27) < 1e-9 && Math.abs(pOf(odds, E.ROAD[3]) - 0.18) < 1e-9, 'gần: 45/27/18%');
 const far = E.ROAD.slice(4), fw = far.reduce((s, i) => s + E.RAR[E.rarOf(i)].w, 0);
-assert(Math.abs(pOf(odds, idx('Rồng')) - 0.1 * E.RAR[2].w / fw) < 1e-9 && pOf(odds, idx('Rồng')) < pOf(odds, idx('Dê')), 'xa: chia theo độ hiếm, huyền thoại ít nhất');
+const farL = far.find(i => E.rarOf(i) === 2), farC = far.find(i => E.rarOf(i) === 0);
+assert(Math.abs(pOf(odds, farL) - 0.1 * E.RAR[2].w / fw) < 1e-9 && pOf(odds, farL) < pOf(odds, farC), 'xa: chia theo độ hiếm, huyền thoại ít nhất');
 eq(E.boxOdds([E.ROAD[5], E.ROAD[9]]).length, 2); assert(Math.abs(sum(E.boxOdds([E.ROAD[5]])) - 1) < 1e-9, 'pool ít: vẫn đủ 100%');
 // bảo hiểm: hết hạn dry → chắc chắn Hiếm+ trong 6 mô hình sắp tới
 const pity = E.boxOdds(pool, E.BOX_PITY);
@@ -65,6 +70,6 @@ console.log('đi hết đường (không QC, đã trừ hộp): dư trung bình'
 Object.keys(E.COLORS).forEach(c => assert(E.COLOR_VI[c], 'thiếu tên màu ' + c));
 eq(E.bomOf(0).reduce((s, m) => s + m.n, 0), E.LEVELS[0].steps.flat().length);
 eq(E.partPrice('base_12x12'), 12);
-// 12 con giáp dựng từ voxel: mọi ô phải tự có chỗ tựa, không phải thêm cột đỡ
+// mô hình dựng từ voxel: mọi ô phải tự có chỗ tựa, không phải thêm cột đỡ
 E.LEVELS.forEach(l => assert(!(l.fix || []).length, 'cần thêm cột đỡ: ' + l.name + ' ' + (l.fix || []).join(' | ')));
 console.log('check-econ OK');

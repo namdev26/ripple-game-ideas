@@ -2,7 +2,7 @@
 const save0 = o => new Function("localStorage.setItem('xepgach.v2'," + JSON.stringify(JSON.stringify(o)) + ')');
 const yday = () => new Date(Date.now() - 864e5).toDateString();
 module.exports = [
-  { name: 'tu-hien-diem-danh', pre: new Function("window.__noAuto=0;localStorage.setItem('xepgach.v2',JSON.stringify({tut:6,best:{'Cây nấm':3}}))"), post: async () => {
+  { name: 'tu-hien-diem-danh', pre: new Function("window.__noAuto=0;localStorage.setItem('xepgach.v2',JSON.stringify({tut:6,best:{'@R0':3}}))"), post: async () => {
       await wait(900); ok($('loginModal').classList.contains('show'), 'mở game lần đầu trong ngày: tự hiện điểm danh');
       ok(document.querySelector('#sbLogin .badge'), 'nút điểm danh có chấm đỏ');
       const c0 = S.coins; $('loginOk').click();

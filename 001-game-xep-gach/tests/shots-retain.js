@@ -1,6 +1,6 @@
 // Ảnh các tính năng giữ chân: SHOT=1 node tests/run-headless.js tests/shots-retain.js → tests/.tmp/rt_*.png
 const save0 = o => new Function("localStorage.setItem('xepgach.v2'," + JSON.stringify(JSON.stringify(o)) + ')');
-const ST = { coins: 260, best: { 'Cây nấm': 3, 'Ngôi nhà': 2, 'Dưa hấu': 3, 'Lâu đài': 1 }, own: { 'Tượng Zeus': true }, tut: 6 };
+const ST = { coins: 260, best: { '@R0': 3, '@R1': 2, '@R2': 3, '@R12': 1 }, own: { '@R9': true }, tut: 6 };
 module.exports = [
   { name: 'rt-home', pre: save0(ST), post: async () => { await wait(500); } },
   { name: 'rt-login', pre: save0({ ...ST, login: { n: 3, d: new Date(Date.now() - 864e5).toDateString() } }), post: async () => { openLogin(); await wait(600); } },
@@ -14,14 +14,14 @@ module.exports.push(
 );
 module.exports.push(
   { name: 'rt-league', pre: save0(ST), post: async () => { lgCheck().pts = 260; save(); openLeague(); await wait(600); } },
-  { name: 'rt-lg-res', pre: new Function("localStorage.setItem('xepgach.v2',JSON.stringify({tut:6,coins:260,best:{'Cây nấm':3},lg:{w:new Date(2026,0,5).getTime(),pts:99999,tier:0}}))"), post: async () => { openLgRes(); await wait(600); } },
+  { name: 'rt-lg-res', pre: new Function("localStorage.setItem('xepgach.v2',JSON.stringify({tut:6,coins:260,best:{'@R0':3},lg:{w:new Date(2026,0,5).getTime(),pts:99999,tier:0}}))"), post: async () => { openLgRes(); await wait(600); } },
 );
 module.exports.push(
   { name: 'rt-event', pre: save0(ST), post: async () => { evState().pts = EV_STEP * 3 + 22; evState().free = [0, 1]; save(); openEvent(); await wait(600); } },
   { name: 'rt-event-pass', pre: save0(ST), post: async () => { evState().pts = EV_STEP * 3 + 22; evState().free = [0, 1]; evState().pass = true; evState().prem = [0]; save(); openEvent(); await wait(600); } },
 );
-const CT = { ...ST, best: { 'Cây nấm': 3, 'Ngôi nhà': 2, 'Dưa hấu': 3, 'Lâu đài': 1, 'Tượng Rhodes': 3, 'Chuột': 2, 'Cầu Vàng': 3 }, sp: { 'Dưa hấu': true }, deco: { '🎄': 2, '⛄': 1 },
-  city: { rows: 3, t: Date.now() - 5 * 3600e3, bank: 0, p: { 0: { m: 'Cây nấm' }, 1: { d: '🎄' }, 2: { m: 'Lâu đài' }, 5: { m: 'Dưa hấu' }, 6: { m: 'Ngôi nhà' }, 7: { d: '⛄' }, 9: { m: 'Tượng Rhodes' } } } };
+const CT = { ...ST, best: { '@R0': 3, '@R1': 2, '@R2': 3, '@R12': 1, '@R3': 3, '@R4': 2, '@R6': 3 }, sp: { '@R2': true }, deco: { '🎄': 2, '⛄': 1 },
+  city: { rows: 3, t: Date.now() - 5 * 3600e3, bank: 0, p: { 0: { m: '@R0' }, 1: { d: '🎄' }, 2: { m: '@R12' }, 5: { m: '@R2' }, 6: { m: '@R1' }, 7: { d: '⛄' }, 9: { m: '@R3' } } } };
 module.exports.push(
   { name: 'rt-city', pre: save0(CT), post: async () => { openCity(); await wait(800); } },
   { name: 'rt-city-pick', pre: save0(CT), post: async () => { openCity(); $('cityGrid').querySelector('[data-k="10"]').click(); await wait(800); } },
@@ -36,6 +36,6 @@ module.exports.push(
   { name: 'rt-free', pre: save0({ ...ST, free: HOUSE }), post: async () => { $('sbFree').click(); await pump(900); } },
 );
 module.exports.push(
-  { name: 'rt-home-box', pre: save0({ tut: 6, coins: 150, best: { 'Cây nấm': 3, 'Ngôi nhà': 2, 'Dưa hấu': 3, 'Lâu đài': 1 } }), post: async () => { await wait(500); } },
-  { name: 'rt-win', pre: save0({ tut: 6, coins: 40, best: { 'Cây nấm': 3 }, own: { 'Ngôi nhà': true } }), post: async () => { startBuild(1); commitAll(); await wait(1500); $('skipBtn').click(); await wait(2500); } },
+  { name: 'rt-home-box', pre: save0({ tut: 6, coins: 150, best: { '@R0': 3, '@R1': 2, '@R2': 3, '@R12': 1 } }), post: async () => { await wait(500); } },
+  { name: 'rt-win', pre: save0({ tut: 6, coins: 40, best: { '@R0': 3 }, own: { '@R1': true } }), post: async () => { startBuild(1); commitAll(); await wait(1500); $('skipBtn').click(); await wait(2500); } },
 );

@@ -1,6 +1,6 @@
 // Ảnh để xem bằng mắt: SHOT=1 node tests/run-headless.js tests/shots-hb.js  → tests/.tmp/<case>.png
 const save0 = o => new Function("localStorage.setItem('xepgach.v2'," + JSON.stringify(JSON.stringify(o)) + ')');
-const ST = { coins: 260, best: { 'Cây nấm': 3, 'Ngôi nhà': 2, 'Dưa hấu': 3, 'Lâu đài': 1 }, own: { 'Tượng Zeus': true, 'Đền Artemis': true }, sp: { 'Dưa hấu': true }, tut: 6 };
+const ST = { coins: 260, best: { '@R0': 3, '@R1': 2, '@R2': 3, '@R12': 1 }, own: { '@R9': true, '@R26': true }, sp: { '@R2': true }, tut: 6 };
 module.exports = [
   { name: 'hb-thieu-xu', pre: save0(ST), post: async () => { openShop(15); $('mBuy').click(); } },
   { name: 'hb-ket-qua', pre: save0(ST), post: async () => { giveModel(5); startBuild(5); commitAll(); await wait(1500); $('skipBtn').click(); await wait(2000); } },
@@ -19,13 +19,13 @@ module.exports = [
   { name: 'hb-trang', pre: save0(ST), post: async () => { openBlueprint(6); bpPage = 3; renderBp(); } },
   { name: 'hb-trang-cuoi', pre: save0(ST), post: async () => { openBlueprint(6); bpPage = 13; renderBp(); } },
   { name: 'hb-lap', pre: save0(ST), post: async () => { startBuild(1, true); targets.filter(t => t.step === 0).forEach(t => commit(t)); await wait(400); commit(targets.find(t => t.step === 1)); wrong(); $('toast').style.display = 'none'; } },
-  { name: 'hb-lap-cao', query: '?all', post: async () => { startBuild(LEVELS.findIndex(l => l.name === 'Hải đăng Alexandria')); targets.filter(t => t.step < 13).forEach(t => commit(t)); await wait(400); showStep(13); } },
+  { name: 'hb-lap-cao', query: '?all', post: async () => { startBuild(LEVELS.findIndex(l => l.name === '@R14')); targets.filter(t => t.step < 13).forEach(t => commit(t)); await wait(400); showStep(13); } },
   { name: 'hb-thua', pre: save0(ST), post: async () => { startBuild(1, true); wrong(); wrong(); wrong(); await wait(900); } },
   { name: 'hb-iap', pre: save0(ST), post: async () => { openIap(); } },
   { name: 'hb-iap-duoi', pre: save0(ST), post: async () => { openIap('secCoin'); } },
   { name: 'hb-ad', pre: save0(ST), post: async () => { show('adView', true); } },
   { name: 'hb-gacha', pre: save0(ST), post: async () => { openGacha(); } },
-  { name: 'hb-home-het', pre: save0({ coins: 260, best: { 'Cây nấm': 3 }, tut: 6 }), post: async () => {} },
+  { name: 'hb-home-het', pre: save0({ coins: 260, best: { '@R0': 3 }, tut: 6 }), post: async () => {} },
   { name: 'hb-home-gon', pre: save0({ ...ST, tut: 6, showWait: true }), post: async () => {} },
   { name: 'hb-ke', pre: save0(ST), post: async () => { openShelf(); } },
   { name: 'hb-tile', pre: save0(ST), post: async () => { showHome(1); $('oddsBtn').click(); } },

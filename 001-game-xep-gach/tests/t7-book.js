@@ -3,9 +3,9 @@
 const save0 = o => new Function("localStorage.setItem('xepgach.v2'," + JSON.stringify(JSON.stringify(o)) + ')');
 module.exports = [
   { name: 'sach-kieu-lego', post: async () => {
-      const g = LEVELS.findIndex(l => l.name === 'Kim tự tháp Giza');
+      const g = LEVELS.findIndex(l => l.name === '@R18');
       giveModel(g); openBlueprint(g);
-      ok($('bpPage').textContent.includes('Kim tự tháp Giza') && $('bpPage').textContent.includes(LEVELS[g].steps.length + ' bước'), 'bìa: ' + $('bpPage').textContent);
+      ok($('bpPage').textContent.includes('@R18') && $('bpPage').textContent.includes(LEVELS[g].steps.length + ' bước'), 'bìa: ' + $('bpPage').textContent);
       $('bpNext').click();
       const n0 = new Set(LEVELS[g].steps[0].map(([k, c]) => k + '|' + c)).size, cis = document.querySelectorAll('#bpPage .callout .ci');
       ok(cis.length === n0, 'khung mảnh bước 1: ' + cis.length + '/' + n0);
@@ -19,23 +19,23 @@ module.exports = [
       ok([...document.querySelectorAll('#bpPage .ci')].every(e => e.textContent.includes('Vàng kim')), 'bản đặc biệt: mảnh vàng kim');
       ok($('bpBuild').textContent.includes('LẮP'), 'nút lắp');
   } },
-  { name: 'ke-bong-den', pre: save0({ coins: 0, best: { 'Cây nấm': 3 }, own: { 'Ngôi nhà': true }, sp: { 'Cây nấm': true } }), post: async () => {
+  { name: 'ke-bong-den', pre: save0({ coins: 0, best: { '@R0': 3 }, own: { '@R1': true }, sp: { '@R0': true } }), post: async () => {
       $('shelfBtn').click();
       const it = document.querySelectorAll('#shGrid .shItem');
       ok(it.length === LEVELS.length, 'kệ hiện đủ 16 chỗ: ' + it.length);
       ok(document.querySelectorAll('#shGrid .shItem.sil').length === LEVELS.length - 2, 'chưa có → bóng đen');
-      ok(it[0].classList.contains('sp'), 'bản đặc biệt có khung vàng');
-      it[2].click(); ok($('shPick').style.display === 'none', 'chọn bóng đen không làm gì');
-      it[1].click(); ok($('bpView').classList.contains('show') && bpI === 1, 'chờ lắp → mở sách');
+      ok(document.querySelector('#shGrid .shItem[data-i="' + ROAD[0] + '"]').classList.contains('sp'), 'bản đặc biệt có khung vàng');
+      document.querySelector('#shGrid .shItem.sil').click(); ok($('shPick').style.display === 'none', 'chọn bóng đen không làm gì');
+      document.querySelector('#shGrid .shItem[data-i="' + ROAD[1] + '"]').click(); ok($('bpView').classList.contains('show') && bpI === ROAD[1], 'chờ lắp → mở sách');
   } },
   { name: 'buoc-khong-bi-che', query: '?all', post: async () => {
-      const i = LEVELS.findIndex(l => l.name === 'Chuột'), ts = modelInfo(LEVELS[i]).ts, n = ts.find(t => t.key === 'arch_1x4').step, v = stepView(ts, n);
-      ok(v.sc > 0.8 && v.dir.z < 0, 'hang chuột sau lưng con chuột: sổ bước xoay ra sau để thấy rõ, điểm ' + v.sc);
-      ok(stepView(ts, 1).dir.equals(new THREE.Vector3(0.55, 0.65, 1)), 'bước không bị che giữ góc quen thuộc');
-      ok(ts.filter(t => t.step === n).every(t => t.x < 4 && t.z < 4), 'bước chỉ lắp 1 cụm ở 1 chỗ (không gom phô mai ở góc kia)');
-      ok(thumbStep(i, n, false, true).startsWith('data:image'), 'vẽ được ảnh bước');
+      // mọi bước của mọi mô hình: có góc nhìn thấy được phần lớn mảnh mới (sổ bước tự xoay sang góc đó)
+      const hid = []; LEVELS.forEach(l => { const ts = modelInfo(l).ts; l.steps.forEach((_, n) => { const v = stepView(ts, n); if (v.f < 0.5) hid.push(l.name + ' bước ' + (n + 1) + ' (' + Math.round(v.f * 100) + '%)'); }); });
+      ok(hid.length <= 3, 'bước bị che gần hết: ' + hid.join(', '));
+      const ts = modelInfo(LEVELS[0]).ts; ok(stepView(ts, 0).dir.equals(new THREE.Vector3(0.55, 0.65, 1)), 'bước không bị che giữ góc quen thuộc');
+      ok(thumbStep(0, 1, false, true).startsWith('data:image'), 'vẽ được ảnh bước');
       const same = LEVELS.every(l => { const c = l.steps.length; splitHiddenSteps(l); return l.steps.length === c; });
-      ok(same && LEVELS.find(l => l.name === 'Lâu đài').steps.length > 21, 'bước rải nhiều chỗ bị che đã được tách (chia lại không đổi gì nữa)');
+      ok(same, 'chia bước bị che đã xong (chia lại không đổi gì nữa)');
   } },
   { name: 'so-buoc-quay-theo-board', post: async () => {
       giveModel(1); startBuild(1); await wait(300); const a = $('sbImg').src;

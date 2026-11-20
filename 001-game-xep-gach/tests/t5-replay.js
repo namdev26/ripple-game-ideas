@@ -19,18 +19,18 @@ module.exports = [
       ok(!replaying && $('result').classList.contains('show'), 'hết phát lại phải hiện kết quả');
       ok(targets.every(t => t.obj.visible && t.obj.scale.x === 1), 'mảnh phải hiện đủ, đúng cỡ');
   } },
-  { name: 'ke-trung-bay', pre: () => localStorage.setItem('xepgach.v2', JSON.stringify({ coins: 0, best: { 'Cây nấm': 3, 'Dưa hấu': 1 }, order: { 'Cây nấm': [1, 0] } })),
+  { name: 'ke-trung-bay', pre: () => localStorage.setItem('xepgach.v2', JSON.stringify({ coins: 0, best: { '@R0': 3, '@R2': 1 }, order: { '@R0': [1, 0] } })),
     post: async () => {
       $('shelfBtn').click();
       ok($('shelf').classList.contains('show'), 'kệ phải hiện');
       ok(document.querySelectorAll('#shGrid .shItem:not(.sil)').length === 2, 'kệ có 2 mô hình');
       document.querySelector('#shGrid .shItem').click();
       $('shReplay').click();
-      ok(replaying && L.name === 'Cây nấm' && !$('shelf').classList.contains('show'), 'phải phát lại Cây nấm');
+      ok(replaying && L.name === '@R0' && !$('shelf').classList.contains('show'), 'phải phát lại Cây nấm');
       $('skipBtn').click();
       ok($('shelf').classList.contains('show') && !$('result').classList.contains('show'), 'xem xong quay về kệ, không hiện kết quả');
       document.querySelector('#shGrid .shItem').click(); $('shBuild').click();
-      ok(L.name === 'Cây nấm' && rebuild && !replaying, 'lắp lại từ kệ');
+      ok(L.name === '@R0' && rebuild && !replaying, 'lắp lại từ kệ');
   } },
 ];
 module.exports.lib = require('./t4-build.js').lib;

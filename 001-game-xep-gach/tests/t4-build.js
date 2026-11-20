@@ -4,19 +4,19 @@ const save0 = o => new Function("localStorage.setItem('xepgach.v2'," + JSON.stri
 module.exports = [
   { name: 'lap-lan-dau', post: async () => {
       giveModel(0); startBuild(0);
-      ok(L && L.name === 'Cây nấm' && !rebuild, 'phải vào lắp Cây nấm');
+      ok(L && L.name === '@R0' && !rebuild, 'phải vào lắp Cây nấm');
       const order = commitAll();
       ok(S.coins === rewardFor(0, 3), 'coins ' + S.coins + ' != ' + rewardFor(0, 3));
-      ok(JSON.stringify(S.order['Cây nấm']) === JSON.stringify(order), 'order ' + JSON.stringify(S.order['Cây nấm']));
-      ok(built(0) && JSON.parse(localStorage.getItem('xepgach.v2')).best['Cây nấm'] === 3, 'phải lưu');
+      ok(JSON.stringify(S.order['@R0']) === JSON.stringify(order), 'order ' + JSON.stringify(S.order['@R0']));
+      ok(built(0) && JSON.parse(localStorage.getItem('xepgach.v2')).best['@R0'] === 3, 'phải lưu');
   } },
   { name: 'chua-co-khong-lap', post: async () => {
       startBuild(1);
       ok(L.name !== LEVELS[1].name && $('home').classList.contains('show'), 'chưa có mô hình thì không được lắp');
   } },
-  { name: 'lap-lai', pre: save0({ coins: 5, best: { 'Cây nấm': 2 } }), post: async () => {
+  { name: 'lap-lai', pre: save0({ coins: 5, best: { '@R0': 2 } }), post: async () => {
       startBuild(0, true); ok(rebuild, 'phải là lắp lại'); commitAll();
-      ok(S.coins === 5 + REBUILD_REWARD && S.best['Cây nấm'] === 3, 'coins ' + S.coins);
+      ok(S.coins === 5 + REBUILD_REWARD && S.best['@R0'] === 3, 'coins ' + S.coins);
   } },
   { name: 'rAgain-la-lap-lai', post: async () => {
       giveModel(0); startBuild(0); commitAll(); const c = S.coins; $('rAgain').click();
@@ -27,9 +27,10 @@ module.exports = [
       ok(targets.every(t => t.color === 'goldsp' || t.color === 'water'), 'bản đặc biệt phải lắp bằng mảnh vàng kim');
       commitAll(); ok(S.coins === rewardFor(0, 3, true), 'thưởng bản đặc biệt ' + S.coins);
   } },
-  { name: 'du-bo-thuong-them', pre: save0({ coins: 0, best: { 'Cây nấm': 1, 'Ngôi nhà': 1, 'Dưa hấu': 1 }, own: { 'Lâu đài': true } }), post: async () => {
-      startBuild(3); commitAll();
-      ok(S.coins === rewardFor(3, 3) + seriesBonus(0), 'coins ' + S.coins);
+  { name: 'du-bo-thuong-them', pre: save0({ coins: 0 }), post: async () => {
+      const ids = seriesIdx(0), t = ids[ids.length - 1]; ids.slice(0, -1).forEach(i => S.best[LEVELS[i].name] = 1); giveModel(t);
+      startBuild(t); commitAll();
+      ok(S.coins === rewardFor(t, 3) + seriesBonus(0), 'coins ' + S.coins);
   } },
   { name: 'tiep-tuc-mo-sach-cho-lap', post: async () => {
       giveModel(0); giveModel(2); startBuild(0); commitAll(); $('rNext').click();
@@ -43,7 +44,7 @@ module.exports = [
       ok(K.width > 0 && K.left - W.left < W.width * 0.08 && K.top - W.top < W.width * 0.08, 'nút back góc trên trái');
       const hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
       ok(![K, G].some(r => hit(r, B)), 'sổ không đè back/⚙');
-      ok($('stepBook').textContent.includes('Cây nấm'), 'tên mô hình nằm trong sổ bước');
+      ok($('stepBook').textContent.includes('@R0'), 'tên mô hình nằm trong sổ bước');
       ok(['lvText', 'stepText', 'pbar', 'infoBtn'].every(id => !$(id)), 'bỏ MÀN, nhãn bước, thanh %, nút i');
       $('setBtn').click(); $('sHelp').click(); ok($('infoModal').classList.contains('show'), 'cách chơi mở từ cài đặt');
       ok(B.bottom - W.top < W.width * 0.5, 'sổ bước gọn, không che nhiều bàn lắp: đáy ở ' + Math.round((B.bottom - W.top) / W.width * 100) + 'cqw');
@@ -101,7 +102,7 @@ module.exports = [
       wrong(); wrong(); await wait(900);
       ok(done && $('loseModal').classList.contains('show'), 'hết mạng → thua');
       $('lRetry').click(); ok(!$('loseModal').classList.contains('show') && on() === 3 && !done, 'chơi lại đủ 3 mạng');
-      wrong(); commitAll(); ok(S.best['Cây nấm'] === 2, 'sao = số mạng còn: ' + S.best['Cây nấm']);
+      wrong(); commitAll(); ok(S.best['@R0'] === 2, 'sao = số mạng còn: ' + S.best['@R0']);
   } },
   { name: 'tiep-tuc-mo-hop', post: async () => {
       giveModel(0); startBuild(0); commitAll(); const c = S.coins; ok(c >= BOX_PRICE, 'thắng đủ xu mở hộp: ' + c);
@@ -113,9 +114,9 @@ module.exports = [
       await wait(1600);
       ok(!replaying && !$('result').classList.contains('show') && !$('app').classList.contains('replaying'), 'vẫn phát lại sau khi về menu');
   } },
-  { name: 'tat-ca-16-man', query: '?all', budget: 30000, post: async () => {
-      for (let i = 0; i < LEVELS.length; i++) { startBuild(i); commitAll(); ok(done && built(i), 'màn ' + i + ' chưa thắng'); }
-  } },
+  // chia 3 phần cho kịp giờ; post bị chép nguyên văn vào trang (mất closure) nên dựng hàm từ chuỗi
+  ...[0, 1, 2].map(p => ({ name: 'tat-ca-man-' + (p + 1), query: '?all', budget: 30000, post: new (Object.getPrototypeOf(async () => {}).constructor)(
+      `for (let i = ${p}; i < LEVELS.length; i += 3) { startBuild(i); commitAll(); ok(done && built(i), 'màn ' + i + ' chưa thắng'); }`) })),
 ];
 module.exports.lib = () => {
   window.giveModel = (i, sp) => { S.own[LEVELS[i].name] = true; if (sp) S.sp[LEVELS[i].name] = true; save(); };

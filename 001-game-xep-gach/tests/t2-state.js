@@ -2,17 +2,17 @@
 module.exports = [
   { name: 'moi-vao', post: async () => {
       ok(S.coins === 0, 'coins ' + S.coins);
-      ok(!owned(0) && !built(0), 'chưa có mô hình nào');
+      ok(!ALL_IDX.some(owned), 'chưa có mô hình nào');
       ok(S.own && S.sp && S.next && S.tut === 0, 'thiếu trường mới');
-      ok(firstFree() && $('hNextBtn').textContent.includes('LẮP') && $('hNextBtn').textContent.includes('Cây nấm · miễn phí'), 'người mới: Cây nấm miễn phí');
-      ok(S.next.g && S.next.g.i !== 0 && !owned(S.next.g.i), 'hộp không ra Cây nấm (đã miễn phí): ' + JSON.stringify(S.next.g));
+      ok(firstFree() && $('hNextBtn').textContent.includes('LẮP') && $('hNextBtn').textContent.includes('@R0 · miễn phí'), 'người mới: mô hình đầu miễn phí');
+      ok(S.next.g && S.next.g.i !== ROAD[0] && !owned(S.next.g.i), 'hộp không ra mô hình đầu (đã miễn phí): ' + JSON.stringify(S.next.g));
   } },
   { name: 'du-lieu-cu', pre: () => localStorage.setItem('xepgach.v2', JSON.stringify({ coins: 77, best: { 0: 3, 1: 2, 2: 1, 3: 3 },
-      bp: { 'Kim tự tháp Giza': true }, inv: { 'base_12x12|green': 2, 'plate_1x1|red': 3 }, tut: 4 })),
+      bp: { '@R18': true }, inv: { 'base_12x12|green': 2, 'plate_1x1|red': 3 }, tut: 4 })),
     post: async () => {
       ok(S.coins === 77 + 24 + 3, 'kho mảnh phải hoàn 100% ra xu: ' + S.coins);
       ok(built(0) && owned(3), 'màn cũ đã lắp phải còn');
-      const g = LEVELS.findIndex(l => l.name === 'Kim tự tháp Giza');
+      const g = LEVELS.findIndex(l => l.name === '@R18');
       ok(owned(g) && !built(g), 'bản thiết kế đã mua → chờ lắp');
       ok(!('inv' in S) && !('bp' in S), 'bỏ trường cũ');
       ok(S.tut === 6, 'đã lắp rồi thì xong hướng dẫn: ' + S.tut);
