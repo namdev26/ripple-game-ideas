@@ -13,13 +13,15 @@ SETS.push({name:'Ẩm thực', c:'#ff7aa8', bonus:200, levels:[
   ],[
     ['dome_4x4','pink',3,3],['cheese_1x2','pink',4,2,0],['cheese_1x2','pink',4,7,2],['cheese_1x2','pink',2,4,1],['cheese_1x2','pink',7,4,3],['ball_2x2','red',4,4],
   ]),1,3,5),
-  // 2. Trà sữa trân châu: cốc trà sữa, đáy đường đen, nắp vòm, ống hút hồng, trân châu rơi ra
+  // 2. Trà sữa trân châu: cốc bo góc, đáy trân châu đen + trà sữa be (thân water bị che mất màu trong nên dùng màu đặc), viền nắp trắng, nắp vòm trong, ống hút hồng to cắm giữa
   voxLevel('Trà sữa trân châu',['base_10x10','lavender'],[
-    [2,2,0,6,6,1,'brown'],[2,2,1,6,6,3,'tan'],[2,2,4,6,6,1,'white'],
+    ...oct(2,2,6,'black',0),...oct(2,2,6,'tan',1,3),
   ],[
-    ['dome_4x4','white',3,3],...rim(2,2,6,'white'),'|',
-    ['cyl_1x1','pink',7,2],['cyl_1x1','pink',7,2],['cyl_1x1','pink',7,2],'|',
-    ['ball_1x1','black',8,8],['ball_1x1','black',9,7],['ball_1x1','black',8,9],['ball_1x1','black',1,8],
+    ['plate_1x4','white',3,2],['plate_1x4','white',3,7],['plate_1x4','white',2,3,1],['plate_1x4','white',7,3,1],'|',
+    ['wcorner_1x1','water',3,3,0],['wcorner_1x1','water',3,6,1],['wcorner_1x1','water',6,6,2],['wcorner_1x1','water',6,3,3],
+    ['wedge_1x2','water',4,3,0],['wedge_1x2','water',4,6,2],['wedge_1x2','water',3,4,1],['wedge_1x2','water',6,4,3],'|',
+    ['cyl_2x2','pink',4,4],['cyl_2x2','pink',4,4],['cyl_2x2','pink',4,4],'|',
+    ['ball_1x1','black',8,8],['ball_1x1','black',9,7],['ball_1x1','black',8,9],
   ]),
   // 3. Bánh mì: ổ bánh mì vàng, kẹp chả hồng + rau xanh thò ra, chai tương ớt
   voxLevel('Bánh mì',['base_12x12','azure'],[
@@ -79,14 +81,16 @@ SETS.push({name:'Ẩm thực', c:'#ff7aa8', bonus:200, levels:[
     ['tile_1x2','green',5,5],['tile_1x2','green',7,3,1],['tile_1x2','green',5,8,1],'|',
     ['round_1x1','white',4,4],['round_1x1','white',7,6],['round_tile_1x1','black',6,7],['round_tile_1x1','black',8,4],['round_tile_1x1','black',3,5],
   ]),
-  // 8. Sushi: khay gỗ, 3 miếng nigiri (cá hồi, cá ngừ, trứng cuộn rong biển), gừng hồng, wasabi, đũa
-  voxLevel('Sushi',['base_12x12','lavender'],[
-    [1,2,0,2,8,1,'brown'],[9,2,0,2,8,1,'brown'],[1,2,1,10,8,1,'tan'],
-    [2,3,2,2,4,1,'white'],[5,3,2,2,4,1,'white'],[8,3,2,2,4,1,'white'],
+  // 8. Sushi: khay gỗ nâu với 3 nigiri (cá hồi vân trắng, cá ngừ, trứng quấn rong biển), cuộn maki (vỏ đen, ruột trắng, nhân cam), gừng hồng, wasabi, đôi đũa đỏ
+  voxLevel('Sushi',['base_12x12','azure'],[
+    [1,1,0,2,5,1,'brown'],[9,1,0,2,5,1,'brown'],[1,1,1,10,5,1,'brown'],
+    [2,1,2,2,4,1,'white'],[5,1,2,2,4,1,'white'],[8,1,2,2,4,1,'white'],
+    ...oct(1,6,5,'black',0),
   ],[
-    ['tile_2x4','orange',2,3,1],['tile_2x4','red',5,3,1],['tile_2x4','yellow',8,3,1],['tile_1x2','black',8,5],'|',
-    ['cheese_1x2','pink',2,8,2],['cheese_1x2','pink',2,7,0],['ball_1x1','lime',5,8],['cyl_2x2','white',8,7],['round_tile_1x1','orange',8,7],'|',
-    ['tile_1x4','tan',6,10],['tile_1x4','tan',6,11],
+    ['plate_2x4','orange',2,1,1],['tile_1x2','white',2,2],['tile_1x2','white',2,4],'|',
+    ['plate_2x4','red',5,1,1],'|',['plate_2x4','yellow',8,1,1],['tile_1x2','black',8,2],['tile_1x2','black',8,3],'|',
+    ['tile_1x2','white',2,7],['tile_1x2','white',4,7,1],['tile_1x2','white',3,9],['tile_1x2','white',2,8,1],['round_tile_1x1','orange',3,8],'|',
+    ['cheese_1x2','pink',7,6,2],['ball_1x1','lime',10,6],'|',['tile_1x4','red',7,8],['tile_1x4','red',7,10],
   ]),
   // 9. Bánh chưng: bánh vuông lá dong xanh, lạt buộc chữ thập, hoa mai bên cạnh
   voxLevel('Bánh chưng',['base_12x12','red'],[

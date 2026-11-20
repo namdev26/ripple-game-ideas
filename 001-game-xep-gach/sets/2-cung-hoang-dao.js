@@ -50,18 +50,18 @@ return {name:'12 Cung hoàng đạo', c:'#9b5de5', bonus:300, levels:[
     ['dome_2x2','white',0,8],['dome_2x2','white',10,8],['dome_2x2','white',4,8],['dome_2x2','white',5,2],'|',
     ['star_1x1','yellow',11,11],
   ]),
-  // Cự Giải: cua đỏ quay mặt ra, 2 càng giơ cao há kẹp, mắt trắng trên cuống, miệng cười
+  // Cự Giải: cua đỏ dẹt mai tròn nhìn từ trên, 2 càng kìm to há ra phía trước, 6 chân 2 bên, mắt trên cuống, trên bãi cát có sóng
   voxLevel('Cự Giải',['base_12x12','sand'],[
-    [2,2,0,8,6,2,'red'],[3,3,2,6,4,1,'red'],[4,7,1,4,1,1,'black'],
-    [0,4,0,3,2,4,'red'],[9,4,0,3,2,4,'red'],
-    [0,3,4,3,4,1,'red'],[9,3,4,3,4,1,'red'],[0,3,5,1,4,1,'red'],[2,3,5,1,4,1,'red'],[9,3,5,1,4,1,'red'],[11,3,5,1,4,1,'red'],
-    [0,2,0,2,1,1,'darkred'],[0,7,0,2,1,1,'darkred'],[10,2,0,2,1,1,'darkred'],[10,7,0,2,1,1,'darkred'],
-    [4,6,3,1,1,1,'red'],[7,6,3,1,1,1,'red'],
+    [2,2,0,8,6,1,'red'],[2,2,1,8,6,1,'red'],[2,2,1,1,1,1,''],[9,2,1,1,1,1,''],[2,7,1,1,1,1,''],[9,7,1,1,1,1,''],
+    [3,3,2,6,4,1,'red'],[4,7,1,4,1,1,'black'],[4,7,2,1,1,1,'red'],[7,7,2,1,1,1,'red'],
+    [0,2,0,2,1,1,'darkred'],[0,4,0,2,1,1,'darkred'],[0,6,0,2,1,1,'darkred'],[10,2,0,2,1,1,'darkred'],[10,4,0,2,1,1,'darkred'],[10,6,0,2,1,1,'darkred'],
+    [0,8,0,4,2,2,'red'],[0,10,0,2,2,2,'red'],[3,10,0,1,2,2,'red'],
+    [8,8,0,4,2,2,'red'],[10,10,0,2,2,2,'red'],[8,10,0,1,2,2,'red'],
   ],[
-    ['ball_1x1','white',4,6],['ball_1x1','white',7,6],['tile_2x2','red',5,3],'|',
-    ['cheese_1x2','red',0,3,1],['cheese_1x2','red',0,5,1],['cheese_1x2','red',2,3,3],['cheese_1x2','red',2,5,3],'|',
-    ['cheese_1x2','red',9,3,1],['cheese_1x2','red',9,5,1],['cheese_1x2','red',11,3,3],['cheese_1x2','red',11,5,3],'|',
-    ['tile_2x4','water',0,0],['tile_2x4','water',4,0],['tile_2x4','water',8,0],['round_tile_1x1','orange',5,10],['round_tile_1x1','white',7,11],['round_tile_1x1','pink',2,10],
+    ['curve_2x4','red',4,3,0],['curve_2x4','red',4,5,2],'|',['ball_1x1','white',4,7],['ball_1x1','white',7,7],'|',
+    ['curve_2x2','red',0,10,2],['tile_2x4','red',0,8],['curve_2x2','red',10,10,2],['tile_2x4','red',8,8],'|',
+    ['tile_2x4','water',0,0],['tile_2x4','water',4,0],['tile_2x4','water',8,0],['round_tile_1x1','white',2,1],['round_tile_1x1','white',9,0],'|',
+    ['round_tile_1x1','orange',5,10],['round_tile_1x1','pink',6,11],
   ]),
   // Sư Tử: sư tử vàng ngồi nhìn thẳng, bờm cam tròn to, mõm trắng mũi nâu, đuôi chùm cam, trên mỏm đá
   voxLevel('Sư Tử',['base_16x16','lime'],[
@@ -84,9 +84,9 @@ return {name:'12 Cung hoàng đạo', c:'#9b5de5', bonus:300, levels:[
     [3,3,0,6,6,1,'white'],[3,3,1,6,6,1,'pink'],[3,4,2,6,4,1,'pink'],
     [3,4,3,6,4,3,'yellow'],[4,6,3,4,2,3,'peach'],[4,7,4,1,1,1,'black'],[7,7,4,1,1,1,'black'],[3,4,6,6,4,1,'yellow'],
     [1,3,2,10,1,1,'white'],[0,3,3,12,1,2,'white'],[0,3,5,3,1,1,'white'],[9,3,5,3,1,1,'white'],[0,3,6,2,1,1,'white'],[10,3,6,2,1,1,'white'],
-    [9,8,0,2,2,2,'lime'],[9,8,2,2,2,1,'tan'],
+    [9,8,0,2,2,2,'tan'],
   ],[
-    ['flame_1x1','gold',9,8],['flame_1x1','gold',10,8],['flame_1x1','gold',9,9],['flame_1x1','gold',10,9],'|',
+    ['pine_2x2','gold',9,8],['cheese_1x2','lime',9,10],'|',
     ['flower_1x1','pink',3,7],['flower_1x1','white',5,7],['flower_1x1','pink',6,7],['flower_1x1','white',8,7],'|',
     ['bush_2x2','green',0,9],['bush_2x2','lime',0,0],['flower_1x1','pink',2,11],['flower_1x1','white',1,11],['tile_2x4','white',4,10],['tile_1x4','white',4,9],'|',
     ['cheese_1x2','white',0,3,1],['cheese_1x2','white',10,3,3],['star_1x1','yellow',11,0],'|',['arch_1x4','gold',4,5],'|',
@@ -103,37 +103,37 @@ return {name:'12 Cung hoàng đạo', c:'#9b5de5', bonus:300, levels:[
     ['brick_1x6','gold',0,5],['brick_1x6','gold',6,5],'|',['ball_2x2','gold',5,5],'|',
     ['dome_2x2','white',0,7],['dome_2x2','white',10,7],['dome_2x2','white',0,2],['dome_2x2','white',10,2],['plate_2x4','white',4,9],
   ]),
-  // Bọ Cạp: bọ cạp xanh đuôi cong vồng qua lưng, ngòi vàng, 2 càng kẹp phía trước
+  // Bọ Cạp: bọ cạp đỏ đô nhiều đốt (sọc cam), đuôi đốt cong vồng qua lưng rồi chúc ngòi đen ra trước, 2 càng kìm, chân đen
   voxLevel('Bọ Cạp',['base_12x12','sand'],[
-    [2,4,0,7,4,2,'darkazure'],[8,4,0,1,4,1,'darkazure'],
-    [1,5,2,2,2,1,'darkazure'],[0,5,3,2,2,2,'darkazure'],[0,5,5,4,2,1,'darkazure'],[1,5,6,4,2,1,'darkazure'],
-    [3,2,0,1,2,1,'darkazure'],[5,2,0,1,2,1,'darkazure'],[3,8,0,1,2,1,'darkazure'],[5,8,0,1,2,1,'darkazure'],
-    [8,2,0,4,2,1,'darkazure'],[9,2,1,1,2,1,'darkazure'],[11,2,1,1,2,1,'darkazure'],
-    [8,8,0,4,2,1,'darkazure'],[9,8,1,1,2,1,'darkazure'],[11,8,1,1,2,1,'darkazure'],
+    [1,4,0,8,4,2,'darkred'],[1,4,1,1,1,1,''],[1,7,1,1,1,1,''],[3,4,1,1,4,1,'orange'],[5,4,1,1,4,1,'orange'],[7,4,1,1,4,1,'orange'],
+    [1,5,2,2,2,1,'orange'],[0,5,3,2,2,1,'darkred'],[0,5,4,2,2,1,'orange'],[0,5,5,2,2,1,'darkred'],[1,5,6,6,2,1,'orange'],[2,5,7,4,2,1,'darkred'],
+    [2,2,0,1,2,1,'black'],[4,2,0,1,2,1,'black'],[6,2,0,1,2,1,'black'],[2,8,0,1,2,1,'black'],[4,8,0,1,2,1,'black'],[6,8,0,1,2,1,'black'],
+    [8,8,0,2,3,1,'darkred'],[10,8,0,2,1,2,'darkred'],[10,10,0,2,1,2,'darkred'],[8,9,1,2,2,1,'darkred'],
+    [8,1,0,2,3,1,'darkred'],[10,1,0,2,1,2,'darkred'],[10,3,0,2,1,2,'darkred'],[8,1,1,2,2,1,'darkred'],
   ],[
-    ['cone_1x1','gold',4,5],['round_1x1','black',8,5],['round_1x1','black',8,6],'|',
-    ['tile_2x4','blue',5,4,1],['tile_1x4','blue',7,4,1],'|',
+    ['slope_2x2','black',5,5,3],'|',['round_1x1','black',8,5],['round_1x1','black',8,6],'|',
     ['brick_2x2','green',0,10],['brick_1x2','green',0,10],['dome_2x2','green',0,10],['flower_1x1','pink',1,11],'|',
-    ['brick_2x2','tan',10,10],['slope_2x2','tan',10,10,2],['round_tile_1x1','tan',1,1],['bush_2x2','darkgreen',0,0],
+    ['brick_2x2','tan',4,10],['slope_2x2','tan',4,10,2],['bush_2x2','darkgreen',0,0],['round_tile_1x1','tan',7,11],
   ]),
-  // Nhân Mã: nhân mã thân ngựa nâu nhạt, áo xanh, tóc đen, giương cung vàng dây trắng về phía trước, đuôi đen
+  // Nhân Mã: ngựa nâu nhạt thân dài 4 chân, người áo xanh đứng thẳng trên lưng phía trước, kéo cung vàng cong có mũi tên
   voxLevel('Nhân Mã',['base_12x12','darkgreen'],side([
-    '.......kkkGG',
-    '.......kseWG',
-    '.......kssWG',
-    '.......aaahG',
-    '.......rrrWG',
-    '.......rrrWG',
-    '.BBBBBBBBBGG',
-    '.BBBBBBBBBB.',
-    '.BBBBBBBBBB.',
-    '..LL....LL..',
-    '..HH....HH..',
-  ],{k:W(4,7,'black'),s:W(4,7,'peach'),e:[[4,6,'peach'],[7,7,'black']],a:W(4,7,'peach'),h:W(5,6,'peach'),G:W(5,6,'gold'),W:W(5,6,'white'),
-     r:W(4,7,'darkgreen'),B:W(3,8,'tan'),L:[[3,4,'tan'],[7,8,'tan']],H:[[3,4,'darkgray'],[7,8,'darkgray']]}),[
-    ['slope_1x2','black',1,4,1],['slope_1x2','black',1,6,1],['tile_2x4','darkgreen',3,3,1],['tile_2x4','darkgreen',3,5,1],'|',
-    ['cheese_1x2','black',7,4,1],['cheese_1x2','black',7,6,1],'|',
-    ['pine_2x2','darkgreen',0,0],['pine_2x2','green',3,0],['bush_2x2','green',0,10],['bush_2x2','lime',9,10],['flower_1x1','yellow',3,11],['flower_1x1','white',6,10],['flower_1x1','pink',5,11],
+    '....kkk.GG..',
+    '.....se.WGG.',
+    '.....ss.WWGG',
+    '.....aaaaaG.',
+    '.....rr.WGG.',
+    '.....rr.GG..',
+    'BBBBBBBBB...',
+    'BBBBBBBBB...',
+    'BBBBBBBBB...',
+    '.LL...LL....',
+    '.LL...LL....',
+    '.HH...HH....',
+  ],{k:W(5,6,'black'),s:W(5,6,'peach'),e:[[5,5,'peach'],[6,6,'black']],a:W(5,6,'peach'),G:W(5,6,'gold'),W:W(5,6,'white'),
+     r:W(5,6,'darkgreen'),B:W(4,7,'tan'),L:LEG(4,7,'tan'),H:LEG(4,7,'darkgray')}),[
+    ['slope_2x2','black',0,4,1],['slope_2x2','black',0,6,1],'|',['tile_2x4','darkgreen',2,4,1],
+    '|',['pine_2x2','darkgreen',0,0],['pine_2x2','green',3,0],['pine_2x2','darkgreen',10,0],['bush_2x2','green',0,10],['bush_2x2','lime',9,9],['bush_2x2','green',5,10],['bush_2x2','darkgreen',3,9],['pine_2x2','green',10,2],['pine_2x2','green',7,10],['bush_2x2','lime',10,6],
+    ['flower_1x1','yellow',3,11],['flower_1x1','white',8,11],['flower_1x1','pink',11,11],
   ]),
   // Ma Kết: dê biển — đầu dê trắng sừng xám vểnh ra sau, nửa sau đuôi cá bạc hà cuộn vồng lên, vây xanh, trên mỏm đá giữa sóng
   voxLevel('Ma Kết',['base_12x12','darkazure'],side([
