@@ -28,3 +28,6 @@ module.exports = [
   } },
 ];
 module.exports.lib = require('./t4-build.js').lib;
+module.exports.push({ name: 'save-mo-hinh-cu', pre: () => localStorage.setItem('xepgach.v2', JSON.stringify({ tut: 6, best: { 'Cây nấm': 3, '@R0': 2 },
+    city: { rows: 2, t: 0, bank: 0, p: { 0: { m: 'Lâu đài' }, 1: { m: '@R0' }, 2: { d: '🎄' } } }, next: { g: { i: 999, sp: false } } })),
+  post: async () => { renderHome(); openCity(); ok(!city().p[0] && city().p[1].m === '@R0' && city().p[2] && peekBox() && LEVELS[S.next.g.i], 'save có mô hình đã bỏ (đổi bộ): gỡ khỏi thành phố / hộp kế, giữ cái còn'); } });

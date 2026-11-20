@@ -2256,6 +2256,9 @@ const mmss=ms=>{ const t=Math.ceil(ms/1000), h=Math.floor(t/3600), m=Math.floor(
 // quà quay lại: vắng hơn 24 giờ
 if (!UNLOCK_ALL&&S.last&&Date.now()-S.last>24*3600e3) giveInf(INF_BACK,'👋 Chào mừng trở lại');
 if ('goal' in S){ delete S.goal; migrated=true; } // bỏ tính năng ghim mục tiêu
+// mô hình đã bỏ khỏi game (đổi bộ): gỡ khỏi Thành phố + hộp kế, tránh tra tên không còn
+if (S.city&&S.city.p) Object.keys(S.city.p).forEach(k=>{ const x=S.city.p[k]; if (x.m&&!LEVELS.some(l=>l.name===x.m)){ delete S.city.p[k]; migrated=true; } });
+if (S.next&&S.next.g&&!LEVELS[S.next.g.i]){ delete S.next.g; migrated=true; }
 if (migrated) save();
 let actx=null;
 function tone(f,dur,type='triangle',vol=0.12,delay=0){
