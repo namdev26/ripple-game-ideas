@@ -46,6 +46,7 @@ Có thể trộn: dùng voxLevel cho thân, rồi `lv.steps.push(...)` thêm bư
 - Tròn: round_1x1 (h1), cyl_1x1, cyl_2x2 (h3), cone_1x1 (h3), cone_2x2 (h6), pyr_2x2 (chóp vuông h3), dome_2x2 (h3), dome_4x4 (h6, trơn), ball_1x1 (h2), ball_2x2 (h4).
 - Kiến trúc: arch_1x4 (h3), arch_1x6 (h6), column_1x1 (cột có đầu, h3), window_1x2, rwindow_1x2 (cửa sổ vòm), corner_2x2, onion_2x2 (vòm củ hành h5), spire_1x1 (chóp nhọn h6), roofcone_2x2 (mái nón h6), vase_2x2.
 - Thiên nhiên: flower_1x1 (h2), bush_2x2 (h3), palm_1x1 (tán dừa, h3), pine_2x2 (thông h6), trunk_1x1 (thân cây h3), flame_1x1 (h3), flame_2x2 (h5).
+- Bánh xe dựng đứng: wheel_2x1 (đường kính 2 núm, cao 5 plate), wheel_4x1 (đường kính 4, cao 10). Xoay 0: trục theo z, nhìn từ +Z (camera) thấy tròn. Xoay 1: trục theo x. Đặt ở ô trống sát thân xe (chi tiết tự rơi xuống mặt bên dưới); thân xe nên kê cao 1–2 tầng để bánh lộ ra.
 - Khác: statue_1x1 (tượng người h4), lion_1x2, horse_1x2, sail_1x2 (cánh buồm h5), flag_1x1 (cờ bay về +X, h3), star_1x1 (sao gắn đỉnh cờ).
 
 ## Màu
